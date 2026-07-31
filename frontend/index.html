@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
@@ -11,18 +11,18 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Rox AI — Mobile</title>
+<title>Rox AI â€” Mobile</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"><\/script>
 <style>
-  /* ══════════════════════════════════════════════════════════════════
-     ROX AI — "Ember Core" identity
+  /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+     ROX AI â€” "Ember Core" identity
      Obsidian rock base, molten ember signal, cool circuit-teal for the
-     machine-facing tools (code / remote). One recurring emblem — the
-     Ember Core mark — carries the brand through logo, loaders and the
+     machine-facing tools (code / remote). One recurring emblem â€” the
+     Ember Core mark â€” carries the brand through logo, loaders and the
      credits gauge.
-     ══════════════════════════════════════════════════════════════════ */
+     â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
   :root{
     --bg:#0b0908;
     --bg-2:#050403;
@@ -67,7 +67,7 @@
     *,*::before,*::after{animation-duration:.001ms !important;animation-iteration-count:1 !important;transition-duration:.001ms !important;}
   }
 
-  /* ── ambient obsidian backdrop (fixed, behind the phone shell) ── */
+  /* â”€â”€ ambient obsidian backdrop (fixed, behind the phone shell) â”€â”€ */
   .ambient{position:fixed;inset:0;z-index:0;overflow:hidden;background:var(--bg-2);pointer-events:none;}
   .ambient::before, .ambient::after{
     content:'';position:absolute;width:70vmax;height:70vmax;border-radius:50%;
@@ -88,7 +88,7 @@
     background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   }
 
-  /* ── Ember Core mark (brand mark + loop-loaders) ── */
+  /* â”€â”€ Ember Core mark (brand mark + loop-loaders) â”€â”€ */
   .core{position:relative;display:flex;align-items:center;justify-content:center;background:var(--bg-2);overflow:hidden;isolation:isolate;}
   .core::before{
     content:'';position:absolute;inset:-45%;z-index:-1;
@@ -177,7 +177,7 @@
   .prow .s{font-size:11.5px;color:var(--text-dim);}
   .prow .chev{margin-left:auto;color:var(--text-faint);}
 
-  /* CORE METER — credits/usage gauge, jagged "crack" fill */
+  /* CORE METER â€” credits/usage gauge, jagged "crack" fill */
   .usage-card{background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:16px;margin:6px 0 4px;position:relative;overflow:hidden;}
   .usage-card::before{content:'';position:absolute;inset:0;background:radial-gradient(220px 100px at 100% 0%, rgba(139,92,246,.12), transparent 70%);pointer-events:none;}
   .usage-label{position:relative;display:flex;justify-content:space-between;font-size:12.5px;color:var(--text-dim);margin-bottom:8px;}
@@ -310,82 +310,82 @@
 <div class="ambient"></div>
 <div class="grain"></div>
 
-<!-- LOGIN OVERLAY — shown until a Supabase session exists -->
+<!-- LOGIN OVERLAY â€” shown until a Supabase session exists -->
 <div id="login-overlay">
   <div class="login-box">
     <div class="brand"><div class="logo core">R</div>Rox AI</div>
-    <p class="login-tag">الذكاء الصناعي في جيبك — Chat · Images · Vidéos · Code</p>
+    <p class="login-tag">Ø§Ù„Ø°ÙƒØ§Ø¡ Ø§Ù„ØµÙ†Ø§Ø¹ÙŠ ÙÙŠ Ø¬ÙŠØ¨Ùƒ â€” Chat Â· Images Â· VidÃ©os Â· Code</p>
     <div class="login-error" id="login-error"></div>
     <input type="text" id="login-name" placeholder="Nom complet" autocomplete="name" style="display:none;">
     <input type="email" id="login-email" placeholder="Adresse email" autocomplete="email">
     <input type="password" id="login-password" placeholder="Mot de passe" autocomplete="current-password">
     <button id="login-submit" class="shimmer-btn">Se connecter</button>
-    <div class="login-toggle" id="login-toggle">Pas encore de compte ? <span>Créer un compte</span></div>
+    <div class="login-toggle" id="login-toggle">Pas encore de compte ? <span>CrÃ©er un compte</span></div>
   </div>
 </div>
 <div class="phone">
 
   <div class="topbar">
     <div class="brand"><div class="logo core">R</div>Rox AI</div>
-    <div class="top-ic" id="logoutBtn" title="Se déconnecter">🚪</div>
-    <div class="avatar-sm" id="userAvatar">–</div>
+    <div class="top-ic" id="logoutBtn" title="Se dÃ©connecter">ðŸšª</div>
+    <div class="avatar-sm" id="userAvatar">â€“</div>
   </div>
 
   <!-- HOME SCREEN -->
   <div class="screen active" id="screen-home">
-    <div class="search">🔍 Rechercher...</div>
+    <div class="search">ðŸ” Rechercher...</div>
     <div class="hero">
-      <h1 id="heroGreeting">Bienvenue ! 👋</h1>
+      <h1 id="heroGreeting">Bienvenue ! ðŸ‘‹</h1>
       <p>Tout l'IA dont vous avez besoin, dans votre poche.</p>
       <div class="pill-row">
-        <div class="pill">✨ Multi-modèles</div>
-        <div class="pill">⚡ Rapide</div>
-        <div class="pill">🛡️ Sécurisé</div>
+        <div class="pill">âœ¨ Multi-modÃ¨les</div>
+        <div class="pill">âš¡ Rapide</div>
+        <div class="pill">ðŸ›¡ï¸ SÃ©curisÃ©</div>
       </div>
     </div>
 
-    <div class="section-title"><h2>Fonctionnalités</h2></div>
+    <div class="section-title"><h2>FonctionnalitÃ©s</h2></div>
     <div class="card-scroll">
       <div class="fcard" data-open="images">
-        <div class="fcard-head"><div class="fcard-ic" style="background:rgba(139,92,246,.15);color:#a78bfa;">🖼️</div><h3>Images AI</h3></div>
+        <div class="fcard-head"><div class="fcard-ic" style="background:rgba(139,92,246,.15);color:#a78bfa;">ðŸ–¼ï¸</div><h3>Images AI</h3></div>
         <div class="fcard-thumb" style="background-image:linear-gradient(135deg,#2a1408,#6d28d9 55%,#ffd166);"></div>
-        <p>Générez des images à partir de vos idées.</p>
-        <button class="fcard-btn shimmer-btn" style="background:var(--ember-grad);">✨ Générer</button>
+        <p>GÃ©nÃ©rez des images Ã  partir de vos idÃ©es.</p>
+        <button class="fcard-btn shimmer-btn" style="background:var(--ember-grad);">âœ¨ GÃ©nÃ©rer</button>
       </div>
       <div class="fcard" data-open="videos">
-        <div class="fcard-head"><div class="fcard-ic" style="background:rgba(134,25,143,.15);color:#f9a8d4;">🎬</div><h3>Vidéos AI</h3></div>
+        <div class="fcard-head"><div class="fcard-ic" style="background:rgba(134,25,143,.15);color:#f9a8d4;">ðŸŽ¬</div><h3>VidÃ©os AI</h3></div>
         <div class="fcard-thumb" style="background-image:linear-gradient(135deg,#2a0a12,#86198f 55%,#f9a8d4);"></div>
-        <p>Créez des vidéos à partir de texte ou d'images.</p>
-        <button class="fcard-btn shimmer-btn" style="background:var(--crimson-grad);">▶ Générer</button>
+        <p>CrÃ©ez des vidÃ©os Ã  partir de texte ou d'images.</p>
+        <button class="fcard-btn shimmer-btn" style="background:var(--crimson-grad);">â–¶ GÃ©nÃ©rer</button>
       </div>
       <div class="fcard rox-ip" data-open="roxip">
-        <div class="fcard-head"><div class="fcard-ic" style="background:rgba(34,197,94,.15);color:#4ade80;">🖥️</div><h3>Rox IP</h3></div>
+        <div class="fcard-head"><div class="fcard-ic" style="background:rgba(34,197,94,.15);color:#4ade80;">ðŸ–¥ï¸</div><h3>Rox IP</h3></div>
         <div class="fcard-thumb" style="background-image:linear-gradient(135deg,#04231a,#0f9d75 55%,#22c55e);"></div>
-        <p>Contrôle à distance via adresse IP.</p>
-        <button class="fcard-btn shimmer-btn" style="background:linear-gradient(135deg,#16a34a,#22c55e);">⚡ Connecter</button>
+        <p>ContrÃ´le Ã  distance via adresse IP.</p>
+        <button class="fcard-btn shimmer-btn" style="background:linear-gradient(135deg,#16a34a,#22c55e);">âš¡ Connecter</button>
       </div>
       <div class="fcard" data-open="code">
-        <div class="fcard-head"><div class="fcard-ic" style="background:rgba(167,139,250,.15);color:#c4b5fd;">⌨️</div><h3>Code Studio</h3></div>
+        <div class="fcard-head"><div class="fcard-ic" style="background:rgba(167,139,250,.15);color:#c4b5fd;">âŒ¨ï¸</div><h3>Code Studio</h3></div>
         <div class="fcard-thumb" style="background:#0d0d14;border:1px solid var(--border);color:#c4b5fd;font-family:monospace;font-size:10px;padding:8px;display:flex;align-items:center;">function greet(){...}</div>
-        <p>Codez et exécutez avec l'aide de l'IA.</p>
-        <button class="fcard-btn shimmer-btn" style="background:var(--blue-grad);">▶ Exécuter</button>
+        <p>Codez et exÃ©cutez avec l'aide de l'IA.</p>
+        <button class="fcard-btn shimmer-btn" style="background:var(--blue-grad);">â–¶ ExÃ©cuter</button>
       </div>
     </div>
 
-    <div class="section-title"><h2>Projets récents</h2><a>Voir tous</a></div>
+    <div class="section-title"><h2>Projets rÃ©cents</h2><a>Voir tous</a></div>
     <div class="project-list">
-      <div class="prow" data-open="images"><div class="thumb" style="background-image:linear-gradient(135deg,#2a1408,#6d28d9 55%,#ffd166);"></div><div><div class="t">Image Fantasy</div><div class="s">Créé il y a 2h</div></div><div class="chev">›</div></div>
-      <div class="prow" data-open="videos"><div class="thumb" style="background-image:linear-gradient(135deg,#2a0a12,#86198f 55%,#f9a8d4);"></div><div><div class="t">Vidéo Cyberpunk</div><div class="s">Créé il y a 5h</div></div><div class="chev">›</div></div>
-      <div class="prow" data-open="roxip"><div class="thumb" style="background-image:linear-gradient(135deg,#04231a,#0f9d75);"></div><div><div class="t">Session IP Bureau</div><div class="s" style="color:#4ade80;">● Connecté</div></div><div class="chev">›</div></div>
-      <div class="prow" data-open="code"><div class="thumb" style="background:#0d0d14;"></div><div><div class="t">Site Web Portfolio</div><div class="s">Créé il y a 2j</div></div><div class="chev">›</div></div>
+      <div class="prow" data-open="images"><div class="thumb" style="background-image:linear-gradient(135deg,#2a1408,#6d28d9 55%,#ffd166);"></div><div><div class="t">Image Fantasy</div><div class="s">CrÃ©Ã© il y a 2h</div></div><div class="chev">â€º</div></div>
+      <div class="prow" data-open="videos"><div class="thumb" style="background-image:linear-gradient(135deg,#2a0a12,#86198f 55%,#f9a8d4);"></div><div><div class="t">VidÃ©o Cyberpunk</div><div class="s">CrÃ©Ã© il y a 5h</div></div><div class="chev">â€º</div></div>
+      <div class="prow" data-open="roxip"><div class="thumb" style="background-image:linear-gradient(135deg,#04231a,#0f9d75);"></div><div><div class="t">Session IP Bureau</div><div class="s" style="color:#4ade80;">â— ConnectÃ©</div></div><div class="chev">â€º</div></div>
+      <div class="prow" data-open="code"><div class="thumb" style="background:#0d0d14;"></div><div><div class="t">Site Web Portfolio</div><div class="s">CrÃ©Ã© il y a 2j</div></div><div class="chev">â€º</div></div>
     </div>
 
     <div class="usage-card">
-      <div class="usage-label"><span>Utilisation</span><span id="sidebarUsagePct">–</span></div>
+      <div class="usage-label"><span>Utilisation</span><span id="sidebarUsagePct">â€“</span></div>
       <div class="usage-bar"><div class="usage-fill" id="sidebarUsageFill" style="width:0%"></div></div>
-      <div class="credits-num" id="sidebarCreditsNum">–</div>
-      <button class="upgrade-btn shimmer-btn" id="upgradeBtn">⭐ Passer au Plan Pro</button>
-      <button class="upgrade-btn shimmer-btn" id="topupBtn" style="display:none; margin-top:8px; background:var(--blue-grad);">💳 شحن رصيد إضافي</button>
+      <div class="credits-num" id="sidebarCreditsNum">â€“</div>
+      <button class="upgrade-btn shimmer-btn" id="upgradeBtn">â­ Passer au Plan Pro</button>
+      <button class="upgrade-btn shimmer-btn" id="topupBtn" style="display:none; margin-top:8px; background:var(--blue-grad);">ðŸ’³ Ø´Ø­Ù† Ø±ØµÙŠØ¯ Ø¥Ø¶Ø§ÙÙŠ</button>
     </div>
   </div>
 
@@ -393,80 +393,80 @@
   <div class="screen" id="screen-chat-tab">
     <div class="section-title"><h2>Chat AI</h2></div>
     <div class="project-list">
-      <div class="prow" data-open="chat"><div class="thumb" style="background:var(--panel-2);display:flex;align-items:center;justify-content:center;">💬</div><div><div class="t">Nouvelle conversation</div><div class="s">Démarrer maintenant</div></div><div class="chev">›</div></div>
+      <div class="prow" data-open="chat"><div class="thumb" style="background:var(--panel-2);display:flex;align-items:center;justify-content:center;">ðŸ’¬</div><div><div class="t">Nouvelle conversation</div><div class="s">DÃ©marrer maintenant</div></div><div class="chev">â€º</div></div>
     </div>
   </div>
   <div class="screen" id="screen-projects">
     <div class="section-title"><h2>Projets</h2></div>
-    <div class="placeholder-view">Retrouvez ici l'ensemble de vos projets Images, Vidéos et Code.</div>
+    <div class="placeholder-view">Retrouvez ici l'ensemble de vos projets Images, VidÃ©os et Code.</div>
   </div>
   <div class="screen" id="screen-more">
     <div class="section-title"><h2>Plus</h2></div>
     <div class="project-list">
-      <div class="prow" data-open="automations"><div class="thumb" style="background:var(--panel-2);display:flex;align-items:center;justify-content:center;">🤖</div><div><div class="t">Automatisations</div></div><div class="chev">›</div></div>
-      <div class="prow" data-open="history"><div class="thumb" style="background:var(--panel-2);display:flex;align-items:center;justify-content:center;">🕘</div><div><div class="t">Historique</div></div><div class="chev">›</div></div>
-      <div class="prow" data-open="settings"><div class="thumb" style="background:var(--panel-2);display:flex;align-items:center;justify-content:center;">⚙️</div><div><div class="t">Paramètres</div></div><div class="chev">›</div></div>
+      <div class="prow" data-open="automations"><div class="thumb" style="background:var(--panel-2);display:flex;align-items:center;justify-content:center;">ðŸ¤–</div><div><div class="t">Automatisations</div></div><div class="chev">â€º</div></div>
+      <div class="prow" data-open="history"><div class="thumb" style="background:var(--panel-2);display:flex;align-items:center;justify-content:center;">ðŸ•˜</div><div><div class="t">Historique</div></div><div class="chev">â€º</div></div>
+      <div class="prow" data-open="settings"><div class="thumb" style="background:var(--panel-2);display:flex;align-items:center;justify-content:center;">âš™ï¸</div><div><div class="t">ParamÃ¨tres</div></div><div class="chev">â€º</div></div>
     </div>
   </div>
 
   <!-- BOTTOM NAV -->
   <div class="bottomnav">
-    <div class="bn-item active" data-tab="home"><span class="ic">🏠</span>Accueil</div>
-    <div class="bn-item" data-tab="chat-tab"><span class="ic">💬</span>Chat</div>
-    <div class="bn-item" data-tab="projects"><span class="ic">📁</span>Projets</div>
-    <div class="bn-item" data-tab="more"><span class="ic">☰</span>Plus</div>
+    <div class="bn-item active" data-tab="home"><span class="ic">ðŸ </span>Accueil</div>
+    <div class="bn-item" data-tab="chat-tab"><span class="ic">ðŸ’¬</span>Chat</div>
+    <div class="bn-item" data-tab="projects"><span class="ic">ðŸ“</span>Projets</div>
+    <div class="bn-item" data-tab="more"><span class="ic">â˜°</span>Plus</div>
   </div>
 
   <!-- FULL-SCREEN FEATURE CHATS -->
   <div class="feature-screen" id="feature-images">
     <div class="feature-topbar">
-      <div class="back" data-close>←</div>
-      <div class="fic" style="background:rgba(139,92,246,.15);color:#a78bfa;">🖼️</div>
-      <div class="meta"><div class="t">Images AI</div><div class="s">Génération d'images</div></div>
+      <div class="back" data-close>â†</div>
+      <div class="fic" style="background:rgba(139,92,246,.15);color:#a78bfa;">ðŸ–¼ï¸</div>
+      <div class="meta"><div class="t">Images AI</div><div class="s">GÃ©nÃ©ration d'images</div></div>
     </div>
     <div class="chat-messages" id="msgs-images">
-      <div class="msg bot">Décris-moi l'image que tu veux générer (style, ambiance, couleurs...).</div>
+      <div class="msg bot">DÃ©cris-moi l'image que tu veux gÃ©nÃ©rer (style, ambiance, couleurs...).</div>
     </div>
     <div class="chat-input-row">
-      <input type="text" placeholder="Décrivez votre image..." data-feature="images">
-      <button style="background:var(--ember-grad);" data-send="images">✨</button>
+      <input type="text" placeholder="DÃ©crivez votre image..." data-feature="images">
+      <button style="background:var(--ember-grad);" data-send="images">âœ¨</button>
     </div>
   </div>
 
   <div class="feature-screen" id="feature-videos">
     <div class="feature-topbar">
-      <div class="back" data-close>←</div>
-      <div class="fic" style="background:rgba(134,25,143,.15);color:#f9a8d4;">🎬</div>
-      <div class="meta"><div class="t">Vidéos AI</div><div class="s">Génération de vidéos</div></div>
+      <div class="back" data-close>â†</div>
+      <div class="fic" style="background:rgba(134,25,143,.15);color:#f9a8d4;">ðŸŽ¬</div>
+      <div class="meta"><div class="t">VidÃ©os AI</div><div class="s">GÃ©nÃ©ration de vidÃ©os</div></div>
     </div>
     <div class="chat-messages" id="msgs-videos">
-      <div class="msg bot">Dis-moi quelle scène tu veux voir en vidéo, et sa durée souhaitée.</div>
+      <div class="msg bot">Dis-moi quelle scÃ¨ne tu veux voir en vidÃ©o, et sa durÃ©e souhaitÃ©e.</div>
     </div>
     <div class="chat-input-row">
-      <input type="text" placeholder="Décrivez votre vidéo..." data-feature="videos">
-      <button style="background:var(--crimson-grad);" data-send="videos">▶</button>
+      <input type="text" placeholder="DÃ©crivez votre vidÃ©o..." data-feature="videos">
+      <button style="background:var(--crimson-grad);" data-send="videos">â–¶</button>
     </div>
   </div>
 
   <div class="feature-screen" id="feature-roxip">
     <div class="feature-topbar">
-      <div class="back" data-close>←</div>
-      <div class="fic" style="background:rgba(34,197,94,.15);color:#4ade80;">🖥️</div>
-      <div class="meta"><div class="t">Rox IP</div><div class="s">Démo — pas encore relié au backend</div></div>
+      <div class="back" data-close>â†</div>
+      <div class="fic" style="background:rgba(34,197,94,.15);color:#4ade80;">ðŸ–¥ï¸</div>
+      <div class="meta"><div class="t">Rox IP</div><div class="s">DÃ©mo â€” pas encore reliÃ© au backend</div></div>
     </div>
     <div class="chat-messages" id="msgs-roxip">
-      <div class="msg bot">Entre l'adresse IP de la machine à laquelle tu veux te connecter.</div>
+      <div class="msg bot">Entre l'adresse IP de la machine Ã  laquelle tu veux te connecter.</div>
     </div>
     <div class="chat-input-row">
       <input type="text" placeholder="Entrez l'adresse IP..." data-feature="roxip">
-      <button style="background:linear-gradient(135deg,#16a34a,#22c55e);" data-send="roxip">⚡</button>
+      <button style="background:linear-gradient(135deg,#16a34a,#22c55e);" data-send="roxip">âš¡</button>
     </div>
   </div>
 
   <div class="feature-screen" id="feature-chat">
     <div class="feature-topbar">
-      <div class="back" data-close>←</div>
-      <div class="fic" style="background:rgba(139,92,246,.15);color:#a78bfa;">💬</div>
+      <div class="back" data-close>â†</div>
+      <div class="fic" style="background:rgba(139,92,246,.15);color:#a78bfa;">ðŸ’¬</div>
       <div class="meta"><div class="t">Chat AI</div><div class="s">En ligne</div></div>
     </div>
     <div class="chat-messages" id="msgs-chat">
@@ -474,72 +474,72 @@
     </div>
     <div class="chat-input-row">
       <input type="text" placeholder="Posez votre question..." data-feature="chat">
-      <button style="background:var(--ember-grad);" data-send="chat">➤</button>
+      <button style="background:var(--ember-grad);" data-send="chat">âž¤</button>
     </div>
   </div>
 
   <div class="feature-screen" id="feature-code">
     <div class="feature-topbar">
-      <div class="back" data-close>←</div>
-      <div class="fic" style="background:rgba(167,139,250,.15);color:#c4b5fd;">⌨️</div>
+      <div class="back" data-close>â†</div>
+      <div class="fic" style="background:rgba(167,139,250,.15);color:#c4b5fd;">âŒ¨ï¸</div>
       <div class="meta"><div class="t">Code Studio</div><div class="s">Assistant de code</div></div>
     </div>
     <div class="chat-messages" id="msgs-code">
-      <div class="msg bot">Dis-moi quelle fonction ou quel script tu veux que je t'aide à écrire.</div>
+      <div class="msg bot">Dis-moi quelle fonction ou quel script tu veux que je t'aide Ã  Ã©crire.</div>
     </div>
     <div class="chat-input-row">
       <input type="text" placeholder="Ex: une fonction qui trie un tableau..." data-feature="code">
-      <button style="background:var(--blue-grad);" data-send="code">▶</button>
+      <button style="background:var(--blue-grad);" data-send="code">â–¶</button>
     </div>
   </div>
 
   <div class="feature-screen" id="feature-automations">
     <div class="feature-topbar">
-      <div class="back" data-close>←</div>
-      <div class="fic" style="background:var(--panel-2);">🤖</div>
-      <div class="meta"><div class="t">Automatisations</div><div class="s">Tâches automatiques</div></div>
+      <div class="back" data-close>â†</div>
+      <div class="fic" style="background:var(--panel-2);">ðŸ¤–</div>
+      <div class="meta"><div class="t">Automatisations</div><div class="s">TÃ¢ches automatiques</div></div>
     </div>
-    <div class="placeholder-view" style="margin:20px 16px;">Aucune automatisation configurée pour l'instant.</div>
+    <div class="placeholder-view" style="margin:20px 16px;">Aucune automatisation configurÃ©e pour l'instant.</div>
   </div>
   <div class="feature-screen" id="feature-history">
     <div class="feature-topbar">
-      <div class="back" data-close>←</div>
-      <div class="fic" style="background:var(--panel-2);">🕘</div>
-      <div class="meta"><div class="t">Historique</div><div class="s">Activité récente</div></div>
+      <div class="back" data-close>â†</div>
+      <div class="fic" style="background:var(--panel-2);">ðŸ•˜</div>
+      <div class="meta"><div class="t">Historique</div><div class="s">ActivitÃ© rÃ©cente</div></div>
     </div>
-    <div class="placeholder-view" style="margin:20px 16px;">Image générée · Vidéo créée · Connexion IP · Code exécuté</div>
+    <div class="placeholder-view" style="margin:20px 16px;">Image gÃ©nÃ©rÃ©e Â· VidÃ©o crÃ©Ã©e Â· Connexion IP Â· Code exÃ©cutÃ©</div>
   </div>
   <div class="feature-screen" id="feature-settings">
     <div class="feature-topbar">
-      <div class="back" data-close>←</div>
-      <div class="fic" style="background:var(--panel-2);">⚙️</div>
-      <div class="meta"><div class="t">Paramètres</div><div class="s">Compte & préférences</div></div>
+      <div class="back" data-close>â†</div>
+      <div class="fic" style="background:var(--panel-2);">âš™ï¸</div>
+      <div class="meta"><div class="t">ParamÃ¨tres</div><div class="s">Compte & prÃ©fÃ©rences</div></div>
     </div>
     <div class="placeholder-view" id="settingsSummary" style="margin:20px 16px;">Chargement...</div>
-    <button class="upgrade-btn shimmer-btn" id="settingsUpgradeBtn" style="margin:0 16px 12px;width:calc(100% - 32px);">⭐ Passer au Plan Pro</button>
-    <div class="prow" id="settingsLogoutBtn" style="margin:0 16px;"><div class="thumb" style="background:var(--panel-2);display:flex;align-items:center;justify-content:center;">🚪</div><div><div class="t">Se déconnecter</div></div></div>
+    <button class="upgrade-btn shimmer-btn" id="settingsUpgradeBtn" style="margin:0 16px 12px;width:calc(100% - 32px);">â­ Passer au Plan Pro</button>
+    <div class="prow" id="settingsLogoutBtn" style="margin:0 16px;"><div class="thumb" style="background:var(--panel-2);display:flex;align-items:center;justify-content:center;">ðŸšª</div><div><div class="t">Se dÃ©connecter</div></div></div>
   </div>
 
 </div>
 
 <script>
-// ── ROX AI mobile config ─────────────────────────────────────────────
+// â”€â”€ ROX AI mobile config â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 // Fill these three in before deploying. SUPABASE_URL/ANON_KEY must be
 // the same Supabase project as rox-ai-backend-v3. API_BASE is wherever
-// server.js is deployed (no trailing slash) — and that origin must be
+// server.js is deployed (no trailing slash) â€” and that origin must be
 // listed in the backend's ALLOWED_ORIGINS env var or every call below
 // will be blocked by CORS.
 const CONFIG = {
-  SUPABASE_URL: 'https://tqoqsgaymygmqrzddvtu.supabase.co', // fill from Supabase → Project Settings → API
+  SUPABASE_URL: 'https://tqoqsgaymygmqrzddvtu.supabase.co', // fill from Supabase â†’ Project Settings â†’ API
   SUPABASE_ANON_KEY: 'sb_publishable_jxn-4TT28_G7LtZG4FJXTQ_75JiaSBi',       // same page, "anon public" key
-  API_BASE: 'http://localhost:3001',                 // v6 server.js — change when you deploy
+  API_BASE: 'https://rox-ai-production.up.railway.app',                 // v6 server.js â€” change when you deploy
 };
 
 const supa = window.supabase.createClient(CONFIG.SUPABASE_URL, CONFIG.SUPABASE_ANON_KEY);
 let session = null;
 let profile = null;
 
-// ── auth ─────────────────────────────────────────────────────────────
+// â”€â”€ auth â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 async function initAuth() {
   const { data } = await supa.auth.getSession();
   if (data.session) await onLoggedIn(data.session);
@@ -563,17 +563,17 @@ let isSignupMode = false;
 document.getElementById('login-toggle').addEventListener('click', () => {
   isSignupMode = !isSignupMode;
   document.getElementById('login-name').style.display = isSignupMode ? 'block' : 'none';
-  document.getElementById('login-submit').textContent = isSignupMode ? "Créer mon compte" : "Se connecter";
+  document.getElementById('login-submit').textContent = isSignupMode ? "CrÃ©er mon compte" : "Se connecter";
   document.getElementById('login-toggle').innerHTML = isSignupMode
-    ? 'Déjà un compte ? <span>Se connecter</span>'
-    : 'Pas encore de compte ? <span>Créer un compte</span>';
+    ? 'DÃ©jÃ  un compte ? <span>Se connecter</span>'
+    : 'Pas encore de compte ? <span>CrÃ©er un compte</span>';
   setLoginError('');
 });
 
-// ── demo shortcut ────────────────────────────────────────────────────
+// â”€â”€ demo shortcut â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 // Local-only bypass for previewing the UI without a live Supabase/backend
 // connection: email "777" + password "19" logs straight into a mocked
-// session. Nothing here touches Supabase or the real API — see
+// session. Nothing here touches Supabase or the real API â€” see
 // enterDemoMode()/demoFetch() below. Remove this block before shipping
 // if you don't want the shortcut to exist in production.
 const DEMO_EMAIL = '777';
@@ -601,17 +601,17 @@ document.getElementById('login-submit').addEventListener('click', async () => {
 
   btn.disabled = false;
   if (error) { setLoginError(error.message); return; }
-  if (isSignupMode) setLoginError('Compte créé — vérifie ta boîte mail si la confirmation est activée.');
+  if (isSignupMode) setLoginError('Compte crÃ©Ã© â€” vÃ©rifie ta boÃ®te mail si la confirmation est activÃ©e.');
 });
 
-// ── demo mode: mocked session + profile + fake API responses ───────────
+// â”€â”€ demo mode: mocked session + profile + fake API responses â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 const DEMO_TOKEN = 'demo-token';
 
 function enterDemoMode(name) {
   session = { user: { id: 'demo-user', email: 'demo@rox.ai' }, access_token: DEMO_TOKEN };
   profile = {
     email: 'demo@rox.ai',
-    full_name: name || 'Démo',
+    full_name: name || 'DÃ©mo',
     credits_used: 180,
     credits_total: 500,
     subscription_status: 'pro',
@@ -630,7 +630,7 @@ async function demoFetch(path, options = {}) {
     profile.credits_used = Math.min(profile.credits_total, profile.credits_used + 2);
     const remaining = profile.credits_total - profile.credits_used;
     return jsonResponse(200, {
-      text: 'هادي إجابة ديمو — ماشي متصلة بحيت الملف خدام بلا backend حقيقي دابا. عمر SUPABASE_URL/API_BASE باش توصل بالفعل.',
+      text: 'Ù‡Ø§Ø¯ÙŠ Ø¥Ø¬Ø§Ø¨Ø© Ø¯ÙŠÙ…Ùˆ â€” Ù…Ø§Ø´ÙŠ Ù…ØªØµÙ„Ø© Ø¨Ø­ÙŠØª Ø§Ù„Ù…Ù„Ù Ø®Ø¯Ø§Ù… Ø¨Ù„Ø§ backend Ø­Ù‚ÙŠÙ‚ÙŠ Ø¯Ø§Ø¨Ø§. Ø¹Ù…Ø± SUPABASE_URL/API_BASE Ø¨Ø§Ø´ ØªÙˆØµÙ„ Ø¨Ø§Ù„ÙØ¹Ù„.',
       newBalance: remaining,
     });
   }
@@ -655,9 +655,9 @@ async function demoFetch(path, options = {}) {
     });
   }
   if (path === '/api/create-checkout-session' || path === '/api/create-topup-session') {
-    return jsonResponse(200, { message: 'Mode démo — pas de paiement réel ici.' });
+    return jsonResponse(200, { message: 'Mode dÃ©mo â€” pas de paiement rÃ©el ici.' });
   }
-  return jsonResponse(404, { message: 'Route démo non gérée: ' + path });
+  return jsonResponse(404, { message: 'Route dÃ©mo non gÃ©rÃ©e: ' + path });
 }
 function jsonResponse(status, body) {
   return { ok: status >= 200 && status < 300, status, json: async () => body };
@@ -674,7 +674,7 @@ function logout() {
 document.getElementById('logoutBtn').addEventListener('click', logout);
 document.getElementById('settingsLogoutBtn').addEventListener('click', logout);
 
-// ── profile / credits ───────────────────────────────────────────────
+// â”€â”€ profile / credits â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 async function refreshProfile() {
   if (!session) return;
   const { data, error } = await supa
@@ -686,10 +686,10 @@ async function refreshProfile() {
   profile = data;
   renderProfile();
 
-  // Always fetch from the backend (not just the raw Supabase row) —
+  // Always fetch from the backend (not just the raw Supabase row) â€”
   // /api/usage-status is what actually matches what the server enforces
   // for both tiers now that Pro also draws from a real 500-credit/month
-  // pool (no more unconditional 'pro' bypass — see gatekeeper.js).
+  // pool (no more unconditional 'pro' bypass â€” see gatekeeper.js).
   try {
     const res = await authFetch('/api/usage-status', { method: 'GET' });
     const usage = await res.json();
@@ -706,9 +706,9 @@ function renderDailyUsage(used, limit) {
   const pct = Math.min(100, Math.round((used / limit) * 100));
   document.getElementById('sidebarUsagePct').textContent = pct + '%';
   document.getElementById('sidebarUsageFill').style.width = pct + '%';
-  document.getElementById('sidebarCreditsNum').textContent = `${used} / ${limit} رسالة اليوم`;
+  document.getElementById('sidebarCreditsNum').textContent = `${used} / ${limit} Ø±Ø³Ø§Ù„Ø© Ø§Ù„ÙŠÙˆÙ…`;
   document.getElementById('settingsSummary').textContent =
-    `الخطة الحالية: مجاني · ${used}/${limit} رسالة شات اليوم · الكود/الصور/الفيديو Pro فقط`;
+    `Ø§Ù„Ø®Ø·Ø© Ø§Ù„Ø­Ø§Ù„ÙŠØ©: Ù…Ø¬Ø§Ù†ÙŠ Â· ${used}/${limit} Ø±Ø³Ø§Ù„Ø© Ø´Ø§Øª Ø§Ù„ÙŠÙˆÙ… Â· Ø§Ù„ÙƒÙˆØ¯/Ø§Ù„ØµÙˆØ±/Ø§Ù„ÙÙŠØ¯ÙŠÙˆ Pro ÙÙ‚Ø·`;
   document.getElementById('topupBtn').style.display = 'none';
 }
 
@@ -716,9 +716,9 @@ function renderProUsage(used, total, remaining) {
   const pct = Math.min(100, Math.round((used / total) * 100));
   document.getElementById('sidebarUsagePct').textContent = pct + '%';
   document.getElementById('sidebarUsageFill').style.width = pct + '%';
-  document.getElementById('sidebarCreditsNum').textContent = `${used} / ${total} credits (${remaining} متبقي)`;
+  document.getElementById('sidebarCreditsNum').textContent = `${used} / ${total} credits (${remaining} Ù…ØªØ¨Ù‚ÙŠ)`;
   document.getElementById('settingsSummary').textContent =
-    `الخطة الحالية: Pro · ${used}/${total} credits هاد الشهر (${remaining} متبقي)`;
+    `Ø§Ù„Ø®Ø·Ø© Ø§Ù„Ø­Ø§Ù„ÙŠØ©: Pro Â· ${used}/${total} credits Ù‡Ø§Ø¯ Ø§Ù„Ø´Ù‡Ø± (${remaining} Ù…ØªØ¨Ù‚ÙŠ)`;
   // Surface the top-up option proactively once the pool is getting low,
   // not only after they've already hit a hard block mid-message.
   document.getElementById('topupBtn').style.display = remaining < total * 0.2 ? 'block' : 'none';
@@ -731,13 +731,13 @@ function renderProfile() {
   const isPro = profile.subscription_status === 'pro';
 
   document.getElementById('userAvatar').textContent = initial;
-  document.getElementById('heroGreeting').textContent = `Bienvenue, ${displayName} 👋`;
+  document.getElementById('heroGreeting').textContent = `Bienvenue, ${displayName} ðŸ‘‹`;
 
   // Overwritten right after by renderProUsage()/renderDailyUsage() once
-  // /api/usage-status responds — this is just the safe initial state.
-  document.getElementById('sidebarUsagePct').textContent = '…';
+  // /api/usage-status responds â€” this is just the safe initial state.
+  document.getElementById('sidebarUsagePct').textContent = 'â€¦';
   document.getElementById('sidebarUsageFill').style.width = '0%';
-  document.getElementById('sidebarCreditsNum').textContent = '…';
+  document.getElementById('sidebarCreditsNum').textContent = 'â€¦';
 
   document.getElementById('upgradeBtn').style.display = isPro ? 'none' : 'block';
   document.getElementById('settingsUpgradeBtn').style.display = isPro ? 'none' : 'block';
@@ -760,15 +760,15 @@ const TOPUP_PRICE_PER_CREDIT = 0.02;
 
 async function handleTopup() {
   if (!session) { showLogin(); return; }
-  const input = window.prompt('شحال بغيتي ديال الـ credits؟ (الحد الأدنى 50 = 1$, الحد الأقصى 2500 = 50$)', '200');
+  const input = window.prompt('Ø´Ø­Ø§Ù„ Ø¨ØºÙŠØªÙŠ Ø¯ÙŠØ§Ù„ Ø§Ù„Ù€ creditsØŸ (Ø§Ù„Ø­Ø¯ Ø§Ù„Ø£Ø¯Ù†Ù‰ 50 = 1$, Ø§Ù„Ø­Ø¯ Ø§Ù„Ø£Ù‚ØµÙ‰ 2500 = 50$)', '200');
   if (!input) return;
   const credits = parseInt(input, 10);
   if (!Number.isInteger(credits) || credits < 50 || credits > 2500) {
-    alert('الرقم خاصو يكون بين 50 و2500.');
+    alert('Ø§Ù„Ø±Ù‚Ù… Ø®Ø§ØµÙˆ ÙŠÙƒÙˆÙ† Ø¨ÙŠÙ† 50 Ùˆ2500.');
     return;
   }
   const estimatedPrice = (credits * TOPUP_PRICE_PER_CREDIT).toFixed(2);
-  if (!window.confirm(`غادي تخلص ~${estimatedPrice}$ مقابل ${credits} credit. متأكد؟`)) return;
+  if (!window.confirm(`ØºØ§Ø¯ÙŠ ØªØ®Ù„Øµ ~${estimatedPrice}$ Ù…Ù‚Ø§Ø¨Ù„ ${credits} credit. Ù…ØªØ£ÙƒØ¯ØŸ`)) return;
 
   try {
     const res = await authFetch('/api/create-topup-session', {
@@ -777,7 +777,7 @@ async function handleTopup() {
     });
     const data = await res.json();
     if (data.url) window.location.href = data.url;
-    else alert(data.message || 'Erreur — réessaie.');
+    else alert(data.message || 'Erreur â€” rÃ©essaie.');
   } catch (err) {
     console.error('[topup] failed:', err.message);
   }
@@ -787,7 +787,7 @@ document.getElementById('upgradeBtn').addEventListener('click', handleUpgrade);
 document.getElementById('settingsUpgradeBtn').addEventListener('click', handleUpgrade);
 document.getElementById('topupBtn').addEventListener('click', handleTopup);
 
-// ── authenticated fetch helper ──────────────────────────────────────
+// â”€â”€ authenticated fetch helper â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 async function authFetch(path, options = {}) {
   if (!session) { showLogin(); throw new Error('not_authenticated'); }
   if (session.access_token === DEMO_TOKEN) return demoFetch(path, options);
@@ -807,7 +807,7 @@ async function authFetch(path, options = {}) {
   return res;
 }
 
-// ── bottom tab switching (unchanged from mockup) ────────────────────
+// â”€â”€ bottom tab switching (unchanged from mockup) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 document.querySelectorAll('.bn-item[data-tab]').forEach(el=>{
   el.addEventListener('click', ()=>{
     document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
@@ -829,13 +829,13 @@ document.querySelectorAll('[data-close]').forEach(el=>{
   });
 });
 
-// ── conversation history (per feature: 'chat' / 'code') ─────────────
+// â”€â”€ conversation history (per feature: 'chat' / 'code') â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 // Previously each call to /api/chat sent only the current message
 // (`messages: [{role:'user', content:text}]`), so the model had no
 // memory of anything said earlier in the same session even though the
 // backend (lib/inputValidation.js) already supports a full history up
 // to MAX_MESSAGES_PER_CHAT (40). Kept in memory only (cleared on page
-// reload) — no browser storage involved.
+// reload) â€” no browser storage involved.
 const CHAT_HISTORY_LIMIT = 40; // mirrors backend MAX_MESSAGES_PER_CHAT default
 const conversations = { chat: [], code: [] };
 
@@ -846,7 +846,7 @@ function pushHistory(feature, role, content) {
   if (hist.length > CHAT_HISTORY_LIMIT) hist.splice(0, hist.length - CHAT_HISTORY_LIMIT);
 }
 
-// ── message rendering helpers ───────────────────────────────────────
+// â”€â”€ message rendering helpers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function appendMsg(msgBox, cls, content, isNode) {
   const el = document.createElement('div');
   el.className = 'msg ' + cls;
@@ -864,13 +864,13 @@ function appendTyping(msgBox) {
   return typing;
 }
 
-// ── chat / code → POST /api/chat ────────────────────────────────────
+// â”€â”€ chat / code â†’ POST /api/chat â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 async function sendChat(feature, text, msgBox) {
   const typing = appendTyping(msgBox);
   // Send the stored history PLUS this new turn, but don't commit the new
   // turn to `conversations[feature]` until the call actually succeeds.
   // The Anthropic Messages API requires strict user/assistant
-  // alternation — if we saved the user turn up front and the call then
+  // alternation â€” if we saved the user turn up front and the call then
   // failed (402/429/network error), a retry would stack two 'user'
   // turns in a row with nothing in between, which the API rejects.
   const outgoing = [...conversations[feature], { role: 'user', content: text }];
@@ -883,26 +883,26 @@ async function sendChat(feature, text, msgBox) {
     typing.remove();
 
     if (res.status === 402) {
-      let msg = '⚠️ Crédit insuffisant — passe au plan Pro pour continuer.';
-      if (data.code === 'code_requires_pro') msg = '💻 مساعدة الكود متاحة فقط للمشتركين Pro — رقّي حسابك للمتابعة.';
-      if (data.code === 'pro_out_of_credits') msg = `💳 ${data.message}`;
+      let msg = 'âš ï¸ CrÃ©dit insuffisant â€” passe au plan Pro pour continuer.';
+      if (data.code === 'code_requires_pro') msg = 'ðŸ’» Ù…Ø³Ø§Ø¹Ø¯Ø© Ø§Ù„ÙƒÙˆØ¯ Ù…ØªØ§Ø­Ø© ÙÙ‚Ø· Ù„Ù„Ù…Ø´ØªØ±ÙƒÙŠÙ† Pro â€” Ø±Ù‚Ù‘ÙŠ Ø­Ø³Ø§Ø¨Ùƒ Ù„Ù„Ù…ØªØ§Ø¨Ø¹Ø©.';
+      if (data.code === 'pro_out_of_credits') msg = `ðŸ’³ ${data.message}`;
       appendMsg(msgBox, 'status', msg);
       return;
     }
     if (res.status === 429 && data.code === 'daily_chat_limit') {
-      appendMsg(msgBox, 'status', `🌙 ${data.message}`);
+      appendMsg(msgBox, 'status', `ðŸŒ™ ${data.message}`);
       return;
     }
-    if (res.status === 429) { appendMsg(msgBox, 'status', `⏳ Trop de requêtes — réessaie dans ${data.retry_after_seconds || 'quelques'}s.`); return; }
+    if (res.status === 429) { appendMsg(msgBox, 'status', `â³ Trop de requÃªtes â€” rÃ©essaie dans ${data.retry_after_seconds || 'quelques'}s.`); return; }
     if (res.status === 400) {
       // Conversation grew past what the backend accepts in one request
-      // (message count/char limits) — drop the oldest turns and let the
+      // (message count/char limits) â€” drop the oldest turns and let the
       // user retry, instead of silently failing forever.
       conversations[feature] = conversations[feature].slice(-10);
-      appendMsg(msgBox, 'error', 'Conversation trop longue — historique réduit, réessaie.');
+      appendMsg(msgBox, 'error', 'Conversation trop longue â€” historique rÃ©duit, rÃ©essaie.');
       return;
     }
-    if (!res.ok) { appendMsg(msgBox, 'error', data.message || 'Erreur — tous les modèles ont échoué.'); return; }
+    if (!res.ok) { appendMsg(msgBox, 'error', data.message || 'Erreur â€” tous les modÃ¨les ont Ã©chouÃ©.'); return; }
 
     appendMsg(msgBox, 'bot', data.text);
     pushHistory(feature, 'user', text);
@@ -917,11 +917,11 @@ async function sendChat(feature, text, msgBox) {
     }
   } catch (err) {
     typing.remove();
-    if (err.message !== 'session_expired') appendMsg(msgBox, 'error', 'Erreur réseau — réessaie.');
+    if (err.message !== 'session_expired') appendMsg(msgBox, 'error', 'Erreur rÃ©seau â€” rÃ©essaie.');
   }
 }
 
-// ── images / videos → POST /api/generate-* then poll job status ────
+// â”€â”€ images / videos â†’ POST /api/generate-* then poll job status â”€â”€â”€â”€
 const GEN_ROUTES = { images: '/api/generate-image', videos: '/api/generate-video' };
 const GEN_POLL_MS = 2500;
 const GEN_TIMEOUT_MS = 120000;
@@ -934,19 +934,19 @@ async function sendGeneration(feature, text, msgBox) {
 
     if (res.status === 403 && data.code === 'pro_out_of_credits') {
       typing.remove();
-      appendMsg(msgBox, 'status', `💳 ${data.message}`);
+      appendMsg(msgBox, 'status', `ðŸ’³ ${data.message}`);
       return;
     }
     if (res.status === 402) {
       typing.remove();
-      let msg = '⚠️ Crédit insuffisant — passe au plan Pro pour continuer.';
-      if (data.code === 'video_requires_pro') msg = '🎬 توليد الفيديو متاح فقط للمشتركين Pro — رقّي حسابك للمتابعة.';
-      if (data.code === 'image_requires_pro') msg = '🖼️ توليد الصور متاح فقط للمشتركين Pro — رقّي حسابك للمتابعة.';
+      let msg = 'âš ï¸ CrÃ©dit insuffisant â€” passe au plan Pro pour continuer.';
+      if (data.code === 'video_requires_pro') msg = 'ðŸŽ¬ ØªÙˆÙ„ÙŠØ¯ Ø§Ù„ÙÙŠØ¯ÙŠÙˆ Ù…ØªØ§Ø­ ÙÙ‚Ø· Ù„Ù„Ù…Ø´ØªØ±ÙƒÙŠÙ† Pro â€” Ø±Ù‚Ù‘ÙŠ Ø­Ø³Ø§Ø¨Ùƒ Ù„Ù„Ù…ØªØ§Ø¨Ø¹Ø©.';
+      if (data.code === 'image_requires_pro') msg = 'ðŸ–¼ï¸ ØªÙˆÙ„ÙŠØ¯ Ø§Ù„ØµÙˆØ± Ù…ØªØ§Ø­ ÙÙ‚Ø· Ù„Ù„Ù…Ø´ØªØ±ÙƒÙŠÙ† Pro â€” Ø±Ù‚Ù‘ÙŠ Ø­Ø³Ø§Ø¨Ùƒ Ù„Ù„Ù…ØªØ§Ø¨Ø¹Ø©.';
       appendMsg(msgBox, 'status', msg);
       return;
     }
-    if (res.status === 429) { typing.remove(); appendMsg(msgBox, 'status', `⏳ Trop de requêtes — réessaie dans ${data.retry_after_seconds || 'quelques'}s.`); return; }
-    if (!res.ok || !data.jobId) { typing.remove(); appendMsg(msgBox, 'error', data.message || 'Échec de la création du job.'); return; }
+    if (res.status === 429) { typing.remove(); appendMsg(msgBox, 'status', `â³ Trop de requÃªtes â€” rÃ©essaie dans ${data.retry_after_seconds || 'quelques'}s.`); return; }
+    if (!res.ok || !data.jobId) { typing.remove(); appendMsg(msgBox, 'error', data.message || 'Ã‰chec de la crÃ©ation du job.'); return; }
 
     if (typeof data.newBalance === 'number' && profile) {
       const total = profile.credits_total || 500;
@@ -956,7 +956,7 @@ async function sendGeneration(feature, text, msgBox) {
     await pollJob(data.jobId, feature, msgBox, typing);
   } catch (err) {
     typing.remove();
-    if (err.message !== 'session_expired') appendMsg(msgBox, 'error', 'Erreur réseau — réessaie.');
+    if (err.message !== 'session_expired') appendMsg(msgBox, 'error', 'Erreur rÃ©seau â€” rÃ©essaie.');
   }
 }
 
@@ -970,7 +970,7 @@ async function pollJob(jobId, feature, msgBox, typing) {
       data = await res.json();
     } catch (err) {
       if (err.message === 'session_expired') return;
-      continue; // transient network error — keep polling
+      continue; // transient network error â€” keep polling
     }
     if (!res.ok) continue;
 
@@ -980,7 +980,7 @@ async function pollJob(jobId, feature, msgBox, typing) {
       if (feature === 'images') {
         const img = document.createElement('img');
         img.src = data.result_url;
-        img.alt = 'Résultat généré';
+        img.alt = 'RÃ©sultat gÃ©nÃ©rÃ©';
         wrap.appendChild(img);
       } else {
         const vid = document.createElement('video');
@@ -993,24 +993,24 @@ async function pollJob(jobId, feature, msgBox, typing) {
     }
     if (data.status === 'failed') {
       typing.remove();
-      appendMsg(msgBox, 'error', 'Échec de la génération : ' + (data.error_message || 'erreur inconnue') + ' (crédits remboursés).');
+      appendMsg(msgBox, 'error', 'Ã‰chec de la gÃ©nÃ©ration : ' + (data.error_message || 'erreur inconnue') + ' (crÃ©dits remboursÃ©s).');
       return;
     }
   }
   typing.remove();
-  appendMsg(msgBox, 'status', "⏳ Ça prend plus longtemps que prévu — vérifie l'onglet Projets plus tard.");
+  appendMsg(msgBox, 'status', "â³ Ã‡a prend plus longtemps que prÃ©vu â€” vÃ©rifie l'onglet Projets plus tard.");
 }
 
-// ── roxip: no backend route yet, kept as a clearly-labeled demo ────
+// â”€â”€ roxip: no backend route yet, kept as a clearly-labeled demo â”€â”€â”€â”€
 function sendRoxIpDemo(text, msgBox) {
   const typing = appendTyping(msgBox);
   setTimeout(() => {
     typing.remove();
-    appendMsg(msgBox, 'status', `Démo — "${text}" ne se connecte pas encore à une vraie machine (fonctionnalité pas encore présente dans le backend).`);
+    appendMsg(msgBox, 'status', `DÃ©mo â€” "${text}" ne se connecte pas encore Ã  une vraie machine (fonctionnalitÃ© pas encore prÃ©sente dans le backend).`);
   }, 700);
 }
 
-// ── dispatch ─────────────────────────────────────────────────────────
+// â”€â”€ dispatch â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function sendMessage(feature){
   const input = document.querySelector('input[data-feature="'+feature+'"]');
   const text = input.value.trim();
@@ -1042,17 +1042,17 @@ initAuth();
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Rox AI — Desktop</title>
+<title>Rox AI â€” Desktop</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"><\/script>
 <style>
-  /* ══════════════════════════════════════════════════════════════════
-     ROX AI — "Ember Core" identity — DESKTOP layout
+  /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+     ROX AI â€” "Ember Core" identity â€” DESKTOP layout
      Same obsidian/ember/circuit-teal brand as the mobile build. Layout
      reworked into a persistent sidebar + topbar shell so every feature
      lives on one canvas instead of full-screen phone panels.
-     ══════════════════════════════════════════════════════════════════ */
+     â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
   :root{
     --bg:#0b0908;
     --bg-2:#050403;
@@ -1100,7 +1100,7 @@ initAuth();
     *,*::before,*::after{animation-duration:.001ms !important;animation-iteration-count:1 !important;transition-duration:.001ms !important;}
   }
 
-  /* ── ambient obsidian backdrop ── */
+  /* â”€â”€ ambient obsidian backdrop â”€â”€ */
   .ambient{position:fixed;inset:0;z-index:0;overflow:hidden;background:var(--bg-2);pointer-events:none;}
   .ambient::before, .ambient::after{
     content:'';position:absolute;width:56vmax;height:56vmax;border-radius:50%;
@@ -1121,7 +1121,7 @@ initAuth();
     background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   }
 
-  /* ── Ember Core mark (brand mark + loop-loaders) ── */
+  /* â”€â”€ Ember Core mark (brand mark + loop-loaders) â”€â”€ */
   .core{position:relative;display:flex;align-items:center;justify-content:center;background:var(--bg-2);overflow:hidden;isolation:isolate;}
   .core::before{
     content:'';position:absolute;inset:-45%;z-index:-1;
@@ -1133,7 +1133,7 @@ initAuth();
   a{text-decoration:none;color:inherit;}
   button{font-family:inherit;}
 
-  /* ═══════════ APP SHELL ═══════════ */
+  /* â•â•â•â•â•â•â•â•â•â•â• APP SHELL â•â•â•â•â•â•â•â•â•â•â• */
   .app{position:relative;z-index:2;display:flex;min-height:100vh;}
 
   /* SIDEBAR */
@@ -1161,7 +1161,7 @@ initAuth();
 
   .sidebar-bottom{margin-top:auto;}
 
-  /* CORE METER — credits/usage gauge */
+  /* CORE METER â€” credits/usage gauge */
   .usage-card{background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:16px;position:relative;overflow:hidden;}
   .usage-card::before{content:'';position:absolute;inset:0;background:radial-gradient(220px 100px at 100% 0%, rgba(139,92,246,.14), transparent 70%);pointer-events:none;}
   .usage-label{position:relative;display:flex;justify-content:space-between;font-size:12.5px;color:var(--text-dim);margin-bottom:8px;}
@@ -1360,7 +1360,7 @@ initAuth();
 
   .placeholder-view{color:var(--text-dim);font-size:13.5px;padding:44px 20px;text-align:center;border:1px dashed var(--border);border-radius:16px;}
 
-  /* ═══════════ MODALS (feature chats) ═══════════ */
+  /* â•â•â•â•â•â•â•â•â•â•â• MODALS (feature chats) â•â•â•â•â•â•â•â•â•â•â• */
   .modal-backdrop{position:fixed;inset:0;background:rgba(5,4,3,.72);backdrop-filter:blur(4px);z-index:60;display:none;align-items:center;justify-content:center;padding:32px;}
   .modal-backdrop.active{display:flex;animation:fadein .18s ease;}
   .feature-screen{
@@ -1453,17 +1453,17 @@ initAuth();
 <div class="ambient"></div>
 <div class="grain"></div>
 
-<!-- LOGIN OVERLAY — shown until a Supabase session exists -->
+<!-- LOGIN OVERLAY â€” shown until a Supabase session exists -->
 <div id="login-overlay">
   <div class="login-box">
     <div class="brand"><div class="logo core">R</div>Rox AI</div>
-    <p class="login-tag">الذكاء الصناعي في جيبك — Chat · Images · Vidéos · Code</p>
+    <p class="login-tag">Ø§Ù„Ø°ÙƒØ§Ø¡ Ø§Ù„ØµÙ†Ø§Ø¹ÙŠ ÙÙŠ Ø¬ÙŠØ¨Ùƒ â€” Chat Â· Images Â· VidÃ©os Â· Code</p>
     <div class="login-error" id="login-error"></div>
     <input type="text" id="login-name" placeholder="Nom complet" autocomplete="name" style="display:none;">
     <input type="email" id="login-email" placeholder="Adresse email" autocomplete="email">
     <input type="password" id="login-password" placeholder="Mot de passe" autocomplete="current-password">
     <button id="login-submit" class="shimmer-btn">Se connecter</button>
-    <div class="login-toggle" id="login-toggle">Pas encore de compte ? <span>Créer un compte</span></div>
+    <div class="login-toggle" id="login-toggle">Pas encore de compte ? <span>CrÃ©er un compte</span></div>
   </div>
 </div>
 
@@ -1474,26 +1474,26 @@ initAuth();
     <div class="brand"><div class="logo core">R</div>Rox AI</div>
 
     <div class="nav-list">
-      <div class="nav-item active" data-tab="home"><span class="ic">🏠</span>Accueil</div>
-      <div class="nav-item" data-open="images"><span class="ic">🖼️</span>Images</div>
-      <div class="nav-item" data-open="videos"><span class="ic">🎥</span>Vidéos</div>
-      <div class="nav-item" data-open="roxip"><span class="ic">🖥️</span>Rox IP (Contrôle PC)<span class="nav-dot"></span></div>
-      <div class="nav-item" data-open="chat"><span class="ic">💬</span>Chat AI</div>
-      <div class="nav-item" data-open="code"><span class="ic">⌨️</span>Code Studio</div>
+      <div class="nav-item active" data-tab="home"><span class="ic">ðŸ </span>Accueil</div>
+      <div class="nav-item" data-open="images"><span class="ic">ðŸ–¼ï¸</span>Images</div>
+      <div class="nav-item" data-open="videos"><span class="ic">ðŸŽ¥</span>VidÃ©os</div>
+      <div class="nav-item" data-open="roxip"><span class="ic">ðŸ–¥ï¸</span>Rox IP (ContrÃ´le PC)<span class="nav-dot"></span></div>
+      <div class="nav-item" data-open="chat"><span class="ic">ðŸ’¬</span>Chat AI</div>
+      <div class="nav-item" data-open="code"><span class="ic">âŒ¨ï¸</span>Code Studio</div>
       <div class="nav-sep"></div>
-      <div class="nav-item" data-tab="projects"><span class="ic">📁</span>Projets</div>
-      <div class="nav-item" data-open="automations"><span class="ic">🤖</span>Automatisations</div>
-      <div class="nav-item" data-open="history"><span class="ic">🕘</span>Historique</div>
-      <div class="nav-item" data-open="settings"><span class="ic">⚙️</span>Paramètres</div>
+      <div class="nav-item" data-tab="projects"><span class="ic">ðŸ“</span>Projets</div>
+      <div class="nav-item" data-open="automations"><span class="ic">ðŸ¤–</span>Automatisations</div>
+      <div class="nav-item" data-open="history"><span class="ic">ðŸ•˜</span>Historique</div>
+      <div class="nav-item" data-open="settings"><span class="ic">âš™ï¸</span>ParamÃ¨tres</div>
     </div>
 
     <div class="sidebar-bottom">
       <div class="usage-card">
-        <div class="usage-label"><span>Utilisation</span><span id="sidebarUsagePct">–</span></div>
+        <div class="usage-label"><span>Utilisation</span><span id="sidebarUsagePct">â€“</span></div>
         <div class="usage-bar"><div class="usage-fill" id="sidebarUsageFill" style="width:0%"></div></div>
-        <div class="credits-num" id="sidebarCreditsNum">–</div>
-        <button class="upgrade-btn shimmer-btn" id="upgradeBtn">⭐ Passer au Plan Pro</button>
-        <button class="upgrade-btn shimmer-btn" id="topupBtn" style="display:none; margin-top:8px; background:var(--blue-grad);">💳 شحن رصيد إضافي</button>
+        <div class="credits-num" id="sidebarCreditsNum">â€“</div>
+        <button class="upgrade-btn shimmer-btn" id="upgradeBtn">â­ Passer au Plan Pro</button>
+        <button class="upgrade-btn shimmer-btn" id="topupBtn" style="display:none; margin-top:8px; background:var(--blue-grad);">ðŸ’³ Ø´Ø­Ù† Ø±ØµÙŠØ¯ Ø¥Ø¶Ø§ÙÙŠ</button>
       </div>
     </div>
   </div>
@@ -1502,13 +1502,13 @@ initAuth();
   <div class="main">
 
     <div class="topbar">
-      <div class="search">🔍 Rechercher dans Rox AI...</div>
+      <div class="search">ðŸ” Rechercher dans Rox AI...</div>
       <div class="topbar-spacer"></div>
-      <div class="top-ic" title="Thème">☀️</div>
-      <div class="top-ic" title="Notifications">🔔</div>
-      <div class="user-block" id="logoutBtn" title="Se déconnecter">
-        <div class="user-meta"><div class="name" id="topbarUserName">–</div><div class="plan" id="topbarUserPlan">–</div></div>
-        <div class="avatar-sm" id="userAvatar">–</div>
+      <div class="top-ic" title="ThÃ¨me">â˜€ï¸</div>
+      <div class="top-ic" title="Notifications">ðŸ””</div>
+      <div class="user-block" id="logoutBtn" title="Se dÃ©connecter">
+        <div class="user-meta"><div class="name" id="topbarUserName">â€“</div><div class="plan" id="topbarUserPlan">â€“</div></div>
+        <div class="avatar-sm" id="userAvatar">â€“</div>
       </div>
     </div>
 
@@ -1519,78 +1519,78 @@ initAuth();
 
         <div class="hero">
           <div class="hero-text">
-            <h1 id="heroGreeting">Bienvenue ! 👋</h1>
-            <p>Tout l'IA dont vous avez besoin, réuni au même endroit.</p>
+            <h1 id="heroGreeting">Bienvenue ! ðŸ‘‹</h1>
+            <p>Tout l'IA dont vous avez besoin, rÃ©uni au mÃªme endroit.</p>
             <div class="pill-row">
-              <div class="pill">✨ Multi-modèles</div>
-              <div class="pill">⚡ Rapide</div>
-              <div class="pill">🛡️ Sécurisé</div>
-              <div class="pill">🧩 Tout-en-un</div>
+              <div class="pill">âœ¨ Multi-modÃ¨les</div>
+              <div class="pill">âš¡ Rapide</div>
+              <div class="pill">ðŸ›¡ï¸ SÃ©curisÃ©</div>
+              <div class="pill">ðŸ§© Tout-en-un</div>
             </div>
           </div>
           <div class="hero-orbit">
             <div class="ring"></div>
             <div class="ring r2"></div>
             <div class="core-lg">R</div>
-            <div class="orbit-ic o1">🖼️</div>
-            <div class="orbit-ic o2">💬</div>
-            <div class="orbit-ic o3">🎥</div>
-            <div class="orbit-ic o4">⌨️</div>
+            <div class="orbit-ic o1">ðŸ–¼ï¸</div>
+            <div class="orbit-ic o2">ðŸ’¬</div>
+            <div class="orbit-ic o3">ðŸŽ¥</div>
+            <div class="orbit-ic o4">âŒ¨ï¸</div>
           </div>
         </div>
 
         <div class="feature-grid">
 
           <div class="fcard" data-open="images">
-            <div class="fcard-head" data-open="images"><div class="fcard-ic" style="background:rgba(139,92,246,.15);color:#a78bfa;">🖼️</div><h3>Images AI</h3></div>
-            <p>Générez des images incroyables à partir de vos idées.</p>
+            <div class="fcard-head" data-open="images"><div class="fcard-ic" style="background:rgba(139,92,246,.15);color:#a78bfa;">ðŸ–¼ï¸</div><h3>Images AI</h3></div>
+            <p>GÃ©nÃ©rez des images incroyables Ã  partir de vos idÃ©es.</p>
             <div class="fcard-thumb" data-open="images" style="background-image:linear-gradient(135deg,#2a1408,#6d28d9 55%,#ffd166);"></div>
             <div class="fcard-form">
-              <input type="text" placeholder="Décrivez votre image..." data-quickfeature="images">
-              <button class="fcard-btn shimmer-btn" style="background:var(--ember-grad);" data-quicksend="images">✨ Générer Image</button>
+              <input type="text" placeholder="DÃ©crivez votre image..." data-quickfeature="images">
+              <button class="fcard-btn shimmer-btn" style="background:var(--ember-grad);" data-quicksend="images">âœ¨ GÃ©nÃ©rer Image</button>
             </div>
           </div>
 
           <div class="fcard" data-open="videos">
-            <div class="fcard-head" data-open="videos"><div class="fcard-ic" style="background:rgba(134,25,143,.15);color:#f9a8d4;">🎥</div><h3>Vidéos AI</h3></div>
-            <p>Créez des vidéos époustouflantes à partir de texte ou d'images.</p>
+            <div class="fcard-head" data-open="videos"><div class="fcard-ic" style="background:rgba(134,25,143,.15);color:#f9a8d4;">ðŸŽ¥</div><h3>VidÃ©os AI</h3></div>
+            <p>CrÃ©ez des vidÃ©os Ã©poustouflantes Ã  partir de texte ou d'images.</p>
             <div class="fcard-thumb" data-open="videos" style="background-image:linear-gradient(135deg,#0a0f2a,#86198f 55%,#22d3ee);">
-              <div class="play"><span>▶</span></div>
+              <div class="play"><span>â–¶</span></div>
             </div>
             <div class="fcard-form">
-              <input type="text" placeholder="Décrivez votre vidéo..." data-quickfeature="videos">
-              <button class="fcard-btn shimmer-btn" style="background:var(--crimson-grad);" data-quicksend="videos">▶ Générer Vidéo</button>
+              <input type="text" placeholder="DÃ©crivez votre vidÃ©o..." data-quickfeature="videos">
+              <button class="fcard-btn shimmer-btn" style="background:var(--crimson-grad);" data-quicksend="videos">â–¶ GÃ©nÃ©rer VidÃ©o</button>
             </div>
           </div>
 
           <div class="fcard rox-ip" data-open="roxip">
-            <div class="fcard-head" data-open="roxip"><div class="fcard-ic" style="background:rgba(34,197,94,.15);color:#4ade80;">🖥️</div><h3>Rox IP (Contrôle PC)</h3></div>
-            <p>Connectez-vous à un IP et prenez le contrôle à distance en temps réel.</p>
+            <div class="fcard-head" data-open="roxip"><div class="fcard-ic" style="background:rgba(34,197,94,.15);color:#4ade80;">ðŸ–¥ï¸</div><h3>Rox IP (ContrÃ´le PC)</h3></div>
+            <p>Connectez-vous Ã  un IP et prenez le contrÃ´le Ã  distance en temps rÃ©el.</p>
             <div class="fcard-thumb map-thumb" data-open="roxip"></div>
             <div class="fcard-form">
               <input type="text" placeholder="Entrez l'adresse IP..." data-quickfeature="roxip">
-              <button class="fcard-btn shimmer-btn" style="background:linear-gradient(135deg,#16a34a,#22c55e);" data-quicksend="roxip">⚡ Se Connecter</button>
+              <button class="fcard-btn shimmer-btn" style="background:linear-gradient(135deg,#16a34a,#22c55e);" data-quicksend="roxip">âš¡ Se Connecter</button>
             </div>
           </div>
 
           <div class="fcard" data-open="chat">
-            <div class="fcard-head" data-open="chat"><div class="fcard-ic" style="background:rgba(139,92,246,.15);color:#a78bfa;">💬</div><h3>Chat AI</h3></div>
-            <p>Discutez avec l'IA et obtenez des réponses instantanées.</p>
+            <div class="fcard-head" data-open="chat"><div class="fcard-ic" style="background:rgba(139,92,246,.15);color:#a78bfa;">ðŸ’¬</div><h3>Chat AI</h3></div>
+            <p>Discutez avec l'IA et obtenez des rÃ©ponses instantanÃ©es.</p>
             <div class="fcard-thumb chat-thumb" data-open="chat">
-              <div class="b a">👋 Bonjour Rox AI !</div>
+              <div class="b a">ðŸ‘‹ Bonjour Rox AI !</div>
               <div class="b a">Bonjour ! Comment puis-je vous aider aujourd'hui ?</div>
-              <div class="b u">Explique moi la gravité...</div>
-              <div class="b a">La gravité est une force...</div>
+              <div class="b u">Explique moi la gravitÃ©...</div>
+              <div class="b a">La gravitÃ© est une force...</div>
             </div>
             <div class="fcard-form">
               <input type="text" placeholder="Posez votre question..." data-quickfeature="chat">
-              <button class="fcard-btn shimmer-btn" style="background:var(--ember-grad);" data-quicksend="chat">➤ Envoyer</button>
+              <button class="fcard-btn shimmer-btn" style="background:var(--ember-grad);" data-quicksend="chat">âž¤ Envoyer</button>
             </div>
           </div>
 
           <div class="fcard" data-open="code">
-            <div class="fcard-head" data-open="code"><div class="fcard-ic" style="background:rgba(167,139,250,.15);color:#c4b5fd;">⌨️</div><h3>Code Studio</h3></div>
-            <p>Codez, build, et déployez vos idées avec l'aide de l'IA.</p>
+            <div class="fcard-head" data-open="code"><div class="fcard-ic" style="background:rgba(167,139,250,.15);color:#c4b5fd;">âŒ¨ï¸</div><h3>Code Studio</h3></div>
+            <p>Codez, build, et dÃ©ployez vos idÃ©es avec l'aide de l'IA.</p>
             <div class="fcard-thumb code-thumb" data-open="code">
 <div><span class="ln">1</span>  <span class="kw">function</span> <span class="fn">greet</span>(name) {</div>
 <div><span class="ln">2</span>    <span class="kw">return</span> <span class="str">`Hello, ${name}!`</span>;</div>
@@ -1600,7 +1600,7 @@ initAuth();
             </div>
             <div class="fcard-form">
               <select id="codeLangSelect"><option>JavaScript</option><option>Python</option><option>TypeScript</option><option>Go</option></select>
-              <button class="fcard-btn shimmer-btn" style="background:var(--blue-grad);" data-quicksend="code">▶ Exécuter</button>
+              <button class="fcard-btn shimmer-btn" style="background:var(--blue-grad);" data-quicksend="code">â–¶ ExÃ©cuter</button>
             </div>
           </div>
 
@@ -1608,54 +1608,54 @@ initAuth();
 
         <div class="dashboard-row">
           <div class="projects-col">
-            <div class="section-title"><h2>Projets récents</h2><a data-tab="projects">Voir tous</a></div>
+            <div class="section-title"><h2>Projets rÃ©cents</h2><a data-tab="projects">Voir tous</a></div>
             <div class="project-grid">
               <div class="pcard" data-open="images">
                 <div class="pthumb" style="background-image:linear-gradient(135deg,#2a1408,#6d28d9 55%,#ffd166);"></div>
-                <div class="pbody"><div class="t">Image Fantasy</div><div class="s">Créé il y a 2h</div></div>
+                <div class="pbody"><div class="t">Image Fantasy</div><div class="s">CrÃ©Ã© il y a 2h</div></div>
               </div>
               <div class="pcard" data-open="videos">
-                <div class="pthumb" style="background-image:linear-gradient(135deg,#0a0f2a,#86198f 55%,#22d3ee);display:flex;align-items:center;justify-content:center;font-size:20px;color:#fff;">▶</div>
-                <div class="pbody"><div class="t">Vidéo Cyberpunk</div><div class="s">Créé il y a 5h</div></div>
+                <div class="pthumb" style="background-image:linear-gradient(135deg,#0a0f2a,#86198f 55%,#22d3ee);display:flex;align-items:center;justify-content:center;font-size:20px;color:#fff;">â–¶</div>
+                <div class="pbody"><div class="t">VidÃ©o Cyberpunk</div><div class="s">CrÃ©Ã© il y a 5h</div></div>
               </div>
               <div class="pcard" data-open="roxip">
                 <div class="pthumb map-thumb"></div>
-                <div class="pbody"><div class="t">Session IP Bureau</div><div class="s live">● Connecté</div></div>
+                <div class="pbody"><div class="t">Session IP Bureau</div><div class="s live">â— ConnectÃ©</div></div>
               </div>
               <div class="pcard" data-open="chat">
                 <div class="pthumb chatp">
                   <div class="row"><div class="av"></div><div class="ln"></div></div>
                   <div class="row"><div class="av" style="background:var(--panel-3);"></div><div class="ln" style="width:70%;"></div></div>
                 </div>
-                <div class="pbody"><div class="t">Chat Histoire</div><div class="s">Créé il y a 1j</div></div>
+                <div class="pbody"><div class="t">Chat Histoire</div><div class="s">CrÃ©Ã© il y a 1j</div></div>
               </div>
               <div class="pcard" data-open="code">
                 <div class="pthumb codep">&lt;/&gt; index.html<br>build/bundle.js<br>package.json</div>
-                <div class="pbody"><div class="t">Site Web Portfolio</div><div class="s">Créé il y a 2j</div></div>
+                <div class="pbody"><div class="t">Site Web Portfolio</div><div class="s">CrÃ©Ã© il y a 2j</div></div>
               </div>
             </div>
           </div>
 
           <div class="activity-col">
-            <h2>Activité récente</h2>
+            <h2>ActivitÃ© rÃ©cente</h2>
             <div class="arow">
-              <div class="aic" style="background:rgba(139,92,246,.15);color:#a78bfa;">🖼️</div>
-              <div class="abody"><div class="at">Image générée</div><div class="as">Projet Fantasy</div></div>
+              <div class="aic" style="background:rgba(139,92,246,.15);color:#a78bfa;">ðŸ–¼ï¸</div>
+              <div class="abody"><div class="at">Image gÃ©nÃ©rÃ©e</div><div class="as">Projet Fantasy</div></div>
               <div class="atime">il y a 2h</div>
             </div>
             <div class="arow">
-              <div class="aic" style="background:rgba(134,25,143,.15);color:#f9a8d4;">🎥</div>
-              <div class="abody"><div class="at">Vidéo créée</div><div class="as">Projet Cyberpunk</div></div>
+              <div class="aic" style="background:rgba(134,25,143,.15);color:#f9a8d4;">ðŸŽ¥</div>
+              <div class="abody"><div class="at">VidÃ©o crÃ©Ã©e</div><div class="as">Projet Cyberpunk</div></div>
               <div class="atime">il y a 5h</div>
             </div>
             <div class="arow">
-              <div class="aic" style="background:rgba(34,197,94,.15);color:#4ade80;">🖥️</div>
+              <div class="aic" style="background:rgba(34,197,94,.15);color:#4ade80;">ðŸ–¥ï¸</div>
               <div class="abody"><div class="at">Connexion IP</div><div class="as">192.168.1.45</div></div>
               <div class="atime">il y a 6h</div>
             </div>
             <div class="arow">
-              <div class="aic" style="background:rgba(167,139,250,.15);color:#c4b5fd;">⌨️</div>
-              <div class="abody"><div class="at">Code exécuté</div><div class="as">script.js</div></div>
+              <div class="aic" style="background:rgba(167,139,250,.15);color:#c4b5fd;">âŒ¨ï¸</div>
+              <div class="abody"><div class="at">Code exÃ©cutÃ©</div><div class="as">script.js</div></div>
               <div class="atime">il y a 1j</div>
             </div>
           </div>
@@ -1666,28 +1666,28 @@ initAuth();
       <!-- PROJECTS TAB -->
       <div class="screen" id="screen-projects">
         <div class="section-title"><h2>Projets</h2></div>
-        <div class="placeholder-view">Retrouvez ici l'ensemble de vos projets Images, Vidéos et Code.</div>
+        <div class="placeholder-view">Retrouvez ici l'ensemble de vos projets Images, VidÃ©os et Code.</div>
       </div>
 
     </div>
   </div>
 </div>
 
-<!-- ═══════════ FULL FEATURE MODALS ═══════════ -->
+<!-- â•â•â•â•â•â•â•â•â•â•â• FULL FEATURE MODALS â•â•â•â•â•â•â•â•â•â•â• -->
 
 <div class="modal-backdrop" id="feature-images">
   <div class="feature-screen">
     <div class="modal-topbar">
-      <div class="back" data-close>←</div>
-      <div class="fic" style="background:rgba(139,92,246,.15);color:#a78bfa;">🖼️</div>
-      <div class="meta"><div class="t">Images AI</div><div class="s">Génération d'images</div></div>
+      <div class="back" data-close>â†</div>
+      <div class="fic" style="background:rgba(139,92,246,.15);color:#a78bfa;">ðŸ–¼ï¸</div>
+      <div class="meta"><div class="t">Images AI</div><div class="s">GÃ©nÃ©ration d'images</div></div>
     </div>
     <div class="chat-messages" id="msgs-images">
-      <div class="msg bot">Décris-moi l'image que tu veux générer (style, ambiance, couleurs...).</div>
+      <div class="msg bot">DÃ©cris-moi l'image que tu veux gÃ©nÃ©rer (style, ambiance, couleurs...).</div>
     </div>
     <div class="chat-input-row">
-      <input type="text" placeholder="Décrivez votre image..." data-feature="images">
-      <button style="background:var(--ember-grad);" data-send="images">✨</button>
+      <input type="text" placeholder="DÃ©crivez votre image..." data-feature="images">
+      <button style="background:var(--ember-grad);" data-send="images">âœ¨</button>
     </div>
   </div>
 </div>
@@ -1695,16 +1695,16 @@ initAuth();
 <div class="modal-backdrop" id="feature-videos">
   <div class="feature-screen">
     <div class="modal-topbar">
-      <div class="back" data-close>←</div>
-      <div class="fic" style="background:rgba(134,25,143,.15);color:#f9a8d4;">🎬</div>
-      <div class="meta"><div class="t">Vidéos AI</div><div class="s">Génération de vidéos</div></div>
+      <div class="back" data-close>â†</div>
+      <div class="fic" style="background:rgba(134,25,143,.15);color:#f9a8d4;">ðŸŽ¬</div>
+      <div class="meta"><div class="t">VidÃ©os AI</div><div class="s">GÃ©nÃ©ration de vidÃ©os</div></div>
     </div>
     <div class="chat-messages" id="msgs-videos">
-      <div class="msg bot">Dis-moi quelle scène tu veux voir en vidéo, et sa durée souhaitée.</div>
+      <div class="msg bot">Dis-moi quelle scÃ¨ne tu veux voir en vidÃ©o, et sa durÃ©e souhaitÃ©e.</div>
     </div>
     <div class="chat-input-row">
-      <input type="text" placeholder="Décrivez votre vidéo..." data-feature="videos">
-      <button style="background:var(--crimson-grad);" data-send="videos">▶</button>
+      <input type="text" placeholder="DÃ©crivez votre vidÃ©o..." data-feature="videos">
+      <button style="background:var(--crimson-grad);" data-send="videos">â–¶</button>
     </div>
   </div>
 </div>
@@ -1712,16 +1712,16 @@ initAuth();
 <div class="modal-backdrop" id="feature-roxip">
   <div class="feature-screen">
     <div class="modal-topbar">
-      <div class="back" data-close>←</div>
-      <div class="fic" style="background:rgba(34,197,94,.15);color:#4ade80;">🖥️</div>
-      <div class="meta"><div class="t">Rox IP</div><div class="s">Démo — pas encore relié au backend</div></div>
+      <div class="back" data-close>â†</div>
+      <div class="fic" style="background:rgba(34,197,94,.15);color:#4ade80;">ðŸ–¥ï¸</div>
+      <div class="meta"><div class="t">Rox IP</div><div class="s">DÃ©mo â€” pas encore reliÃ© au backend</div></div>
     </div>
     <div class="chat-messages" id="msgs-roxip">
-      <div class="msg bot">Entre l'adresse IP de la machine à laquelle tu veux te connecter.</div>
+      <div class="msg bot">Entre l'adresse IP de la machine Ã  laquelle tu veux te connecter.</div>
     </div>
     <div class="chat-input-row">
       <input type="text" placeholder="Entrez l'adresse IP..." data-feature="roxip">
-      <button style="background:linear-gradient(135deg,#16a34a,#22c55e);" data-send="roxip">⚡</button>
+      <button style="background:linear-gradient(135deg,#16a34a,#22c55e);" data-send="roxip">âš¡</button>
     </div>
   </div>
 </div>
@@ -1729,8 +1729,8 @@ initAuth();
 <div class="modal-backdrop" id="feature-chat">
   <div class="feature-screen">
     <div class="modal-topbar">
-      <div class="back" data-close>←</div>
-      <div class="fic" style="background:rgba(139,92,246,.15);color:#a78bfa;">💬</div>
+      <div class="back" data-close>â†</div>
+      <div class="fic" style="background:rgba(139,92,246,.15);color:#a78bfa;">ðŸ’¬</div>
       <div class="meta"><div class="t">Chat AI</div><div class="s">En ligne</div></div>
     </div>
     <div class="chat-messages" id="msgs-chat">
@@ -1738,7 +1738,7 @@ initAuth();
     </div>
     <div class="chat-input-row">
       <input type="text" placeholder="Posez votre question..." data-feature="chat">
-      <button style="background:var(--ember-grad);" data-send="chat">➤</button>
+      <button style="background:var(--ember-grad);" data-send="chat">âž¤</button>
     </div>
   </div>
 </div>
@@ -1746,16 +1746,16 @@ initAuth();
 <div class="modal-backdrop" id="feature-code">
   <div class="feature-screen">
     <div class="modal-topbar">
-      <div class="back" data-close>←</div>
-      <div class="fic" style="background:rgba(167,139,250,.15);color:#c4b5fd;">⌨️</div>
+      <div class="back" data-close>â†</div>
+      <div class="fic" style="background:rgba(167,139,250,.15);color:#c4b5fd;">âŒ¨ï¸</div>
       <div class="meta"><div class="t">Code Studio</div><div class="s">Assistant de code</div></div>
     </div>
     <div class="chat-messages" id="msgs-code">
-      <div class="msg bot">Dis-moi quelle fonction ou quel script tu veux que je t'aide à écrire.</div>
+      <div class="msg bot">Dis-moi quelle fonction ou quel script tu veux que je t'aide Ã  Ã©crire.</div>
     </div>
     <div class="chat-input-row">
       <input type="text" placeholder="Ex: une fonction qui trie un tableau..." data-feature="code">
-      <button style="background:var(--blue-grad);" data-send="code">▶</button>
+      <button style="background:var(--blue-grad);" data-send="code">â–¶</button>
     </div>
   </div>
 </div>
@@ -1763,57 +1763,57 @@ initAuth();
 <div class="modal-backdrop" id="feature-automations">
   <div class="feature-screen">
     <div class="modal-topbar">
-      <div class="back" data-close>←</div>
-      <div class="fic" style="background:var(--panel-2);">🤖</div>
-      <div class="meta"><div class="t">Automatisations</div><div class="s">Tâches automatiques</div></div>
+      <div class="back" data-close>â†</div>
+      <div class="fic" style="background:var(--panel-2);">ðŸ¤–</div>
+      <div class="meta"><div class="t">Automatisations</div><div class="s">TÃ¢ches automatiques</div></div>
     </div>
-    <div class="placeholder-view" style="margin:20px;">Aucune automatisation configurée pour l'instant.</div>
+    <div class="placeholder-view" style="margin:20px;">Aucune automatisation configurÃ©e pour l'instant.</div>
   </div>
 </div>
 
 <div class="modal-backdrop" id="feature-history">
   <div class="feature-screen">
     <div class="modal-topbar">
-      <div class="back" data-close>←</div>
-      <div class="fic" style="background:var(--panel-2);">🕘</div>
-      <div class="meta"><div class="t">Historique</div><div class="s">Activité récente</div></div>
+      <div class="back" data-close>â†</div>
+      <div class="fic" style="background:var(--panel-2);">ðŸ•˜</div>
+      <div class="meta"><div class="t">Historique</div><div class="s">ActivitÃ© rÃ©cente</div></div>
     </div>
-    <div class="placeholder-view" style="margin:20px;">Image générée · Vidéo créée · Connexion IP · Code exécuté</div>
+    <div class="placeholder-view" style="margin:20px;">Image gÃ©nÃ©rÃ©e Â· VidÃ©o crÃ©Ã©e Â· Connexion IP Â· Code exÃ©cutÃ©</div>
   </div>
 </div>
 
 <div class="modal-backdrop" id="feature-settings">
   <div class="feature-screen">
     <div class="modal-topbar">
-      <div class="back" data-close>←</div>
-      <div class="fic" style="background:var(--panel-2);">⚙️</div>
-      <div class="meta"><div class="t">Paramètres</div><div class="s">Compte & préférences</div></div>
+      <div class="back" data-close>â†</div>
+      <div class="fic" style="background:var(--panel-2);">âš™ï¸</div>
+      <div class="meta"><div class="t">ParamÃ¨tres</div><div class="s">Compte & prÃ©fÃ©rences</div></div>
     </div>
     <div class="placeholder-view" id="settingsSummary" style="margin:20px;">Chargement...</div>
-    <button class="upgrade-btn shimmer-btn" id="settingsUpgradeBtn" style="margin:0 20px 12px;width:calc(100% - 40px);">⭐ Passer au Plan Pro</button>
-    <div class="prow" id="settingsLogoutBtn" style="margin:0 20px 20px;"><div class="thumb" style="background:var(--panel-2);display:flex;align-items:center;justify-content:center;">🚪</div><div><div class="t">Se déconnecter</div></div></div>
+    <button class="upgrade-btn shimmer-btn" id="settingsUpgradeBtn" style="margin:0 20px 12px;width:calc(100% - 40px);">â­ Passer au Plan Pro</button>
+    <div class="prow" id="settingsLogoutBtn" style="margin:0 20px 20px;"><div class="thumb" style="background:var(--panel-2);display:flex;align-items:center;justify-content:center;">ðŸšª</div><div><div class="t">Se dÃ©connecter</div></div></div>
   </div>
 </div>
 
 <script>
-// ══════════════════════════════════════════════════════════════════
-// ROX AI desktop config — EDIT ONLY THIS BLOCK BEFORE DEPLOYING
-// Paste your real Supabase anon public key below (Supabase dashboard →
-// Project Settings → API → "anon public"). Never put the service_role
-// key here — this file is public/frontend code.
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ROX AI desktop config â€” EDIT ONLY THIS BLOCK BEFORE DEPLOYING
+// Paste your real Supabase anon public key below (Supabase dashboard â†’
+// Project Settings â†’ API â†’ "anon public"). Never put the service_role
+// key here â€” this file is public/frontend code.
 // API_BASE currently points at your local backend (server.js running
 // on port 3001). Update it when you deploy the backend elsewhere, and
 // make sure that origin is listed in the backend's ALLOWED_ORIGINS.
-// ══════════════════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 const CONFIG = {
   SUPABASE_URL: 'https://tqoqsgaymygmqrzddvtu.supabase.co',
   SUPABASE_ANON_KEY: 'sb_publishable_jxn-4TT28_G7LtZG4FJXTQ_75JiaSBi',
-  API_BASE: 'http://localhost:3001'
+  API_BASE: 'https://rox-ai-production.up.railway.app'
 };
-// ══════════════════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 
-// ── config guard: fail loudly instead of silently if the anon key
-// was never filled in ──────────────────────────────────────────────
+// â”€â”€ config guard: fail loudly instead of silently if the anon key
+// was never filled in â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 const CONFIG_MISSING = !CONFIG.SUPABASE_ANON_KEY || CONFIG.SUPABASE_ANON_KEY === 'PASTE_REAL_ANON_KEY_HERE';
 
 function showConfigBanner(message) {
@@ -1826,23 +1826,23 @@ function showConfigBanner(message) {
 }
 
 if (CONFIG_MISSING) {
-  showConfigBanner('⚠️ Configuration Supabase manquante. Ajoutez la clé anon publique.');
+  showConfigBanner('âš ï¸ Configuration Supabase manquante. Ajoutez la clÃ© anon publique.');
 }
 
 // A harmless placeholder client so the rest of the script doesn't throw
-// if createClient() is called with an empty/placeholder key — actual
+// if createClient() is called with an empty/placeholder key â€” actual
 // auth calls will simply fail (and are guarded by CONFIG_MISSING below).
 const supa = window.supabase.createClient(CONFIG.SUPABASE_URL, CONFIG_MISSING ? 'placeholder.invalid.key' : CONFIG.SUPABASE_ANON_KEY);
 let session = null;
 let profile = null;
 
-// ── auth ─────────────────────────────────────────────────────────────
+// â”€â”€ auth â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 async function initAuth() {
   if (CONFIG_MISSING) {
     // Still show the login screen (so the demo login 777/19 remains
     // usable) but don't attempt real Supabase calls with a fake key.
     showLogin();
-    setLoginError('Configuration Supabase manquante. Ajoutez la clé anon publique.');
+    setLoginError('Configuration Supabase manquante. Ajoutez la clÃ© anon publique.');
     return;
   }
 
@@ -1868,17 +1868,17 @@ let isSignupMode = false;
 document.getElementById('login-toggle').addEventListener('click', () => {
   isSignupMode = !isSignupMode;
   document.getElementById('login-name').style.display = isSignupMode ? 'block' : 'none';
-  document.getElementById('login-submit').textContent = isSignupMode ? "Créer mon compte" : "Se connecter";
+  document.getElementById('login-submit').textContent = isSignupMode ? "CrÃ©er mon compte" : "Se connecter";
   document.getElementById('login-toggle').innerHTML = isSignupMode
-    ? 'Déjà un compte ? <span>Se connecter</span>'
-    : 'Pas encore de compte ? <span>Créer un compte</span>';
+    ? 'DÃ©jÃ  un compte ? <span>Se connecter</span>'
+    : 'Pas encore de compte ? <span>CrÃ©er un compte</span>';
   setLoginError('');
 });
 
-// ── demo shortcut ────────────────────────────────────────────────────
+// â”€â”€ demo shortcut â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 // Local-only bypass for previewing the UI without a live Supabase/backend
 // connection: email "777" + password "19" logs straight into a mocked
-// session. Nothing here touches Supabase or the real API — see
+// session. Nothing here touches Supabase or the real API â€” see
 // enterDemoMode()/demoFetch() below. Remove this block before shipping
 // if you don't want the shortcut to exist in production.
 const DEMO_EMAIL = '777';
@@ -1906,17 +1906,17 @@ document.getElementById('login-submit').addEventListener('click', async () => {
 
   btn.disabled = false;
   if (error) { setLoginError(error.message); return; }
-  if (isSignupMode) setLoginError('Compte créé — vérifie ta boîte mail si la confirmation est activée.');
+  if (isSignupMode) setLoginError('Compte crÃ©Ã© â€” vÃ©rifie ta boÃ®te mail si la confirmation est activÃ©e.');
 });
 
-// ── demo mode: mocked session + profile + fake API responses ───────────
+// â”€â”€ demo mode: mocked session + profile + fake API responses â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 const DEMO_TOKEN = 'demo-token';
 
 function enterDemoMode(name) {
   session = { user: { id: 'demo-user', email: 'demo@rox.ai' }, access_token: DEMO_TOKEN };
   profile = {
     email: 'demo@rox.ai',
-    full_name: name || 'Démo',
+    full_name: name || 'DÃ©mo',
     credits_used: 180,
     credits_total: 500,
     subscription_status: 'pro',
@@ -1935,7 +1935,7 @@ async function demoFetch(path, options = {}) {
     profile.credits_used = Math.min(profile.credits_total, profile.credits_used + 2);
     const remaining = profile.credits_total - profile.credits_used;
     return jsonResponse(200, {
-      text: 'هادي إجابة ديمو — ماشي متصلة بحيت الملف خدام بلا backend حقيقي دابا. عمر SUPABASE_URL/API_BASE باش توصل بالفعل.',
+      text: 'Ù‡Ø§Ø¯ÙŠ Ø¥Ø¬Ø§Ø¨Ø© Ø¯ÙŠÙ…Ùˆ â€” Ù…Ø§Ø´ÙŠ Ù…ØªØµÙ„Ø© Ø¨Ø­ÙŠØª Ø§Ù„Ù…Ù„Ù Ø®Ø¯Ø§Ù… Ø¨Ù„Ø§ backend Ø­Ù‚ÙŠÙ‚ÙŠ Ø¯Ø§Ø¨Ø§. Ø¹Ù…Ø± SUPABASE_URL/API_BASE Ø¨Ø§Ø´ ØªÙˆØµÙ„ Ø¨Ø§Ù„ÙØ¹Ù„.',
       newBalance: remaining,
     });
   }
@@ -1960,9 +1960,9 @@ async function demoFetch(path, options = {}) {
     });
   }
   if (path === '/api/create-checkout-session' || path === '/api/create-topup-session') {
-    return jsonResponse(200, { message: 'Mode démo — pas de paiement réel ici.' });
+    return jsonResponse(200, { message: 'Mode dÃ©mo â€” pas de paiement rÃ©el ici.' });
   }
-  return jsonResponse(404, { message: 'Route démo non gérée: ' + path });
+  return jsonResponse(404, { message: 'Route dÃ©mo non gÃ©rÃ©e: ' + path });
 }
 function jsonResponse(status, body) {
   return { ok: status >= 200 && status < 300, status, json: async () => body };
@@ -1979,7 +1979,7 @@ function logout() {
 document.getElementById('logoutBtn').addEventListener('click', logout);
 document.getElementById('settingsLogoutBtn').addEventListener('click', logout);
 
-// ── profile / credits ───────────────────────────────────────────────
+// â”€â”€ profile / credits â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 async function refreshProfile() {
   if (!session) return;
   const { data, error } = await supa
@@ -1991,10 +1991,10 @@ async function refreshProfile() {
   profile = data;
   renderProfile();
 
-  // Always fetch from the backend (not just the raw Supabase row) —
+  // Always fetch from the backend (not just the raw Supabase row) â€”
   // /api/usage-status is what actually matches what the server enforces
   // for both tiers now that Pro also draws from a real 500-credit/month
-  // pool (no more unconditional 'pro' bypass — see gatekeeper.js).
+  // pool (no more unconditional 'pro' bypass â€” see gatekeeper.js).
   try {
     const res = await authFetch('/api/usage-status', { method: 'GET' });
     const usage = await res.json();
@@ -2011,9 +2011,9 @@ function renderDailyUsage(used, limit) {
   const pct = Math.min(100, Math.round((used / limit) * 100));
   document.getElementById('sidebarUsagePct').textContent = pct + '%';
   document.getElementById('sidebarUsageFill').style.width = pct + '%';
-  document.getElementById('sidebarCreditsNum').textContent = `${used} / ${limit} رسالة اليوم`;
+  document.getElementById('sidebarCreditsNum').textContent = `${used} / ${limit} Ø±Ø³Ø§Ù„Ø© Ø§Ù„ÙŠÙˆÙ…`;
   document.getElementById('settingsSummary').textContent =
-    `الخطة الحالية: مجاني · ${used}/${limit} رسالة شات اليوم · الكود/الصور/الفيديو Pro فقط`;
+    `Ø§Ù„Ø®Ø·Ø© Ø§Ù„Ø­Ø§Ù„ÙŠØ©: Ù…Ø¬Ø§Ù†ÙŠ Â· ${used}/${limit} Ø±Ø³Ø§Ù„Ø© Ø´Ø§Øª Ø§Ù„ÙŠÙˆÙ… Â· Ø§Ù„ÙƒÙˆØ¯/Ø§Ù„ØµÙˆØ±/Ø§Ù„ÙÙŠØ¯ÙŠÙˆ Pro ÙÙ‚Ø·`;
   document.getElementById('topupBtn').style.display = 'none';
 }
 
@@ -2021,9 +2021,9 @@ function renderProUsage(used, total, remaining) {
   const pct = Math.min(100, Math.round((used / total) * 100));
   document.getElementById('sidebarUsagePct').textContent = pct + '%';
   document.getElementById('sidebarUsageFill').style.width = pct + '%';
-  document.getElementById('sidebarCreditsNum').textContent = `${used} / ${total} credits (${remaining} متبقي)`;
+  document.getElementById('sidebarCreditsNum').textContent = `${used} / ${total} credits (${remaining} Ù…ØªØ¨Ù‚ÙŠ)`;
   document.getElementById('settingsSummary').textContent =
-    `الخطة الحالية: Pro · ${used}/${total} credits هاد الشهر (${remaining} متبقي)`;
+    `Ø§Ù„Ø®Ø·Ø© Ø§Ù„Ø­Ø§Ù„ÙŠØ©: Pro Â· ${used}/${total} credits Ù‡Ø§Ø¯ Ø§Ù„Ø´Ù‡Ø± (${remaining} Ù…ØªØ¨Ù‚ÙŠ)`;
   // Surface the top-up option proactively once the pool is getting low,
   // not only after they've already hit a hard block mid-message.
   document.getElementById('topupBtn').style.display = remaining < total * 0.2 ? 'block' : 'none';
@@ -2038,13 +2038,13 @@ function renderProfile() {
   document.getElementById('userAvatar').textContent = initial;
   document.getElementById('topbarUserName').textContent = displayName;
   document.getElementById('topbarUserPlan').textContent = isPro ? 'Pro Plan' : 'Plan Gratuit';
-  document.getElementById('heroGreeting').textContent = `Bienvenue, ${displayName} ! 👋`;
+  document.getElementById('heroGreeting').textContent = `Bienvenue, ${displayName} ! ðŸ‘‹`;
 
   // Overwritten right after by renderProUsage()/renderDailyUsage() once
-  // /api/usage-status responds — this is just the safe initial state.
-  document.getElementById('sidebarUsagePct').textContent = '…';
+  // /api/usage-status responds â€” this is just the safe initial state.
+  document.getElementById('sidebarUsagePct').textContent = 'â€¦';
   document.getElementById('sidebarUsageFill').style.width = '0%';
-  document.getElementById('sidebarCreditsNum').textContent = '…';
+  document.getElementById('sidebarCreditsNum').textContent = 'â€¦';
 
   document.getElementById('upgradeBtn').style.display = isPro ? 'none' : 'block';
   document.getElementById('settingsUpgradeBtn').style.display = isPro ? 'none' : 'block';
@@ -2067,15 +2067,15 @@ const TOPUP_PRICE_PER_CREDIT = 0.02;
 
 async function handleTopup() {
   if (!session) { showLogin(); return; }
-  const input = window.prompt('شحال بغيتي ديال الـ credits؟ (الحد الأدنى 50 = 1$, الحد الأقصى 2500 = 50$)', '200');
+  const input = window.prompt('Ø´Ø­Ø§Ù„ Ø¨ØºÙŠØªÙŠ Ø¯ÙŠØ§Ù„ Ø§Ù„Ù€ creditsØŸ (Ø§Ù„Ø­Ø¯ Ø§Ù„Ø£Ø¯Ù†Ù‰ 50 = 1$, Ø§Ù„Ø­Ø¯ Ø§Ù„Ø£Ù‚ØµÙ‰ 2500 = 50$)', '200');
   if (!input) return;
   const credits = parseInt(input, 10);
   if (!Number.isInteger(credits) || credits < 50 || credits > 2500) {
-    alert('الرقم خاصو يكون بين 50 و2500.');
+    alert('Ø§Ù„Ø±Ù‚Ù… Ø®Ø§ØµÙˆ ÙŠÙƒÙˆÙ† Ø¨ÙŠÙ† 50 Ùˆ2500.');
     return;
   }
   const estimatedPrice = (credits * TOPUP_PRICE_PER_CREDIT).toFixed(2);
-  if (!window.confirm(`غادي تخلص ~${estimatedPrice}$ مقابل ${credits} credit. متأكد؟`)) return;
+  if (!window.confirm(`ØºØ§Ø¯ÙŠ ØªØ®Ù„Øµ ~${estimatedPrice}$ Ù…Ù‚Ø§Ø¨Ù„ ${credits} credit. Ù…ØªØ£ÙƒØ¯ØŸ`)) return;
 
   try {
     const res = await authFetch('/api/create-topup-session', {
@@ -2084,7 +2084,7 @@ async function handleTopup() {
     });
     const data = await res.json();
     if (data.url) window.location.href = data.url;
-    else alert(data.message || 'Erreur — réessaie.');
+    else alert(data.message || 'Erreur â€” rÃ©essaie.');
   } catch (err) {
     console.error('[topup] failed:', err.message);
   }
@@ -2094,8 +2094,8 @@ document.getElementById('upgradeBtn').addEventListener('click', handleUpgrade);
 document.getElementById('settingsUpgradeBtn').addEventListener('click', handleUpgrade);
 document.getElementById('topupBtn').addEventListener('click', handleTopup);
 
-// ── authenticated fetch helper ──────────────────────────────────────
-const BACKEND_UNAVAILABLE_MSG = 'Backend Rox AI indisponible. Démarrez le serveur sur le port 3001.';
+// â”€â”€ authenticated fetch helper â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+const BACKEND_UNAVAILABLE_MSG = 'Backend Rox AI indisponible. DÃ©marrez le serveur sur le port 3001.';
 
 async function authFetch(path, options = {}) {
   if (!session) { showLogin(); throw new Error('not_authenticated'); }
@@ -2113,7 +2113,7 @@ async function authFetch(path, options = {}) {
     });
   } catch (networkErr) {
     // fetch() throws (TypeError: Failed to fetch) when the backend is
-    // down/unreachable — surface that clearly instead of a generic error.
+    // down/unreachable â€” surface that clearly instead of a generic error.
     console.error('[authFetch] backend unreachable:', networkErr.message);
     showConfigBanner(BACKEND_UNAVAILABLE_MSG);
     throw new Error('backend_unavailable');
@@ -2127,7 +2127,7 @@ async function authFetch(path, options = {}) {
   return res;
 }
 
-// ── sidebar tab switching (Accueil / Projets) ───────────────────────
+// â”€â”€ sidebar tab switching (Accueil / Projets) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 document.querySelectorAll('.nav-item[data-tab]').forEach(el=>{
   el.addEventListener('click', ()=>{
     document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
@@ -2162,13 +2162,13 @@ document.querySelectorAll('.modal-backdrop').forEach(el=>{
   el.addEventListener('click', (e)=>{ if (e.target === el) el.classList.remove('active'); });
 });
 
-// ── conversation history (per feature: 'chat' / 'code') ─────────────
+// â”€â”€ conversation history (per feature: 'chat' / 'code') â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 // Previously each call to /api/chat sent only the current message
 // (`messages: [{role:'user', content:text}]`), so the model had no
 // memory of anything said earlier in the same session even though the
 // backend (lib/inputValidation.js) already supports a full history up
 // to MAX_MESSAGES_PER_CHAT (40). Kept in memory only (cleared on page
-// reload) — no browser storage involved.
+// reload) â€” no browser storage involved.
 const CHAT_HISTORY_LIMIT = 40; // mirrors backend MAX_MESSAGES_PER_CHAT default
 const conversations = { chat: [], code: [] };
 
@@ -2179,7 +2179,7 @@ function pushHistory(feature, role, content) {
   if (hist.length > CHAT_HISTORY_LIMIT) hist.splice(0, hist.length - CHAT_HISTORY_LIMIT);
 }
 
-// ── message rendering helpers ───────────────────────────────────────
+// â”€â”€ message rendering helpers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function appendMsg(msgBox, cls, content, isNode) {
   const el = document.createElement('div');
   el.className = 'msg ' + cls;
@@ -2197,13 +2197,13 @@ function appendTyping(msgBox) {
   return typing;
 }
 
-// ── chat / code → POST /api/chat ────────────────────────────────────
+// â”€â”€ chat / code â†’ POST /api/chat â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 async function sendChat(feature, text, msgBox) {
   const typing = appendTyping(msgBox);
   // Send the stored history PLUS this new turn, but don't commit the new
   // turn to `conversations[feature]` until the call actually succeeds.
   // The Anthropic Messages API requires strict user/assistant
-  // alternation — if we saved the user turn up front and the call then
+  // alternation â€” if we saved the user turn up front and the call then
   // failed (402/429/network error), a retry would stack two 'user'
   // turns in a row with nothing in between, which the API rejects.
   const outgoing = [...conversations[feature], { role: 'user', content: text }];
@@ -2216,26 +2216,26 @@ async function sendChat(feature, text, msgBox) {
     typing.remove();
 
     if (res.status === 402) {
-      let msg = '⚠️ Crédit insuffisant — passe au plan Pro pour continuer.';
-      if (data.code === 'code_requires_pro') msg = '💻 مساعدة الكود متاحة فقط للمشتركين Pro — رقّي حسابك للمتابعة.';
-      if (data.code === 'pro_out_of_credits') msg = `💳 ${data.message}`;
+      let msg = 'âš ï¸ CrÃ©dit insuffisant â€” passe au plan Pro pour continuer.';
+      if (data.code === 'code_requires_pro') msg = 'ðŸ’» Ù…Ø³Ø§Ø¹Ø¯Ø© Ø§Ù„ÙƒÙˆØ¯ Ù…ØªØ§Ø­Ø© ÙÙ‚Ø· Ù„Ù„Ù…Ø´ØªØ±ÙƒÙŠÙ† Pro â€” Ø±Ù‚Ù‘ÙŠ Ø­Ø³Ø§Ø¨Ùƒ Ù„Ù„Ù…ØªØ§Ø¨Ø¹Ø©.';
+      if (data.code === 'pro_out_of_credits') msg = `ðŸ’³ ${data.message}`;
       appendMsg(msgBox, 'status', msg);
       return;
     }
     if (res.status === 429 && data.code === 'daily_chat_limit') {
-      appendMsg(msgBox, 'status', `🌙 ${data.message}`);
+      appendMsg(msgBox, 'status', `ðŸŒ™ ${data.message}`);
       return;
     }
-    if (res.status === 429) { appendMsg(msgBox, 'status', `⏳ Trop de requêtes — réessaie dans ${data.retry_after_seconds || 'quelques'}s.`); return; }
+    if (res.status === 429) { appendMsg(msgBox, 'status', `â³ Trop de requÃªtes â€” rÃ©essaie dans ${data.retry_after_seconds || 'quelques'}s.`); return; }
     if (res.status === 400) {
       // Conversation grew past what the backend accepts in one request
-      // (message count/char limits) — drop the oldest turns and let the
+      // (message count/char limits) â€” drop the oldest turns and let the
       // user retry, instead of silently failing forever.
       conversations[feature] = conversations[feature].slice(-10);
-      appendMsg(msgBox, 'error', 'Conversation trop longue — historique réduit, réessaie.');
+      appendMsg(msgBox, 'error', 'Conversation trop longue â€” historique rÃ©duit, rÃ©essaie.');
       return;
     }
-    if (!res.ok) { appendMsg(msgBox, 'error', data.message || 'Erreur — tous les modèles ont échoué.'); return; }
+    if (!res.ok) { appendMsg(msgBox, 'error', data.message || 'Erreur â€” tous les modÃ¨les ont Ã©chouÃ©.'); return; }
 
     appendMsg(msgBox, 'bot', data.text);
     pushHistory(feature, 'user', text);
@@ -2251,11 +2251,11 @@ async function sendChat(feature, text, msgBox) {
   } catch (err) {
     typing.remove();
     if (err.message === 'backend_unavailable') appendMsg(msgBox, 'error', BACKEND_UNAVAILABLE_MSG);
-    else if (err.message !== 'session_expired') appendMsg(msgBox, 'error', 'Erreur réseau — réessaie.');
+    else if (err.message !== 'session_expired') appendMsg(msgBox, 'error', 'Erreur rÃ©seau â€” rÃ©essaie.');
   }
 }
 
-// ── images / videos → POST /api/generate-* then poll job status ────
+// â”€â”€ images / videos â†’ POST /api/generate-* then poll job status â”€â”€â”€â”€
 const GEN_ROUTES = { images: '/api/generate-image', videos: '/api/generate-video' };
 const GEN_POLL_MS = 2500;
 const GEN_TIMEOUT_MS = 120000;
@@ -2268,19 +2268,19 @@ async function sendGeneration(feature, text, msgBox) {
 
     if (res.status === 403 && data.code === 'pro_out_of_credits') {
       typing.remove();
-      appendMsg(msgBox, 'status', `💳 ${data.message}`);
+      appendMsg(msgBox, 'status', `ðŸ’³ ${data.message}`);
       return;
     }
     if (res.status === 402) {
       typing.remove();
-      let msg = '⚠️ Crédit insuffisant — passe au plan Pro pour continuer.';
-      if (data.code === 'video_requires_pro') msg = '🎬 توليد الفيديو متاح فقط للمشتركين Pro — رقّي حسابك للمتابعة.';
-      if (data.code === 'image_requires_pro') msg = '🖼️ توليد الصور متاح فقط للمشتركين Pro — رقّي حسابك للمتابعة.';
+      let msg = 'âš ï¸ CrÃ©dit insuffisant â€” passe au plan Pro pour continuer.';
+      if (data.code === 'video_requires_pro') msg = 'ðŸŽ¬ ØªÙˆÙ„ÙŠØ¯ Ø§Ù„ÙÙŠØ¯ÙŠÙˆ Ù…ØªØ§Ø­ ÙÙ‚Ø· Ù„Ù„Ù…Ø´ØªØ±ÙƒÙŠÙ† Pro â€” Ø±Ù‚Ù‘ÙŠ Ø­Ø³Ø§Ø¨Ùƒ Ù„Ù„Ù…ØªØ§Ø¨Ø¹Ø©.';
+      if (data.code === 'image_requires_pro') msg = 'ðŸ–¼ï¸ ØªÙˆÙ„ÙŠØ¯ Ø§Ù„ØµÙˆØ± Ù…ØªØ§Ø­ ÙÙ‚Ø· Ù„Ù„Ù…Ø´ØªØ±ÙƒÙŠÙ† Pro â€” Ø±Ù‚Ù‘ÙŠ Ø­Ø³Ø§Ø¨Ùƒ Ù„Ù„Ù…ØªØ§Ø¨Ø¹Ø©.';
       appendMsg(msgBox, 'status', msg);
       return;
     }
-    if (res.status === 429) { typing.remove(); appendMsg(msgBox, 'status', `⏳ Trop de requêtes — réessaie dans ${data.retry_after_seconds || 'quelques'}s.`); return; }
-    if (!res.ok || !data.jobId) { typing.remove(); appendMsg(msgBox, 'error', data.message || 'Échec de la création du job.'); return; }
+    if (res.status === 429) { typing.remove(); appendMsg(msgBox, 'status', `â³ Trop de requÃªtes â€” rÃ©essaie dans ${data.retry_after_seconds || 'quelques'}s.`); return; }
+    if (!res.ok || !data.jobId) { typing.remove(); appendMsg(msgBox, 'error', data.message || 'Ã‰chec de la crÃ©ation du job.'); return; }
 
     if (typeof data.newBalance === 'number' && profile) {
       const total = profile.credits_total || 500;
@@ -2291,7 +2291,7 @@ async function sendGeneration(feature, text, msgBox) {
   } catch (err) {
     typing.remove();
     if (err.message === 'backend_unavailable') appendMsg(msgBox, 'error', BACKEND_UNAVAILABLE_MSG);
-    else if (err.message !== 'session_expired') appendMsg(msgBox, 'error', 'Erreur réseau — réessaie.');
+    else if (err.message !== 'session_expired') appendMsg(msgBox, 'error', 'Erreur rÃ©seau â€” rÃ©essaie.');
   }
 }
 
@@ -2305,7 +2305,7 @@ async function pollJob(jobId, feature, msgBox, typing) {
       data = await res.json();
     } catch (err) {
       if (err.message === 'session_expired') return;
-      continue; // transient network error — keep polling
+      continue; // transient network error â€” keep polling
     }
     if (!res.ok) continue;
 
@@ -2315,7 +2315,7 @@ async function pollJob(jobId, feature, msgBox, typing) {
       if (feature === 'images') {
         const img = document.createElement('img');
         img.src = data.result_url;
-        img.alt = 'Résultat généré';
+        img.alt = 'RÃ©sultat gÃ©nÃ©rÃ©';
         wrap.appendChild(img);
       } else {
         const vid = document.createElement('video');
@@ -2328,24 +2328,24 @@ async function pollJob(jobId, feature, msgBox, typing) {
     }
     if (data.status === 'failed') {
       typing.remove();
-      appendMsg(msgBox, 'error', 'Échec de la génération : ' + (data.error_message || 'erreur inconnue') + ' (crédits remboursés).');
+      appendMsg(msgBox, 'error', 'Ã‰chec de la gÃ©nÃ©ration : ' + (data.error_message || 'erreur inconnue') + ' (crÃ©dits remboursÃ©s).');
       return;
     }
   }
   typing.remove();
-  appendMsg(msgBox, 'status', "⏳ Ça prend plus longtemps que prévu — vérifie l'onglet Projets plus tard.");
+  appendMsg(msgBox, 'status', "â³ Ã‡a prend plus longtemps que prÃ©vu â€” vÃ©rifie l'onglet Projets plus tard.");
 }
 
-// ── roxip: no backend route yet, kept as a clearly-labeled demo ────
+// â”€â”€ roxip: no backend route yet, kept as a clearly-labeled demo â”€â”€â”€â”€
 function sendRoxIpDemo(text, msgBox) {
   const typing = appendTyping(msgBox);
   setTimeout(() => {
     typing.remove();
-    appendMsg(msgBox, 'status', `Démo — "${text}" ne se connecte pas encore à une vraie machine (fonctionnalité pas encore présente dans le backend).`);
+    appendMsg(msgBox, 'status', `DÃ©mo â€” "${text}" ne se connecte pas encore Ã  une vraie machine (fonctionnalitÃ© pas encore prÃ©sente dans le backend).`);
   }, 700);
 }
 
-// ── dispatch ─────────────────────────────────────────────────────────
+// â”€â”€ dispatch â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function sendMessage(feature){
   const input = document.querySelector('input[data-feature="'+feature+'"]');
   const text = input.value.trim();
@@ -2367,7 +2367,7 @@ document.querySelectorAll('input[data-feature]').forEach(inp=>{
   inp.addEventListener('keydown', e=>{ if(e.key==='Enter') sendMessage(inp.dataset.feature); });
 });
 
-// ── quick-send from the dashboard feature cards ─────────────────────
+// â”€â”€ quick-send from the dashboard feature cards â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 // Lets the person type straight into a card on the home screen: it
 // opens the matching modal, drops their text into its real input, and
 // fires the same sendMessage() pipeline used inside the modal.
@@ -2398,8 +2398,8 @@ initAuth();
 </html>
 </script>
 <script>
-// ══════════════════════════════════════════════════════════════════
-// ROX AI — single-URL device router
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// ROX AI â€” single-URL device router
 // Runs immediately (synchronously, before the browser paints anything)
 // to decide which complete interface to load, then replaces this
 // shell document with the full chosen document via document.write().
@@ -2408,7 +2408,7 @@ initAuth();
 //
 // Breakpoint: screen width <= 768px -> mobile interface
 //             screen width  > 768px -> desktop interface
-// ══════════════════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 (function () {
   'use strict';
 
@@ -2425,14 +2425,14 @@ initAuth();
   var sourceEl = document.getElementById(sourceId);
   var fullHtml = unescapeScriptTags(sourceEl.textContent);
 
-  // ── resize / rotation support ───────────────────────────────────
+  // â”€â”€ resize / rotation support â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   // Appended into the chosen document right before its closing
   // </body> tag. If the viewport crosses the 768px breakpoint after
   // load (window resize or device rotation), reload this same URL
   // once so index.html re-detects and serves the correct interface.
   // The reload only fires when the category actually flips (mobile
   // <-> desktop), and a fresh load re-evaluates the flag from the
-  // real current width, so this cannot loop indefinitely — it can
+  // real current width, so this cannot loop indefinitely â€” it can
   // only fire again after another real crossing of the breakpoint.
   var deviceWatcher =
     '<' + 'script>' +
@@ -2466,3 +2466,4 @@ initAuth();
 </script>
 </body>
 </html>
+
