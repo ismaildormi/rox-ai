@@ -1,8 +1,8 @@
-// ROX AI Ã¢â‚¬â€ Worker (hardened)
+// ROX AI ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â Worker (hardened)
 //
 // Credits are now reserved by server.js BEFORE the job is even enqueued
 // (see handleGenerationRequest), so this worker no longer charges
-// anything on success Ã¢â‚¬â€ that already happened. What it's responsible
+// anything on success ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â that already happened. What it's responsible
 // for now: if a job exhausts every retry, refund the exact reservation
 // tied to that job's requestId, so a failed generation never costs the
 // user credits. That refund + a log-only 'error' entry is recorded
@@ -27,7 +27,7 @@ async function markJob(jobId, patch) {
 
 // Deliberately NOT pinning a specific version hash here. A pinned hash
 // (owner/model:64-hex-version) silently 404s the moment that exact
-// version is retired/renamed on Replicate Ã¢â‚¬â€ the previous version of
+// version is retired/renamed on Replicate ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â the previous version of
 // this file had exactly that bug (a truncated SDXL hash and a
 // video-model hash that didn't match any real version). Using the bare
 // "owner/model" form always resolves to that model's current default
@@ -35,7 +35,7 @@ async function markJob(jobId, patch) {
 // anything long-running. If you need a pinned version for reproducible
 // output, verify the exact hash on the model's Replicate page first.
 const IMAGE_MODEL = 'black-forest-labs/flux-schnell';
-const VIDEO_MODEL = 'wan-video/wan-2.2-t2v-fast'; // real text-to-video model Ã¢â‚¬â€ takes { prompt }, not an image
+const VIDEO_MODEL = 'wan-video/wan-2.2-t2v-fast'; // real text-to-video model ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â takes { prompt }, not an image
 
 async function processImageJob(job) {
   const { jobRowId, prompt } = job.data;
@@ -48,7 +48,7 @@ async function processImageJob(job) {
     result_url: result.url,
     completed_at: new Date().toISOString(),
   });
-  // No credit deduction here Ã¢â‚¬â€ it was already reserved before enqueue.
+  // No credit deduction here ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â it was already reserved before enqueue.
 }
 
 async function processVideoJob(job) {
@@ -56,7 +56,7 @@ async function processVideoJob(job) {
   await markJob(jobRowId, { status: 'processing', started_at: new Date().toISOString() });
 
   // Previous version passed the user's TEXT prompt into `input_image`
-  // on stability-ai/stable-video-diffusion Ã¢â‚¬â€ but SVD is image-to-video
+  // on stability-ai/stable-video-diffusion ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â but SVD is image-to-video
   // only (it animates an existing image, it does not read text at all).
   // Since the frontend only ever collects a text prompt for this
   // feature (see rox-ai-mobile.html), the correct fix is a real
@@ -77,7 +77,7 @@ const imageWorker = new Worker('rox-image-generation', processImageJob, {
 
 const videoWorker = new Worker('rox-video-generation', processVideoJob, {
   connection,
-  concurrency: Math.max(1, Math.floor(CONCURRENCY / 2)), // video is heavier Ã¢â‚¬â€ fewer parallel jobs
+  concurrency: Math.max(1, Math.floor(CONCURRENCY / 2)), // video is heavier ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â fewer parallel jobs
 });
 
 // ---------- Failure handling: refund only once retries are exhausted ----------
@@ -87,7 +87,7 @@ async function handleJobFailure(job, err, feature) {
   const maxAttempts = job.opts.attempts;
 
   if (attemptsMade < maxAttempts) {
-    // BullMQ will retry this automatically (exponential backoff) Ã¢â‚¬â€ don't
+    // BullMQ will retry this automatically (exponential backoff) ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â don't
     // refund or mark it failed yet, it may still succeed.
     return;
   }
@@ -102,7 +102,7 @@ async function handleJobFailure(job, err, feature) {
     await refundCredits(requestId);
     recordRefund(feature);
   } catch (refundErr) {
-    // Must be visible Ã¢â‚¬â€ a failed refund means the user paid for a
+    // Must be visible ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â a failed refund means the user paid for a
     // generation that never happened and support needs to step in.
     // Persisted to refund_failures/system_alerts, not just this log line.
     await reportRefundFailure({ requestId, userId, feature, error: refundErr });
@@ -116,7 +116,11 @@ async function handleJobFailure(job, err, feature) {
     errorMessage: err.message,
   });
 
-  console.error(`[worker] job ${job.id} (${feature}) exhausted retries, refunded:`, err.message);
+  console.error(
+    `[worker] job ${job.id} (${feature}) exhausted retries, refunded:`,
+    err.message,
+    err.attempts ? JSON.stringify(err.attempts) : ''
+  );
 }
 
 imageWorker.on('failed', (job, err) => handleJobFailure(job, err, 'image'));
