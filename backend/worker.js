@@ -1,8 +1,8 @@
-// ROX AI — Worker (hardened)
+﻿// ROX AI â€” Worker (hardened)
 //
 // Credits are now reserved by server.js BEFORE the job is even enqueued
 // (see handleGenerationRequest), so this worker no longer charges
-// anything on success — that already happened. What it's responsible
+// anything on success â€” that already happened. What it's responsible
 // for now: if a job exhausts every retry, refund the exact reservation
 // tied to that job's requestId, so a failed generation never costs the
 // user credits. That refund + a log-only 'error' entry is recorded
@@ -29,15 +29,15 @@ async function markJob(jobId, patch) {
 
 // Deliberately NOT pinning a specific version hash here. A pinned hash
 // (owner/model:64-hex-version) silently 404s the moment that exact
-// version is retired/renamed on Replicate — the previous version of
+// version is retired/renamed on Replicate â€” the previous version of
 // this file had exactly that bug (a truncated SDXL hash and a
 // video-model hash that didn't match any real version). Using the bare
 // "owner/model" form always resolves to that model's current default
 // version, which is what replicate.run()/the JS client recommends for
 // anything long-running. If you need a pinned version for reproducible
 // output, verify the exact hash on the model's Replicate page first.
-const IMAGE_MODEL = 'stability-ai/sdxl';
-const VIDEO_MODEL = 'wan-video/wan-2.2-t2v-fast'; // real text-to-video model — takes { prompt }, not an image
+const IMAGE_MODEL = 'black-forest-labs/flux-schnell';
+const VIDEO_MODEL = 'wan-video/wan-2.2-t2v-fast'; // real text-to-video model â€” takes { prompt }, not an image
 
 async function processImageJob(job) {
   const { jobRowId, prompt } = job.data;
@@ -50,7 +50,7 @@ async function processImageJob(job) {
     result_url: Array.isArray(output) ? output[0] : output,
     completed_at: new Date().toISOString(),
   });
-  // No credit deduction here — it was already reserved before enqueue.
+  // No credit deduction here â€” it was already reserved before enqueue.
 }
 
 async function processVideoJob(job) {
@@ -58,7 +58,7 @@ async function processVideoJob(job) {
   await markJob(jobRowId, { status: 'processing', started_at: new Date().toISOString() });
 
   // Previous version passed the user's TEXT prompt into `input_image`
-  // on stability-ai/stable-video-diffusion — but SVD is image-to-video
+  // on stability-ai/stable-video-diffusion â€” but SVD is image-to-video
   // only (it animates an existing image, it does not read text at all).
   // Since the frontend only ever collects a text prompt for this
   // feature (see rox-ai-mobile.html), the correct fix is a real
@@ -79,7 +79,7 @@ const imageWorker = new Worker('rox-image-generation', processImageJob, {
 
 const videoWorker = new Worker('rox-video-generation', processVideoJob, {
   connection,
-  concurrency: Math.max(1, Math.floor(CONCURRENCY / 2)), // video is heavier — fewer parallel jobs
+  concurrency: Math.max(1, Math.floor(CONCURRENCY / 2)), // video is heavier â€” fewer parallel jobs
 });
 
 // ---------- Failure handling: refund only once retries are exhausted ----------
@@ -89,7 +89,7 @@ async function handleJobFailure(job, err, feature) {
   const maxAttempts = job.opts.attempts;
 
   if (attemptsMade < maxAttempts) {
-    // BullMQ will retry this automatically (exponential backoff) — don't
+    // BullMQ will retry this automatically (exponential backoff) â€” don't
     // refund or mark it failed yet, it may still succeed.
     return;
   }
@@ -104,7 +104,7 @@ async function handleJobFailure(job, err, feature) {
     await refundCredits(requestId);
     recordRefund(feature);
   } catch (refundErr) {
-    // Must be visible — a failed refund means the user paid for a
+    // Must be visible â€” a failed refund means the user paid for a
     // generation that never happened and support needs to step in.
     // Persisted to refund_failures/system_alerts, not just this log line.
     await reportRefundFailure({ requestId, userId, feature, error: refundErr });
@@ -125,3 +125,4 @@ imageWorker.on('failed', (job, err) => handleJobFailure(job, err, 'image'));
 videoWorker.on('failed', (job, err) => handleJobFailure(job, err, 'video'));
 
 console.log(`ROX AI worker running (concurrency: image=${CONCURRENCY}, video=${Math.max(1, Math.floor(CONCURRENCY / 2))})`);
+
