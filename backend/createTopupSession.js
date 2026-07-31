@@ -1,39 +1,46 @@
-// ROX AI — Creates a one-time Stripe Checkout session for purchasing
-// extra credits on top of the monthly Pro allowance (500 credits/month,
-// ~50% guaranteed margin — see gatekeeper.js and 08_maintenance.sql).
-//
-// Price is $0.02/credit — double the ~$0.01/credit worst-case real cost
-// used to size the base plan, so top-ups carry the same ~50% margin as
-// the subscription itself. Amount is chosen by the user (min/max
-// bounded below), not by us picking a number for them.
-//
-// Unlike the subscription session (mode: 'subscription', fixed Price
-// ID), this is mode: 'payment' with inline price_data, since the
-// amount is variable per purchase.
-
 const express = require('express');
 const Stripe = require('stripe');
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 const router = express.Router();
 
-const PRICE_PER_CREDIT_USD = Number(process.env.TOPUP_PRICE_PER_CREDIT_USD || 0.02);
-const MIN_TOPUP_CREDITS = 50;   // $1.00
-const MAX_TOPUP_CREDITS = 2500; // $50.00 — cap a single purchase to limit blast radius of any pricing/abuse bug
+const PRICE_PER_CREDIT_USD = Number(
+  process.env.TOPUP_PRICE_PER_CREDIT_USD || 0.01
+);
+
+const MIN_TOPUP_USD = Number(process.env.MIN_TOPUP_USD || 10);
+const MIN_TOPUP_CREDITS = Math.ceil(
+  MIN_TOPUP_USD / PRICE_PER_CREDIT_USD
+);
+
+// High safety ceiling per purchase. It can be raised later by env variable.
+const MAX_TOPUP_USD = Number(process.env.MAX_TOPUP_USD || 1000);
+const MAX_TOPUP_CREDITS = Math.floor(
+  MAX_TOPUP_USD / PRICE_PER_CREDIT_USD
+);
 
 router.post('/', async (req, res) => {
   const userId = req.userId;
   const userEmail = req.userEmail;
   const credits = Number(req.body?.credits);
 
-  if (!Number.isInteger(credits) || credits < MIN_TOPUP_CREDITS || credits > MAX_TOPUP_CREDITS) {
+  if (
+    !Number.isInteger(credits) ||
+    credits < MIN_TOPUP_CREDITS ||
+    credits > MAX_TOPUP_CREDITS
+  ) {
     return res.status(400).json({
       status: 'error',
-      message: `credits must be an integer between ${MIN_TOPUP_CREDITS} and ${MAX_TOPUP_CREDITS}.`,
+      message:
+        `Credits must be an integer between ` +
+        `${MIN_TOPUP_CREDITS} and ${MAX_TOPUP_CREDITS}.`,
+      minimumUsd: MIN_TOPUP_USD,
     });
   }
 
-  const amountCents = Math.round(credits * PRICE_PER_CREDIT_USD * 100);
+  const amountCents = Math.round(
+    credits * PRICE_PER_CREDIT_USD * 100
+  );
 
   const session = await stripe.checkout.sessions.create({
     mode: 'payment',
@@ -42,17 +49,29 @@ router.post('/', async (req, res) => {
     line_items: [{
       price_data: {
         currency: 'usd',
-        product_data: { name: `ROX AI — ${credits} credits (top-up)` },
+        product_data: {
+          name: `ROX AI - ${credits} credits`,
+        },
         unit_amount: amountCents,
       },
       quantity: 1,
     }],
     success_url: `${process.env.APP_URL}/dashboard?topup=true`,
     cancel_url: `${process.env.APP_URL}/dashboard`,
-    metadata: { userId, type: 'topup', credits: String(credits) },
+    metadata: {
+      userId,
+      type: 'topup',
+      credits: String(credits),
+      priceUsd: String(amountCents / 100),
+    },
   });
 
-  res.json({ url: session.url, credits, priceUsd: amountCents / 100 });
+  return res.json({
+    url: session.url,
+    credits,
+    priceUsd: amountCents / 100,
+    pricePerCreditUsd: PRICE_PER_CREDIT_USD,
+  });
 });
 
 module.exports = router;

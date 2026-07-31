@@ -1,4 +1,4 @@
-// ROX AI — lib/creditEconomics.js
+// ROX AI â€” lib/creditEconomics.js
 //
 // Connects the credit system to real money, so "is traffic paying for
 // itself" becomes a number you can query instead of a hope.
@@ -9,12 +9,12 @@
 // Set it in .env as CREDIT_PRICE_USD so it can be updated the moment
 // pricing/plan changes, without touching code.
 
-const CREDIT_PRICE_USD = Number(process.env.CREDIT_PRICE_USD || 0.001);
+const CREDIT_PRICE_USD = Number(process.env.CREDIT_PRICE_USD || 0.01);
 
 /**
  * @param {number} creditsConsumed - what was charged to the user for this call
  * @param {number} costUsd - estimated real API cost of this call (lib/modelCosts.js)
- * @returns {number} margin in USD — positive means this request was profitable
+ * @returns {number} margin in USD â€” positive means this request was profitable
  *                    on its own, negative means it was a loss even before
  *                    counting fixed server costs.
  */
