@@ -35,11 +35,11 @@ const MAX_OUTPUT_TOKENS = Number(process.env.MAX_OUTPUT_TOKENS || 2048);
 const ROUTES = {
   chat: [
     { provider: 'anthropic', model: 'claude-sonnet-5' },
-    { provider: 'openrouter', model: 'meta-llama/llama-3.3-70b-instruct:free' },
-    { provider: 'openrouter', model: 'meta-llama/llama-3.3-70b-instruct:free' }
+    { provider: 'openrouter', model: 'openrouter/free' },
+    { provider: 'openrouter', model: 'openrouter/free' }
   ],
   code: [
-    { provider: 'openrouter', model: 'meta-llama/llama-3.3-70b-instruct:free' },
+    { provider: 'openrouter', model: 'openrouter/free' },
     { provider: 'anthropic', model: 'claude-sonnet-5' }
   ]
 };
@@ -166,5 +166,6 @@ async function routeRequest(feature, messages, opts = {}) {
 }
 
 module.exports = { routeRequest, ROUTES, getEffectiveChain };
+
 
 
