@@ -103,6 +103,40 @@ async function generateImage(prompt, opts = {}) {
   throw error;
 }
 
+registerImageProvider('fal', {
+  label: 'Fal AI',
+  isConfigured: () => Boolean(process.env.FAL_KEY),
+
+  async generate(prompt, opts = {}) {
+    const { fal } = await import('@fal-ai/client');
+
+    fal.config({
+      credentials: opts.apiKey || process.env.FAL_KEY,
+    });
+
+    const model =
+      opts.model ||
+      process.env.FAL_IMAGE_MODEL ||
+      'fal-ai/flux/schnell';
+
+    const result = await fal.subscribe(model, {
+      input: {
+        prompt,
+        num_images: 1,
+        ...(opts.input || {}),
+      },
+      logs: false,
+    });
+
+    const url = result?.data?.images?.[0]?.url;
+
+    if (!url) {
+      throw new Error('fal_returned_no_image_url');
+    }
+
+    return url;
+  },
+});
 registerImageProvider('replicate', {
   label: 'Replicate',
   isConfigured: () => Boolean(process.env.REPLICATE_API_TOKEN),
