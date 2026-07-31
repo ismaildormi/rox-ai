@@ -1,7 +1,7 @@
-// ROX AI — AI Router (hardened)
+﻿// ROX AI â€” AI Router (hardened)
 //
 // The original router had no memory of model health at all: every
-// request walked the full Claude → Qwen → DeepSeek chain from scratch,
+// request walked the full Claude â†’ Qwen â†’ DeepSeek chain from scratch,
 // even if Claude had failed the last 500 requests in a row. That wastes
 // up to PRIMARY_TIMEOUT_MS (15s) per request on a model everyone already
 // knows is down, and nothing was shared across server replicas.
@@ -15,7 +15,7 @@ const { canRoute, reportOutcome } = require('./lib/modelHealth');
 const { recordFallback, recordModelLatency, recordModelOutcome } = require('./lib/metrics');
 const { estimateCostUsd, costTier } = require('./lib/modelCosts');
 // Providers (anthropic/openrouter/openai/google/groq/local/custom) are no
-// longer called directly from this file — see src/modules/ai/providers.
+// longer called directly from this file â€” see src/modules/ai/providers.
 // This is what makes providers interchangeable: adding one, swapping one,
 // or pointing a route at a customer's own key/endpoint never touches the
 // fallback chain, circuit breaker, or credit logic below.
@@ -23,7 +23,7 @@ const providers = require('./src/modules/ai/providers');
 
 const PRIMARY_TIMEOUT_MS = 15000;
 // Under 'high' load, don't let the (expensive) primary model hold the
-// line for a full 15s before falling back — fail toward the cheap
+// line for a full 15s before falling back â€” fail toward the cheap
 // models faster so a traffic spike doesn't also mean a latency spike.
 const HIGH_LOAD_TIMEOUT_MS = 6000;
 
@@ -35,29 +35,29 @@ const MAX_OUTPUT_TOKENS = Number(process.env.MAX_OUTPUT_TOKENS || 2048);
 const ROUTES = {
   chat: [
     { provider: 'anthropic', model: 'claude-sonnet-5' },
-    { provider: 'openrouter', model: 'qwen/qwen3-coder-480b:free' },
-    { provider: 'openrouter', model: 'deepseek/deepseek-r1:free' }
+    { provider: 'openrouter', model: 'openrouter/free' },
+    { provider: 'openrouter', model: 'openrouter/free' }
   ],
   code: [
-    { provider: 'openrouter', model: 'qwen/qwen3-coder-480b:free' },
+    { provider: 'openrouter', model: 'openrouter/free' },
     { provider: 'anthropic', model: 'claude-sonnet-5' }
   ]
 };
 
 // Previously the chain order was fixed: aiRouter only ever moved to a
 // cheaper model AFTER the primary failed or timed out (reliability
-// fallback). It never reacted to LOAD — a real traffic spike with every
+// fallback). It never reacted to LOAD â€” a real traffic spike with every
 // model healthy would still bill 100% of requests at Claude's rate, so
 // cost kept climbing linearly with traffic instead of flattening out.
 //
 // getEffectiveChain() adds a second, independent trigger: under 'high'
 // global load (see lib/loadGuard.js), for the 'chat' feature, the chain
-// is re-sorted cheapest-first. The primary model is NOT removed — it's
+// is re-sorted cheapest-first. The primary model is NOT removed â€” it's
 // pushed to the end of the chain, so quality-sensitive requests still
 // get served by it if every free model also happens to be down. This is
 // a margin-protection measure, not a reliability one, so it only applies
 // to 'chat' (the 'code' chain already leads with the cheap model).
-// Free-tier chat is served ENTIRELY by the free OpenRouter models —
+// Free-tier chat is served ENTIRELY by the free OpenRouter models â€”
 // Claude Sonnet is not in the chain at all for non-pro users, so a free
 // chat message costs ~$0 in real API spend regardless of volume. Pro
 // users get the full chain led by Claude Sonnet. This only applies to
@@ -84,12 +84,12 @@ async function withTimeout(promise, ms) {
   }
 }
 
-// callModel no longer knows what a provider IS — it just asks the
+// callModel no longer knows what a provider IS â€” it just asks the
 // registry for one by key. Every route's `provider` field (today:
 // 'anthropic' | 'openrouter') is looked up the same way a future
 // 'openai' | 'google' | 'groq' | 'local' | custom-per-org key would be.
 // Behavior for the two providers already in ROUTES is unchanged: same
-// endpoints, same max_tokens cap, same request/response shape — this
+// endpoints, same max_tokens cap, same request/response shape â€” this
 // only moved the two functions into src/modules/ai/providers/index.js
 // as registered adapters instead of local functions.
 async function callModel(route, messages) {
@@ -135,7 +135,7 @@ async function routeRequest(feature, messages, opts = {}) {
 
       // A reliability fallback (primary was down/slow) is tracked
       // separately from a load-triggered reorder (primary was skipped
-      // on purpose to protect margin) — conflating them would make
+      // on purpose to protect margin) â€” conflating them would make
       // rox_fallback_total look like an outage that wasn't one.
       const isReliabilityFallback = !chainReordered && route.model !== originalChain[0].model;
       if (isReliabilityFallback) recordFallback(feature, originalChain[0].model, route.model);
@@ -166,3 +166,4 @@ async function routeRequest(feature, messages, opts = {}) {
 }
 
 module.exports = { routeRequest, ROUTES, getEffectiveChain };
+
