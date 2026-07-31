@@ -1,0 +1,6 @@
+{
+  "name": "hello",
+  "description": "Example plugin (delete this folder any time) — proves a new `rox <command>` can be added without touching rox.js or any file under cli/commands/",
+  "main": "index.js",
+  "version": "1.0.0"
+}

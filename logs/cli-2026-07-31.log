@@ -1,0 +1,5 @@
+{"ts":"2026-07-31T00:55:27.763Z","command":"health","level":"step","msg":"ROX AI — health check"}
+{"ts":"2026-07-31T00:55:28.879Z","command":"health","level":"err","msg":"rox-api: waiting restart"}
+{"ts":"2026-07-31T00:55:28.879Z","command":"health","level":"ok","msg":"rox-worker: online (restarts: 0)"}
+{"ts":"2026-07-31T00:55:30.659Z","command":"health","level":"ok","msg":"API /healthz: ok (redis=ok, supabase=ok, uptime=4416s)"}
+{"ts":"2026-07-31T00:55:31.398Z","command":"health","level":"warn","msg":"Disk check: could not read thresholds from DB (Could not find the table 'public.disk_monitor_settings' in the schema cache) — using defaults."}

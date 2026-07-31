@@ -1,0 +1,28 @@
+{
+  "_comment": "Credit costs and limits, in one place. Changing a price/limit is now a config edit, not a code edit + redeploy of business logic. server.js reads this via src/core/config.js. Keep numeric env-var overrides (FREE_DAILY_CHAT_LIMIT etc.) working as a higher-priority override for ops-level tuning without a config-file commit.",
+
+  "tiers": {
+    "free": { "creditsTotal": 800, "dailyChatLimit": 150 },
+    "pro": { "creditsTotal": 500, "monthlyReset": true },
+    "team": { "creditsTotal": null, "seatsIncluded": 5 },
+    "org": { "creditsTotal": null, "seatsIncluded": null },
+    "enterprise": { "creditsTotal": null, "seatsIncluded": null }
+  },
+
+  "featureCosts": {
+    "chat_free": { "credits": 0, "note": "unmetered, abuse-capped by dailyChatLimit instead" },
+    "chat_pro": { "credits": 2 },
+    "code": { "credits": 2 },
+    "image": { "credits": 1 },
+    "video": { "credits": 15 },
+    "voice_ai": { "credits": 3, "note": "placeholder rate, tune before enabling the flag" },
+    "file_analysis": { "credits": 2, "note": "placeholder rate, tune before enabling the flag" },
+    "web_search": { "credits": 1, "note": "placeholder rate, tune before enabling the flag" }
+  },
+
+  "rateLimitsPerMinute": {
+    "chat": 20,
+    "image": 10,
+    "video": 4
+  }
+}

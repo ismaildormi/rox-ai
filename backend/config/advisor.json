@@ -1,0 +1,45 @@
+{
+  "_comment": "Every threshold the Business Advisor scores/flags against. Same philosophy as plans.json/models.json: a config edit, not a code edit, when a number needs tuning. src/modules/advisor/{health,risk,forecast}.js read this via src/core/config.js. Nothing here is a trained model — every score/risk is traceable to one of these numbers.",
+
+  "healthThresholds": {
+    "financial": { "marginBad": 0.0, "marginGood": 0.5, "penaltyPerNegativeCombo": 10 },
+    "business": { "growthBad": -0.05, "growthGood": 0.1, "conversionBad": 0.02, "conversionGood": 0.2 },
+    "platform": { "failurePenaltyWeight": 100 },
+    "infrastructure": { "penaltyPerTrippedModel": 20 },
+    "security": { "penaltyPerCritical": 15, "penaltyPerWarning": 5 },
+    "growth": { "bad": -0.05, "good": 0.15 }
+  },
+
+  "riskThresholds": {
+    "financial": {
+      "lowMarginPct": 0.15,
+      "highDailyAiCostUsd": 200,
+      "negativeComboFloorUsd": -1
+    },
+    "infrastructure": {
+      "highJobFailureRate": 0.1
+    },
+    "abuse": {
+      "highVolumeRequestsPerDay": 500,
+      "repeatedBlocksSuspicious": 5
+    }
+  },
+
+  "forecast": {
+    "trendWindowDays": 30,
+    "minDaysForHighConfidence": 21
+  },
+
+  "insights": {
+    "notableChangePct": 0.05,
+    "profitLeaderMinRequests": 5,
+    "expensiveModelMarginFloorUsd": 0
+  },
+
+  "recommendations": {
+    "inactiveUserDays": 21,
+    "highDemandGrowthPct": 0.25,
+    "premiumCandidateMinDailyRequests": 50,
+    "premiumCandidateMaxMarginUsd": 0
+  }
+}

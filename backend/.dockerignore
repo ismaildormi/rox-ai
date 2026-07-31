@@ -1,0 +1,41 @@
+# ROX AI — backend Docker build context exclusions
+#
+# Keeps the build context small (faster `docker build`) and, more
+# importantly, keeps real secrets and host-specific state OUT of the
+# image entirely — .env is never copied in; real values are injected
+# at `docker run`/compose time via --env-file/env_vars, never baked in.
+
+# Dependencies — installed fresh inside the image by `npm install
+# --omit=dev` (see Dockerfile); a host node_modules would just be dead
+# weight, and could bake in a platform-mismatched native binary if the
+# image is built on a different OS/arch than it was installed on.
+node_modules
+
+# Secrets — NEVER let a real .env reach the build context. .env.example
+# is intentionally not excluded (it has no real values, and is useful
+# reference inside the image/repo checkout).
+.env
+.env.*
+!.env.example
+
+# Host-local state that has no place in an image (logs/backups
+# themselves live one level up at the repo root — outside this build
+# context already — so they're excluded from ever being COPY'd purely
+# by not being inside backend/ at all; this just covers stray *.log
+# files that might exist directly under backend/)
+*.log
+
+# Version control / editor / OS cruft
+.git
+.gitignore
+.DS_Store
+*.swp
+
+# Tests aren't needed at runtime in the image — they still run in CI /
+# on the host via `npm run test:unit`, just not shipped in the image.
+test-*.js
+
+# Docker's own files (irrelevant to include in their own build context)
+Dockerfile
+Dockerfile.worker
+.dockerignore

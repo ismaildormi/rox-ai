@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="ar" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ROX AI — Telemetry</title>
+<style>
+  :root{
+    --bg:#0A0A10;
+    --surface:#14141C;
+    --surface-hi:#1B1B26;
+    --border:#262633;
+    --text:#EDEDF2;
+    --text-dim:#8A8A9C;
+    --text-faint:#54545F;
+    --accent:#8B6BFF;
+    --accent-dim:#4C3A99;
+    --good:#33D6A6;
+    --warn:#F5A623;
+    --bad:#FB6B6B;
+    --mono: ui-monospace, "SF Mono", "Cascadia Code", "JetBrains Mono", Menlo, Consolas, monospace;
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, sans-serif;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:var(--sans);}
+  body{min-height:100vh;padding-bottom:60px;}
+
+  .topbar{
+    position:sticky; top:0; z-index:10;
+    background:linear-gradient(180deg, rgba(10,10,16,0.97), rgba(10,10,16,0.88));
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--border);
+    padding:16px 20px;
+  }
+  .brand{display:flex; align-items:center; gap:10px;}
+  .brand-mark{
+    font-family:var(--mono); font-weight:700; font-size:15px; letter-spacing:1px;
+    background:var(--accent); color:#0A0A10; padding:3px 8px; border-radius:4px;
+  }
+  .brand-label{font-family:var(--mono); font-size:11px; letter-spacing:3px; color:var(--text-dim); text-transform:uppercase;}
+  .pulse-row{display:flex; align-items:center; gap:8px; margin-left:auto;}
+  .pulse-dot{width:8px; height:8px; border-radius:50%; background:var(--text-faint); flex-shrink:0;}
+  .pulse-dot.live{background:var(--good); box-shadow:0 0 0 0 rgba(51,214,166,0.6); animation:pulse 1.8s infinite;}
+  .pulse-dot.stale{background:var(--warn);}
+  .pulse-dot.dead{background:var(--bad);}
+  @keyframes pulse{
+    0%{box-shadow:0 0 0 0 rgba(51,214,166,0.5);}
+    70%{box-shadow:0 0 0 8px rgba(51,214,166,0);}
+    100%{box-shadow:0 0 0 0 rgba(51,214,166,0);}
+  }
+  .pulse-text{font-family:var(--mono); font-size:12px; color:var(--text-dim);}
+
+  .header-flex{display:flex; align-items:center; flex-wrap:wrap; gap:12px 20px;}
+
+  .controls{
+    display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-top:14px;
+  }
+  input[type=text], select, textarea{
+    background:var(--surface); border:1px solid var(--border); color:var(--text);
+    border-radius:6px; padding:8px 10px; font-family:var(--mono); font-size:12.5px;
+    outline:none;
+  }
+  input[type=text]{flex:1; min-width:220px;}
+  input[type=text]:focus, select:focus, textarea:focus{border-color:var(--accent);}
+  button{
+    background:var(--accent); color:#0A0A10; border:none; border-radius:6px;
+    padding:8px 14px; font-family:var(--sans); font-weight:600; font-size:12.5px;
+    cursor:pointer;
+  }
+  button:hover{filter:brightness(1.08);}
+  button.ghost{
+    background:transparent; color:var(--text-dim); border:1px solid var(--border);
+    font-weight:500;
+  }
+  button.ghost:hover{color:var(--text); border-color:var(--accent);}
+  .toggle-link{
+    font-family:var(--mono); font-size:11.5px; color:var(--accent); cursor:pointer;
+    text-decoration:underline; text-underline-offset:2px; background:none; border:none; padding:0;
+  }
+
+  .paste-box{display:none; margin-top:10px; gap:8px; flex-direction:column;}
+  .paste-box.open{display:flex;}
+  textarea{width:100%; min-height:110px; resize:vertical; line-height:1.5;}
+
+  .status-msg{font-family:var(--mono); font-size:11.5px; margin-top:8px; color:var(--text-dim);}
+  .status-msg.error{color:var(--bad);}
+
+  main{padding:20px; max-width:1100px; margin:0 auto;}
+  .empty-state{
+    margin-top:60px; text-align:center; color:var(--text-dim);
+    display:flex; flex-direction:column; align-items:center; gap:10px;
+  }
+  .empty-state .glyph{font-family:var(--mono); font-size:32px; color:var(--accent-dim);}
+  .empty-state h2{font-size:15px; font-weight:600; color:var(--text); margin:0;}
+  .empty-state p{font-size:13px; max-width:420px; margin:0; line-height:1.6;}
+
+  section{margin-bottom:26px;}
+  .section-head{
+    display:flex; align-items:baseline; gap:8px; margin-bottom:10px;
+  }
+  .section-head .bar{color:var(--accent); font-family:var(--mono); font-size:13px;}
+  .section-head h3{font-size:13px; text-transform:uppercase; letter-spacing:1.5px; color:var(--text-dim); font-weight:600; margin:0;}
+
+  .grid{display:grid; grid-template-columns:repeat(auto-fill, minmax(150px,1fr)); gap:10px;}
+  .card{
+    background:var(--surface); border:1px solid var(--border); border-radius:10px;
+    padding:14px;
+  }
+  .card .label{font-size:11px; color:var(--text-dim); margin-bottom:6px; word-break:break-word;}
+  .card .value{font-family:var(--mono); font-size:22px; font-weight:600;}
+  .card .value.good{color:var(--good);}
+  .card .value.warn{color:var(--warn);}
+  .card .value.bad{color:var(--bad);}
+  .card .sub{font-family:var(--mono); font-size:10.5px; color:var(--text-faint); margin-top:4px;}
+
+  .model-card{
+    background:var(--surface); border:1px solid var(--border); border-radius:10px;
+    padding:14px 16px; margin-bottom:10px;
+  }
+  .model-name{font-family:var(--mono); font-weight:700; font-size:13px; margin-bottom:10px; display:flex; align-items:center; gap:8px;}
+  .model-name .dot{width:6px; height:6px; border-radius:50%; background:var(--accent);}
+  .bar-row{display:flex; align-items:center; gap:10px; margin-bottom:6px; font-size:11.5px;}
+  .bar-row .bl{width:78px; color:var(--text-dim); font-family:var(--mono); flex-shrink:0;}
+  .bar-track{flex:1; height:8px; background:var(--surface-hi); border-radius:4px; overflow:hidden;}
+  .bar-fill{height:100%; border-radius:4px;}
+  .bar-fill.success{background:var(--good);}
+  .bar-fill.failure{background:var(--bad);}
+  .bar-fill.exhausted{background:var(--warn);}
+  .bar-fill.generic{background:var(--accent);}
+  .bar-num{font-family:var(--mono); font-size:11px; color:var(--text-dim); width:36px; text-align:right; flex-shrink:0;}
+
+  table{width:100%; border-collapse:collapse; font-size:12px;}
+  th{text-align:left; color:var(--text-dim); font-weight:600; font-size:10.5px; text-transform:uppercase; letter-spacing:1px; padding:8px 10px; border-bottom:1px solid var(--border);}
+  td{padding:9px 10px; border-bottom:1px solid var(--border); font-family:var(--mono); font-size:11.5px;}
+  tr:last-child td{border-bottom:none;}
+  .table-wrap{background:var(--surface); border:1px solid var(--border); border-radius:10px; overflow:hidden;}
+
+  details.raw{margin-top:24px; background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:12px 16px;}
+  details.raw summary{cursor:pointer; font-family:var(--mono); font-size:12px; color:var(--text-dim);}
+  details.raw pre{white-space:pre-wrap; word-break:break-all; font-size:10.5px; color:var(--text-faint); margin-top:10px; max-height:280px; overflow:auto;}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="header-flex">
+    <div class="brand">
+      <span class="brand-mark">ROX</span>
+      <span class="brand-label">Telemetry</span>
+    </div>
+    <div class="pulse-row" id="pulseRow">
+      <div class="pulse-dot" id="pulseDot"></div>
+      <span class="pulse-text" id="pulseText">not connected</span>
+    </div>
+  </div>
+
+  <div class="controls">
+    <input type="text" id="urlInput" value="http://localhost:3001/metrics" />
+    <button id="fetchBtn">Fetch</button>
+    <select id="intervalSelect">
+      <option value="0">no auto-refresh</option>
+      <option value="5000">every 5s</option>
+      <option value="10000" selected>every 10s</option>
+      <option value="30000">every 30s</option>
+    </select>
+    <button class="toggle-link" id="pasteToggle">paste raw /metrics text instead</button>
+  </div>
+
+  <div class="paste-box" id="pasteBox">
+    <textarea id="pasteArea" placeholder="# HELP rox_queue_depth ...&#10;rox_queue_depth{queue=&quot;image&quot;} 3&#10;..."></textarea>
+    <div style="display:flex; gap:8px;">
+      <button id="parseBtn">Parse pasted text</button>
+      <button class="ghost" id="clearPasteBtn">Clear</button>
+    </div>
+  </div>
+
+  <div class="status-msg" id="statusMsg"></div>
+</div>
+
+<main>
+  <div class="empty-state" id="emptyState">
+    <div class="glyph">$</div>
+    <h2>Waiting for a scrape</h2>
+    <p>
+      Point this at your v6 backend's built-in metrics route (default <b>http://localhost:3001/metrics</b>) and hit Fetch —
+      or, if the browser blocks a local http:// request from this page, copy the page source from that
+      URL and paste it above instead. Nothing here leaves your machine; parsing happens in this tab.
+    </p>
+  </div>
+
+  <div id="dashboard" style="display:none;">
+
+    <section id="sysSection" style="display:none;">
+      <div class="section-head"><span class="bar">$</span><h3>System</h3></div>
+      <div class="grid" id="sysGrid"></div>
+    </section>
+
+    <section id="queueSection" style="display:none;">
+      <div class="section-head"><span class="bar">$</span><h3>Queue depth</h3></div>
+      <div class="grid" id="queueGrid"></div>
+    </section>
+
+    <section id="outcomeSection" style="display:none;">
+      <div class="section-head"><span class="bar">$</span><h3>Model outcomes</h3></div>
+      <div id="outcomeList"></div>
+    </section>
+
+    <section id="latencySection" style="display:none;">
+      <div class="section-head"><span class="bar">$</span><h3>Model latency (ms)</h3></div>
+      <div class="grid" id="latencyGrid"></div>
+    </section>
+
+    <section id="reliabilitySection" style="display:none;">
+      <div class="section-head"><span class="bar">$</span><h3>Reliability</h3></div>
+      <div class="grid" id="reliabilityGrid"></div>
+    </section>
+
+    <section id="fallbackSection" style="display:none;">
+      <div class="section-head"><span class="bar">$</span><h3>Fallbacks</h3></div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Feature</th><th>Primary model</th><th>Fell back to</th><th>Count</th></tr></thead>
+          <tbody id="fallbackBody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <details class="raw">
+      <summary>raw parsed metrics (debug)</summary>
+      <pre id="rawOutput"></pre>
+    </details>
+  </div>
+</main>
+
+<script>
+let autoTimer = null;
+let lastScrapeTime = null;
+
+// ---------- Prometheus text parser ----------
+function parsePrometheusText(text){
+  const series = {}; // name -> [{labels:{}, value:number}]
+  const lines = text.split('\n');
+  for(const raw of lines){
+    const line = raw.trim();
+    if(!line || line.startsWith('#')) continue;
+    const m = line.match(/^([a-zA-Z_:][a-zA-Z0-9_:]*)(\{([^}]*)\})?\s+([^\s]+)/);
+    if(!m) continue;
+    const name = m[1];
+    const labelStr = m[3] || '';
+    const value = parseFloat(m[4]);
+    if(Number.isNaN(value)) continue;
+    const labels = {};
+    if(labelStr){
+      const labelRe = /([a-zA-Z_][a-zA-Z0-9_]*)="((?:[^"\\]|\\.)*)"/g;
+      let lm;
+      while((lm = labelRe.exec(labelStr)) !== null){
+        labels[lm[1]] = lm[2].replace(/\\"/g,'"');
+      }
+    }
+    if(!series[name]) series[name] = [];
+    series[name].push({labels, value});
+  }
+  return series;
+}
+
+function fmtNum(n){
+  if(n >= 1e6) return (n/1e6).toFixed(2)+'M';
+  if(n >= 1e3) return (n/1e3).toFixed(1)+'k';
+  if(Number.isInteger(n)) return String(n);
+  return n.toFixed(2);
+}
+
+function el(tag, cls, html){
+  const e = document.createElement(tag);
+  if(cls) e.className = cls;
+  if(html !== undefined) e.innerHTML = html;
+  return e;
+}
+
+// ---------- Render ----------
+function render(series){
+  document.getElementById('emptyState').style.display = 'none';
+  document.getElementById('dashboard').style.display = 'block';
+  document.getElementById('rawOutput').textContent = JSON.stringify(series, null, 2);
+
+  renderSystem(series);
+  renderQueues(series);
+  renderOutcomes(series);
+  renderLatency(series);
+  renderReliability(series);
+  renderFallbacks(series);
+}
+
+function renderSystem(series){
+  const grid = document.getElementById('sysGrid');
+  grid.innerHTML = '';
+  const wanted = [
+    {key:'process_resident_memory_bytes', label:'Memory (RSS)', fmt: v => (v/1024/1024).toFixed(1)+' MB'},
+    {key:'process_cpu_user_seconds_total', label:'CPU (user, total)', fmt: v => v.toFixed(1)+' s'},
+    {key:'nodejs_eventloop_lag_seconds', label:'Event loop lag', fmt: v => (v*1000).toFixed(1)+' ms'},
+    {key:'nodejs_heap_size_used_bytes', label:'Heap used', fmt: v => (v/1024/1024).toFixed(1)+' MB'},
+    {key:'process_uptime_seconds', label:'Uptime', fmt: v => (v/60).toFixed(0)+' min'},
+    {key:'nodejs_active_handles_total', label:'Active handles', fmt: v => fmtNum(v)},
+  ];
+  let any = false;
+  for(const w of wanted){
+    if(series[w.key] && series[w.key][0]){
+      any = true;
+      const v = series[w.key][0].value;
+      const card = el('div','card');
+      card.appendChild(el('div','label', w.label));
+      card.appendChild(el('div','value', w.fmt(v)));
+      grid.appendChild(card);
+    }
+  }
+  document.getElementById('sysSection').style.display = any ? 'block' : 'none';
+}
+
+function renderQueues(series){
+  const grid = document.getElementById('queueGrid');
+  grid.innerHTML = '';
+  const rows = series['rox_queue_depth'] || [];
+  for(const r of rows){
+    const card = el('div','card');
+    card.appendChild(el('div','label', (r.labels.queue || 'queue') ));
+    const cls = r.value > 20 ? 'bad' : r.value > 5 ? 'warn' : 'good';
+    card.appendChild(el('div','value '+cls, fmtNum(r.value)));
+    card.appendChild(el('div','sub','waiting jobs'));
+    grid.appendChild(card);
+  }
+  document.getElementById('queueSection').style.display = rows.length ? 'block' : 'none';
+}
+
+function renderOutcomes(series){
+  const list = document.getElementById('outcomeList');
+  list.innerHTML = '';
+  const rows = series['rox_model_outcome_total'] || [];
+  const byModel = {};
+  for(const r of rows){
+    const model = r.labels.model || 'unknown';
+    const outcome = r.labels.outcome || 'unknown';
+    if(!byModel[model]) byModel[model] = {};
+    byModel[model][outcome] = (byModel[model][outcome]||0) + r.value;
+  }
+  const models = Object.keys(byModel);
+  for(const model of models){
+    const outcomes = byModel[model];
+    const total = Object.values(outcomes).reduce((a,b)=>a+b,0) || 1;
+    const card = el('div','model-card');
+    const nameRow = el('div','model-name');
+    nameRow.appendChild(el('span','dot'));
+    nameRow.appendChild(document.createTextNode(model));
+    card.appendChild(nameRow);
+    ['success','failure','exhausted'].forEach(k=>{
+      if(outcomes[k] === undefined) return;
+      const pct = Math.round((outcomes[k]/total)*100);
+      const row = el('div','bar-row');
+      row.appendChild(el('div','bl', k));
+      const track = el('div','bar-track');
+      const fill = el('div','bar-fill '+k);
+      fill.style.width = pct+'%';
+      track.appendChild(fill);
+      row.appendChild(track);
+      row.appendChild(el('div','bar-num', fmtNum(outcomes[k])));
+      card.appendChild(row);
+    });
+    list.appendChild(card);
+  }
+  document.getElementById('outcomeSection').style.display = models.length ? 'block' : 'none';
+}
+
+function renderLatency(series){
+  const grid = document.getElementById('latencyGrid');
+  grid.innerHTML = '';
+  const sums = series['rox_model_latency_ms_sum'] || [];
+  const counts = series['rox_model_latency_ms_count'] || [];
+  const countByModel = {};
+  for(const c of counts) countByModel[c.labels.model || 'unknown'] = c.value;
+  let any = false;
+  for(const s of sums){
+    const model = s.labels.model || 'unknown';
+    const count = countByModel[model];
+    if(!count) continue;
+    any = true;
+    const avg = s.value / count;
+    const card = el('div','card');
+    card.appendChild(el('div','label', model));
+    const cls = avg > 5000 ? 'bad' : avg > 1500 ? 'warn' : 'good';
+    card.appendChild(el('div','value '+cls, fmtNum(avg)+' ms'));
+    card.appendChild(el('div','sub', 'avg over '+fmtNum(count)+' calls'));
+    grid.appendChild(card);
+  }
+  document.getElementById('latencySection').style.display = any ? 'block' : 'none';
+}
+
+function renderReliability(series){
+  const grid = document.getElementById('reliabilityGrid');
+  grid.innerHTML = '';
+  let any = false;
+  const groups = [
+    {key:'rox_refund_total', label:'refunds', labelKey:'feature'},
+  ];
+  for(const g of groups){
+    const rows = series[g.key] || [];
+    for(const r of rows){
+      any = true;
+      const card = el('div','card');
+      card.appendChild(el('div','label', g.label+' · '+(r.labels[g.labelKey]||'')));
+      const cls = r.value > 0 ? 'warn' : 'good';
+      card.appendChild(el('div','value '+cls, fmtNum(r.value)));
+      grid.appendChild(card);
+    }
+  }
+  const costs = series['rox_model_cost_usd_total'] || [];
+  for(const r of costs){
+    any = true;
+    const card = el('div','card');
+    card.appendChild(el('div','label', 'cost · '+(r.labels.model||'')));
+    card.appendChild(el('div','value', '$'+r.value.toFixed(4)));
+    grid.appendChild(card);
+  }
+  const margins = series['rox_margin_usd_last_request'] || [];
+  for(const r of margins){
+    any = true;
+    const card = el('div','card');
+    card.appendChild(el('div','label', 'margin · '+(r.labels.feature||'')));
+    const cls = r.value < 0 ? 'bad' : 'good';
+    card.appendChild(el('div','value '+cls, '$'+r.value.toFixed(4)));
+    grid.appendChild(card);
+  }
+  const loadLevels = series['rox_load_level'] || [];
+  const LEVEL_NAMES = {0:'normal', 1:'elevated', 2:'high'};
+  for(const r of loadLevels){
+    any = true;
+    const card = el('div','card');
+    card.appendChild(el('div','label', 'load · '+(r.labels.feature||'')));
+    const cls = r.value >= 2 ? 'bad' : r.value >= 1 ? 'warn' : 'good';
+    card.appendChild(el('div','value '+cls, LEVEL_NAMES[r.value] || r.value));
+    grid.appendChild(card);
+  }
+  document.getElementById('reliabilitySection').style.display = any ? 'block' : 'none';
+}
+
+function renderFallbacks(series){
+  const body = document.getElementById('fallbackBody');
+  body.innerHTML = '';
+  const rows = series['rox_fallback_total'] || [];
+  for(const r of rows){
+    const tr = el('tr');
+    tr.appendChild(el('td', null, r.labels.feature || '—'));
+    tr.appendChild(el('td', null, r.labels.primary_model || '—'));
+    tr.appendChild(el('td', null, r.labels.fallback_model || '—'));
+    tr.appendChild(el('td', null, fmtNum(r.value)));
+    body.appendChild(tr);
+  }
+  document.getElementById('fallbackSection').style.display = rows.length ? 'block' : 'none';
+}
+
+// ---------- Connection status ----------
+function setStatus(state, text){
+  const dot = document.getElementById('pulseDot');
+  const label = document.getElementById('pulseText');
+  dot.className = 'pulse-dot' + (state ? ' '+state : '');
+  label.textContent = text;
+}
+
+function setMsg(text, isError){
+  const m = document.getElementById('statusMsg');
+  m.textContent = text || '';
+  m.className = 'status-msg' + (isError ? ' error' : '');
+}
+
+function tickFreshness(){
+  if(!lastScrapeTime) return;
+  const secs = Math.round((Date.now() - lastScrapeTime)/1000);
+  setStatus('live', 'last scraped '+secs+'s ago');
+}
+setInterval(tickFreshness, 1000);
+
+// ---------- Fetch flow ----------
+async function doFetch(){
+  const url = document.getElementById('urlInput').value.trim();
+  if(!url){ setMsg('enter a URL first', true); return; }
+  setStatus(null, 'fetching…');
+  setMsg('');
+  try{
+    const res = await fetch(url, {cache:'no-store'});
+    if(!res.ok) throw new Error('HTTP '+res.status);
+    const text = await res.text();
+    const series = parsePrometheusText(text);
+    if(Object.keys(series).length === 0) throw new Error('response had no parseable metric lines');
+    lastScrapeTime = Date.now();
+    setStatus('live', 'connected');
+    setMsg('');
+    render(series);
+  }catch(err){
+    setStatus('dead', 'fetch failed');
+    setMsg('Could not fetch: '+err.message+' — this is usually the browser blocking a local http:// request from this page (mixed content / CORS). Use "paste raw /metrics text instead" below.', true);
+  }
+}
+
+function applyAutoRefresh(){
+  if(autoTimer){ clearInterval(autoTimer); autoTimer = null; }
+  const ms = parseInt(document.getElementById('intervalSelect').value, 10);
+  if(ms > 0){
+    autoTimer = setInterval(doFetch, ms);
+  }
+}
+
+document.getElementById('fetchBtn').addEventListener('click', () => { doFetch(); applyAutoRefresh(); });
+document.getElementById('intervalSelect').addEventListener('change', applyAutoRefresh);
+
+document.getElementById('pasteToggle').addEventListener('click', () => {
+  document.getElementById('pasteBox').classList.toggle('open');
+});
+document.getElementById('clearPasteBtn').addEventListener('click', () => {
+  document.getElementById('pasteArea').value = '';
+});
+document.getElementById('parseBtn').addEventListener('click', () => {
+  const text = document.getElementById('pasteArea').value;
+  if(!text.trim()){ setMsg('paste some metrics text first', true); return; }
+  try{
+    const series = parsePrometheusText(text);
+    if(Object.keys(series).length === 0) throw new Error('no parseable metric lines found');
+    lastScrapeTime = Date.now();
+    setStatus('stale', 'parsed from pasted text');
+    setMsg('');
+    render(series);
+  }catch(err){
+    setStatus('dead', 'parse failed');
+    setMsg('Could not parse: '+err.message, true);
+  }
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,60 @@
+# ROX AI — background worker (production image)
+#
+# Same base and dependency set as ./Dockerfile (the API server) — this
+# process runs `worker.js` instead of `server.js` and never listens on
+# a port, since it only consumes BullMQ jobs from Redis (see
+# lib/queue.js) and calls Replicate for image/video generation. See
+# ./Dockerfile's header comment for why this runs `node worker.js`
+# directly rather than through pm2.
+#
+# Kept as a separate Dockerfile (rather than one image + an overridden
+# CMD) so each service has its own, independently taggable/scannable
+# image and its own HEALTHCHECK — a worker has no HTTP endpoint to
+# probe, so "healthy" means something different here than for the API.
+#
+# Build:
+#   docker build -f Dockerfile.worker -t rox-ai-worker .
+# Run:
+#   docker run --env-file .env rox-ai-worker
+
+# ---- deps stage --------------------------------------------------------
+# Uses `npm install` rather than `npm ci` — this repo has no
+# package-lock.json yet (see Phase 1's security-review notes); switch
+# to `npm ci` once one is committed, for fully reproducible installs.
+FROM node:20-alpine AS deps
+WORKDIR /app
+
+COPY package.json ./
+COPY package-lock.json* ./
+RUN npm install --omit=dev --no-audit --no-fund
+
+# ---- runtime stage ------------------------------------------------------
+FROM node:20-alpine AS runtime
+WORKDIR /app
+
+RUN apk add --no-cache tini
+
+ENV NODE_ENV=production
+
+COPY --from=deps --chown=node:node /app/node_modules ./node_modules
+COPY --chown=node:node . .
+
+USER node
+
+# No EXPOSE — this process doesn't listen on any port.
+
+# There's no HTTP endpoint to probe. This isn't a real liveness check
+# of worker.js itself (it opens its OWN short-lived ioredis connection
+# rather than inspecting the running process's) — a worker can be
+# connected to Redis but still stuck for other reasons, and this
+# wouldn't catch that. It's a conservative first pass that at least
+# verifies the worker's one hard dependency (Redis) is reachable from
+# inside this container, which is meaningfully better than no
+# healthcheck at all and matches what `docker ps`/compose can act on
+# today without new app code. A deeper check (e.g. worker.js exposing
+# its own liveness state) is listed as remaining Phase 2 work.
+HEALTHCHECK --interval=30s --timeout=5s --start-period=15s --retries=3 \
+  CMD node -e "const IORedis = require('ioredis'); const c = new IORedis(process.env.REDIS_URL || 'redis://localhost:6379', { lazyConnect: true, maxRetriesPerRequest: 1 }); c.connect().then(() => c.ping()).then(() => { c.disconnect(); process.exit(0); }).catch(() => { c.disconnect(); process.exit(1); });"
+
+ENTRYPOINT ["/sbin/tini", "--"]
+CMD ["node", "worker.js"]

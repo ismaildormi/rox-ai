@@ -1,0 +1,50 @@
+# ROX AI — nginx active-upstream template
+#
+# Rendered by scripts/deploy/production-deploy.sh into
+# nginx/conf.d/active.conf on the production host (NOT committed —
+# only this .template is; the rendered file is host state, same
+# category as .active-color). One placeholder, __ACTIVE_UPSTREAM__,
+# is substituted with either `backend-blue:3001` or
+# `backend-green:3001` (the Docker-internal service name + port —
+# nginx and both backend containers share the compose network, so
+# this resolves via Docker's internal DNS, no host ports involved).
+#
+# After rendering a new active.conf, the deploy script runs
+# `docker exec rox-nginx-production nginx -s reload` — nginx re-reads
+# config and opens new connections against the new upstream while
+# letting in-flight requests on the old upstream finish naturally.
+# That reload is the entire zero-downtime cutover mechanism; nothing
+# else about nginx's config changes between deploys.
+
+upstream rox_backend_active {
+    server __ACTIVE_UPSTREAM__;
+}
+
+server {
+    listen 80;
+
+    # Generous but bounded — a stuck upstream should surface as a 502
+    # within seconds, not hang a client indefinitely.
+    proxy_connect_timeout 5s;
+    proxy_send_timeout 30s;
+    proxy_read_timeout 30s;
+
+    location / {
+        proxy_pass http://rox_backend_active;
+        proxy_http_version 1.1;
+        proxy_set_header Connection '';
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    # /healthz is also proxied through the active upstream (not
+    # answered by nginx itself) — the compose-file HEALTHCHECK above
+    # needs to reflect whether the ACTIVE backend is actually healthy,
+    # not just whether nginx is up.
+    location /healthz {
+        proxy_pass http://rox_backend_active;
+        proxy_http_version 1.1;
+    }
+}

@@ -1,0 +1,33 @@
+{
+  "thresholds": {
+    "warning": 75,
+    "critical": 90,
+    "emergency": 95
+  },
+
+  "retention": {
+    "logsRetentionDays": 14,
+    "backupRetentionDays": 30,
+    "maxBackupsKept": 20,
+    "cacheMaxAgeHours": 24,
+    "tempMaxAgeHours": 6
+  },
+
+  "abnormalGrowthPct24h": 25,
+
+  "_comment_paths": "These are OPTIONAL. If unset, that category is reported as 'external' — this deployment's generated images/videos/uploads are not assumed to live on local disk (generation_jobs.result_url points at Replicate/Supabase Storage today, see backend/worker.js). Set the matching env var only if a future feature actually writes these locally.",
+  "envVarsByCategory": {
+    "uploads": "UPLOADS_DIR",
+    "generatedImages": "GENERATED_IMAGES_DIR",
+    "generatedVideos": "GENERATED_VIDEOS_DIR",
+    "cache": "CACHE_DIR",
+    "temp": "TEMP_DIR"
+  },
+
+  "scan": {
+    "defaultMaxDepth": 3,
+    "defaultTopN": 15,
+    "maxFilesScanned": 200000,
+    "maxScanMs": 15000
+  }
+}

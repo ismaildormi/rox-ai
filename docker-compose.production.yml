@@ -1,0 +1,137 @@
+# ROX AI — Production deployment compose file
+#
+# Same lineage as docker-compose.staging.yml (image: pulled from GHCR,
+# published by .github/workflows/cd.yml — never a local build on the
+# host) with one structural difference: the `backend` service is
+# duplicated into `backend-blue` / `backend-green`, both always kept
+# running, with an `nginx` reverse proxy in front deciding which one
+# receives real traffic. That's the whole zero-downtime mechanism —
+# see scripts/deploy/production-deploy.sh and
+# docs/DEPLOYMENT.md#production-deployment for the full walkthrough.
+# `worker` stays a single instance (see the rationale in that doc —
+# BullMQ jobs live in Redis, not in the worker process, so a brief
+# restart delays a job, it doesn't drop one).
+#
+# Not meant to be run from a developer laptop. It's copied to the
+# production host by .github/workflows/deploy-production.yml and
+# driven by scripts/deploy/production-deploy.sh, which sets REGISTRY,
+# OWNER_REPO, and IMAGE_TAG before calling `docker compose up` for
+# whichever single color is being deployed (`--no-deps backend-blue`
+# or `--no-deps backend-green` — never both at once, and never
+# `worker`/`redis`/`nginx` unless they're the ones actually changing).
+# Running a specific service manually works the same way as long as
+# those three vars are exported first, e.g.:
+#
+#   REGISTRY=ghcr.io OWNER_REPO=your-org/rox-ai IMAGE_TAG=sha-abc12345 \
+#     docker compose -f docker-compose.production.yml up -d --no-deps backend-blue
+#
+# One-time setup on the production host (see docs/DEPLOYMENT.md for
+# the full runbook — same shape as staging's, plus the nginx piece):
+#   1. Create the deploy directory (path = the PRODUCTION_DEPLOY_DIR
+#      secret used by deploy-production.yml) — the workflow copies
+#      this file, the deploy script, and nginx/nginx.conf.template
+#      there on every run. Nothing else needs to be cloned/checked out
+#      on the host.
+#   2. Inside that directory, copy backend/.env.example to `.env` and
+#      fill in real production values — same convention as staging's
+#      `.env`, never touched by the pipeline, never passed through
+#      GitHub Actions.
+#   3. Docker + Docker Compose v2 installed on the host.
+#   4. `mkdir -p nginx/conf.d` in the deploy directory once, by hand —
+#      production-deploy.sh renders the active upstream into
+#      nginx/conf.d/active.conf and reloads nginx to pick it up; the
+#      directory just needs to exist before the first deploy.
+#
+# Backend and worker images both already bake a HEALTHCHECK into the
+# Dockerfile itself (see backend/Dockerfile, backend/Dockerfile.worker)
+# — nothing to redeclare here for those two. Redis and nginx need
+# their own since neither upstream image ships one.
+
+services:
+  redis:
+    image: redis:7-alpine
+    container_name: rox-redis-production
+    restart: unless-stopped
+    volumes:
+      - redis-production-data:/data
+    command: ['redis-server', '--appendonly', 'yes']
+    healthcheck:
+      test: ['CMD', 'redis-cli', 'ping']
+      interval: 10s
+      timeout: 3s
+      retries: 5
+
+  # backend-blue / backend-green: identical service definitions bar
+  # the container/host-port name. Only one is "active" (receiving
+  # traffic via nginx) at a time, but BOTH stay running always — that
+  # is what makes a rollback instant (flip nginx back, nothing to
+  # pull or restart) rather than a redeploy of an older tag. The host
+  # ports below (3011/3012) are for the deploy script's own direct
+  # health-check of the *inactive* color before cutover — they are
+  # not the port real traffic arrives on (that's nginx, §PORT below).
+  backend-blue:
+    image: ${REGISTRY:-ghcr.io}/${OWNER_REPO}/backend:${IMAGE_TAG:-latest}
+    container_name: rox-backend-blue-production
+    restart: unless-stopped
+    ports:
+      - '3011:3001'
+    env_file:
+      - ./.env
+    environment:
+      REDIS_URL: redis://redis:6379
+    depends_on:
+      redis:
+        condition: service_healthy
+
+  backend-green:
+    image: ${REGISTRY:-ghcr.io}/${OWNER_REPO}/backend:${IMAGE_TAG:-latest}
+    container_name: rox-backend-green-production
+    restart: unless-stopped
+    ports:
+      - '3012:3001'
+    env_file:
+      - ./.env
+    environment:
+      REDIS_URL: redis://redis:6379
+    depends_on:
+      redis:
+        condition: service_healthy
+
+  # nginx: the one thing that actually "moves" during a deploy. It
+  # proxies the public PORT to whichever of backend-blue/backend-green
+  # nginx/conf.d/active.conf currently points at. `nginx -s reload`
+  # (issued by production-deploy.sh via `docker exec`) is graceful —
+  # existing keep-alive connections finish against the old upstream,
+  # new connections get the new one — that's the zero-downtime cutover.
+  nginx:
+    image: nginx:1.27-alpine
+    container_name: rox-nginx-production
+    restart: unless-stopped
+    ports:
+      - '${PORT:-3001}:80'
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d:ro
+    depends_on:
+      - backend-blue
+      - backend-green
+    healthcheck:
+      test: ['CMD', 'wget', '-q', '-O', '/dev/null', 'http://localhost/healthz']
+      interval: 10s
+      timeout: 3s
+      retries: 5
+      start_period: 10s
+
+  worker:
+    image: ${REGISTRY:-ghcr.io}/${OWNER_REPO}/worker:${IMAGE_TAG:-latest}
+    container_name: rox-worker-production
+    restart: unless-stopped
+    env_file:
+      - ./.env
+    environment:
+      REDIS_URL: redis://redis:6379
+    depends_on:
+      redis:
+        condition: service_healthy
+
+volumes:
+  redis-production-data:

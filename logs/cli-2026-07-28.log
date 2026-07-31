@@ -1,0 +1,4 @@
+{"ts":"2026-07-28T00:35:57.610Z","command":"health","level":"step","msg":"ROX AI — health check"}
+{"ts":"2026-07-28T00:35:59.232Z","command":"health","level":"err","msg":"Could not read pm2 process list: Unexpected token 'P', \"[PM2] Spawn\"... is not valid JSON"}
+{"ts":"2026-07-28T00:35:59.278Z","command":"health","level":"err","msg":"API not responding on http://localhost:3001/healthz (fetch failed)"}
+{"ts":"2026-07-28T00:36:01.344Z","command":"health","level":"warn","msg":"Disk check: could not read thresholds from DB (Could not find the table 'public.disk_monitor_settings' in the schema cache) — using defaults."}

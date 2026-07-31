@@ -1,0 +1,90 @@
+# ROX AI — local development compose file
+#
+# Brings up the three pieces the backend needs to run end-to-end
+# locally: the API server, the background worker, and Redis (BullMQ's
+# queue + the rate-limit/ipGuard/loadGuard counters — see
+# backend/lib/queue.js). Supabase, Stripe, Anthropic/OpenRouter, and
+# Replicate are all external managed services with no local
+# equivalent here — they're reached over the network using the
+# credentials in backend/.env, same as the bare-metal (`./cli/rox.js
+# start`) path.
+#
+# This does NOT replace `./cli/rox.js start`/`stop`/`health` — that
+# pm2-based flow (see backend/ecosystem.config.js) is still exactly
+# how it worked before and is unaffected by any of this. This is a
+# second, independent way to run the same two processes, useful for a
+# from-scratch local dev setup or a container-based deployment target
+# that doesn't want pm2 in the picture at all.
+#
+# Usage:
+#   cp backend/.env.example backend/.env   # then fill in real values
+#   docker compose up --build
+#   docker compose down                    # stop + remove containers
+#   docker compose down -v                  # also wipe the Redis volume
+#
+# Individual services:
+#   docker compose up backend               # backend + its `depends_on` (redis)
+#   docker compose logs -f worker
+#   docker compose exec backend sh
+
+services:
+  redis:
+    image: redis:7-alpine
+    container_name: rox-redis
+    restart: unless-stopped
+    ports:
+      - '6379:6379' # exposed for local debugging (redis-cli, a GUI) — remove for a real deployment
+    volumes:
+      - redis-data:/data
+    # Same persistence posture Redis defaults to; BullMQ job data and
+    # the rate-limit/ipGuard counters are all fine to lose on a dev
+    # machine restart, but this keeps them around across
+    # `docker compose restart` for a less surprising dev loop.
+    command: ['redis-server', '--appendonly', 'yes']
+    healthcheck:
+      test: ['CMD', 'redis-cli', 'ping']
+      interval: 10s
+      timeout: 3s
+      retries: 5
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: rox-backend
+    restart: unless-stopped
+    ports:
+      - '${PORT:-3001}:3001'
+    env_file:
+      - ./backend/.env
+    environment:
+      # Overrides whatever REDIS_URL is set to in backend/.env for this
+      # compose network specifically — `redis` below is the service
+      # name, which Docker's internal DNS resolves for us. Every other
+      # var (SUPABASE_*, STRIPE_*, ANTHROPIC_API_KEY, etc.) still comes
+      # from backend/.env via env_file above, untouched.
+      REDIS_URL: redis://redis:6379
+    depends_on:
+      redis:
+        condition: service_healthy
+    # backend/.env stays out of the image (see backend/.dockerignore)
+    # but IS what env_file reads from at container-start time — those
+    # are two different things: "not baked into the image" vs. "not
+    # supplied at runtime."
+
+  worker:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.worker
+    container_name: rox-worker
+    restart: unless-stopped
+    env_file:
+      - ./backend/.env
+    environment:
+      REDIS_URL: redis://redis:6379
+    depends_on:
+      redis:
+        condition: service_healthy
+
+volumes:
+  redis-data:

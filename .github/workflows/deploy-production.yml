@@ -1,0 +1,127 @@
+name: Deploy to Production
+
+# Full operator runbook: docs/DEPLOYMENT.md#production-deployment.
+# Architectural rationale: ARCHITECTURE.md §13d.
+#
+# Deliberately NOT triggered by workflow_run on cd.yml or ci.yml the
+# way deploy-staging.yml is. Production promotion is manual, always —
+# a human names an exact tag (normally one that has already been
+# verified on staging) and the `production` GitHub Environment's
+# required-reviewers rule (configured in repo settings, not in this
+# file — see docs/DEPLOYMENT.md) gates the job before it runs at all.
+# That's the "deployment protection" layer: two independent gates
+# (explicit tag input + environment approval) before any SSH happens.
+on:
+  workflow_dispatch:
+    inputs:
+      image_tag:
+        description: >-
+          Exact image tag to deploy (e.g. sha-abc12345 or v1.2.0).
+          No default on purpose — production never deploys a tag
+          nobody explicitly typed. Ignored if rollback is true.
+        required: false
+      rollback:
+        description: 'Roll back to the previously active color instead of deploying image_tag (no pull, instant cutover)'
+        required: true
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+  packages: read
+
+jobs:
+  validate:
+    name: Validate compose file + deploy script
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: docker compose config (structural check only)
+        run: |
+          # Same synthetic-.env approach ci.yml's lint job already uses
+          # for docker-compose.yml — env_file: requires the file to
+          # exist for `config` to parse successfully. No real secrets
+          # involved; removed immediately after.
+          cp backend/.env.example .env
+          REGISTRY=ghcr.io OWNER_REPO=placeholder/placeholder IMAGE_TAG=placeholder \
+            docker compose -f docker-compose.production.yml config >/dev/null
+          rm .env
+
+      - name: Shellcheck deploy script
+        uses: ludeeus/action-shellcheck@master
+        with:
+          scandir: './scripts/deploy'
+
+      - name: Sanity-check nginx template has its placeholder
+        run: |
+          grep -q '__ACTIVE_UPSTREAM__' nginx/active.conf.template
+
+  deploy:
+    name: Deploy (or roll back)
+    needs: validate
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Require image_tag unless this is a rollback
+        if: ${{ inputs.rollback != true && inputs.image_tag == '' }}
+        run: |
+          echo "::error::image_tag is required when rollback is not true."
+          exit 1
+
+      - name: Install SSH key
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.PRODUCTION_SSH_KEY }}
+
+      - name: Copy compose file, deploy script, and nginx template to the host
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan -p "${{ secrets.PRODUCTION_SSH_PORT }}" "${{ secrets.PRODUCTION_HOST }}" >> ~/.ssh/known_hosts
+          scp -P "${{ secrets.PRODUCTION_SSH_PORT }}" \
+            docker-compose.production.yml \
+            scripts/deploy/production-deploy.sh \
+            "${{ secrets.PRODUCTION_SSH_USER }}@${{ secrets.PRODUCTION_HOST }}:${{ secrets.PRODUCTION_DEPLOY_DIR }}/"
+          ssh -p "${{ secrets.PRODUCTION_SSH_PORT }}" "${{ secrets.PRODUCTION_SSH_USER }}@${{ secrets.PRODUCTION_HOST }}" \
+            "mkdir -p '${{ secrets.PRODUCTION_DEPLOY_DIR }}/nginx'"
+          scp -P "${{ secrets.PRODUCTION_SSH_PORT }}" \
+            nginx/active.conf.template \
+            "${{ secrets.PRODUCTION_SSH_USER }}@${{ secrets.PRODUCTION_HOST }}:${{ secrets.PRODUCTION_DEPLOY_DIR }}/nginx/"
+          ssh -p "${{ secrets.PRODUCTION_SSH_PORT }}" "${{ secrets.PRODUCTION_SSH_USER }}@${{ secrets.PRODUCTION_HOST }}" \
+            "chmod +x '${{ secrets.PRODUCTION_DEPLOY_DIR }}/production-deploy.sh'"
+
+      - name: Run production-deploy.sh on the host
+        env:
+          IMAGE_TAG: ${{ inputs.image_tag }}
+          ROLLBACK: ${{ inputs.rollback }}
+        run: |
+          ssh -p "${{ secrets.PRODUCTION_SSH_PORT }}" "${{ secrets.PRODUCTION_SSH_USER }}@${{ secrets.PRODUCTION_HOST }}" \
+            "cd '${{ secrets.PRODUCTION_DEPLOY_DIR }}' && \
+             REGISTRY=ghcr.io \
+             OWNER_REPO='${{ github.repository }}' \
+             IMAGE_TAG='${IMAGE_TAG}' \
+             ROLLBACK='${ROLLBACK}' \
+             GHCR_ACTOR='${{ github.actor }}' \
+             GHCR_TOKEN='${{ secrets.GITHUB_TOKEN }}' \
+             ./production-deploy.sh"
+
+      - name: Post-deploy external verification
+        # Independent of the host-side health check inside
+        # production-deploy.sh — this confirms /healthz answers from
+        # OUTSIDE the host too (catches a firewall/DNS/nginx-port
+        # misconfiguration that an on-host curl to localhost wouldn't).
+        run: |
+          curl -fsS "https://${{ secrets.PRODUCTION_HOST }}/healthz" || \
+          curl -fsS "http://${{ secrets.PRODUCTION_HOST }}:${{ vars.PRODUCTION_PORT || 3001 }}/healthz"
+
+      - name: Job summary
+        if: always()
+        run: |
+          {
+            echo "### Production deploy"
+            echo "- Rollback: \`${{ inputs.rollback }}\`"
+            echo "- Tag requested: \`${{ inputs.image_tag || '(rollback — ignored)' }}\`"
+            echo "- Result: ${{ job.status }}"
+          } >> "$GITHUB_STEP_SUMMARY"

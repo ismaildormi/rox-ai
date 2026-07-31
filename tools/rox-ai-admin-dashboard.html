@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ROX AI — Admin: Business Advisor & Auto Optimizer</title>
+<style>
+  :root{
+    --bg:#0A0A10; --surface:#14141C; --surface-hi:#1B1B26; --border:#262633;
+    --text:#EDEDF2; --text-dim:#8A8A9C; --text-faint:#54545F;
+    --accent:#8B6BFF; --accent-dim:#4C3A99;
+    --good:#33D6A6; --warn:#F5A623; --bad:#FB6B6B;
+    --mono: ui-monospace, "SF Mono", "Cascadia Code", "JetBrains Mono", Menlo, Consolas, monospace;
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, sans-serif;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:var(--sans);}
+  body{min-height:100vh;padding-bottom:60px;}
+  .topbar{position:sticky;top:0;z-index:10;background:linear-gradient(180deg, rgba(10,10,16,0.97), rgba(10,10,16,0.88));backdrop-filter:blur(10px);border-bottom:1px solid var(--border);padding:16px 20px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
+  .brand{display:flex;align-items:center;gap:10px;}
+  .brand-mark{font-family:var(--mono);font-weight:700;font-size:15px;letter-spacing:1px;background:var(--accent);color:#0A0A10;padding:3px 8px;border-radius:4px;}
+  .brand-label{font-family:var(--mono);font-size:11px;letter-spacing:2px;color:var(--text-dim);text-transform:uppercase;}
+  .conn{display:flex;gap:8px;align-items:center;margin-left:auto;flex-wrap:wrap;}
+  input[type=text],input[type=password]{background:var(--surface);border:1px solid var(--border);color:var(--text);padding:8px 10px;border-radius:6px;font-family:var(--mono);font-size:12px;width:260px;}
+  button{background:var(--accent);color:#0A0A10;border:none;padding:8px 14px;border-radius:6px;font-weight:600;font-size:12px;cursor:pointer;}
+  button.ghost{background:transparent;border:1px solid var(--border);color:var(--text);}
+  button.danger{background:var(--bad);}
+  button:disabled{opacity:0.4;cursor:not-allowed;}
+  .wrap{max-width:1100px;margin:0 auto;padding:20px;}
+  .msg{font-size:12px;color:var(--text-dim);margin:8px 0;}
+  .msg.error{color:var(--bad);}
+  .grid7{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin:16px 0;}
+  .score-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px;text-align:center;}
+  .score-num{font-family:var(--mono);font-size:28px;font-weight:700;}
+  .score-label{font-size:11px;color:var(--text-dim);margin-top:4px;text-transform:uppercase;letter-spacing:1px;}
+  .good{color:var(--good);} .warn{color:var(--warn);} .bad{color:var(--bad);}
+  section{margin:26px 0;}
+  h2{font-size:14px;text-transform:uppercase;letter-spacing:2px;color:var(--text-dim);border-bottom:1px solid var(--border);padding-bottom:8px;margin-bottom:12px;}
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:10px;}
+  .card .top{display:flex;justify-content:space-between;gap:10px;align-items:flex-start;}
+  .tag{font-family:var(--mono);font-size:10px;letter-spacing:1px;text-transform:uppercase;padding:2px 8px;border-radius:4px;background:var(--surface-hi);color:var(--text-dim);border:1px solid var(--border);}
+  .tag.critical{color:var(--bad);border-color:var(--bad);}
+  .tag.warning{color:var(--warn);border-color:var(--warn);}
+  .rationale{font-size:12px;color:var(--text-dim);margin-top:6px;}
+  .row-actions{display:flex;gap:8px;margin-top:10px;}
+  .empty{color:var(--text-faint);font-size:12px;font-style:italic;}
+  .kv{display:flex;justify-content:space-between;font-family:var(--mono);font-size:11px;color:var(--text-dim);padding:4px 0;border-bottom:1px dashed var(--border);}
+  .mode-toggle{display:flex;gap:8px;align-items:center;}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="brand">
+    <span class="brand-mark">ROX</span>
+    <span class="brand-label">Admin · Business Advisor & Auto Optimizer</span>
+  </div>
+  <div class="conn">
+    <input type="text" id="apiBase" placeholder="API base, e.g. https://api.roxai.app" value="">
+    <input type="password" id="token" placeholder="Supabase bearer token">
+    <button onclick="loadAll()">Connect</button>
+  </div>
+</div>
+
+<div class="wrap">
+  <p class="msg" id="statusMsg">Enter your API base URL and an admin account's bearer token, then Connect. Nothing is stored — this page only calls the endpoints documented in docs/API.md §6.</p>
+
+  <section>
+    <h2>AI Health Score</h2>
+    <div class="grid7" id="healthGrid"><div class="empty">Not connected yet.</div></div>
+  </section>
+
+  <section>
+    <h2>Executive Report — <span id="reportDate">—</span></h2>
+    <div id="insightsList"><div class="empty">No report loaded.</div></div>
+    <div class="row-actions"><button class="ghost" onclick="runReportNow()">Run report now</button></div>
+  </section>
+
+  <section>
+    <h2>Risk Analysis</h2>
+    <div id="risksList"><div class="empty">No risks loaded.</div></div>
+  </section>
+
+  <section>
+    <h2>AI Forecast (next 30 days)</h2>
+    <div id="forecastGrid" class="grid7"><div class="empty">No forecast loaded.</div></div>
+  </section>
+
+  <section>
+    <h2>Recommendations</h2>
+    <div id="recsList"><div class="empty">No recommendations loaded.</div></div>
+  </section>
+
+  <section>
+    <h2>Auto Optimizer</h2>
+    <div class="card">
+      <div class="mode-toggle">
+        <span>Mode:</span>
+        <button id="btnManual" class="ghost" onclick="setMode('manual')">Manual</button>
+        <button id="btnAuto" class="ghost" onclick="setMode('automatic')">Automatic</button>
+        <button class="ghost" onclick="runSweep()" style="margin-left:auto;">Run sweep now</button>
+      </div>
+      <div id="safetyRulesView" style="margin-top:10px;"></div>
+    </div>
+    <div id="actionsList"></div>
+  </section>
+
+  <section>
+    <h2>Disk Space Monitor</h2>
+    <div id="diskHealthCard" class="card"><div class="empty">Not loaded yet.</div></div>
+    <div id="diskCategories" class="grid7"></div>
+    <div class="card" id="diskSettingsCard">
+      <div class="row-actions">
+        <button class="ghost" onclick="runDiskAction('delete_temp')">Clear temp</button>
+        <button class="ghost" onclick="runDiskAction('delete_cache')">Clear cache</button>
+        <button class="ghost" onclick="runDiskAction('delete_old_logs')">Delete old logs</button>
+        <button class="ghost" onclick="runDiskAction('compress_logs')">Compress logs</button>
+        <button class="ghost" onclick="runDiskAction('delete_old_backups')">Delete old backups</button>
+        <button class="ghost" onclick="runDiskAction('docker_prune_images')">Prune Docker images</button>
+      </div>
+      <div style="margin-top:10px;">
+        <label style="font-size:12px;color:var(--text-dim);">Warning % <input type="text" id="thWarning" style="width:50px;"></label>
+        <label style="font-size:12px;color:var(--text-dim);">Critical % <input type="text" id="thCritical" style="width:50px;"></label>
+        <label style="font-size:12px;color:var(--text-dim);">Emergency % <input type="text" id="thEmergency" style="width:50px;"></label>
+        <label style="font-size:12px;color:var(--text-dim);"><input type="checkbox" id="autoFixToggle"> Fix Automatically</label>
+        <button class="ghost" onclick="saveDiskSettings()">Save</button>
+      </div>
+    </div>
+    <div id="diskRecs"></div>
+    <h2 style="margin-top:20px;">Pending Confirmations (models, uploads, generated content)</h2>
+    <div id="diskConfirmations"><div class="empty">None loaded.</div></div>
+  </section>
+</div>
+
+<script>
+function base(){ return document.getElementById('apiBase').value.trim().replace(/\/$/,''); }
+function tok(){ return document.getElementById('token').value.trim(); }
+function setMsg(t, isErr){ const m=document.getElementById('statusMsg'); m.textContent=t; m.className='msg'+(isErr?' error':''); }
+
+async function api(path, opts={}){
+  const res = await fetch(base()+path, {
+    ...opts,
+    headers: { 'Content-Type':'application/json', 'Authorization':'Bearer '+tok(), ...(opts.headers||{}) }
+  });
+  const body = await res.json().catch(()=>({}));
+  if(!res.ok || body.status === 'error'){
+    throw new Error(body.message || ('HTTP '+res.status));
+  }
+  return body.data;
+}
+
+function scoreClass(n){ if(n>=70) return 'good'; if(n>=40) return 'warn'; return 'bad'; }
+function severityTag(sev){ return `<span class="tag ${sev==='critical'?'critical':'warning'}">${sev}</span>`; }
+function fmtUsd(n){ return '$'+Number(n||0).toFixed(2); }
+
+function renderHealth(scores){
+  const grid = document.getElementById('healthGrid');
+  const labels = {business:'Business', financial:'Financial', platform:'Platform', infrastructure:'Infra', security:'Security', growth:'Growth', customerSatisfaction:'CSAT (proxy)', overall:'Overall'};
+  grid.innerHTML = Object.entries(labels).map(([key,label])=>{
+    const val = scores[key];
+    if(val===undefined) return '';
+    return `<div class="score-card"><div class="score-num ${scoreClass(val)}">${val}</div><div class="score-label">${label}</div></div>`;
+  }).join('');
+}
+
+function renderInsights(report){
+  document.getElementById('reportDate').textContent = report.report_date || report.reportDate || '—';
+  const list = (report.insights || []).map(i => `<div class="card">${typeof i === 'string' ? i : i.text}</div>`).join('');
+  document.getElementById('insightsList').innerHTML = list || '<div class="empty">No notable changes.</div>';
+}
+
+function renderRisks(risks){
+  const list = (risks || []).map(r => `
+    <div class="card">
+      <div class="top">${severityTag(r.severity)}<span class="tag">${r.type}</span></div>
+      <div class="rationale">${r.message}</div>
+    </div>`).join('');
+  document.getElementById('risksList').innerHTML = list || '<div class="empty">No active risks detected.</div>';
+}
+
+function renderForecast(f){
+  if(!f) return;
+  const cards = [
+    ['Revenue', fmtUsd(f.revenueNextMonthUsd)],
+    ['Profit', fmtUsd(f.profitNextMonthUsd)],
+    ['AI Cost', fmtUsd(f.expectedAiCostNextMonthUsd)],
+    ['Growth/day', (f.growthRatePctPerDay||0)+'%'],
+    ['Confidence', f.confidence || '—'],
+  ];
+  document.getElementById('forecastGrid').innerHTML = cards.map(([label,val])=>
+    `<div class="score-card"><div class="score-num">${val}</div><div class="score-label">${label}</div></div>`
+  ).join('');
+}
+
+function renderRecs(recs){
+  const list = (recs || []).map(r => `
+    <div class="card">
+      <div class="top">
+        <div><span class="tag">${r.category}</span> ${r.optimizer_actionable ? '<span class="tag good">optimizer-eligible</span>' : ''}</div>
+        <span style="font-family:var(--mono);font-size:11px;color:var(--text-dim);">confidence ${Math.round((r.confidence||0)*100)}%</span>
+      </div>
+      <div style="margin-top:8px;">${r.recommendation}</div>
+      <div class="rationale">${r.rationale || ''}</div>
+      <div class="row-actions">
+        <button class="ghost" onclick="resolveRec('${r.id}','applied')">Mark applied</button>
+        <button class="ghost" onclick="resolveRec('${r.id}','dismissed')">Dismiss</button>
+      </div>
+    </div>`).join('');
+  document.getElementById('recsList').innerHTML = list || '<div class="empty">No open recommendations.</div>';
+}
+
+function renderOptimizer(settings, actions){
+  document.getElementById('btnManual').style.borderColor = settings.mode==='manual' ? 'var(--good)' : 'var(--border)';
+  document.getElementById('btnAuto').style.borderColor = settings.mode==='automatic' ? 'var(--good)' : 'var(--border)';
+  const rules = settings.safetyRules || {};
+  document.getElementById('safetyRulesView').innerHTML = Object.entries(rules).map(([k,v])=>
+    `<div class="kv"><span>${k}</span><span>${Array.isArray(v)?v.join(', '):v}</span></div>`
+  ).join('');
+  document.getElementById('actionsList').innerHTML = (actions||[]).map(a => `
+    <div class="card">
+      <div class="top"><span class="tag">${a.action_type}</span><span class="tag">${a.triggered_by}</span></div>
+      <div style="margin-top:8px;">${a.description}</div>
+      <div class="row-actions">
+        ${a.reversed ? '<span class="empty">reversed</span>' : `<button class="ghost danger" onclick="revertAction('${a.id}')">Revert</button>`}
+      </div>
+    </div>`).join('') || '<div class="empty">No actions logged yet.</div>';
+}
+
+async function loadAll(){
+  setMsg('loading…');
+  try{
+    const [report, recs, settings, actions, diskReport, diskSettings, diskConfirmations] = await Promise.all([
+      api('/api/v1/admin/advisor/report/latest'),
+      api('/api/v1/admin/advisor/recommendations?status=open'),
+      api('/api/v1/admin/optimizer/settings'),
+      api('/api/v1/admin/optimizer/actions?limit=20'),
+      api('/api/v1/admin/disk/report'),
+      api('/api/v1/admin/disk/settings'),
+      api('/api/v1/admin/disk/confirmations/pending'),
+    ]);
+    if(report){
+      renderHealth(report.health_scores || {});
+      renderInsights(report);
+      renderRisks(report.risks || []);
+      renderForecast(report.forecast || {});
+    } else {
+      setMsg('Connected, but no report has run yet — click "Run report now".');
+    }
+    renderRecs(recs);
+    renderOptimizer(settings, actions);
+    renderDisk(diskReport, diskSettings, diskConfirmations);
+    setMsg('Connected.');
+  }catch(err){
+    setMsg('Failed: '+err.message, true);
+  }
+}
+
+async function runReportNow(){
+  setMsg('running daily analysis…');
+  try{
+    const report = await api('/api/v1/admin/advisor/report/run', { method:'POST' });
+    renderHealth(report.healthScores || {});
+    renderInsights(report);
+    renderRisks(report.risks || []);
+    renderForecast(report.forecast || {});
+    renderRecs(report.recommendations || []);
+    setMsg('Report generated.');
+  }catch(err){ setMsg('Failed: '+err.message, true); }
+}
+
+async function resolveRec(id, status){
+  try{ await api(`/api/v1/admin/advisor/recommendations/${id}/resolve`, { method:'POST', body: JSON.stringify({status}) }); loadAll(); }
+  catch(err){ setMsg('Failed: '+err.message, true); }
+}
+
+async function setMode(mode){
+  try{ await api('/api/v1/admin/optimizer/mode', { method:'POST', body: JSON.stringify({mode}) }); loadAll(); }
+  catch(err){ setMsg('Failed: '+err.message, true); }
+}
+
+async function runSweep(){
+  setMsg('running optimizer sweep…');
+  try{ const r = await api('/api/v1/admin/optimizer/sweep/run', { method:'POST' }); setMsg(`Sweep done — applied ${r.applied.length}, skipped ${r.skipped.length}.`); loadAll(); }
+  catch(err){ setMsg('Failed: '+err.message, true); }
+}
+
+async function revertAction(id){
+  try{ await api(`/api/v1/admin/optimizer/actions/${id}/revert`, { method:'POST' }); loadAll(); }
+  catch(err){ setMsg('Failed: '+err.message, true); }
+}
+
+// --- Disk Space Monitor ---
+
+function fmtBytesUi(bytes){
+  if(!bytes || bytes<=0) return '0 B';
+  const units=['B','KB','MB','GB','TB'];
+  const i=Math.min(units.length-1, Math.floor(Math.log(bytes)/Math.log(1024)));
+  return (bytes/Math.pow(1024,i)).toFixed(i===0?0:1)+' '+units[i];
+}
+
+function renderDisk(report, settings, confirmations){
+  const emoji = {healthy:'🟢', warning:'🟡', critical:'🟠', emergency:'🔴'}[report.healthLevel] || '⚪';
+  document.getElementById('diskHealthCard').innerHTML = `
+    <div class="top">
+      <div style="font-size:20px;">${emoji} ${report.healthLevel.toUpperCase()} — ${report.totals.usedPct}% used</div>
+    </div>
+    <div class="rationale">${fmtBytesUi(report.totals.usedBytes)} used / ${fmtBytesUi(report.totals.totalBytes)} total (${fmtBytesUi(report.totals.freeBytes)} free)</div>
+    ${report.growthFlags.length ? '<div class="rationale" style="color:var(--warn);margin-top:8px;">' + report.growthFlags.map(f=>f.message).join('<br>') + '</div>' : ''}
+  `;
+
+  document.getElementById('diskCategories').innerHTML = Object.entries(report.categories).map(([name, cat]) => {
+    const val = (!cat || cat.available===false) ? '—' : fmtBytesUi(cat.bytes ?? cat.totalBytes ?? 0);
+    return `<div class="score-card"><div class="score-num" style="font-size:16px;">${val}</div><div class="score-label">${name}</div></div>`;
+  }).join('');
+
+  document.getElementById('thWarning').value = settings.thresholds.warning;
+  document.getElementById('thCritical').value = settings.thresholds.critical;
+  document.getElementById('thEmergency').value = settings.thresholds.emergency;
+  document.getElementById('autoFixToggle').checked = !!settings.autoFixEnabled;
+
+  document.getElementById('diskRecs').innerHTML = (report.recommendations||[]).map(rec => `
+    <div class="card">
+      <div>${rec.message}</div>
+      ${rec.requiresConfirmation ? `<div class="row-actions">
+        <button class="ghost" onclick='requestDiskConfirmation(${JSON.stringify(rec.actionType)}, ${JSON.stringify(rec.category)}, ${rec.potentialBytes})'>Request confirmation</button>
+      </div>` : ''}
+    </div>`).join('') || '<div class="empty">No recommendations — storage looks healthy.</div>';
+
+  document.getElementById('diskConfirmations').innerHTML = (confirmations||[]).map(c => `
+    <div class="card">
+      <div class="top"><span class="tag">${c.action_type}</span><span style="font-family:var(--mono);font-size:11px;">~${fmtBytesUi(c.estimated_bytes)}</span></div>
+      <div style="margin-top:8px;">${JSON.stringify(c.target)}</div>
+      <div class="rationale">${c.reason || ''}</div>
+      <div class="row-actions">
+        <button class="ghost" onclick="resolveDiskConfirmation('${c.id}','confirmed')">Confirm</button>
+        <button class="ghost danger" onclick="resolveDiskConfirmation('${c.id}','rejected')">Reject</button>
+      </div>
+    </div>`).join('') || '<div class="empty">Nothing waiting on confirmation.</div>';
+}
+
+async function runDiskAction(actionType){
+  setMsg(`running ${actionType}…`);
+  try{
+    const r = await api(`/api/v1/admin/disk/actions/${actionType}/run`, { method:'POST', body: JSON.stringify({}) });
+    setMsg(`${actionType}: freed ${fmtBytesUi(r.bytes_freed)}.`);
+    loadAll();
+  }catch(err){ setMsg('Failed: '+err.message, true); }
+}
+
+async function saveDiskSettings(){
+  try{
+    await api('/api/v1/admin/disk/settings', { method:'PUT', body: JSON.stringify({
+      thresholds: {
+        warning: Number(document.getElementById('thWarning').value),
+        critical: Number(document.getElementById('thCritical').value),
+        emergency: Number(document.getElementById('thEmergency').value),
+      },
+      autoFixEnabled: document.getElementById('autoFixToggle').checked,
+    })});
+    setMsg('Disk settings saved.');
+    loadAll();
+  }catch(err){ setMsg('Failed: '+err.message, true); }
+}
+
+async function resolveDiskConfirmation(id, decision){
+  try{
+    await api(`/api/v1/admin/disk/confirmations/${id}/resolve`, { method:'POST', body: JSON.stringify({decision}) });
+    loadAll();
+  }catch(err){ setMsg('Failed: '+err.message, true); }
+}
+
+async function requestDiskConfirmation(actionType, category, potentialBytes){
+  let target = {};
+  if(actionType === 'remove_ollama_model'){
+    const model = prompt('Which Ollama model to remove? (see the Ollama category above for names)');
+    if(!model) return;
+    target = { model };
+  } else if(actionType === 'delete_uploads'){
+    const days = Number(prompt('Delete uploads older than how many days?', '90'));
+    if(!days || days < 1) return;
+    target = { olderThanDays: days };
+  } else if(actionType === 'delete_generated_content'){
+    const days = Number(prompt(`Delete ${category} older than how many days?`, '90'));
+    if(!days || days < 1) return;
+    target = { category, olderThanDays: days };
+  }
+  try{
+    await api('/api/v1/admin/disk/confirmations/request', { method:'POST', body: JSON.stringify({
+      actionType, target, estimatedBytes: potentialBytes, reason: 'Requested from Admin Dashboard',
+    })});
+    setMsg('Confirmation requested — resolve it below.');
+    loadAll();
+  }catch(err){ setMsg('Failed: '+err.message, true); }
+}
+</script>
+</body>
+</html>

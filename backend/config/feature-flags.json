@@ -1,0 +1,66 @@
+{
+  "_comment": "Single source of truth for every feature the platform has or will have. `enabled: false` = built (or stubbed) but switched off, not 'doesn't exist'. Never delete a key when a feature ships — flip it to true. src/core/featureFlags.js reads this file, then layers env-var overrides, then DB overrides (table feature_flags) on top, in that order.",
+
+  "chat": { "enabled": true, "tier": "free", "status": "live" },
+  "code_assistant": { "enabled": true, "tier": "pro", "status": "live" },
+  "image_generation": { "enabled": true, "tier": "pro", "status": "live" },
+  "video_generation": { "enabled": true, "tier": "pro", "status": "live" },
+
+  "teams": { "enabled": false, "tier": "team", "status": "planned" },
+  "organizations": { "enabled": false, "tier": "org", "status": "planned" },
+  "workspaces": { "enabled": false, "tier": "team", "status": "planned" },
+
+  "ai_agents": { "enabled": false, "tier": "pro", "status": "planned" },
+  "plugins": { "enabled": false, "tier": "pro", "status": "planned" },
+  "extensions": { "enabled": false, "tier": "pro", "status": "planned" },
+  "prompt_library": { "enabled": false, "tier": "free", "status": "planned" },
+  "templates": { "enabled": false, "tier": "free", "status": "planned" },
+  "custom_ai_models": { "enabled": false, "tier": "pro", "status": "planned" },
+  "voice_ai": { "enabled": false, "tier": "pro", "status": "planned" },
+  "file_analysis": { "enabled": false, "tier": "pro", "status": "planned" },
+  "web_search": { "enabled": false, "tier": "pro", "status": "planned" },
+  "mcp_servers": { "enabled": false, "tier": "pro", "status": "planned" },
+  "custom_tools": { "enabled": false, "tier": "pro", "status": "planned" },
+  "ai_personas": { "enabled": false, "tier": "pro", "status": "planned" },
+
+  "public_api_access": { "enabled": false, "tier": "pro", "status": "planned" },
+  "webhooks": { "enabled": false, "tier": "pro", "status": "planned" },
+  "public_sdk": { "enabled": false, "tier": "pro", "status": "planned" },
+
+  "business_advisor": { "enabled": true, "tier": "internal", "status": "live" },
+  "auto_optimizer": { "enabled": true, "tier": "internal", "status": "live", "note": "flag only gates API/route access; automatic-vs-manual MODE is a separate, admin-controlled setting in optimizer_settings, defaulting to manual" },
+  "disk_monitor": { "enabled": true, "tier": "internal", "status": "live", "note": "flag only gates API/route access; auto-fix MODE is a separate, admin-controlled setting in disk_monitor_settings, defaulting to off — see ARCHITECTURE.md §14" },
+
+  "mobile_app": { "enabled": false, "tier": "free", "status": "planned" },
+  "desktop_app": { "enabled": false, "tier": "free", "status": "planned" },
+  "browser_extension": { "enabled": false, "tier": "free", "status": "planned" },
+
+  "notifications": { "enabled": false, "tier": "free", "status": "planned" },
+  "admin_dashboard": { "enabled": false, "tier": "internal", "status": "planned" },
+  "analytics_dashboard": { "enabled": false, "tier": "pro", "status": "planned" },
+  "billing_dashboard": { "enabled": false, "tier": "pro", "status": "planned" },
+
+  "referral_system": { "enabled": false, "tier": "free", "status": "planned" },
+  "affiliate_program": { "enabled": false, "tier": "free", "status": "planned" },
+
+  "marketplace": { "enabled": false, "tier": "free", "status": "planned" },
+  "community_templates": { "enabled": false, "tier": "free", "status": "planned" },
+
+  "shared_conversations": { "enabled": false, "tier": "free", "status": "planned" },
+  "shared_projects": { "enabled": false, "tier": "team", "status": "planned" },
+  "realtime_collaboration": { "enabled": false, "tier": "team", "status": "planned" },
+  "version_history": { "enabled": false, "tier": "pro", "status": "planned" },
+
+  "cloud_sync": { "enabled": false, "tier": "free", "status": "planned" },
+  "offline_support": { "enabled": false, "tier": "free", "status": "planned" },
+
+  "multi_language_ui": { "enabled": false, "tier": "free", "status": "planned" },
+  "dark_mode": { "enabled": false, "tier": "free", "status": "planned" },
+  "themes": { "enabled": false, "tier": "free", "status": "planned" },
+  "keyboard_shortcuts": { "enabled": false, "tier": "free", "status": "planned" },
+  "accessibility_mode": { "enabled": false, "tier": "free", "status": "planned" },
+
+  "enterprise_sso": { "enabled": false, "tier": "enterprise", "status": "planned" },
+  "enterprise_audit_export": { "enabled": false, "tier": "enterprise", "status": "planned" },
+  "enterprise_seat_management": { "enabled": false, "tier": "enterprise", "status": "planned" }
+}

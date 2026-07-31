@@ -1,0 +1,26 @@
+{
+  "_comment": "Default safety rules for the AI Auto Optimizer. These are the FALLBACK — the live, admin-editable copy lives in the optimizer_settings DB row (13_advisor_optimizer_schema.sql), seeded from this file on first run. Editing this file changes the default for a fresh install only; changing behavior on a running platform means calling POST /api/v1/admin/optimizer/settings, which is itself logged. Every one of these is a HARD ceiling the optimizer's own code enforces in src/modules/optimizer — it is not a suggestion to a model, it's a check that throws if violated.",
+
+  "mode": "manual",
+
+  "safetyRules": {
+    "maxMarginAdjustmentPctPerAction": 5,
+    "maxPriceChangePctPerAction": 10,
+    "maxCreditCostChangePctPerAction": 15,
+    "maxActionsPerDay": 10,
+    "minMarginPctFloor": 0.1,
+    "requireHumanApprovalAboveUsdImpact": 50,
+    "allowedActionTypes": [
+      "provider_traffic_balance",
+      "provider_switch_cheaper",
+      "cache_tuning",
+      "reduce_redundant_api_calls"
+    ],
+    "disallowedWithoutManualApproval": [
+      "margin_adjustment",
+      "limit_adjustment",
+      "pricing_change"
+    ],
+    "cooldownMinutesBetweenSameActionType": 60
+  }
+}

@@ -1,0 +1,10 @@
+{"ts":"2026-07-25T01:33:27.047Z","command":"health","level":"step","msg":"ROX AI — health check"}
+{"ts":"2026-07-25T01:33:27.048Z","command":"health","level":"err","msg":"pm2 is not installed — services are not managed. Run `rox setup`."}
+{"ts":"2026-07-25T01:33:27.080Z","command":"health","level":"err","msg":"API not responding on http://localhost:3001/healthz (fetch failed)"}
+{"ts":"2026-07-25T01:49:06.133Z","command":"health","level":"step","msg":"ROX AI — health check"}
+{"ts":"2026-07-25T01:49:07.440Z","command":"health","level":"err","msg":"Could not read pm2 process list: No number after minus sign in JSON at position 1 (line 1 column 2)"}
+{"ts":"2026-07-25T01:49:07.471Z","command":"health","level":"err","msg":"API not responding on http://localhost:3001/healthz (fetch failed)"}
+{"ts":"2026-07-25T01:52:07.247Z","command":"health","level":"step","msg":"ROX AI — health check"}
+{"ts":"2026-07-25T01:52:07.485Z","command":"health","level":"err","msg":"rox-api: waiting restart"}
+{"ts":"2026-07-25T01:52:07.485Z","command":"health","level":"err","msg":"rox-worker: waiting restart"}
+{"ts":"2026-07-25T01:52:07.516Z","command":"health","level":"err","msg":"API not responding on http://localhost:3001/healthz (fetch failed)"}

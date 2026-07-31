@@ -1,0 +1,82 @@
+# ROX AI — Staging deployment compose file
+#
+# This is the staging counterpart of docker-compose.yml (local dev):
+# same three services (redis, backend, worker), same env vars, same
+# volume pattern. The only real difference is `image:` (pulled from
+# GHCR, published by .github/workflows/cd.yml) instead of `build:`
+# (a local Dockerfile) — staging runs whatever the CD pipeline already
+# built and pushed, never a fresh build on the staging host itself.
+#
+# Not meant to be run from a developer laptop. It's copied to the
+# staging host by .github/workflows/deploy-staging.yml and driven by
+# scripts/deploy/staging-deploy.sh, which sets REGISTRY, OWNER_REPO,
+# and IMAGE_TAG as environment variables before calling
+# `docker compose up`. Running it manually works the same way as long
+# as those three are exported first, e.g.:
+#
+#   REGISTRY=ghcr.io OWNER_REPO=your-org/rox-ai IMAGE_TAG=latest \
+#     docker compose -f docker-compose.staging.yml up -d
+#
+# One-time setup on the staging host (see docs/DEPLOYMENT.md for the
+# full runbook):
+#   1. Create the deploy directory (path = the STAGING_DEPLOY_DIR
+#      secret used by deploy-staging.yml) — the workflow copies this
+#      file and the deploy script there on every run, so nothing else
+#      needs to be cloned/checked out on the host.
+#   2. Inside that directory, copy backend/.env.example to `.env` and
+#      fill in real staging values (Supabase, Stripe *test* keys,
+#      etc.) — the exact same convention README.md already documents
+#      for backend/.env. This file is never touched by the pipeline
+#      and never passed through GitHub Actions.
+#   3. Docker + Docker Compose v2 installed on the host.
+#
+# Backend and worker images both already bake a HEALTHCHECK into the
+# Dockerfile itself (see backend/Dockerfile, backend/Dockerfile.worker)
+# — nothing to redeclare here for those two. Redis needs its own since
+# the upstream redis:7-alpine image doesn't ship one.
+
+services:
+  redis:
+    image: redis:7-alpine
+    container_name: rox-redis-staging
+    restart: unless-stopped
+    volumes:
+      - redis-staging-data:/data
+    command: ['redis-server', '--appendonly', 'yes']
+    healthcheck:
+      test: ['CMD', 'redis-cli', 'ping']
+      interval: 10s
+      timeout: 3s
+      retries: 5
+
+  backend:
+    image: ${REGISTRY:-ghcr.io}/${OWNER_REPO}/backend:${IMAGE_TAG:-latest}
+    container_name: rox-backend-staging
+    restart: unless-stopped
+    ports:
+      - '${PORT:-3001}:3001'
+    env_file:
+      - ./.env
+    environment:
+      # Same override rationale as docker-compose.yml: `redis` is the
+      # service name, resolved via Docker's internal DNS. Every other
+      # var comes from ./.env via env_file, untouched.
+      REDIS_URL: redis://redis:6379
+    depends_on:
+      redis:
+        condition: service_healthy
+
+  worker:
+    image: ${REGISTRY:-ghcr.io}/${OWNER_REPO}/worker:${IMAGE_TAG:-latest}
+    container_name: rox-worker-staging
+    restart: unless-stopped
+    env_file:
+      - ./.env
+    environment:
+      REDIS_URL: redis://redis:6379
+    depends_on:
+      redis:
+        condition: service_healthy
+
+volumes:
+  redis-staging-data:
