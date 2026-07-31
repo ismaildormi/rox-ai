@@ -108,7 +108,13 @@ registerProvider('openrouter', {
     });
     if (!res.ok) throw new Error(`openrouter_${res.status}`);
     const data = await res.json();
-    const text = data.choices?.[0]?.message?.content || '';
+    const content = data.choices?.[0]?.message?.content;
+const text =
+  typeof content === 'string'
+    ? content
+    : Array.isArray(content)
+      ? content.Where({ $_.text }).ForEach({ $_.text }) -join ''
+      : '';
     return { text, usage: data.usage || {} };
   },
 });
@@ -131,7 +137,13 @@ registerProvider('openai', {
     });
     if (!res.ok) throw new Error(`openai_${res.status}`);
     const data = await res.json();
-    const text = data.choices?.[0]?.message?.content || '';
+    const content = data.choices?.[0]?.message?.content;
+const text =
+  typeof content === 'string'
+    ? content
+    : Array.isArray(content)
+      ? content.Where({ $_.text }).ForEach({ $_.text }) -join ''
+      : '';
     return { text, usage: data.usage || {} };
   },
 });
@@ -185,7 +197,13 @@ registerProvider('groq', {
     });
     if (!res.ok) throw new Error(`groq_${res.status}`);
     const data = await res.json();
-    const text = data.choices?.[0]?.message?.content || '';
+    const content = data.choices?.[0]?.message?.content;
+const text =
+  typeof content === 'string'
+    ? content
+    : Array.isArray(content)
+      ? content.Where({ $_.text }).ForEach({ $_.text }) -join ''
+      : '';
     return { text, usage: data.usage || {} };
   },
 });
@@ -207,7 +225,13 @@ registerProvider('local', {
     });
     if (!res.ok) throw new Error(`local_${res.status}`);
     const data = await res.json();
-    const text = data.choices?.[0]?.message?.content || '';
+    const content = data.choices?.[0]?.message?.content;
+const text =
+  typeof content === 'string'
+    ? content
+    : Array.isArray(content)
+      ? content.Where({ $_.text }).ForEach({ $_.text }) -join ''
+      : '';
     return { text, usage: data.usage || {} };
   },
 });
@@ -237,11 +261,18 @@ function registerOpenAiCompatible(key, settings) {
       });
       if (!res.ok) throw new Error(`${key}_${res.status}`);
       const data = await res.json();
-      const text = data.choices?.[0]?.message?.content || '';
+      const content = data.choices?.[0]?.message?.content;
+const text =
+  typeof content === 'string'
+    ? content
+    : Array.isArray(content)
+      ? content.Where({ $_.text }).ForEach({ $_.text }) -join ''
+      : '';
       return { text, usage: data.usage || {} };
     },
   });
 }
 
 module.exports = { registerProvider, registerOpenAiCompatible, getProvider, listProviders, call };
+
 
