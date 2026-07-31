@@ -1,4 +1,4 @@
-// ROX AI ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â API server (hardened)
+// ROX AI ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â API server (hardened)
 // npm install express @supabase/supabase-js stripe replicate dotenv bullmq ioredis prom-client
 //
 // Changes from the original:
@@ -9,7 +9,7 @@
 //     queue or run up model spend.
 //   - Every route now generates one requestId (crypto.randomUUID()) up
 //     front and reserves credits with it BEFORE calling the model or
-//     enqueueing a job ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â image/video jobs used to charge nothing until
+//     enqueueing a job ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â image/video jobs used to charge nothing until
 //     AFTER completion, so a burst of requests could fill the queue for
 //     free. If the work fails, that exact reservation is refunded.
 //   - GET /metrics for Prometheus scraping.
@@ -36,7 +36,7 @@ const createTopupSessionRouter = require('./createTopupSession');
 const { featureCost } = require('./src/core/config');
 // New, additive-only: stub routes for every not-yet-built feature (see
 // ARCHITECTURE.md). Each route is flag-gated and returns a clear
-// "not enabled" response until the feature is actually implemented ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â
+// "not enabled" response until the feature is actually implemented ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â
 // nothing here changes existing behavior.
 const futureRoutesRouter = require('./src/api/v1/futureRoutes');
 // Admin-only surface: AI Business Advisor + AI Auto Optimizer. Mounted
@@ -51,7 +51,7 @@ const diskMaintenanceModule = require('./src/modules/diskMonitor/maintenance');
 const app = express();
 
 // Stripe webhook needs the raw body, so it's mounted BEFORE express.json()
-// ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â and deliberately BEFORE the IP guard below. Stripe sends from a
+// ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â and deliberately BEFORE the IP guard below. Stripe sends from a
 // shared/rotating pool of IPs, so subjecting it to the same per-IP limit
 // as end-user traffic risks throttling legitimate payment events during
 // a burst (e.g. many checkouts completing at once). Its real protection
@@ -61,7 +61,7 @@ app.use('/webhook', stripeWebhookRouter);
 // Required for req.ip / lib/ipGuard.js to see the REAL client IP behind
 // a reverse proxy (Railway, Render, Cloudflare, etc all set
 // X-Forwarded-For). Without this, every request looks like it comes
-// from the proxy's own IP ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â which makes IP-based rate limiting and the
+// from the proxy's own IP ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â which makes IP-based rate limiting and the
 // auth-failure block useless (or worse, blocks everyone at once).
 app.set('trust proxy', 1);
 
@@ -78,7 +78,7 @@ app.use((req, res, next) => {
 
 // --- Health check: what `rox health` (see /cli) actually calls ---
 // No auth (an orchestrator/uptime monitor/load balancer needs to reach
-// this without a user token) and no secrets in the response ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â just
+// this without a user token) and no secrets in the response ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â just
 // "is this process able to reach its two hard dependencies right now."
 // Redis and Supabase are checked with a short timeout each so one slow
 // dependency can't make the health check itself hang indefinitely.
@@ -121,7 +121,7 @@ app.get('/healthz', async (req, res) => {
 });
 
 // Nothing previously set CORS headers at all, which in practice just
-// means the browser blocks the frontend unless it's same-origin ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â but
+// means the browser blocks the frontend unless it's same-origin ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â but
 // it's implicit and fragile. Make it explicit and restrictive: only the
 // configured frontend origin(s) can call this API from a browser.
 // ALLOWED_ORIGINS is comma-separated, e.g. "https://rox.ai,https://app.rox.ai".
@@ -138,14 +138,14 @@ app.use((req, res, next) => {
   next();
 });
 
-// Global per-IP flood guard, ahead of auth ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â see lib/ipGuard.js. A
+// Global per-IP flood guard, ahead of auth ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â see lib/ipGuard.js. A
 // blocked/flooding IP never reaches Supabase's token verification or
 // the DB at all. Applied via app.use() AFTER the /webhook mount above,
 // so it only ever sees end-user traffic, not Stripe's.
 app.use(ipBlockGuard);
 app.use(ipRateLimit());
 
-// Explicit (small) body size cap ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â the default express.json() limit is
+// Explicit (small) body size cap ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â the default express.json() limit is
 // 100kb, which is generous for a chat/prompt payload and was never set
 // on purpose. A tighter, explicit limit means a huge-body request is
 // rejected by Express itself before it reaches any handler, on top of
@@ -153,7 +153,7 @@ app.use(ipRateLimit());
 app.use(express.json({ limit: '32kb' }));
 // --- API versioning ---------------------------------------------------
 // New/future-feature endpoints are written directly under /api/v1 (see
-// src/api/v1/futureRoutes.js) ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â checked FIRST so they never fall into
+// src/api/v1/futureRoutes.js) ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â checked FIRST so they never fall into
 // the alias rewrite below.
 app.use('/api/v1', futureRoutesRouter);
 app.use('/api/v1/admin', adminRoutesRouter);
@@ -165,7 +165,7 @@ app.use('/api/v1/admin', adminRoutesRouter);
 // identically to /api/chat, /api/generate-image today, by rewriting
 // the path before it reaches those handlers. When a real v2 needs to
 // diverge in behavior from v1, give it its own Router mounted at
-// /api/v2 instead of extending this rewrite ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â see ARCHITECTURE.md
+// /api/v2 instead of extending this rewrite ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â see ARCHITECTURE.md
 // "API versioning strategy" for the full reasoning.
 app.use((req, res, next) => {
   if (req.url.startsWith('/api/v1/')) req.url = '/api/' + req.url.slice('/api/v1/'.length);
@@ -179,14 +179,14 @@ app.get('/metrics', async (req, res) => {
   // Deliberately not gated by ALLOWED_ORIGINS above: this endpoint is
   // read-only aggregate telemetry meant for a dashboard on another
   // origin (including a browser-based one), so CORS is opened wide here
-  // on purpose ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â that part is fine.
+  // on purpose ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â that part is fine.
   //
   // BUT: this payload includes real business numbers (rox_model_cost_usd_total,
-  // rox_margin_usd_last_request) ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â not just uptime/latency ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â so leaving
+  // rox_margin_usd_last_request) ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â not just uptime/latency ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â so leaving
   // it fully public would let anyone with the URL see your margins. If
   // METRICS_TOKEN is set, require it (via `x-metrics-token` header or
   // `?token=`, so a Prometheus scrape config or a browser dashboard can
-  // both supply it). Left unset, it stays open ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â same as before ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â so
+  // both supply it). Left unset, it stays open ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â same as before ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â so
   // this doesn't silently break an existing scrape until you opt in.
   if (process.env.METRICS_TOKEN) {
     const provided = req.headers['x-metrics-token'] || req.query.token;
@@ -201,7 +201,7 @@ app.get('/metrics', async (req, res) => {
 
 // --- Maintenance: for schedulers without pg_cron access (08_maintenance.sql) ---
 // Not on the /api/ path and not behind requireAuth (a normal user token
-// shouldn't reach this) ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â instead gated by a shared secret only your
+// shouldn't reach this) ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â instead gated by a shared secret only your
 // scheduler knows. If CRON_SECRET isn't set, the route refuses to run
 // rather than being callable by anyone who finds the URL.
 app.post('/internal/maintenance/run', async (req, res) => {
@@ -227,7 +227,7 @@ app.post('/internal/maintenance/run', async (req, res) => {
 
 // --- Margin summary: is traffic currently paying for itself? ---
 // Same auth posture as /internal/maintenance/run (shared secret, not a
-// user token) ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â this is an operator/finance view, not a user-facing one.
+// user token) ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â this is an operator/finance view, not a user-facing one.
 // Reads rox_margin_last_24h (09_margin_tracking.sql), which aggregates
 // the cost_usd/margin_usd fields logged into credit_audit_log.metadata
 // above. Point a scheduled Slack/email digest at this if you want a
@@ -249,14 +249,14 @@ app.get('/internal/margin-summary', async (req, res) => {
 });
 
 // Frontend calls this on load / after auth to render the usage counter.
-// Deliberately does NOT use gatekeeperMiddleware ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â that blocks on
+// Deliberately does NOT use gatekeeperMiddleware ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â that blocks on
 // credits_used >= credits_total, which is exactly the state a Pro user
 // needs to see (so they know to top up) rather than being 403'd from
 // even checking their own status.
 // --- Business Advisor: scheduled daily run (same auth posture as /internal/maintenance/run) ---
 // A scheduler (cron, GitHub Actions, Railway cron, etc.) hits this once
 // a day. It runs the full collect -> analyze -> persist pipeline, then
-// ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â if and only if the optimizer is in 'automatic' mode ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â runs the
+// ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â if and only if the optimizer is in 'automatic' mode ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â runs the
 // optimizer's sweep over the recommendations this same run produced.
 // Manual mode: report is generated and recommendations sit there for an
 // admin to review; nothing is auto-applied.
@@ -289,12 +289,12 @@ app.post('/internal/advisor/run-daily', async (req, res) => {
 });
 
 // --- Disk Space Monitor: scheduled scan (same auth posture as /internal/advisor/run-daily) ---
-// Runs a fresh scan + persists a snapshot, then ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â only if
-// disk_monitor_settings.auto_fix_enabled is true ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â runs the safe
+// Runs a fresh scan + persists a snapshot, then ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â only if
+// disk_monitor_settings.auto_fix_enabled is true ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â runs the safe
 // maintenance sweep (temp/cache/old-logs/compress-logs/docker-images).
 // Nothing touching an Ollama model, user uploads, or generated content
-// EVER runs from here, auto-fix or not ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â see maintenance.js's
-// NEVER_AUTO set and ARCHITECTURE.md Ãƒâ€šÃ‚Â§14.
+// EVER runs from here, auto-fix or not ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â see maintenance.js's
+// NEVER_AUTO set and ARCHITECTURE.md ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â§14.
 app.post('/internal/disk/run-scan', async (req, res) => {
   const provided = req.headers['x-cron-secret'];
   if (!process.env.CRON_SECRET || provided !== process.env.CRON_SECRET) {
@@ -397,7 +397,7 @@ app.post('/api/chat', requireAuth, rateLimit('chat'), validateChatBody, gatekeep
   }
 
 
-  // Global demand signal (all users, this feature) ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â separate from the
+  // Global demand signal (all users, this feature) ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â separate from the
   // per-user rate limit above. aiRouter uses it to decide whether to try
   // Claude first or go straight for the cheap/free models to protect
   // margin during a spike. See lib/loadGuard.js.
@@ -413,7 +413,7 @@ app.post('/api/chat', requireAuth, rateLimit('chat'), validateChatBody, gatekeep
     recordCost(result.model, result.cost_usd);
     recordMargin(feature || 'chat', margin);
 
-    // reserveCredits() already ran above for Pro (2 credits) ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â this is
+    // reserveCredits() already ran above for Pro (2 credits) ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â this is
     // a metadata-only follow-up log, same pattern as image/video.
     // credits_consumed is logged as 0 in metadata since the ledger
     // charge itself already happened; this call never touches balance
@@ -446,7 +446,7 @@ app.post('/api/chat', requireAuth, rateLimit('chat'), validateChatBody, gatekeep
   } catch (err) {
     // Only refund if this request actually charged credits (Pro path).
     // Free chat never reserved anything, so there's nothing to reverse
-    // ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â calling refundCredits(requestId) with no matching ledger row
+    // ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â calling refundCredits(requestId) with no matching ledger row
     // would itself throw and falsely trigger reportRefundFailure.
     if (reservation) {
       try {
@@ -464,7 +464,7 @@ app.post('/api/chat', requireAuth, rateLimit('chat'), validateChatBody, gatekeep
       metadata: { attempts: err.attempts || [] },
     });
 
-    res.status(502).json({ status: 'error', message: 'Tous les modÃƒÆ’Ã‚Â¨les disponibles ont ÃƒÆ’Ã‚Â©chouÃƒÆ’Ã‚Â©.' });
+    res.status(502).json({ status: 'error', message: 'Tous les modÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¨les disponibles ont ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â©chouÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â©.' });
   }
 });
 
@@ -473,7 +473,7 @@ async function handleGenerationRequest(req, res, { feature, queue }) {
   const { prompt } = req.body;
   const userId = req.userId;
   // One id threads through everything: credit_audit_log.request_id,
-  // generation_jobs.id, and the BullMQ jobId ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â so a job, its charge,
+  // generation_jobs.id, and the BullMQ jobId ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â so a job, its charge,
   // and its refund (if any) are always the same id to look up.
   const requestId = crypto.randomUUID();
 
@@ -497,7 +497,7 @@ async function handleGenerationRequest(req, res, { feature, queue }) {
     reservation = await reserveCredits({ userId, requestId, feature, creditsConsumed });
   } catch (err) {
     if (err.code === 'insufficient_credits') {
-      return res.status(402).json({ status: 'error', message: 'CrÃƒÆ’Ã‚Â©dit insuffisant.' });
+      return res.status(402).json({ status: 'error', message: 'CrÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â©dit insuffisant.' });
     }
     console.error(`[${feature}] reserveCredits failed:`, err.message);
     return res.status(500).json({ status: 'error', message: 'Erreur interne.' });
@@ -508,11 +508,11 @@ async function handleGenerationRequest(req, res, { feature, queue }) {
     .insert([{ id: requestId, user_id: userId, feature, prompt, status: 'queued' }]);
 
   if (insertError) {
-    // Job row couldn't be created ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â refund immediately, nothing was enqueued.
+    // Job row couldn't be created ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â refund immediately, nothing was enqueued.
     await refundCredits(requestId).catch(refundErr =>
       reportRefundFailure({ requestId, userId, feature, error: refundErr })
     );
-    return res.status(500).json({ status: 'error', message: 'ÃƒÆ’Ã¢â‚¬Â°chec de la crÃƒÆ’Ã‚Â©ation du job.' });
+    return res.status(500).json({ status: 'error', message: 'ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â°chec de la crÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â©ation du job.' });
   }
 
   try {
@@ -524,7 +524,7 @@ async function handleGenerationRequest(req, res, { feature, queue }) {
     // The generation_jobs row and the credit reservation both already
     // exist at this point. If BullMQ/Redis can't accept the job (a
     // connection blip, Redis down), the job would otherwise be stuck at
-    // 'queued' forever ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â charged, but never picked up by worker.js. Fail
+    // 'queued' forever ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â charged, but never picked up by worker.js. Fail
     // closed: refund, mark the row 'failed', and tell the client now
     // instead of leaving a silent zombie job.
     console.error(`[${feature}] queue.add failed:`, queueErr.message);
@@ -535,7 +535,7 @@ async function handleGenerationRequest(req, res, { feature, queue }) {
     await refundCredits(requestId).catch(refundErr =>
       reportRefundFailure({ requestId, userId, feature, error: refundErr })
     );
-    return res.status(503).json({ status: 'error', message: 'File d\'attente indisponible ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â rÃƒÆ’Ã‚Â©essayez.' });
+    return res.status(503).json({ status: 'error', message: 'File d\'attente indisponible ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â rÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â©essayez.' });
   }
 
   res.status(202).json({
@@ -548,13 +548,13 @@ async function handleGenerationRequest(req, res, { feature, queue }) {
 
 // Video generation is real-cost-heavy (far more than its 5-credit charge
 // reflects) and, per launch-cost analysis, free-tier users mostly never
-// convert to paid ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â so free video access is a direct, uncapped cost leak.
+// convert to paid ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â so free video access is a direct, uncapped cost leak.
 // This gate is separate from gatekeeperMiddleware (credit balance) and
 // blocks unconditionally unless subscription_status === 'pro', regardless
 // of how many credits the free user has left.
 // Video AND image generation are pro-only: video is real-cost-heavy far
 // beyond its 5-credit charge, and per launch-cost analysis, free-tier
-// users mostly never convert to paid ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â so any free generation access is
+// users mostly never convert to paid ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â so any free generation access is
 // a direct, uncapped cost leak. This gate is separate from
 // gatekeeperMiddleware (credit balance) and blocks unconditionally
 // unless subscription_status === 'pro', regardless of remaining credits.
@@ -563,14 +563,46 @@ function requireProSubscription(featureLabel) {
     if (!req.roxUser || req.roxUser.subscription_status !== 'pro') {
       return res.status(402).json({
         status: 'error',
-        message: `ÃƒËœÃ‚ÂªÃƒâ„¢Ã‹â€ Ãƒâ„¢Ã¢â‚¬Å¾Ãƒâ„¢Ã…Â ÃƒËœÃ‚Â¯ ${featureLabel} Ãƒâ„¢Ã¢â‚¬Â¦ÃƒËœÃ‚ÂªÃƒËœÃ‚Â§ÃƒËœÃ‚Â­ Ãƒâ„¢Ã‚ÂÃƒâ„¢Ã¢â‚¬Å¡ÃƒËœÃ‚Â· Ãƒâ„¢Ã¢â‚¬Å¾Ãƒâ„¢Ã¢â‚¬Å¾Ãƒâ„¢Ã¢â‚¬Â¦ÃƒËœÃ‚Â´ÃƒËœÃ‚ÂªÃƒËœÃ‚Â±Ãƒâ„¢Ã†â€™Ãƒâ„¢Ã…Â Ãƒâ„¢Ã¢â‚¬Â  Pro. ÃƒËœÃ‚Â±Ãƒâ„¢Ã¢â‚¬Å¡Ãƒâ„¢Ã¢â‚¬ËœÃƒâ„¢Ã…Â  ÃƒËœÃ‚Â­ÃƒËœÃ‚Â³ÃƒËœÃ‚Â§ÃƒËœÃ‚Â¨Ãƒâ„¢Ã†â€™ Ãƒâ„¢Ã¢â‚¬Å¾Ãƒâ„¢Ã¢â‚¬Å¾Ãƒâ„¢Ã¢â‚¬Â¦ÃƒËœÃ‚ÂªÃƒËœÃ‚Â§ÃƒËœÃ‚Â¨ÃƒËœÃ‚Â¹ÃƒËœÃ‚Â©.`,
-        code: `${featureLabel === 'ÃƒËœÃ‚Â§Ãƒâ„¢Ã¢â‚¬Å¾Ãƒâ„¢Ã‚ÂÃƒâ„¢Ã…Â ÃƒËœÃ‚Â¯Ãƒâ„¢Ã…Â Ãƒâ„¢Ã‹â€ ' ? 'video' : 'image'}_requires_pro`,
+        message: `ÃƒÆ’Ã‹Å“Ãƒâ€šÃ‚ÂªÃƒÆ’Ã¢â€žÂ¢Ãƒâ€¹Ã¢â‚¬Â ÃƒÆ’Ã¢â€žÂ¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¾ÃƒÆ’Ã¢â€žÂ¢Ãƒâ€¦Ã‚Â ÃƒÆ’Ã‹Å“Ãƒâ€šÃ‚Â¯ ${featureLabel} ÃƒÆ’Ã¢â€žÂ¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦ÃƒÆ’Ã‹Å“Ãƒâ€šÃ‚ÂªÃƒÆ’Ã‹Å“Ãƒâ€šÃ‚Â§ÃƒÆ’Ã‹Å“Ãƒâ€šÃ‚Â­ ÃƒÆ’Ã¢â€žÂ¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã¢â€žÂ¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã‹Å“Ãƒâ€šÃ‚Â· ÃƒÆ’Ã¢â€žÂ¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¾ÃƒÆ’Ã¢â€žÂ¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¾ÃƒÆ’Ã¢â€žÂ¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦ÃƒÆ’Ã‹Å“Ãƒâ€šÃ‚Â´ÃƒÆ’Ã‹Å“Ãƒâ€šÃ‚ÂªÃƒÆ’Ã‹Å“Ãƒâ€šÃ‚Â±ÃƒÆ’Ã¢â€žÂ¢Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã¢â€žÂ¢Ãƒâ€¦Ã‚Â ÃƒÆ’Ã¢â€žÂ¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â  Pro. ÃƒÆ’Ã‹Å“Ãƒâ€šÃ‚Â±ÃƒÆ’Ã¢â€žÂ¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â€žÂ¢ÃƒÂ¢Ã¢â€šÂ¬Ã‹Å“ÃƒÆ’Ã¢â€žÂ¢Ãƒâ€¦Ã‚Â  ÃƒÆ’Ã‹Å“Ãƒâ€šÃ‚Â­ÃƒÆ’Ã‹Å“Ãƒâ€šÃ‚Â³ÃƒÆ’Ã‹Å“Ãƒâ€šÃ‚Â§ÃƒÆ’Ã‹Å“Ãƒâ€šÃ‚Â¨ÃƒÆ’Ã¢â€žÂ¢Ãƒâ€ Ã¢â‚¬â„¢ ÃƒÆ’Ã¢â€žÂ¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¾ÃƒÆ’Ã¢â€žÂ¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¾ÃƒÆ’Ã¢â€žÂ¢ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦ÃƒÆ’Ã‹Å“Ãƒâ€šÃ‚ÂªÃƒÆ’Ã‹Å“Ãƒâ€šÃ‚Â§ÃƒÆ’Ã‹Å“Ãƒâ€šÃ‚Â¨ÃƒÆ’Ã‹Å“Ãƒâ€šÃ‚Â¹ÃƒÆ’Ã‹Å“Ãƒâ€šÃ‚Â©.`,
+        code: `${featureLabel === 'ÃƒÆ’Ã‹Å“Ãƒâ€šÃ‚Â§ÃƒÆ’Ã¢â€žÂ¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¾ÃƒÆ’Ã¢â€žÂ¢Ãƒâ€šÃ‚ÂÃƒÆ’Ã¢â€žÂ¢Ãƒâ€¦Ã‚Â ÃƒÆ’Ã‹Å“Ãƒâ€šÃ‚Â¯ÃƒÆ’Ã¢â€žÂ¢Ãƒâ€¦Ã‚Â ÃƒÆ’Ã¢â€žÂ¢Ãƒâ€¹Ã¢â‚¬Â ' ? 'video' : 'image'}_requires_pro`,
       });
     }
     next();
   };
 }
 
+app.get('/api/pricing', requireAuth, (req, res) => {
+  const services = {};
+
+  for (const feature of ['image', 'video']) {
+    try {
+      const quote = quoteGeneration(feature);
+
+      services[feature] = {
+        available: true,
+        credits: quote.credits,
+      };
+    } catch (error) {
+      services[feature] = {
+        available: false,
+        credits: null,
+      };
+    }
+  }
+
+  return res.json({
+    status: 'success',
+    creditPriceUsd: 0.01,
+    minimumTopupUsd: 10,
+    packs: [
+      { priceUsd: 10, credits: 1000 },
+      { priceUsd: 20, credits: 2000 },
+      { priceUsd: 50, credits: 5000 },
+      { priceUsd: 100, credits: 10000 },
+    ],
+    services,
+  });
+});
 app.post('/api/generate-image', requireAuth, rateLimit('image'), validatePromptBody, gatekeeperMiddleware, (req, res) =>
   handleGenerationRequest(req, res, { feature: 'image', queue: imageQueue })
 );
@@ -588,7 +620,7 @@ app.get('/api/job-status/:jobId', requireAuth, async (req, res) => {
     .single();
 
   if (error || !data) return res.status(404).json({ status: 'error', message: 'Job introuvable.' });
-  if (data.user_id !== req.userId) return res.status(403).json({ status: 'error', message: 'AccÃƒÆ’Ã‚Â¨s refusÃƒÆ’Ã‚Â©.' });
+  if (data.user_id !== req.userId) return res.status(403).json({ status: 'error', message: 'AccÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¨s refusÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â©.' });
 
   res.json(data);
 });
