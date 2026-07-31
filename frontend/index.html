@@ -2,11 +2,19 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rox AI</title>
+</head>
+<body>
+<script type="text/plain" id="rox-src-mobile"><!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>Rox AI — Mobile</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"><\/script>
 <style>
   /* ══════════════════════════════════════════════════════════════════
      ROX AI — "Ember Core" identity
@@ -523,7 +531,7 @@
 // will be blocked by CORS.
 const CONFIG = {
   SUPABASE_URL: 'https://tqoqsgaymygmqrzddvtu.supabase.co', // fill from Supabase → Project Settings → API
-SUPABASE_ANON_KEY: 'sb_publishable_jxn-4TT28_G7LtZG4FJXTQ_75JiaSBi',
+  SUPABASE_ANON_KEY: 'sb_publishable_jxn-4TT28_G7LtZG4FJXTQ_75JiaSBi',       // same page, "anon public" key
   API_BASE: 'http://localhost:3001',                 // v6 server.js — change when you deploy
 };
 
@@ -1025,6 +1033,1436 @@ document.querySelectorAll('input[data-feature]').forEach(inp=>{
 });
 
 initAuth();
+<\/script>
+</body>
+</html>
+</script>
+<script type="text/plain" id="rox-src-desktop"><!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rox AI — Desktop</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"><\/script>
+<style>
+  /* ══════════════════════════════════════════════════════════════════
+     ROX AI — "Ember Core" identity — DESKTOP layout
+     Same obsidian/ember/circuit-teal brand as the mobile build. Layout
+     reworked into a persistent sidebar + topbar shell so every feature
+     lives on one canvas instead of full-screen phone panels.
+     ══════════════════════════════════════════════════════════════════ */
+  :root{
+    --bg:#0b0908;
+    --bg-2:#050403;
+    --panel:#161210;
+    --panel-2:#1e1914;
+    --panel-3:#241d16;
+    --border:#2e2620;
+    --border-soft: rgba(167,139,250,.16);
+    --text:#f6efe4;
+    --text-dim:#a99c8a;
+    --text-faint:#6b6152;
+
+    --ember-1:#6d28d9;
+    --ember-2:#a78bfa;
+    --ember-grad: linear-gradient(135deg, var(--ember-1), var(--ember-2));
+
+    --crimson-1:#86198f;
+    --crimson-2:#f472b6;
+    --crimson-grad: linear-gradient(135deg, var(--crimson-1), var(--crimson-2));
+
+    --teal-1:#0f9d75;
+    --teal-2:#22c55e;
+    --teal-grad: linear-gradient(135deg, var(--teal-1), var(--teal-2));
+
+    --blue-1:#4c1d95;
+    --blue-2:#a78bfa;
+    --blue-grad: linear-gradient(135deg, var(--blue-1), var(--blue-2));
+
+    --danger:#ff6b7a;
+    --shadow-ember: 0 8px 24px -10px rgba(139,92,246,.45);
+    --sidebar-w: 264px;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html,body{margin:0;background:#000;}
+  body{
+    font-family:'Inter','Tajawal',sans-serif;color:var(--text);
+    -webkit-font-smoothing:antialiased;min-height:100vh;
+  }
+  h1,h2,h3,.brand,.fcard h3,.pcard .t,.feature-topbar .t,.modal-topbar .t{font-family:'Space Grotesk','Tajawal',sans-serif;letter-spacing:-.01em;}
+  ::-webkit-scrollbar{width:10px;height:10px;}
+  ::-webkit-scrollbar-track{background:transparent;}
+  ::-webkit-scrollbar-thumb{background:var(--panel-3);border-radius:8px;border:2px solid var(--bg);}
+
+  @media (prefers-reduced-motion: reduce){
+    *,*::before,*::after{animation-duration:.001ms !important;animation-iteration-count:1 !important;transition-duration:.001ms !important;}
+  }
+
+  /* ── ambient obsidian backdrop ── */
+  .ambient{position:fixed;inset:0;z-index:0;overflow:hidden;background:var(--bg-2);pointer-events:none;}
+  .ambient::before, .ambient::after{
+    content:'';position:absolute;width:56vmax;height:56vmax;border-radius:50%;
+    filter:blur(110px);opacity:.30;
+  }
+  .ambient::before{
+    top:-22vmax;right:-14vmax;background:radial-gradient(circle at center, var(--ember-1), transparent 65%);
+    animation:driftA 24s ease-in-out infinite alternate;
+  }
+  .ambient::after{
+    bottom:-26vmax;left:-10vmax;background:radial-gradient(circle at center, #0f766e, transparent 65%);
+    animation:driftB 28s ease-in-out infinite alternate;
+  }
+  @keyframes driftA{0%{transform:translate(0,0) scale(1);}100%{transform:translate(-6%,4%) scale(1.08);}}
+  @keyframes driftB{0%{transform:translate(0,0) scale(1);}100%{transform:translate(5%,-5%) scale(1.06);}}
+  .grain{
+    position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.04;mix-blend-mode:overlay;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  /* ── Ember Core mark (brand mark + loop-loaders) ── */
+  .core{position:relative;display:flex;align-items:center;justify-content:center;background:var(--bg-2);overflow:hidden;isolation:isolate;}
+  .core::before{
+    content:'';position:absolute;inset:-45%;z-index:-1;
+    background:conic-gradient(from 0deg, transparent 0 55%, var(--ember-1), var(--ember-2), transparent 78%);
+    animation:coreSpin 5s linear infinite;opacity:.85;
+  }
+  @keyframes coreSpin{to{transform:rotate(360deg);}}
+
+  a{text-decoration:none;color:inherit;}
+  button{font-family:inherit;}
+
+  /* ═══════════ APP SHELL ═══════════ */
+  .app{position:relative;z-index:2;display:flex;min-height:100vh;}
+
+  /* SIDEBAR */
+  .sidebar{
+    width:var(--sidebar-w);flex-shrink:0;display:flex;flex-direction:column;gap:22px;
+    padding:22px 16px 18px;border-right:1px solid var(--border);
+    background:rgba(11,9,8,.55);backdrop-filter:blur(10px);
+    position:sticky;top:0;height:100vh;overflow-y:auto;
+  }
+  .brand{display:flex;align-items:center;gap:9px;font-weight:700;font-size:18px;padding:0 6px;}
+  .brand .logo{width:34px;height:34px;border-radius:10px;font-weight:800;color:var(--ember-2);font-size:14px;box-shadow:0 0 0 1px var(--border-soft), var(--shadow-ember);flex-shrink:0;}
+
+  .nav-list{display:flex;flex-direction:column;gap:3px;flex:1;}
+  .nav-item{
+    display:flex;align-items:center;gap:12px;padding:10.5px 13px;border-radius:11px;
+    color:var(--text-dim);font-size:14px;font-weight:500;cursor:pointer;position:relative;
+    transition:background .15s ease, color .15s ease;
+  }
+  .nav-item .ic{width:19px;text-align:center;font-size:16px;flex-shrink:0;}
+  .nav-item:hover{background:var(--panel-2);color:var(--text);}
+  .nav-item.active{background:var(--ember-grad);color:#fff;box-shadow:var(--shadow-ember);}
+  .nav-item.active:hover{background:var(--ember-grad);}
+  .nav-dot{width:7px;height:7px;border-radius:50%;background:#22c55e;box-shadow:0 0 8px rgba(34,197,94,.8);margin-left:auto;flex-shrink:0;}
+  .nav-sep{height:1px;background:var(--border);margin:8px 6px;}
+
+  .sidebar-bottom{margin-top:auto;}
+
+  /* CORE METER — credits/usage gauge */
+  .usage-card{background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:16px;position:relative;overflow:hidden;}
+  .usage-card::before{content:'';position:absolute;inset:0;background:radial-gradient(220px 100px at 100% 0%, rgba(139,92,246,.14), transparent 70%);pointer-events:none;}
+  .usage-label{position:relative;display:flex;justify-content:space-between;font-size:12.5px;color:var(--text-dim);margin-bottom:8px;}
+  .usage-label span:last-child{color:var(--ember-2);font-weight:700;font-family:'Space Grotesk',sans-serif;}
+  .usage-bar{position:relative;height:8px;background:var(--panel-2);border:1px solid var(--border);border-radius:6px;overflow:hidden;margin-bottom:10px;}
+  .usage-fill{position:relative;height:100%;background:var(--ember-grad);border-radius:6px;overflow:hidden;transition:width .5s cubic-bezier(.16,1,.3,1);}
+  .usage-fill::after{
+    content:'';position:absolute;top:0;left:-60%;width:40%;height:100%;
+    background:linear-gradient(120deg,transparent,rgba(255,255,255,.55),transparent);
+    transform:skewX(-18deg);animation:shimmerSweep 2.8s ease-in-out infinite;
+  }
+  @keyframes shimmerSweep{0%{left:-60%;}55%{left:130%;}100%{left:130%;}}
+  .credits-num{position:relative;font-size:13.5px;font-weight:700;margin-bottom:12px;font-family:'Space Grotesk',sans-serif;line-height:1.4;}
+  .upgrade-btn{
+    width:100%;padding:11.5px;border-radius:10px;border:none;background:var(--ember-grad);color:#ffffff;
+    font-weight:700;font-size:13px;cursor:pointer;position:relative;overflow:hidden;
+  }
+  .shimmer-btn::after{
+    content:'';position:absolute;top:0;left:-60%;width:40%;height:100%;
+    background:linear-gradient(120deg,transparent,rgba(255,255,255,.4),transparent);
+    transform:skewX(-18deg);animation:shimmerSweep 3.4s ease-in-out infinite;
+  }
+
+  /* MAIN */
+  .main{flex:1;min-width:0;display:flex;flex-direction:column;}
+
+  .topbar{
+    height:74px;flex-shrink:0;display:flex;align-items:center;gap:18px;padding:0 32px;
+    position:sticky;top:0;z-index:20;background:rgba(11,9,8,.72);backdrop-filter:blur(14px);
+    border-bottom:1px solid var(--border);
+  }
+  .search{
+    flex:1;max-width:560px;background:var(--panel);border:1px solid var(--border);border-radius:12px;
+    padding:11px 16px;color:var(--text-faint);font-size:14px;display:flex;align-items:center;gap:10px;
+    transition:border-color .15s ease;
+  }
+  .search:hover{border-color:var(--border-soft);}
+  .topbar-spacer{flex:1;}
+  .top-ic{width:38px;height:38px;border-radius:11px;background:var(--panel);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:15px;color:var(--text-dim);cursor:pointer;transition:transform .15s ease, border-color .15s ease;flex-shrink:0;}
+  .top-ic:hover{transform:translateY(-1px);border-color:var(--border-soft);color:var(--text);}
+  .user-block{display:flex;align-items:center;gap:10px;padding-left:6px;cursor:pointer;flex-shrink:0;}
+  .user-meta{text-align:right;line-height:1.25;}
+  .user-meta .name{font-size:13.5px;font-weight:700;}
+  .user-meta .plan{font-size:11px;color:var(--ember-2);font-weight:600;}
+  .avatar-sm{width:38px;height:38px;border-radius:50%;background:var(--ember-grad);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;color:#ffffff;box-shadow:var(--shadow-ember);flex-shrink:0;}
+
+  .content{flex:1;overflow-y:auto;padding:28px 32px 56px;}
+
+  /* SCREENS */
+  .screen{display:none;}
+  .screen.active{display:block;animation:fadein .3s ease;}
+  @keyframes fadein{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+
+  /* HERO */
+  .hero{
+    position:relative;border-radius:22px;padding:34px 38px;margin:0 0 28px;overflow:hidden;
+    background:var(--panel);border:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:32px;min-height:180px;
+  }
+  .hero::before{
+    content:'';position:absolute;inset:0;
+    background:radial-gradient(620px 260px at 92% -20%, rgba(139,92,246,.26), transparent 62%),
+               radial-gradient(420px 220px at -10% 130%, rgba(15,157,117,.2), transparent 60%);
+    pointer-events:none;
+  }
+  .hero-text{position:relative;flex:1;min-width:0;}
+  .hero h1{font-size:30px;margin:0 0 8px;font-weight:700;}
+  .hero p{color:var(--text-dim);margin:0 0 18px;font-size:15px;}
+  .pill-row{display:flex;gap:9px;flex-wrap:wrap;}
+  .pill{background:var(--panel-2);border:1px solid var(--border);padding:7px 13px;border-radius:20px;font-size:12.5px;color:var(--text-dim);display:flex;align-items:center;gap:6px;}
+
+  .hero-orbit{position:relative;width:210px;height:210px;flex-shrink:0;display:none;}
+  .hero-orbit .ring{position:absolute;inset:0;border-radius:50%;border:1px dashed var(--border-soft);}
+  .hero-orbit .ring.r2{inset:26px;}
+  .hero-orbit .core-lg{
+    position:absolute;inset:52px;border-radius:50%;background:var(--ember-grad);
+    display:flex;align-items:center;justify-content:center;font-weight:800;font-size:34px;color:#fff;
+    box-shadow:0 0 50px -6px rgba(139,92,246,.65);
+  }
+  .orbit-ic{
+    position:absolute;width:44px;height:44px;border-radius:13px;background:var(--panel-2);border:1px solid var(--border);
+    display:flex;align-items:center;justify-content:center;font-size:18px;box-shadow:0 6px 16px -6px rgba(0,0,0,.6);
+    animation:orbitBob 5s ease-in-out infinite;
+  }
+  .orbit-ic.o1{top:-6px;left:6px;color:#a78bfa;animation-delay:0s;}
+  .orbit-ic.o2{top:-2px;right:-8px;color:#f9a8d4;animation-delay:.6s;}
+  .orbit-ic.o3{bottom:6px;left:-14px;color:#4ade80;animation-delay:1.2s;}
+  .orbit-ic.o4{bottom:-4px;right:2px;color:#c4b5fd;animation-delay:1.8s;}
+  @keyframes orbitBob{0%,100%{transform:translateY(0);}50%{transform:translateY(-7px);}}
+
+  .section-title{display:flex;align-items:center;justify-content:space-between;margin:8px 0 16px;}
+  .section-title h2{font-size:18px;margin:0;padding-left:12px;position:relative;font-weight:600;}
+  .section-title h2::before{content:'';position:absolute;left:0;top:2px;bottom:2px;width:3px;border-radius:3px;background:var(--ember-grad);}
+  .section-title a{color:var(--ember-2);font-size:13px;font-weight:600;}
+  .section-title a:hover{text-decoration:underline;}
+
+  /* FEATURE GRID */
+  .feature-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:18px;margin-bottom:36px;}
+  @media (max-width:1500px){.feature-grid{grid-template-columns:repeat(3,1fr);}}
+  @media (max-width:980px){.feature-grid{grid-template-columns:repeat(2,1fr);}}
+  @media (max-width:640px){.feature-grid{grid-template-columns:1fr;}}
+
+  .fcard{
+    background:var(--panel);border:1px solid var(--border);border-radius:18px;padding:18px;
+    display:flex;flex-direction:column;transition:border-color .15s ease, transform .15s ease;min-width:0;
+  }
+  .fcard:hover{border-color:var(--border-soft);transform:translateY(-2px);}
+  .fcard.rox-ip{border-color:rgba(34,197,94,.28);}
+  .fcard-head{display:flex;align-items:center;gap:10px;margin-bottom:9px;cursor:pointer;}
+  .fcard-ic{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
+  .fcard h3{margin:0;font-size:15px;font-weight:600;}
+  .fcard p{color:var(--text-dim);font-size:12px;margin:0 0 12px;line-height:1.5;min-height:34px;}
+  .fcard-thumb{height:96px;border-radius:12px;margin-bottom:12px;background-size:cover;background-position:center;position:relative;overflow:hidden;cursor:pointer;flex-shrink:0;}
+  .fcard-thumb .play{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:15px;color:#fff;background:rgba(0,0,0,.18);}
+  .fcard-thumb .play span{width:32px;height:32px;border-radius:50%;background:rgba(0,0,0,.45);backdrop-filter:blur(3px);display:flex;align-items:center;justify-content:center;}
+
+  /* Rox IP dotted map thumb */
+  .map-thumb{
+    background:
+      radial-gradient(circle at 20% 35%, rgba(74,222,128,.9) 0 2px, transparent 3px),
+      radial-gradient(circle at 62% 20%, rgba(74,222,128,.9) 0 2px, transparent 3px),
+      radial-gradient(circle at 80% 55%, rgba(74,222,128,.9) 0 2px, transparent 3px),
+      radial-gradient(circle at 38% 70%, rgba(74,222,128,.9) 0 2px, transparent 3px),
+      radial-gradient(circle at 55% 82%, rgba(74,222,128,.9) 0 2px, transparent 3px),
+      radial-gradient(circle at 12% 78%, rgba(74,222,128,.9) 0 2px, transparent 3px),
+      linear-gradient(135deg,#04231a,#0f9d75 70%,#0b2f22);
+    position:relative;
+  }
+
+  /* Chat preview thumb */
+  .chat-thumb{background:var(--panel-2);border:1px solid var(--border);padding:9px 10px;display:flex;flex-direction:column;gap:6px;justify-content:center;}
+  .chat-thumb .b{max-width:80%;padding:5px 9px;border-radius:9px;font-size:9.5px;line-height:1.35;}
+  .chat-thumb .b.u{align-self:flex-end;background:var(--ember-grad);color:#fff;border-bottom-right-radius:3px;}
+  .chat-thumb .b.a{align-self:flex-start;background:var(--panel-3);border:1px solid var(--border);border-bottom-left-radius:3px;color:var(--text-dim);}
+
+  /* Code preview thumb */
+  .code-thumb{background:#0d0c11;border:1px solid var(--border);padding:9px 11px;font-family:'SF Mono',Consolas,monospace;font-size:10px;line-height:1.6;color:#c4b5fd;overflow:hidden;}
+  .code-thumb .ln{color:var(--text-faint);display:inline-block;width:14px;}
+  .code-thumb .kw{color:#f9a8d4;}
+  .code-thumb .fn{color:#7dd3fc;}
+  .code-thumb .str{color:#86efac;}
+
+  .fcard-form{display:flex;flex-direction:column;gap:9px;margin-top:auto;}
+  .fcard-form input, .fcard-form select{
+    background:var(--panel-2);border:1px solid var(--border);border-radius:10px;padding:10px 12px;
+    color:var(--text);font-size:12.5px;width:100%;transition:border-color .15s ease;
+  }
+  .fcard-form input:focus, .fcard-form select:focus{outline:none;border-color:var(--ember-2);box-shadow:0 0 0 3px rgba(167,139,250,.12);}
+  .fcard-btn{
+    border:none;border-radius:10px;padding:11px;font-weight:600;font-size:13px;color:#ffffff;cursor:pointer;
+    width:100%;display:flex;align-items:center;justify-content:center;gap:6px;position:relative;overflow:hidden;
+  }
+
+  /* DASHBOARD ROW: projects + activity */
+  .dashboard-row{display:flex;gap:22px;align-items:flex-start;}
+  @media (max-width:1100px){.dashboard-row{flex-direction:column;}}
+  .projects-col{flex:1;min-width:0;}
+  .project-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:16px;}
+  .pcard{
+    background:var(--panel);border:1px solid var(--border);border-radius:16px;overflow:hidden;cursor:pointer;
+    transition:transform .15s ease, border-color .15s ease;
+  }
+  .pcard:hover{transform:translateY(-3px);border-color:var(--border-soft);}
+  .pcard .pthumb{height:110px;background-size:cover;background-position:center;position:relative;}
+  .pcard .pbody{padding:12px 13px 14px;}
+  .pcard .t{font-size:13px;font-weight:600;margin-bottom:3px;}
+  .pcard .s{font-size:11.5px;color:var(--text-dim);}
+  .pcard .s.live{color:#4ade80;}
+  .pcard .pthumb.chatp{background:var(--panel-2);display:flex;flex-direction:column;justify-content:center;gap:6px;padding:12px;}
+  .pcard .pthumb.chatp .row{display:flex;align-items:center;gap:6px;}
+  .pcard .pthumb.chatp .av{width:22px;height:22px;border-radius:50%;background:var(--ember-grad);flex-shrink:0;}
+  .pcard .pthumb.chatp .ln{height:6px;border-radius:4px;background:var(--panel-3);flex:1;}
+  .pcard .pthumb.codep{background:#0d0c11;padding:10px;font-family:monospace;font-size:9px;color:var(--text-faint);line-height:1.7;}
+
+  .activity-col{width:300px;flex-shrink:0;background:var(--panel);border:1px solid var(--border);border-radius:18px;padding:20px;}
+  @media (max-width:1100px){.activity-col{width:100%;}}
+  .activity-col h2{font-size:16px;margin:0 0 16px;font-weight:600;}
+  .arow{display:flex;align-items:flex-start;gap:11px;padding:10px 0;border-bottom:1px solid var(--border);}
+  .arow:last-child{border-bottom:none;padding-bottom:0;}
+  .arow:first-of-type{padding-top:0;}
+  .arow .aic{width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;}
+  .arow .abody{flex:1;min-width:0;}
+  .arow .at{font-size:13px;font-weight:600;}
+  .arow .as{font-size:11.5px;color:var(--text-dim);margin-top:1px;}
+  .arow .atime{font-size:10.5px;color:var(--text-faint);flex-shrink:0;white-space:nowrap;}
+
+  .project-list{display:flex;flex-direction:column;gap:10px;}
+  .prow{
+    display:flex;align-items:center;gap:12px;background:var(--panel);border:1px solid var(--border);
+    border-radius:14px;padding:11px;cursor:pointer;transition:transform .15s ease, border-color .15s ease;
+  }
+  .prow:hover{border-color:var(--border-soft);}
+  .prow .thumb{width:52px;height:52px;border-radius:10px;flex-shrink:0;background-size:cover;background-position:center;}
+  .prow .t{font-size:13.5px;font-weight:600;}
+  .prow .s{font-size:11.5px;color:var(--text-dim);}
+  .prow .chev{margin-left:auto;color:var(--text-faint);}
+
+  .placeholder-view{color:var(--text-dim);font-size:13.5px;padding:44px 20px;text-align:center;border:1px dashed var(--border);border-radius:16px;}
+
+  /* ═══════════ MODALS (feature chats) ═══════════ */
+  .modal-backdrop{position:fixed;inset:0;background:rgba(5,4,3,.72);backdrop-filter:blur(4px);z-index:60;display:none;align-items:center;justify-content:center;padding:32px;}
+  .modal-backdrop.active{display:flex;animation:fadein .18s ease;}
+  .feature-screen{
+    width:100%;max-width:640px;height:min(680px,86vh);background:var(--bg);border:1px solid var(--border);
+    border-radius:20px;display:flex;flex-direction:column;overflow:hidden;isolation:isolate;position:relative;
+    box-shadow:0 30px 80px -20px rgba(0,0,0,.7);animation:modalIn .22s cubic-bezier(.16,1,.3,1);
+  }
+  @keyframes modalIn{from{transform:translateY(14px) scale(.98);opacity:0;}to{transform:none;opacity:1;}}
+  .feature-screen::before,.feature-screen::after{
+    content:'';position:absolute;width:60vmax;height:60vmax;border-radius:50%;
+    filter:blur(70px);opacity:.35;z-index:-1;pointer-events:none;
+  }
+  .feature-screen::before{top:-18vmax;right:-20vmax;background:radial-gradient(circle at center, var(--ember-1), transparent 65%);}
+  .feature-screen::after{bottom:-18vmax;left:-18vmax;background:radial-gradient(circle at center, #0f766e, transparent 65%);}
+
+  .modal-topbar{
+    display:flex;align-items:center;gap:12px;padding:16px 18px;border-bottom:1px solid var(--border);
+    background:rgba(22,18,16,.72);backdrop-filter:blur(14px);
+  }
+  .modal-topbar .back{width:36px;height:36px;border-radius:10px;background:var(--panel-2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;flex-shrink:0;transition:transform .15s ease;}
+  .modal-topbar .back:hover{transform:scale(1.05);}
+  .modal-topbar .fic{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
+  .modal-topbar .meta{line-height:1.2;}
+  .modal-topbar .meta .t{font-size:15px;font-weight:700;}
+  .modal-topbar .meta .s{font-size:11.5px;color:var(--text-dim);}
+
+  .chat-messages{flex:1;overflow-y:auto;padding:20px 20px;display:flex;flex-direction:column;gap:12px;}
+  .msg{max-width:74%;padding:11px 14px;border-radius:14px;font-size:13.5px;line-height:1.5;animation:msgIn .22s ease;}
+  @keyframes msgIn{from{opacity:0;transform:translateY(4px);}to{opacity:1;transform:translateY(0);}}
+  .msg.bot{background:var(--panel-2);border:1px solid var(--border);align-self:flex-start;border-bottom-left-radius:4px;}
+  .msg.user{background:var(--ember-grad);color:#ffffff;font-weight:500;align-self:flex-end;border-bottom-right-radius:4px;}
+  .typing{display:flex;gap:5px;align-self:flex-start;background:var(--panel-2);border:1px solid var(--border);padding:13px 16px;border-radius:14px;border-bottom-left-radius:4px;}
+  .typing span{width:6px;height:6px;background:var(--ember-2);border-radius:50%;box-shadow:0 0 8px rgba(167,139,250,.8);animation:emberBlink 1.2s infinite ease-in-out;}
+  .typing span:nth-child(2){animation-delay:.2s;}
+  .typing span:nth-child(3){animation-delay:.4s;}
+  @keyframes emberBlink{0%,80%,100%{opacity:.25;transform:scale(.8);}40%{opacity:1;transform:scale(1);}}
+
+  .chat-input-row{display:flex;gap:8px;padding:14px 16px;border-top:1px solid var(--border);background:rgba(22,18,16,.72);backdrop-filter:blur(14px);}
+  .chat-input-row input{
+    flex:1;background:var(--panel-2);border:1px solid var(--border);border-radius:12px;padding:12px 14px;
+    color:var(--text);font-size:14px;transition:border-color .15s ease;
+  }
+  .chat-input-row input:focus{outline:none;border-color:var(--ember-2);box-shadow:0 0 0 3px rgba(167,139,250,.12);}
+  .chat-input-row button{
+    border:none;border-radius:12px;padding:0 20px;font-weight:600;color:#ffffff;cursor:pointer;flex-shrink:0;
+    transition:transform .15s ease;
+  }
+  .chat-input-row button:hover{transform:scale(1.04);}
+
+  .msg.status{background:transparent;border:1px dashed var(--border);color:var(--text-dim);align-self:center;font-size:12px;text-align:center;max-width:92%;}
+  .msg.error{background:rgba(255,107,122,.1);border:1px solid rgba(255,107,122,.3);color:var(--danger);align-self:flex-start;}
+  .msg img{max-width:100%;border-radius:10px;display:block;margin-top:4px;}
+  .msg video{max-width:100%;border-radius:10px;display:block;margin-top:4px;}
+
+  /* LOGIN OVERLAY */
+  #login-overlay{
+    position:fixed;inset:0;background:var(--bg);z-index:100;display:flex;
+    align-items:center;justify-content:center;padding:20px;overflow:hidden;
+  }
+  #login-overlay.hidden{display:none;}
+  #login-overlay::before{
+    content:'';position:absolute;width:70vw;height:70vw;border-radius:50%;
+    background:radial-gradient(circle at center, rgba(139,92,246,.22), transparent 60%);
+    top:-30vw;right:-15vw;animation:driftA 20s ease-in-out infinite alternate;pointer-events:none;
+  }
+  .login-box{position:relative;width:100%;max-width:400px;background:var(--panel);border:1px solid var(--border);border-radius:18px;padding:30px 28px;animation:bootIn .55s cubic-bezier(.16,1,.3,1) both;}
+  @keyframes bootIn{from{opacity:0;transform:translateY(10px) scale(.99);}to{opacity:1;transform:none;}}
+  .login-box .brand{justify-content:center;padding:0 0 6px;}
+  .login-box .brand .logo{width:40px;height:40px;font-size:17px;border-radius:13px;}
+  .login-tag{text-align:center;color:var(--text-dim);font-size:12px;margin:0 0 22px;}
+  .login-box input{
+    width:100%;background:var(--panel-2);border:1px solid var(--border);border-radius:10px;padding:11px 13px;
+    color:var(--text);font-size:14px;margin-bottom:10px;transition:border-color .15s ease, box-shadow .15s ease;
+  }
+  .login-box input:focus{outline:none;border-color:var(--ember-2);box-shadow:0 0 0 3px rgba(167,139,250,.12);}
+  .login-box button{
+    width:100%;padding:12px;border-radius:10px;border:none;background:var(--ember-grad);color:#ffffff;
+    font-weight:700;font-size:13.5px;cursor:pointer;margin-top:4px;position:relative;overflow:hidden;
+  }
+  .login-box button:disabled{opacity:.6;cursor:default;}
+  .login-toggle{text-align:center;font-size:12.5px;color:var(--text-dim);margin-top:14px;cursor:pointer;}
+  .login-toggle span{color:var(--ember-2);font-weight:600;}
+  .login-error{color:var(--danger);font-size:12.5px;margin:-2px 0 10px;min-height:1em;}
+
+  @media (min-width:1180px){.hero-orbit{display:block;}}
+</style>
+</head>
+<body>
+
+<div class="ambient"></div>
+<div class="grain"></div>
+
+<!-- LOGIN OVERLAY — shown until a Supabase session exists -->
+<div id="login-overlay">
+  <div class="login-box">
+    <div class="brand"><div class="logo core">R</div>Rox AI</div>
+    <p class="login-tag">الذكاء الصناعي في جيبك — Chat · Images · Vidéos · Code</p>
+    <div class="login-error" id="login-error"></div>
+    <input type="text" id="login-name" placeholder="Nom complet" autocomplete="name" style="display:none;">
+    <input type="email" id="login-email" placeholder="Adresse email" autocomplete="email">
+    <input type="password" id="login-password" placeholder="Mot de passe" autocomplete="current-password">
+    <button id="login-submit" class="shimmer-btn">Se connecter</button>
+    <div class="login-toggle" id="login-toggle">Pas encore de compte ? <span>Créer un compte</span></div>
+  </div>
+</div>
+
+<div class="app">
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="brand"><div class="logo core">R</div>Rox AI</div>
+
+    <div class="nav-list">
+      <div class="nav-item active" data-tab="home"><span class="ic">🏠</span>Accueil</div>
+      <div class="nav-item" data-open="images"><span class="ic">🖼️</span>Images</div>
+      <div class="nav-item" data-open="videos"><span class="ic">🎥</span>Vidéos</div>
+      <div class="nav-item" data-open="roxip"><span class="ic">🖥️</span>Rox IP (Contrôle PC)<span class="nav-dot"></span></div>
+      <div class="nav-item" data-open="chat"><span class="ic">💬</span>Chat AI</div>
+      <div class="nav-item" data-open="code"><span class="ic">⌨️</span>Code Studio</div>
+      <div class="nav-sep"></div>
+      <div class="nav-item" data-tab="projects"><span class="ic">📁</span>Projets</div>
+      <div class="nav-item" data-open="automations"><span class="ic">🤖</span>Automatisations</div>
+      <div class="nav-item" data-open="history"><span class="ic">🕘</span>Historique</div>
+      <div class="nav-item" data-open="settings"><span class="ic">⚙️</span>Paramètres</div>
+    </div>
+
+    <div class="sidebar-bottom">
+      <div class="usage-card">
+        <div class="usage-label"><span>Utilisation</span><span id="sidebarUsagePct">–</span></div>
+        <div class="usage-bar"><div class="usage-fill" id="sidebarUsageFill" style="width:0%"></div></div>
+        <div class="credits-num" id="sidebarCreditsNum">–</div>
+        <button class="upgrade-btn shimmer-btn" id="upgradeBtn">⭐ Passer au Plan Pro</button>
+        <button class="upgrade-btn shimmer-btn" id="topupBtn" style="display:none; margin-top:8px; background:var(--blue-grad);">💳 شحن رصيد إضافي</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <div class="main">
+
+    <div class="topbar">
+      <div class="search">🔍 Rechercher dans Rox AI...</div>
+      <div class="topbar-spacer"></div>
+      <div class="top-ic" title="Thème">☀️</div>
+      <div class="top-ic" title="Notifications">🔔</div>
+      <div class="user-block" id="logoutBtn" title="Se déconnecter">
+        <div class="user-meta"><div class="name" id="topbarUserName">–</div><div class="plan" id="topbarUserPlan">–</div></div>
+        <div class="avatar-sm" id="userAvatar">–</div>
+      </div>
+    </div>
+
+    <div class="content">
+
+      <!-- HOME SCREEN -->
+      <div class="screen active" id="screen-home">
+
+        <div class="hero">
+          <div class="hero-text">
+            <h1 id="heroGreeting">Bienvenue ! 👋</h1>
+            <p>Tout l'IA dont vous avez besoin, réuni au même endroit.</p>
+            <div class="pill-row">
+              <div class="pill">✨ Multi-modèles</div>
+              <div class="pill">⚡ Rapide</div>
+              <div class="pill">🛡️ Sécurisé</div>
+              <div class="pill">🧩 Tout-en-un</div>
+            </div>
+          </div>
+          <div class="hero-orbit">
+            <div class="ring"></div>
+            <div class="ring r2"></div>
+            <div class="core-lg">R</div>
+            <div class="orbit-ic o1">🖼️</div>
+            <div class="orbit-ic o2">💬</div>
+            <div class="orbit-ic o3">🎥</div>
+            <div class="orbit-ic o4">⌨️</div>
+          </div>
+        </div>
+
+        <div class="feature-grid">
+
+          <div class="fcard" data-open="images">
+            <div class="fcard-head" data-open="images"><div class="fcard-ic" style="background:rgba(139,92,246,.15);color:#a78bfa;">🖼️</div><h3>Images AI</h3></div>
+            <p>Générez des images incroyables à partir de vos idées.</p>
+            <div class="fcard-thumb" data-open="images" style="background-image:linear-gradient(135deg,#2a1408,#6d28d9 55%,#ffd166);"></div>
+            <div class="fcard-form">
+              <input type="text" placeholder="Décrivez votre image..." data-quickfeature="images">
+              <button class="fcard-btn shimmer-btn" style="background:var(--ember-grad);" data-quicksend="images">✨ Générer Image</button>
+            </div>
+          </div>
+
+          <div class="fcard" data-open="videos">
+            <div class="fcard-head" data-open="videos"><div class="fcard-ic" style="background:rgba(134,25,143,.15);color:#f9a8d4;">🎥</div><h3>Vidéos AI</h3></div>
+            <p>Créez des vidéos époustouflantes à partir de texte ou d'images.</p>
+            <div class="fcard-thumb" data-open="videos" style="background-image:linear-gradient(135deg,#0a0f2a,#86198f 55%,#22d3ee);">
+              <div class="play"><span>▶</span></div>
+            </div>
+            <div class="fcard-form">
+              <input type="text" placeholder="Décrivez votre vidéo..." data-quickfeature="videos">
+              <button class="fcard-btn shimmer-btn" style="background:var(--crimson-grad);" data-quicksend="videos">▶ Générer Vidéo</button>
+            </div>
+          </div>
+
+          <div class="fcard rox-ip" data-open="roxip">
+            <div class="fcard-head" data-open="roxip"><div class="fcard-ic" style="background:rgba(34,197,94,.15);color:#4ade80;">🖥️</div><h3>Rox IP (Contrôle PC)</h3></div>
+            <p>Connectez-vous à un IP et prenez le contrôle à distance en temps réel.</p>
+            <div class="fcard-thumb map-thumb" data-open="roxip"></div>
+            <div class="fcard-form">
+              <input type="text" placeholder="Entrez l'adresse IP..." data-quickfeature="roxip">
+              <button class="fcard-btn shimmer-btn" style="background:linear-gradient(135deg,#16a34a,#22c55e);" data-quicksend="roxip">⚡ Se Connecter</button>
+            </div>
+          </div>
+
+          <div class="fcard" data-open="chat">
+            <div class="fcard-head" data-open="chat"><div class="fcard-ic" style="background:rgba(139,92,246,.15);color:#a78bfa;">💬</div><h3>Chat AI</h3></div>
+            <p>Discutez avec l'IA et obtenez des réponses instantanées.</p>
+            <div class="fcard-thumb chat-thumb" data-open="chat">
+              <div class="b a">👋 Bonjour Rox AI !</div>
+              <div class="b a">Bonjour ! Comment puis-je vous aider aujourd'hui ?</div>
+              <div class="b u">Explique moi la gravité...</div>
+              <div class="b a">La gravité est une force...</div>
+            </div>
+            <div class="fcard-form">
+              <input type="text" placeholder="Posez votre question..." data-quickfeature="chat">
+              <button class="fcard-btn shimmer-btn" style="background:var(--ember-grad);" data-quicksend="chat">➤ Envoyer</button>
+            </div>
+          </div>
+
+          <div class="fcard" data-open="code">
+            <div class="fcard-head" data-open="code"><div class="fcard-ic" style="background:rgba(167,139,250,.15);color:#c4b5fd;">⌨️</div><h3>Code Studio</h3></div>
+            <p>Codez, build, et déployez vos idées avec l'aide de l'IA.</p>
+            <div class="fcard-thumb code-thumb" data-open="code">
+<div><span class="ln">1</span>  <span class="kw">function</span> <span class="fn">greet</span>(name) {</div>
+<div><span class="ln">2</span>    <span class="kw">return</span> <span class="str">`Hello, ${name}!`</span>;</div>
+<div><span class="ln">3</span>  }</div>
+<div><span class="ln">4</span></div>
+<div><span class="ln">5</span>  console.log(greet(<span class="str">"Rox AI"</span>));</div>
+            </div>
+            <div class="fcard-form">
+              <select id="codeLangSelect"><option>JavaScript</option><option>Python</option><option>TypeScript</option><option>Go</option></select>
+              <button class="fcard-btn shimmer-btn" style="background:var(--blue-grad);" data-quicksend="code">▶ Exécuter</button>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="dashboard-row">
+          <div class="projects-col">
+            <div class="section-title"><h2>Projets récents</h2><a data-tab="projects">Voir tous</a></div>
+            <div class="project-grid">
+              <div class="pcard" data-open="images">
+                <div class="pthumb" style="background-image:linear-gradient(135deg,#2a1408,#6d28d9 55%,#ffd166);"></div>
+                <div class="pbody"><div class="t">Image Fantasy</div><div class="s">Créé il y a 2h</div></div>
+              </div>
+              <div class="pcard" data-open="videos">
+                <div class="pthumb" style="background-image:linear-gradient(135deg,#0a0f2a,#86198f 55%,#22d3ee);display:flex;align-items:center;justify-content:center;font-size:20px;color:#fff;">▶</div>
+                <div class="pbody"><div class="t">Vidéo Cyberpunk</div><div class="s">Créé il y a 5h</div></div>
+              </div>
+              <div class="pcard" data-open="roxip">
+                <div class="pthumb map-thumb"></div>
+                <div class="pbody"><div class="t">Session IP Bureau</div><div class="s live">● Connecté</div></div>
+              </div>
+              <div class="pcard" data-open="chat">
+                <div class="pthumb chatp">
+                  <div class="row"><div class="av"></div><div class="ln"></div></div>
+                  <div class="row"><div class="av" style="background:var(--panel-3);"></div><div class="ln" style="width:70%;"></div></div>
+                </div>
+                <div class="pbody"><div class="t">Chat Histoire</div><div class="s">Créé il y a 1j</div></div>
+              </div>
+              <div class="pcard" data-open="code">
+                <div class="pthumb codep">&lt;/&gt; index.html<br>build/bundle.js<br>package.json</div>
+                <div class="pbody"><div class="t">Site Web Portfolio</div><div class="s">Créé il y a 2j</div></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="activity-col">
+            <h2>Activité récente</h2>
+            <div class="arow">
+              <div class="aic" style="background:rgba(139,92,246,.15);color:#a78bfa;">🖼️</div>
+              <div class="abody"><div class="at">Image générée</div><div class="as">Projet Fantasy</div></div>
+              <div class="atime">il y a 2h</div>
+            </div>
+            <div class="arow">
+              <div class="aic" style="background:rgba(134,25,143,.15);color:#f9a8d4;">🎥</div>
+              <div class="abody"><div class="at">Vidéo créée</div><div class="as">Projet Cyberpunk</div></div>
+              <div class="atime">il y a 5h</div>
+            </div>
+            <div class="arow">
+              <div class="aic" style="background:rgba(34,197,94,.15);color:#4ade80;">🖥️</div>
+              <div class="abody"><div class="at">Connexion IP</div><div class="as">192.168.1.45</div></div>
+              <div class="atime">il y a 6h</div>
+            </div>
+            <div class="arow">
+              <div class="aic" style="background:rgba(167,139,250,.15);color:#c4b5fd;">⌨️</div>
+              <div class="abody"><div class="at">Code exécuté</div><div class="as">script.js</div></div>
+              <div class="atime">il y a 1j</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- PROJECTS TAB -->
+      <div class="screen" id="screen-projects">
+        <div class="section-title"><h2>Projets</h2></div>
+        <div class="placeholder-view">Retrouvez ici l'ensemble de vos projets Images, Vidéos et Code.</div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ FULL FEATURE MODALS ═══════════ -->
+
+<div class="modal-backdrop" id="feature-images">
+  <div class="feature-screen">
+    <div class="modal-topbar">
+      <div class="back" data-close>←</div>
+      <div class="fic" style="background:rgba(139,92,246,.15);color:#a78bfa;">🖼️</div>
+      <div class="meta"><div class="t">Images AI</div><div class="s">Génération d'images</div></div>
+    </div>
+    <div class="chat-messages" id="msgs-images">
+      <div class="msg bot">Décris-moi l'image que tu veux générer (style, ambiance, couleurs...).</div>
+    </div>
+    <div class="chat-input-row">
+      <input type="text" placeholder="Décrivez votre image..." data-feature="images">
+      <button style="background:var(--ember-grad);" data-send="images">✨</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="feature-videos">
+  <div class="feature-screen">
+    <div class="modal-topbar">
+      <div class="back" data-close>←</div>
+      <div class="fic" style="background:rgba(134,25,143,.15);color:#f9a8d4;">🎬</div>
+      <div class="meta"><div class="t">Vidéos AI</div><div class="s">Génération de vidéos</div></div>
+    </div>
+    <div class="chat-messages" id="msgs-videos">
+      <div class="msg bot">Dis-moi quelle scène tu veux voir en vidéo, et sa durée souhaitée.</div>
+    </div>
+    <div class="chat-input-row">
+      <input type="text" placeholder="Décrivez votre vidéo..." data-feature="videos">
+      <button style="background:var(--crimson-grad);" data-send="videos">▶</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="feature-roxip">
+  <div class="feature-screen">
+    <div class="modal-topbar">
+      <div class="back" data-close>←</div>
+      <div class="fic" style="background:rgba(34,197,94,.15);color:#4ade80;">🖥️</div>
+      <div class="meta"><div class="t">Rox IP</div><div class="s">Démo — pas encore relié au backend</div></div>
+    </div>
+    <div class="chat-messages" id="msgs-roxip">
+      <div class="msg bot">Entre l'adresse IP de la machine à laquelle tu veux te connecter.</div>
+    </div>
+    <div class="chat-input-row">
+      <input type="text" placeholder="Entrez l'adresse IP..." data-feature="roxip">
+      <button style="background:linear-gradient(135deg,#16a34a,#22c55e);" data-send="roxip">⚡</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="feature-chat">
+  <div class="feature-screen">
+    <div class="modal-topbar">
+      <div class="back" data-close>←</div>
+      <div class="fic" style="background:rgba(139,92,246,.15);color:#a78bfa;">💬</div>
+      <div class="meta"><div class="t">Chat AI</div><div class="s">En ligne</div></div>
+    </div>
+    <div class="chat-messages" id="msgs-chat">
+      <div class="msg bot">Bonjour ! Comment puis-je vous aider aujourd'hui ?</div>
+    </div>
+    <div class="chat-input-row">
+      <input type="text" placeholder="Posez votre question..." data-feature="chat">
+      <button style="background:var(--ember-grad);" data-send="chat">➤</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="feature-code">
+  <div class="feature-screen">
+    <div class="modal-topbar">
+      <div class="back" data-close>←</div>
+      <div class="fic" style="background:rgba(167,139,250,.15);color:#c4b5fd;">⌨️</div>
+      <div class="meta"><div class="t">Code Studio</div><div class="s">Assistant de code</div></div>
+    </div>
+    <div class="chat-messages" id="msgs-code">
+      <div class="msg bot">Dis-moi quelle fonction ou quel script tu veux que je t'aide à écrire.</div>
+    </div>
+    <div class="chat-input-row">
+      <input type="text" placeholder="Ex: une fonction qui trie un tableau..." data-feature="code">
+      <button style="background:var(--blue-grad);" data-send="code">▶</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="feature-automations">
+  <div class="feature-screen">
+    <div class="modal-topbar">
+      <div class="back" data-close>←</div>
+      <div class="fic" style="background:var(--panel-2);">🤖</div>
+      <div class="meta"><div class="t">Automatisations</div><div class="s">Tâches automatiques</div></div>
+    </div>
+    <div class="placeholder-view" style="margin:20px;">Aucune automatisation configurée pour l'instant.</div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="feature-history">
+  <div class="feature-screen">
+    <div class="modal-topbar">
+      <div class="back" data-close>←</div>
+      <div class="fic" style="background:var(--panel-2);">🕘</div>
+      <div class="meta"><div class="t">Historique</div><div class="s">Activité récente</div></div>
+    </div>
+    <div class="placeholder-view" style="margin:20px;">Image générée · Vidéo créée · Connexion IP · Code exécuté</div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="feature-settings">
+  <div class="feature-screen">
+    <div class="modal-topbar">
+      <div class="back" data-close>←</div>
+      <div class="fic" style="background:var(--panel-2);">⚙️</div>
+      <div class="meta"><div class="t">Paramètres</div><div class="s">Compte & préférences</div></div>
+    </div>
+    <div class="placeholder-view" id="settingsSummary" style="margin:20px;">Chargement...</div>
+    <button class="upgrade-btn shimmer-btn" id="settingsUpgradeBtn" style="margin:0 20px 12px;width:calc(100% - 40px);">⭐ Passer au Plan Pro</button>
+    <div class="prow" id="settingsLogoutBtn" style="margin:0 20px 20px;"><div class="thumb" style="background:var(--panel-2);display:flex;align-items:center;justify-content:center;">🚪</div><div><div class="t">Se déconnecter</div></div></div>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════════════════════════════════
+// ROX AI desktop config — EDIT ONLY THIS BLOCK BEFORE DEPLOYING
+// Paste your real Supabase anon public key below (Supabase dashboard →
+// Project Settings → API → "anon public"). Never put the service_role
+// key here — this file is public/frontend code.
+// API_BASE currently points at your local backend (server.js running
+// on port 3001). Update it when you deploy the backend elsewhere, and
+// make sure that origin is listed in the backend's ALLOWED_ORIGINS.
+// ══════════════════════════════════════════════════════════════════
+const CONFIG = {
+  SUPABASE_URL: 'https://tqoqsgaymygmqrzddvtu.supabase.co',
+  SUPABASE_ANON_KEY: 'sb_publishable_jxn-4TT28_G7LtZG4FJXTQ_75JiaSBi',
+  API_BASE: 'http://localhost:3001'
+};
+// ══════════════════════════════════════════════════════════════════
+
+// ── config guard: fail loudly instead of silently if the anon key
+// was never filled in ──────────────────────────────────────────────
+const CONFIG_MISSING = !CONFIG.SUPABASE_ANON_KEY || CONFIG.SUPABASE_ANON_KEY === 'PASTE_REAL_ANON_KEY_HERE';
+
+function showConfigBanner(message) {
+  if (document.getElementById('config-banner')) return;
+  const bar = document.createElement('div');
+  bar.id = 'config-banner';
+  bar.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:999;background:#3a0a0a;color:#ff6b7a;border-bottom:1px solid #ff6b7a;padding:12px 20px;font:600 13.5px Inter,sans-serif;text-align:center;';
+  bar.textContent = message;
+  document.body.appendChild(bar);
+}
+
+if (CONFIG_MISSING) {
+  showConfigBanner('⚠️ Configuration Supabase manquante. Ajoutez la clé anon publique.');
+}
+
+// A harmless placeholder client so the rest of the script doesn't throw
+// if createClient() is called with an empty/placeholder key — actual
+// auth calls will simply fail (and are guarded by CONFIG_MISSING below).
+const supa = window.supabase.createClient(CONFIG.SUPABASE_URL, CONFIG_MISSING ? 'placeholder.invalid.key' : CONFIG.SUPABASE_ANON_KEY);
+let session = null;
+let profile = null;
+
+// ── auth ─────────────────────────────────────────────────────────────
+async function initAuth() {
+  if (CONFIG_MISSING) {
+    // Still show the login screen (so the demo login 777/19 remains
+    // usable) but don't attempt real Supabase calls with a fake key.
+    showLogin();
+    setLoginError('Configuration Supabase manquante. Ajoutez la clé anon publique.');
+    return;
+  }
+
+  const { data } = await supa.auth.getSession();
+  if (data.session) await onLoggedIn(data.session);
+  else showLogin();
+
+  supa.auth.onAuthStateChange((_event, s) => {
+    if (s) onLoggedIn(s); else { session = null; profile = null; showLogin(); }
+  });
+}
+
+async function onLoggedIn(s) {
+  session = s;
+  document.getElementById('login-overlay').classList.add('hidden');
+  await refreshProfile();
+}
+
+function showLogin() { document.getElementById('login-overlay').classList.remove('hidden'); }
+function setLoginError(msg) { document.getElementById('login-error').textContent = msg || ''; }
+
+let isSignupMode = false;
+document.getElementById('login-toggle').addEventListener('click', () => {
+  isSignupMode = !isSignupMode;
+  document.getElementById('login-name').style.display = isSignupMode ? 'block' : 'none';
+  document.getElementById('login-submit').textContent = isSignupMode ? "Créer mon compte" : "Se connecter";
+  document.getElementById('login-toggle').innerHTML = isSignupMode
+    ? 'Déjà un compte ? <span>Se connecter</span>'
+    : 'Pas encore de compte ? <span>Créer un compte</span>';
+  setLoginError('');
+});
+
+// ── demo shortcut ────────────────────────────────────────────────────
+// Local-only bypass for previewing the UI without a live Supabase/backend
+// connection: email "777" + password "19" logs straight into a mocked
+// session. Nothing here touches Supabase or the real API — see
+// enterDemoMode()/demoFetch() below. Remove this block before shipping
+// if you don't want the shortcut to exist in production.
+const DEMO_EMAIL = '777';
+const DEMO_PASSWORD = '19';
+
+document.getElementById('login-submit').addEventListener('click', async () => {
+  const name = document.getElementById('login-name').value.trim();
+  const email = document.getElementById('login-email').value.trim();
+  const password = document.getElementById('login-password').value;
+  if (!email || !password) { setLoginError('Email et mot de passe requis.'); return; }
+
+  if (email === DEMO_EMAIL && password === DEMO_PASSWORD) {
+    setLoginError('');
+    enterDemoMode(name);
+    return;
+  }
+
+  const btn = document.getElementById('login-submit');
+  btn.disabled = true;
+  setLoginError('');
+
+  const { error } = isSignupMode
+    ? await supa.auth.signUp({ email, password, options: { data: { full_name: name || undefined } } })
+    : await supa.auth.signInWithPassword({ email, password });
+
+  btn.disabled = false;
+  if (error) { setLoginError(error.message); return; }
+  if (isSignupMode) setLoginError('Compte créé — vérifie ta boîte mail si la confirmation est activée.');
+});
+
+// ── demo mode: mocked session + profile + fake API responses ───────────
+const DEMO_TOKEN = 'demo-token';
+
+function enterDemoMode(name) {
+  session = { user: { id: 'demo-user', email: 'demo@rox.ai' }, access_token: DEMO_TOKEN };
+  profile = {
+    email: 'demo@rox.ai',
+    full_name: name || 'Démo',
+    credits_used: 180,
+    credits_total: 500,
+    subscription_status: 'pro',
+  };
+  document.getElementById('login-overlay').classList.add('hidden');
+  renderProfile();
+  renderProUsage(profile.credits_used, profile.credits_total, profile.credits_total - profile.credits_used);
+}
+
+// Fabricated responses so every screen is explorable with no backend.
+// Shapes mirror exactly what server.js returns for each route.
+async function demoFetch(path, options = {}) {
+  await new Promise(r => setTimeout(r, 500 + Math.random() * 400));
+
+  if (path === '/api/chat') {
+    profile.credits_used = Math.min(profile.credits_total, profile.credits_used + 2);
+    const remaining = profile.credits_total - profile.credits_used;
+    return jsonResponse(200, {
+      text: 'هادي إجابة ديمو — ماشي متصلة بحيت الملف خدام بلا backend حقيقي دابا. عمر SUPABASE_URL/API_BASE باش توصل بالفعل.',
+      newBalance: remaining,
+    });
+  }
+  if (path === '/api/generate-image' || path === '/api/generate-video') {
+    const kind = path === '/api/generate-video' ? 'videos' : 'images';
+    return jsonResponse(200, { jobId: `demo-job-${kind}-${Date.now()}`, newBalance: profile.credits_total - profile.credits_used });
+  }
+  if (path.startsWith('/api/job-status/')) {
+    const isVideo = path.includes('demo-job-videos-');
+    return jsonResponse(200, {
+      status: 'done',
+      result_url: isVideo
+        ? 'https://www.w3schools.com/html/mov_bbb.mp4'
+        : 'https://picsum.photos/seed/roxai/640/420',
+    });
+  }
+  if (path === '/api/usage-status') {
+    return jsonResponse(200, {
+      status: 'success', isPro: true,
+      creditsUsed: profile.credits_used, creditsTotal: profile.credits_total,
+      creditsRemaining: profile.credits_total - profile.credits_used,
+    });
+  }
+  if (path === '/api/create-checkout-session' || path === '/api/create-topup-session') {
+    return jsonResponse(200, { message: 'Mode démo — pas de paiement réel ici.' });
+  }
+  return jsonResponse(404, { message: 'Route démo non gérée: ' + path });
+}
+function jsonResponse(status, body) {
+  return { ok: status >= 200 && status < 300, status, json: async () => body };
+}
+
+function logout() {
+  conversations.chat = []; conversations.code = [];
+  if (session && session.access_token === DEMO_TOKEN) {
+    session = null; profile = null; showLogin();
+    return;
+  }
+  supa.auth.signOut();
+}
+document.getElementById('logoutBtn').addEventListener('click', logout);
+document.getElementById('settingsLogoutBtn').addEventListener('click', logout);
+
+// ── profile / credits ───────────────────────────────────────────────
+async function refreshProfile() {
+  if (!session) return;
+  const { data, error } = await supa
+    .from('profiles')
+    .select('email, full_name, credits_used, credits_total, subscription_status')
+    .eq('id', session.user.id)
+    .single();
+  if (error) { console.error('[profile] load failed:', error.message); return; }
+  profile = data;
+  renderProfile();
+
+  // Always fetch from the backend (not just the raw Supabase row) —
+  // /api/usage-status is what actually matches what the server enforces
+  // for both tiers now that Pro also draws from a real 500-credit/month
+  // pool (no more unconditional 'pro' bypass — see gatekeeper.js).
+  try {
+    const res = await authFetch('/api/usage-status', { method: 'GET' });
+    const usage = await res.json();
+    if (usage.status !== 'success') return;
+    if (usage.isPro) {
+      renderProUsage(usage.creditsUsed, usage.creditsTotal, usage.creditsRemaining);
+    } else {
+      renderDailyUsage(usage.dailyChatUsed, usage.dailyChatLimit);
+    }
+  } catch (e) { console.error('[usage-status] load failed:', e); }
+}
+
+function renderDailyUsage(used, limit) {
+  const pct = Math.min(100, Math.round((used / limit) * 100));
+  document.getElementById('sidebarUsagePct').textContent = pct + '%';
+  document.getElementById('sidebarUsageFill').style.width = pct + '%';
+  document.getElementById('sidebarCreditsNum').textContent = `${used} / ${limit} رسالة اليوم`;
+  document.getElementById('settingsSummary').textContent =
+    `الخطة الحالية: مجاني · ${used}/${limit} رسالة شات اليوم · الكود/الصور/الفيديو Pro فقط`;
+  document.getElementById('topupBtn').style.display = 'none';
+}
+
+function renderProUsage(used, total, remaining) {
+  const pct = Math.min(100, Math.round((used / total) * 100));
+  document.getElementById('sidebarUsagePct').textContent = pct + '%';
+  document.getElementById('sidebarUsageFill').style.width = pct + '%';
+  document.getElementById('sidebarCreditsNum').textContent = `${used} / ${total} credits (${remaining} متبقي)`;
+  document.getElementById('settingsSummary').textContent =
+    `الخطة الحالية: Pro · ${used}/${total} credits هاد الشهر (${remaining} متبقي)`;
+  // Surface the top-up option proactively once the pool is getting low,
+  // not only after they've already hit a hard block mid-message.
+  document.getElementById('topupBtn').style.display = remaining < total * 0.2 ? 'block' : 'none';
+}
+
+function renderProfile() {
+  if (!profile) return;
+  const initial = (profile.full_name || profile.email || '?').charAt(0).toUpperCase();
+  const displayName = profile.full_name || profile.email.split('@')[0];
+  const isPro = profile.subscription_status === 'pro';
+
+  document.getElementById('userAvatar').textContent = initial;
+  document.getElementById('topbarUserName').textContent = displayName;
+  document.getElementById('topbarUserPlan').textContent = isPro ? 'Pro Plan' : 'Plan Gratuit';
+  document.getElementById('heroGreeting').textContent = `Bienvenue, ${displayName} ! 👋`;
+
+  // Overwritten right after by renderProUsage()/renderDailyUsage() once
+  // /api/usage-status responds — this is just the safe initial state.
+  document.getElementById('sidebarUsagePct').textContent = '…';
+  document.getElementById('sidebarUsageFill').style.width = '0%';
+  document.getElementById('sidebarCreditsNum').textContent = '…';
+
+  document.getElementById('upgradeBtn').style.display = isPro ? 'none' : 'block';
+  document.getElementById('settingsUpgradeBtn').style.display = isPro ? 'none' : 'block';
+}
+
+async function handleUpgrade() {
+  if (!session) { showLogin(); return; }
+  try {
+    const res = await authFetch('/api/create-checkout-session', { method: 'POST' });
+    const data = await res.json();
+    if (data.url) window.location.href = data.url;
+  } catch (err) {
+    console.error('[upgrade] failed:', err.message);
+  }
+}
+
+// TOPUP_PRICE_PER_CREDIT must match backend/createTopupSession.js
+// (TOPUP_PRICE_PER_CREDIT_USD, default $0.02/credit).
+const TOPUP_PRICE_PER_CREDIT = 0.02;
+
+async function handleTopup() {
+  if (!session) { showLogin(); return; }
+  const input = window.prompt('شحال بغيتي ديال الـ credits؟ (الحد الأدنى 50 = 1$, الحد الأقصى 2500 = 50$)', '200');
+  if (!input) return;
+  const credits = parseInt(input, 10);
+  if (!Number.isInteger(credits) || credits < 50 || credits > 2500) {
+    alert('الرقم خاصو يكون بين 50 و2500.');
+    return;
+  }
+  const estimatedPrice = (credits * TOPUP_PRICE_PER_CREDIT).toFixed(2);
+  if (!window.confirm(`غادي تخلص ~${estimatedPrice}$ مقابل ${credits} credit. متأكد؟`)) return;
+
+  try {
+    const res = await authFetch('/api/create-topup-session', {
+      method: 'POST',
+      body: JSON.stringify({ credits }),
+    });
+    const data = await res.json();
+    if (data.url) window.location.href = data.url;
+    else alert(data.message || 'Erreur — réessaie.');
+  } catch (err) {
+    console.error('[topup] failed:', err.message);
+  }
+}
+
+document.getElementById('upgradeBtn').addEventListener('click', handleUpgrade);
+document.getElementById('settingsUpgradeBtn').addEventListener('click', handleUpgrade);
+document.getElementById('topupBtn').addEventListener('click', handleTopup);
+
+// ── authenticated fetch helper ──────────────────────────────────────
+const BACKEND_UNAVAILABLE_MSG = 'Backend Rox AI indisponible. Démarrez le serveur sur le port 3001.';
+
+async function authFetch(path, options = {}) {
+  if (!session) { showLogin(); throw new Error('not_authenticated'); }
+  if (session.access_token === DEMO_TOKEN) return demoFetch(path, options);
+
+  let res;
+  try {
+    res = await fetch(CONFIG.API_BASE + path, {
+      ...options,
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${session.access_token}`,
+        ...(options.headers || {}),
+      },
+    });
+  } catch (networkErr) {
+    // fetch() throws (TypeError: Failed to fetch) when the backend is
+    // down/unreachable — surface that clearly instead of a generic error.
+    console.error('[authFetch] backend unreachable:', networkErr.message);
+    showConfigBanner(BACKEND_UNAVAILABLE_MSG);
+    throw new Error('backend_unavailable');
+  }
+
+  if (res.status === 401) {
+    await supa.auth.signOut();
+    showLogin();
+    throw new Error('session_expired');
+  }
+  return res;
+}
+
+// ── sidebar tab switching (Accueil / Projets) ───────────────────────
+document.querySelectorAll('.nav-item[data-tab]').forEach(el=>{
+  el.addEventListener('click', ()=>{
+    document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+    document.querySelectorAll('.nav-item').forEach(b=>b.classList.remove('active'));
+    document.getElementById('screen-'+el.dataset.tab).classList.add('active');
+    el.classList.add('active');
+  });
+});
+// "Voir tous" link also jumps to the Projets screen + highlights the nav item
+document.querySelectorAll('a[data-tab]').forEach(el=>{
+  el.addEventListener('click', ()=>{
+    document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+    document.querySelectorAll('.nav-item').forEach(b=>b.classList.remove('active'));
+    document.getElementById('screen-'+el.dataset.tab).classList.add('active');
+    document.querySelector('.nav-item[data-tab="'+el.dataset.tab+'"]').classList.add('active');
+  });
+});
+
+// open a feature modal (chat overlay)
+document.querySelectorAll('[data-open]').forEach(el=>{
+  el.addEventListener('click', ()=>{
+    document.getElementById('feature-'+el.dataset.open).classList.add('active');
+  });
+});
+document.querySelectorAll('[data-close]').forEach(el=>{
+  el.addEventListener('click', ()=>{
+    el.closest('.modal-backdrop').classList.remove('active');
+  });
+});
+// click on the dark backdrop itself (not the card) also closes the modal
+document.querySelectorAll('.modal-backdrop').forEach(el=>{
+  el.addEventListener('click', (e)=>{ if (e.target === el) el.classList.remove('active'); });
+});
+
+// ── conversation history (per feature: 'chat' / 'code') ─────────────
+// Previously each call to /api/chat sent only the current message
+// (`messages: [{role:'user', content:text}]`), so the model had no
+// memory of anything said earlier in the same session even though the
+// backend (lib/inputValidation.js) already supports a full history up
+// to MAX_MESSAGES_PER_CHAT (40). Kept in memory only (cleared on page
+// reload) — no browser storage involved.
+const CHAT_HISTORY_LIMIT = 40; // mirrors backend MAX_MESSAGES_PER_CHAT default
+const conversations = { chat: [], code: [] };
+
+function pushHistory(feature, role, content) {
+  const hist = conversations[feature];
+  if (!hist) return;
+  hist.push({ role, content });
+  if (hist.length > CHAT_HISTORY_LIMIT) hist.splice(0, hist.length - CHAT_HISTORY_LIMIT);
+}
+
+// ── message rendering helpers ───────────────────────────────────────
+function appendMsg(msgBox, cls, content, isNode) {
+  const el = document.createElement('div');
+  el.className = 'msg ' + cls;
+  if (isNode) el.appendChild(content); else el.textContent = content;
+  msgBox.appendChild(el);
+  msgBox.scrollTop = msgBox.scrollHeight;
+  return el;
+}
+function appendTyping(msgBox) {
+  const typing = document.createElement('div');
+  typing.className = 'typing';
+  typing.innerHTML = '<span></span><span></span><span></span>';
+  msgBox.appendChild(typing);
+  msgBox.scrollTop = msgBox.scrollHeight;
+  return typing;
+}
+
+// ── chat / code → POST /api/chat ────────────────────────────────────
+async function sendChat(feature, text, msgBox) {
+  const typing = appendTyping(msgBox);
+  // Send the stored history PLUS this new turn, but don't commit the new
+  // turn to `conversations[feature]` until the call actually succeeds.
+  // The Anthropic Messages API requires strict user/assistant
+  // alternation — if we saved the user turn up front and the call then
+  // failed (402/429/network error), a retry would stack two 'user'
+  // turns in a row with nothing in between, which the API rejects.
+  const outgoing = [...conversations[feature], { role: 'user', content: text }];
+  try {
+    const res = await authFetch('/api/chat', {
+      method: 'POST',
+      body: JSON.stringify({ messages: outgoing, feature }),
+    });
+    const data = await res.json();
+    typing.remove();
+
+    if (res.status === 402) {
+      let msg = '⚠️ Crédit insuffisant — passe au plan Pro pour continuer.';
+      if (data.code === 'code_requires_pro') msg = '💻 مساعدة الكود متاحة فقط للمشتركين Pro — رقّي حسابك للمتابعة.';
+      if (data.code === 'pro_out_of_credits') msg = `💳 ${data.message}`;
+      appendMsg(msgBox, 'status', msg);
+      return;
+    }
+    if (res.status === 429 && data.code === 'daily_chat_limit') {
+      appendMsg(msgBox, 'status', `🌙 ${data.message}`);
+      return;
+    }
+    if (res.status === 429) { appendMsg(msgBox, 'status', `⏳ Trop de requêtes — réessaie dans ${data.retry_after_seconds || 'quelques'}s.`); return; }
+    if (res.status === 400) {
+      // Conversation grew past what the backend accepts in one request
+      // (message count/char limits) — drop the oldest turns and let the
+      // user retry, instead of silently failing forever.
+      conversations[feature] = conversations[feature].slice(-10);
+      appendMsg(msgBox, 'error', 'Conversation trop longue — historique réduit, réessaie.');
+      return;
+    }
+    if (!res.ok) { appendMsg(msgBox, 'error', data.message || 'Erreur — tous les modèles ont échoué.'); return; }
+
+    appendMsg(msgBox, 'bot', data.text);
+    pushHistory(feature, 'user', text);
+    pushHistory(feature, 'assistant', data.text);
+    if (typeof data.dailyChatUsed === 'number') {
+      renderDailyUsage(data.dailyChatUsed, data.dailyChatLimit);
+    }
+    if (typeof data.newBalance === 'number' && profile) {
+      const total = profile.credits_total || 500;
+      const used = total - data.newBalance;
+      renderProUsage(used, total, data.newBalance);
+    }
+  } catch (err) {
+    typing.remove();
+    if (err.message === 'backend_unavailable') appendMsg(msgBox, 'error', BACKEND_UNAVAILABLE_MSG);
+    else if (err.message !== 'session_expired') appendMsg(msgBox, 'error', 'Erreur réseau — réessaie.');
+  }
+}
+
+// ── images / videos → POST /api/generate-* then poll job status ────
+const GEN_ROUTES = { images: '/api/generate-image', videos: '/api/generate-video' };
+const GEN_POLL_MS = 2500;
+const GEN_TIMEOUT_MS = 120000;
+
+async function sendGeneration(feature, text, msgBox) {
+  const typing = appendTyping(msgBox);
+  try {
+    const res = await authFetch(GEN_ROUTES[feature], { method: 'POST', body: JSON.stringify({ prompt: text }) });
+    const data = await res.json();
+
+    if (res.status === 403 && data.code === 'pro_out_of_credits') {
+      typing.remove();
+      appendMsg(msgBox, 'status', `💳 ${data.message}`);
+      return;
+    }
+    if (res.status === 402) {
+      typing.remove();
+      let msg = '⚠️ Crédit insuffisant — passe au plan Pro pour continuer.';
+      if (data.code === 'video_requires_pro') msg = '🎬 توليد الفيديو متاح فقط للمشتركين Pro — رقّي حسابك للمتابعة.';
+      if (data.code === 'image_requires_pro') msg = '🖼️ توليد الصور متاح فقط للمشتركين Pro — رقّي حسابك للمتابعة.';
+      appendMsg(msgBox, 'status', msg);
+      return;
+    }
+    if (res.status === 429) { typing.remove(); appendMsg(msgBox, 'status', `⏳ Trop de requêtes — réessaie dans ${data.retry_after_seconds || 'quelques'}s.`); return; }
+    if (!res.ok || !data.jobId) { typing.remove(); appendMsg(msgBox, 'error', data.message || 'Échec de la création du job.'); return; }
+
+    if (typeof data.newBalance === 'number' && profile) {
+      const total = profile.credits_total || 500;
+      renderProUsage(total - data.newBalance, total, data.newBalance);
+    }
+
+    await pollJob(data.jobId, feature, msgBox, typing);
+  } catch (err) {
+    typing.remove();
+    if (err.message === 'backend_unavailable') appendMsg(msgBox, 'error', BACKEND_UNAVAILABLE_MSG);
+    else if (err.message !== 'session_expired') appendMsg(msgBox, 'error', 'Erreur réseau — réessaie.');
+  }
+}
+
+async function pollJob(jobId, feature, msgBox, typing) {
+  const start = Date.now();
+  while (Date.now() - start < GEN_TIMEOUT_MS) {
+    await new Promise(r => setTimeout(r, GEN_POLL_MS));
+    let res, data;
+    try {
+      res = await authFetch('/api/job-status/' + jobId);
+      data = await res.json();
+    } catch (err) {
+      if (err.message === 'session_expired') return;
+      continue; // transient network error — keep polling
+    }
+    if (!res.ok) continue;
+
+    if (data.status === 'done') {
+      typing.remove();
+      const wrap = document.createElement('div');
+      if (feature === 'images') {
+        const img = document.createElement('img');
+        img.src = data.result_url;
+        img.alt = 'Résultat généré';
+        wrap.appendChild(img);
+      } else {
+        const vid = document.createElement('video');
+        vid.src = data.result_url;
+        vid.controls = true;
+        wrap.appendChild(vid);
+      }
+      appendMsg(msgBox, 'bot', wrap, true);
+      return;
+    }
+    if (data.status === 'failed') {
+      typing.remove();
+      appendMsg(msgBox, 'error', 'Échec de la génération : ' + (data.error_message || 'erreur inconnue') + ' (crédits remboursés).');
+      return;
+    }
+  }
+  typing.remove();
+  appendMsg(msgBox, 'status', "⏳ Ça prend plus longtemps que prévu — vérifie l'onglet Projets plus tard.");
+}
+
+// ── roxip: no backend route yet, kept as a clearly-labeled demo ────
+function sendRoxIpDemo(text, msgBox) {
+  const typing = appendTyping(msgBox);
+  setTimeout(() => {
+    typing.remove();
+    appendMsg(msgBox, 'status', `Démo — "${text}" ne se connecte pas encore à une vraie machine (fonctionnalité pas encore présente dans le backend).`);
+  }, 700);
+}
+
+// ── dispatch ─────────────────────────────────────────────────────────
+function sendMessage(feature){
+  const input = document.querySelector('input[data-feature="'+feature+'"]');
+  const text = input.value.trim();
+  if(!text) return;
+  const msgBox = document.getElementById('msgs-'+feature);
+
+  appendMsg(msgBox, 'user', text);
+  input.value = '';
+
+  if (feature === 'chat' || feature === 'code') sendChat(feature, text, msgBox);
+  else if (feature === 'images' || feature === 'videos') sendGeneration(feature, text, msgBox);
+  else if (feature === 'roxip') sendRoxIpDemo(text, msgBox);
+}
+
+document.querySelectorAll('[data-send]').forEach(btn=>{
+  btn.addEventListener('click', ()=>sendMessage(btn.dataset.send));
+});
+document.querySelectorAll('input[data-feature]').forEach(inp=>{
+  inp.addEventListener('keydown', e=>{ if(e.key==='Enter') sendMessage(inp.dataset.feature); });
+});
+
+// ── quick-send from the dashboard feature cards ─────────────────────
+// Lets the person type straight into a card on the home screen: it
+// opens the matching modal, drops their text into its real input, and
+// fires the same sendMessage() pipeline used inside the modal.
+function quickSend(feature){
+  const cardInput = document.querySelector('input[data-quickfeature="'+feature+'"]');
+  let text = cardInput ? cardInput.value.trim() : '';
+  if (!text) return;
+  if (feature === 'code') {
+    const lang = document.getElementById('codeLangSelect');
+    if (lang) text = `[${lang.value}] ${text}`;
+  }
+  document.getElementById('feature-'+feature).classList.add('active');
+  const modalInput = document.querySelector('input[data-feature="'+feature+'"]');
+  modalInput.value = text;
+  sendMessage(feature);
+  if (cardInput) cardInput.value = '';
+}
+document.querySelectorAll('[data-quicksend]').forEach(btn=>{
+  btn.addEventListener('click', ()=>quickSend(btn.dataset.quicksend));
+});
+document.querySelectorAll('input[data-quickfeature]').forEach(inp=>{
+  inp.addEventListener('keydown', e=>{ if(e.key==='Enter') quickSend(inp.dataset.quickfeature); });
+});
+
+initAuth();
+<\/script>
+</body>
+</html>
+</script>
+<script>
+// ══════════════════════════════════════════════════════════════════
+// ROX AI — single-URL device router
+// Runs immediately (synchronously, before the browser paints anything)
+// to decide which complete interface to load, then replaces this
+// shell document with the full chosen document via document.write().
+// Because this happens before first paint and before any visible
+// content exists in this shell, there is no flash of the wrong layout.
+//
+// Breakpoint: screen width <= 768px -> mobile interface
+//             screen width  > 768px -> desktop interface
+// ══════════════════════════════════════════════════════════════════
+(function () {
+  'use strict';
+
+  function unescapeScriptTags(raw) {
+    // Reverses the escaping applied below (a backslash inserted right
+    // after every '<' of a script-closing tag) so the document handed
+    // to document.write() is byte-for-byte the original mobile/desktop
+    // HTML.
+    return raw.replace(/<\\\/script/gi, '<' + '/script');
+  }
+
+  var isMobile = window.innerWidth <= 768;
+  var sourceId = isMobile ? 'rox-src-mobile' : 'rox-src-desktop';
+  var sourceEl = document.getElementById(sourceId);
+  var fullHtml = unescapeScriptTags(sourceEl.textContent);
+
+  // ── resize / rotation support ───────────────────────────────────
+  // Appended into the chosen document right before its closing
+  // </body> tag. If the viewport crosses the 768px breakpoint after
+  // load (window resize or device rotation), reload this same URL
+  // once so index.html re-detects and serves the correct interface.
+  // The reload only fires when the category actually flips (mobile
+  // <-> desktop), and a fresh load re-evaluates the flag from the
+  // real current width, so this cannot loop indefinitely — it can
+  // only fire again after another real crossing of the breakpoint.
+  var deviceWatcher =
+    '<' + 'script>' +
+    '(function(){' +
+    'var __roxInitialIsMobile=' + (isMobile ? 'true' : 'false') + ';' +
+    'var __roxResizeTimer=null;' +
+    'function __roxCheckDevice(){' +
+    'var nowMobile=window.innerWidth<=768;' +
+    'if(nowMobile!==__roxInitialIsMobile){location.reload();}' +
+    '}' +
+    'window.addEventListener("resize",function(){' +
+    'clearTimeout(__roxResizeTimer);' +
+    '__roxResizeTimer=setTimeout(__roxCheckDevice,250);' +
+    '});' +
+    'window.addEventListener("orientationchange",function(){' +
+    'setTimeout(__roxCheckDevice,350);' +
+    '});' +
+    '})();' +
+    '<' + '/script>';
+
+  if (/<\/body>/i.test(fullHtml)) {
+    fullHtml = fullHtml.replace(/<\/body>/i, deviceWatcher + '<' + '/body>');
+  } else {
+    fullHtml += deviceWatcher;
+  }
+
+  document.open();
+  document.write(fullHtml);
+  document.close();
+})();
 </script>
 </body>
 </html>
