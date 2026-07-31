@@ -1,8 +1,8 @@
-// ROX AI — Gatekeeper (hardened)
+// ROX AI â€” Gatekeeper (hardened)
 //
 // The original flow deducted credits AFTER the AI call completed
 // (server.js called logCreditEvent post-hoc), and image/video jobs
-// never deducted anything before being enqueued at all — a burst of
+// never deducted anything before being enqueued at all â€” a burst of
 // requests could fill the queue for free before any charge landed.
 // checkAccess() also only read the balance; nothing locked the row,
 // so two concurrent requests could both pass the check.
@@ -24,7 +24,7 @@ async function checkAccess(userId) {
 
   if (error || !user) return { allowed: false, reason: 'user_not_found' };
 
-  // Pro is no longer an unconditional bypass — it's a bigger, paid-for
+  // Pro is no longer an unconditional bypass â€” it's a bigger, paid-for
   // credit pool (500/month, ~50% guaranteed margin on the $10 plan; see
   // stripeWebhook.js and 08_maintenance.sql). Out-of-credits Pro users
   // are offered a top-up (see /api/create-topup-session) instead of
@@ -37,7 +37,7 @@ async function checkAccess(userId) {
   return { allowed: true, user, remaining };
 }
 
-// Cheap pre-flight check only — gives a fast 403 for the obviously-out-
+// Cheap pre-flight check only â€” gives a fast 403 for the obviously-out-
 // -of-credits case without doing a row-locked write. Real enforcement
 // happens in reserveCredits(), which is safe under concurrency even if
 // this middleware is skipped or races with another request.
@@ -49,8 +49,8 @@ async function gatekeeperMiddleware(req, res, next) {
     return res.status(403).json({
       status: 'error',
       message: isPro
-        ? 'استهلكتي الرصيد الشهري ديال Pro. اشحن رصيد إضافي للمتابعة.'
-        : 'Crédit insuffisant. Passez au plan Pro pour continuer.',
+        ? 'Ø§Ø³ØªÙ‡Ù„ÙƒØªÙŠ Ø§Ù„Ø±ØµÙŠØ¯ Ø§Ù„Ø´Ù‡Ø±ÙŠ Ø¯ÙŠØ§Ù„ Pro. Ø§Ø´Ø­Ù† Ø±ØµÙŠØ¯ Ø¥Ø¶Ø§ÙÙŠ Ù„Ù„Ù…ØªØ§Ø¨Ø¹Ø©.'
+        : 'CrÃ©dit insuffisant. Passez au plan Pro pour continuer.',
       code: isPro ? 'pro_out_of_credits' : 'out_of_credits',
     });
   }
@@ -65,7 +65,7 @@ async function gatekeeperMiddleware(req, res, next) {
  * retry with the same requestId will never double-charge.
  * Throws with err.code = 'insufficient_credits' | 'user_not_found' on failure.
  */
-async function reserveCredits({ userId, requestId, feature, modelUsed = null, creditsConsumed = 1 }) {
+async function reserveCredits({ userId, requestId, feature, modelUsed = 'pending', creditsConsumed = 1 }) {
   if (!requestId) {
     throw new Error('reserveCredits requires a requestId for idempotency');
   }
@@ -95,7 +95,7 @@ async function reserveCredits({ userId, requestId, feature, modelUsed = null, cr
 /**
  * Reverses the charge tied to requestId (e.g. all fallback models
  * failed, or a queued job exhausted its retries). Safe to call more
- * than once for the same requestId — only refunds once.
+ * than once for the same requestId â€” only refunds once.
  */
 async function refundCredits(requestId) {
   const { data, error } = await supabaseAdmin.rpc('refund_credit_and_log', { p_request_id: requestId });
@@ -156,7 +156,7 @@ async function reportRefundFailure({ requestId, userId, feature, error }) {
   });
 
   if (rpcError) {
-    // Last resort — even the failure-tracking write failed. Nothing left
+    // Last resort â€” even the failure-tracking write failed. Nothing left
     // to persist to, so this line in the logs is the only record.
     console.error('[gatekeeper] could not persist refund failure either:', rpcError.message);
   }
