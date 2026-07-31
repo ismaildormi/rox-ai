@@ -1,4 +1,4 @@
-// ROX AI — src/modules/ai/providers
+﻿// ROX AI â€” src/modules/ai/providers
 //
 // Makes the AI backend swappable: aiRouter.js should never again say
 // `if (route.provider === 'anthropic') ... else if (route.provider ===
@@ -6,7 +6,7 @@
 // Groq, OpenRouter, a local/self-hosted model, a future customer-supplied
 // endpoint) registers itself here under the SAME shape, and aiRouter.js
 // just does `providers.call(route.provider, route.model, messages, opts)`.
-// Adding provider #7 is "write an adapter, register it" — zero changes
+// Adding provider #7 is "write an adapter, register it" â€” zero changes
 // to the routing/fallback/circuit-breaker/credit logic that already works.
 //
 // Common adapter interface (every entry in the 'ai.providers' registry
@@ -16,7 +16,7 @@
 //     // usage is returned in whatever shape the provider gives it back
 //     // (lib/modelCosts.js already normalizes both the Anthropic shape
 //     // {input_tokens, output_tokens} and the OpenAI-style shape
-//     // {prompt_tokens, completion_tokens} — a new provider should use
+//     // {prompt_tokens, completion_tokens} â€” a new provider should use
 //     // whichever of those two shapes its API natively returns, not
 //     // invent a third one).
 //   }
@@ -24,7 +24,7 @@
 // opts (all optional): { maxOutputTokens, timeoutMs, apiKey, baseUrl }
 // A caller-supplied apiKey/baseUrl is what "custom_ai_models" (a user's
 // own key against a provider already registered here, or a fully custom
-// OpenAI-compatible endpoint) plugs into later — see registerOpenAiCompatible().
+// OpenAI-compatible endpoint) plugs into later â€” see registerOpenAiCompatible().
 
 const registry = require('../../../core/registry');
 
@@ -33,7 +33,7 @@ const BUCKET = 'ai.providers';
 
 /**
  * Registers an adapter under a provider key. Called once per provider,
- * below, at module load — but any module (including a future plugin)
+ * below, at module load â€” but any module (including a future plugin)
  * can call this to add a provider without touching this file.
  * @param {string} key e.g. 'anthropic', 'openai', 'google', 'groq', 'openrouter', 'local'
  * @param {{call: Function, label?: string}} adapter
@@ -70,7 +70,7 @@ async function call(providerKey, model, messages, opts = {}) {
 // --- Built-in adapters -----------------------------------------------
 
 // Anthropic (Messages API). Same request shape aiRouter.js's old
-// callAnthropic() used — behavior-preserving move, not a rewrite.
+// callAnthropic() used â€” behavior-preserving move, not a rewrite.
 registerProvider('anthropic', {
   label: 'Anthropic',
   async call(model, messages, opts = {}) {
@@ -91,7 +91,7 @@ registerProvider('anthropic', {
   },
 });
 
-// OpenRouter — itself a multi-provider proxy (this is how the free
+// OpenRouter â€” itself a multi-provider proxy (this is how the free
 // Qwen/DeepSeek chain is served today), kept as one adapter since it
 // already speaks the OpenAI-compatible chat/completions shape.
 registerProvider('openrouter', {
@@ -113,7 +113,7 @@ registerProvider('openrouter', {
   },
 });
 
-// OpenAI — same chat/completions shape as OpenRouter (OpenRouter was
+// OpenAI â€” same chat/completions shape as OpenRouter (OpenRouter was
 // modeled on it), so this is a genuinely small adapter: different base
 // URL and env var, nothing else changes.
 registerProvider('openai', {
@@ -137,7 +137,7 @@ registerProvider('openai', {
 });
 
 // Google (Gemini). Different request/response shape (contents[] with
-// role 'user'/'model', parts[].text) — this is exactly the case the
+// role 'user'/'model', parts[].text) â€” this is exactly the case the
 // registry pattern is for: the adapter absorbs the shape difference,
 // callers never see it.
 registerProvider('google', {
@@ -170,7 +170,7 @@ registerProvider('google', {
   },
 });
 
-// Groq — OpenAI-compatible chat/completions API, same pattern as OpenAI.
+// Groq â€” OpenAI-compatible chat/completions API, same pattern as OpenAI.
 registerProvider('groq', {
   label: 'Groq',
   async call(model, messages, opts = {}) {
@@ -190,7 +190,7 @@ registerProvider('groq', {
   },
 });
 
-// Local / self-hosted (Ollama, vLLM, LM Studio, etc.) — anything that
+// Local / self-hosted (Ollama, vLLM, LM Studio, etc.) â€” anything that
 // speaks the OpenAI-compatible /v1/chat/completions shape on a local or
 // private baseUrl. No API key required by default (local networks
 // typically don't need one); pass opts.apiKey if the deployment does.
@@ -217,7 +217,7 @@ registerProvider('local', {
  * at runtime for any endpoint that speaks the OpenAI-compatible
  * /v1/chat/completions shape (OpenAI, Groq, OpenRouter, local runtimes,
  * and most third-party "OpenAI-compatible" hosts all qualify). Lets a
- * user/org bring their own {endpoint, apiKey} without a code change —
+ * user/org bring their own {endpoint, apiKey} without a code change â€”
  * the feature flag gates whether this is ever called, this function
  * doesn't gate itself.
  * @param {string} key unique provider key, e.g. `custom:${orgId}`
@@ -244,3 +244,4 @@ function registerOpenAiCompatible(key, settings) {
 }
 
 module.exports = { registerProvider, registerOpenAiCompatible, getProvider, listProviders, call };
+
