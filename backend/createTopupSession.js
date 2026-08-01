@@ -14,10 +14,16 @@ const MIN_TOPUP_CREDITS = Math.ceil(
 );
 
 // High safety ceiling per purchase. It can be raised later by env variable.
-const MAX_TOPUP_USD = Number(process.env.MAX_TOPUP_USD || 1000);
-const MAX_TOPUP_CREDITS = Math.floor(
-  MAX_TOPUP_USD / PRICE_PER_CREDIT_USD
+const MAX_TOPUP_CREDITS = Number(
+  process.env.MAX_TOPUP_CREDITS || 10000
 );
+
+function calculateTopupAmountCents(credits) {
+  const pricePerCreditUsd =
+    credits >= 5000 ? 0.008 : PRICE_PER_CREDIT_USD;
+
+  return Math.round(credits * pricePerCreditUsd * 100);
+}
 
 router.post('/', async (req, res) => {
   const userId = req.userId;
@@ -38,9 +44,7 @@ router.post('/', async (req, res) => {
     });
   }
 
-  const amountCents = Math.round(
-    credits * PRICE_PER_CREDIT_USD * 100
-  );
+  const amountCents = calculateTopupAmountCents(credits);
 
   const session = await stripe.checkout.sessions.create({
     mode: 'payment',
@@ -70,7 +74,7 @@ router.post('/', async (req, res) => {
     url: session.url,
     credits,
     priceUsd: amountCents / 100,
-    pricePerCreditUsd: PRICE_PER_CREDIT_USD,
+    pricePerCreditUsd: amountCents / 100 / credits,
   });
 });
 

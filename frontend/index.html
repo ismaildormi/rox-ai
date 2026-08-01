@@ -552,12 +552,12 @@
 
         <button class="credit-pack" type="button" data-credits="5000">
           <strong>5000 Credits</strong>
-          <span>$50</span>
+          <span>$40</span>
         </button>
 
         <button class="credit-pack" type="button" data-credits="10000">
           <strong>10000 Credits</strong>
-          <span>$100</span>
+          <span>$80</span>
         </button>
       </div>
 
@@ -979,8 +979,13 @@ function setTopupCredits(value) {
   document.getElementById('topupCreditsValue').textContent = credits.toLocaleString();
   document.getElementById('topupSummaryCredits').textContent =
     `${credits.toLocaleString()} Credits`;
+  const topupPriceUsd =
+    credits >= 5000
+      ? credits * 0.008
+      : credits * TOPUP_PRICE_PER_CREDIT;
+
   document.getElementById('topupSummaryPrice').textContent =
-    `${(credits * TOPUP_PRICE_PER_CREDIT).toFixed(2)}`;
+    `$${topupPriceUsd.toFixed(2)}`;
 
   document.querySelectorAll('.credit-pack').forEach(pack => {
     pack.classList.toggle(
@@ -1938,12 +1943,12 @@ initAuth();
 
         <button class="credit-pack" type="button" data-credits="5000">
           <strong>5000 Credits</strong>
-          <span>$50</span>
+          <span>$40</span>
         </button>
 
         <button class="credit-pack" type="button" data-credits="10000">
           <strong>10000 Credits</strong>
-          <span>$100</span>
+          <span>$80</span>
         </button>
       </div>
 
@@ -2565,8 +2570,13 @@ function setTopupCredits(value) {
   document.getElementById('topupCreditsValue').textContent = credits.toLocaleString();
   document.getElementById('topupSummaryCredits').textContent =
     `${credits.toLocaleString()} Credits`;
+  const topupPriceUsd =
+    credits >= 5000
+      ? credits * 0.008
+      : credits * TOPUP_PRICE_PER_CREDIT;
+
   document.getElementById('topupSummaryPrice').textContent =
-    `${(credits * TOPUP_PRICE_PER_CREDIT).toFixed(2)}`;
+    `$${topupPriceUsd.toFixed(2)}`;
 
   document.querySelectorAll('.credit-pack').forEach(pack => {
     pack.classList.toggle(
