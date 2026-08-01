@@ -760,11 +760,11 @@ const TOPUP_PRICE_PER_CREDIT = 0.01;
 
 async function handleTopup() {
   if (!session) { showLogin(); return; }
-  const input = window.prompt('شحال بغيتي ديال الـ credits؟ (الحد الأدنى 50 = 1$, الحد الأقصى 2500 = 50$)', '200');
+  const input = window.prompt('How many Credits? Minimum 1000 Credits = $10, maximum 100000 Credits = $1000.', '1000');
   if (!input) return;
   const credits = parseInt(input, 10);
-  if (!Number.isInteger(credits) || credits < 50 || credits > 2500) {
-    alert('الرقم خاصو يكون بين 50 و2500.');
+  if (!Number.isInteger(credits) || credits < 1000 || credits > 100000) {
+    alert('Credits must be an integer between 1000 and 100000.');
     return;
   }
   const estimatedPrice = (credits * TOPUP_PRICE_PER_CREDIT).toFixed(2);
@@ -2067,11 +2067,11 @@ const TOPUP_PRICE_PER_CREDIT = 0.01;
 
 async function handleTopup() {
   if (!session) { showLogin(); return; }
-  const input = window.prompt('شحال بغيتي ديال الـ credits؟ (الحد الأدنى 50 = 1$, الحد الأقصى 2500 = 50$)', '200');
+  const input = window.prompt('How many Credits? Minimum 1000 Credits = $10, maximum 100000 Credits = $1000.', '1000');
   if (!input) return;
   const credits = parseInt(input, 10);
-  if (!Number.isInteger(credits) || credits < 50 || credits > 2500) {
-    alert('الرقم خاصو يكون بين 50 و2500.');
+  if (!Number.isInteger(credits) || credits < 1000 || credits > 100000) {
+    alert('Credits must be an integer between 1000 and 100000.');
     return;
   }
   const estimatedPrice = (credits * TOPUP_PRICE_PER_CREDIT).toFixed(2);
