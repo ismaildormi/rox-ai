@@ -709,7 +709,7 @@ function renderDailyUsage(used, limit) {
   document.getElementById('sidebarCreditsNum').textContent = `${used} / ${limit} رسالة اليوم`;
   document.getElementById('settingsSummary').textContent =
     `الخطة الحالية: مجاني · ${used}/${limit} رسالة شات اليوم · الكود/الصور/الفيديو Pro فقط`;
-  document.getElementById('topupBtn').style.display = 'none';
+  document.getElementById('topupBtn').style.display = 'block';
 }
 
 function renderProUsage(used, total, remaining) {
@@ -721,7 +721,7 @@ function renderProUsage(used, total, remaining) {
     `الخطة الحالية: Pro · ${used}/${total} credits هاد الشهر (${remaining} متبقي)`;
   // Surface the top-up option proactively once the pool is getting low,
   // not only after they've already hit a hard block mid-message.
-  document.getElementById('topupBtn').style.display = remaining < total * 0.2 ? 'block' : 'none';
+  document.getElementById('topupBtn').style.display = 'block';
 }
 
 function renderProfile() {
@@ -756,7 +756,7 @@ async function handleUpgrade() {
 
 // TOPUP_PRICE_PER_CREDIT must match backend/createTopupSession.js
 // (TOPUP_PRICE_PER_CREDIT_USD, default $0.02/credit).
-const TOPUP_PRICE_PER_CREDIT = 0.02;
+const TOPUP_PRICE_PER_CREDIT = 0.01;
 
 async function handleTopup() {
   if (!session) { showLogin(); return; }
@@ -2014,7 +2014,7 @@ function renderDailyUsage(used, limit) {
   document.getElementById('sidebarCreditsNum').textContent = `${used} / ${limit} رسالة اليوم`;
   document.getElementById('settingsSummary').textContent =
     `الخطة الحالية: مجاني · ${used}/${limit} رسالة شات اليوم · الكود/الصور/الفيديو Pro فقط`;
-  document.getElementById('topupBtn').style.display = 'none';
+  document.getElementById('topupBtn').style.display = 'block';
 }
 
 function renderProUsage(used, total, remaining) {
@@ -2026,7 +2026,7 @@ function renderProUsage(used, total, remaining) {
     `الخطة الحالية: Pro · ${used}/${total} credits هاد الشهر (${remaining} متبقي)`;
   // Surface the top-up option proactively once the pool is getting low,
   // not only after they've already hit a hard block mid-message.
-  document.getElementById('topupBtn').style.display = remaining < total * 0.2 ? 'block' : 'none';
+  document.getElementById('topupBtn').style.display = 'block';
 }
 
 function renderProfile() {
@@ -2063,7 +2063,7 @@ async function handleUpgrade() {
 
 // TOPUP_PRICE_PER_CREDIT must match backend/createTopupSession.js
 // (TOPUP_PRICE_PER_CREDIT_USD, default $0.02/credit).
-const TOPUP_PRICE_PER_CREDIT = 0.02;
+const TOPUP_PRICE_PER_CREDIT = 0.01;
 
 async function handleTopup() {
   if (!session) { showLogin(); return; }
