@@ -60,8 +60,8 @@ router.post('/', async (req, res) => {
       },
       quantity: 1,
     }],
-    success_url: `${process.env.APP_URL}/dashboard?topup=true`,
-    cancel_url: `${process.env.APP_URL}/dashboard`,
+    success_url: `${process.env.APP_URL}/?topup=true`,
+    cancel_url: `${process.env.APP_URL}/`,
     metadata: {
       userId,
       type: 'topup',
