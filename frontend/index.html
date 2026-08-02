@@ -3540,7 +3540,7 @@ initAuth();
     '<' + '/script>';
 
   if (/<\/body>/i.test(fullHtml)) {
-    fullHtml = fullHtml.replace(/<\/body>/i, deviceWatcher + '<' + '/body>');
+    fullHtml = fullHtml.replace(/<\/body>(?![\s\S]*<\/body>)/i, deviceWatcher + '<' + '/body>');
   } else {
     fullHtml += deviceWatcher;
   }
