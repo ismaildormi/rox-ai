@@ -63,6 +63,7 @@ router.post('/', express.raw({ type: 'application/json' }), async (req, res) => 
         amount_usd: Number(session.amount_total || 0) / 100,
         currency: session.currency || 'usd',
         stripe_event_id: event.id,
+        credits: Number(session.metadata?.credits || 0),
         metadata: { session_id: session.id, mode: session.mode },
       });
     } catch (revenueErr) {
