@@ -443,6 +443,110 @@
   .msg.error{background:rgba(255,107,122,.1);border:1px solid rgba(255,107,122,.3);color:var(--danger);align-self:flex-start;}
   .msg img{max-width:100%;border-radius:10px;display:block;margin-top:4px;}
   .msg video{max-width:100%;border-radius:10px;display:block;margin-top:4px;}
+
+/* Rox AI Code Artifact */
+.artifact-card{
+  width:min(100%,620px);
+  align-self:flex-start;
+  background:#1f1f22;
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:18px;
+  overflow:hidden;
+  box-shadow:0 18px 45px rgba(0,0,0,.28);
+  animation:msgIn .22s ease;
+}
+.artifact-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  padding:14px 16px;
+  border-bottom:1px solid rgba(255,255,255,.1);
+}
+.artifact-title{display:flex;align-items:center;gap:11px;min-width:0;}
+.artifact-icon{
+  width:42px;height:42px;border-radius:12px;
+  display:grid;place-items:center;
+  background:rgba(167,139,250,.16);
+  color:#c4b5fd;font-size:20px;
+}
+.artifact-name{font-weight:700;font-size:15px;color:var(--text);}
+.artifact-type{font-size:12px;color:var(--text-dim);margin-top:2px;}
+.artifact-open{
+  border:1px solid rgba(255,255,255,.14);
+  background:rgba(255,255,255,.06);
+  color:var(--text);
+  border-radius:10px;
+  padding:8px 12px;
+  cursor:pointer;
+}
+.artifact-preview{
+  height:190px;
+  background:#fff;
+  border:0;
+  width:100%;
+  display:block;
+}
+.artifact-actions{
+  display:flex;
+  gap:8px;
+  padding:12px 14px;
+  border-top:1px solid rgba(255,255,255,.1);
+}
+.artifact-actions button{
+  flex:1;
+  border:1px solid rgba(255,255,255,.12);
+  background:rgba(255,255,255,.06);
+  color:var(--text);
+  border-radius:10px;
+  padding:9px 10px;
+  cursor:pointer;
+}
+.artifact-modal{
+  position:fixed;inset:0;z-index:9999;
+  display:none;
+  background:rgba(0,0,0,.72);
+  backdrop-filter:blur(10px);
+  padding:18px;
+}
+.artifact-modal.active{display:flex;align-items:center;justify-content:center;}
+.artifact-shell{
+  width:min(100%,1100px);
+  height:min(92vh,820px);
+  background:#18181b;
+  border:1px solid rgba(255,255,255,.14);
+  border-radius:22px;
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+}
+.artifact-toolbar{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:13px 15px;
+  border-bottom:1px solid rgba(255,255,255,.1);
+}
+.artifact-tabs{display:flex;gap:8px;}
+.artifact-tabs button,.artifact-close{
+  border:0;background:transparent;color:var(--text);
+  padding:9px 12px;border-radius:10px;cursor:pointer;
+}
+.artifact-tabs button.active{background:rgba(255,255,255,.1);}
+.artifact-body{flex:1;min-height:0;}
+.artifact-body iframe{width:100%;height:100%;border:0;background:#fff;}
+.artifact-code{
+  display:none;width:100%;height:100%;
+  margin:0;padding:20px;overflow:auto;
+  white-space:pre-wrap;
+  font:13px/1.55 monospace;
+  color:#e5e7eb;background:#111114;
+}
+@media(max-width:640px){
+  .artifact-card{width:100%;}
+  .artifact-preview{height:150px;}
+  .artifact-modal{padding:0;}
+  .artifact-shell{height:100%;border-radius:0;}
+}
+
 </style>
 </head>
 <body>
@@ -1147,6 +1251,147 @@ function appendTyping(msgBox) {
 }
 
 // ── chat / code → POST /api/chat ────────────────────────────────────
+function createCodeArtifact(rawText) {
+  const fenced = String(rawText || '').match(/```([a-zA-Z0-9+#.-]*)\s*([\s\S]*?)```/);
+  const language = (fenced?.[1] || '').toLowerCase();
+
+  let code = (fenced ? fenced[2] : String(rawText || '')).trim();
+  const htmlStart = code.search(/<!doctype html|<html[\s>]/i);
+  if (htmlStart > 0) code = code.slice(htmlStart);
+
+  if (!code) return null;
+
+  const isHtml = /<!doctype html|<html[\s>]|<body[\s>]/i.test(code);
+  const extensions = {
+    javascript: 'js',
+    js: 'js',
+    typescript: 'ts',
+    ts: 'ts',
+    python: 'py',
+    css: 'css',
+    html: 'html'
+  };
+
+  const extension = isHtml ? 'html' : (extensions[language] || 'txt');
+  const fileName = isHtml ? 'index.html' : `main.${extension}`;
+
+  const escapeHtml = value => String(value)
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;');
+
+  const previewDocument = isHtml
+    ? code
+    : `<!doctype html><html><body style="margin:0;background:#111114;color:#e5e7eb;"><pre style="padding:24px;white-space:pre-wrap;font:14px/1.6 monospace;">${escapeHtml(code)}</pre></body></html>`;
+
+  const card = document.createElement('div');
+  card.className = 'artifact-card';
+
+  card.innerHTML = `
+    <div class="artifact-head">
+      <div class="artifact-title">
+        <div class="artifact-icon">⌨️</div>
+        <div>
+          <div class="artifact-name">${fileName}</div>
+          <div class="artifact-type">${isHtml ? 'Application web interactive' : 'Code généré'}</div>
+        </div>
+      </div>
+      <button class="artifact-open" type="button">Ouvrir ↗</button>
+    </div>
+
+    <iframe class="artifact-preview" title="Aperçu du code"></iframe>
+
+    <div class="artifact-actions">
+      <button type="button" data-artifact-preview>Aperçu</button>
+      <button type="button" data-artifact-code>Code</button>
+      <button type="button" data-artifact-copy>Copier</button>
+      <button type="button" data-artifact-download>Télécharger</button>
+    </div>
+  `;
+
+  const modal = document.createElement('div');
+  modal.className = 'artifact-modal';
+
+  modal.innerHTML = `
+    <div class="artifact-shell">
+      <div class="artifact-toolbar">
+        <div class="artifact-tabs">
+          <button type="button" data-tab="preview" class="active">Aperçu</button>
+          <button type="button" data-tab="code">Code</button>
+        </div>
+        <button type="button" class="artifact-close">✕</button>
+      </div>
+
+      <div class="artifact-body">
+        <iframe title="Aperçu complet"></iframe>
+        <pre class="artifact-code"></pre>
+      </div>
+    </div>
+  `;
+
+  document.body.appendChild(modal);
+
+  const cardFrame = card.querySelector('.artifact-preview');
+  const modalFrame = modal.querySelector('iframe');
+  const modalCode = modal.querySelector('.artifact-code');
+
+  cardFrame.srcdoc = previewDocument;
+  modalFrame.srcdoc = previewDocument;
+  modalCode.textContent = code;
+
+  function showTab(tab) {
+    const previewActive = tab === 'preview';
+
+    modalFrame.style.display = previewActive ? 'block' : 'none';
+    modalCode.style.display = previewActive ? 'none' : 'block';
+
+    modal.querySelectorAll('[data-tab]').forEach(button => {
+      button.classList.toggle('active', button.dataset.tab === tab);
+    });
+  }
+
+  function openArtifact(tab = 'preview') {
+    showTab(tab);
+    modal.classList.add('active');
+  }
+
+  card.querySelector('.artifact-open').onclick = () => openArtifact('preview');
+  card.querySelector('[data-artifact-preview]').onclick = () => openArtifact('preview');
+  card.querySelector('[data-artifact-code]').onclick = () => openArtifact('code');
+
+  card.querySelector('[data-artifact-copy]').onclick = async event => {
+    await navigator.clipboard.writeText(code);
+    event.currentTarget.textContent = 'Copié ✓';
+    setTimeout(() => event.currentTarget.textContent = 'Copier', 1500);
+  };
+
+  card.querySelector('[data-artifact-download]').onclick = () => {
+    const blob = new Blob([code], {
+      type: isHtml ? 'text/html;charset=utf-8' : 'text/plain;charset=utf-8'
+    });
+
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = fileName;
+    link.click();
+
+    setTimeout(() => URL.revokeObjectURL(link.href), 1000);
+  };
+
+  modal.querySelectorAll('[data-tab]').forEach(button => {
+    button.onclick = () => showTab(button.dataset.tab);
+  });
+
+  modal.querySelector('.artifact-close').onclick = () => {
+    modal.classList.remove('active');
+  };
+
+  modal.onclick = event => {
+    if (event.target === modal) modal.classList.remove('active');
+  };
+
+  return card;
+}
 async function sendChat(feature, text, msgBox) {
   if (feature === 'code') appendMsg(msgBox, 'status', 'Coût estimé : 2 à 10 Credits');
   const typing = appendTyping(msgBox);
@@ -1187,7 +1432,18 @@ async function sendChat(feature, text, msgBox) {
     }
     if (!res.ok) { appendMsg(msgBox, 'error', data.message || 'Erreur — tous les modèles ont échoué.'); return; }
 
+    if (feature === 'code') {
+  const artifact = createCodeArtifact(data.text);
+
+  if (artifact) {
+    msgBox.appendChild(artifact);
+    msgBox.scrollTop = msgBox.scrollHeight;
+  } else {
     appendMsg(msgBox, 'bot', data.text);
+  }
+} else {
+  appendMsg(msgBox, 'bot', data.text);
+}
   if (feature === 'code' && typeof data.creditsCharged === 'number') {
     appendMsg(msgBox, 'status', `Coût final : ${data.creditsCharged} Credits`);
   }
@@ -1872,6 +2128,110 @@ initAuth();
   .login-error{color:var(--danger);font-size:12.5px;margin:-2px 0 10px;min-height:1em;}
 
   @media (min-width:1180px){.hero-orbit{display:block;}}
+
+/* Rox AI Code Artifact */
+.artifact-card{
+  width:min(100%,620px);
+  align-self:flex-start;
+  background:#1f1f22;
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:18px;
+  overflow:hidden;
+  box-shadow:0 18px 45px rgba(0,0,0,.28);
+  animation:msgIn .22s ease;
+}
+.artifact-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  padding:14px 16px;
+  border-bottom:1px solid rgba(255,255,255,.1);
+}
+.artifact-title{display:flex;align-items:center;gap:11px;min-width:0;}
+.artifact-icon{
+  width:42px;height:42px;border-radius:12px;
+  display:grid;place-items:center;
+  background:rgba(167,139,250,.16);
+  color:#c4b5fd;font-size:20px;
+}
+.artifact-name{font-weight:700;font-size:15px;color:var(--text);}
+.artifact-type{font-size:12px;color:var(--text-dim);margin-top:2px;}
+.artifact-open{
+  border:1px solid rgba(255,255,255,.14);
+  background:rgba(255,255,255,.06);
+  color:var(--text);
+  border-radius:10px;
+  padding:8px 12px;
+  cursor:pointer;
+}
+.artifact-preview{
+  height:190px;
+  background:#fff;
+  border:0;
+  width:100%;
+  display:block;
+}
+.artifact-actions{
+  display:flex;
+  gap:8px;
+  padding:12px 14px;
+  border-top:1px solid rgba(255,255,255,.1);
+}
+.artifact-actions button{
+  flex:1;
+  border:1px solid rgba(255,255,255,.12);
+  background:rgba(255,255,255,.06);
+  color:var(--text);
+  border-radius:10px;
+  padding:9px 10px;
+  cursor:pointer;
+}
+.artifact-modal{
+  position:fixed;inset:0;z-index:9999;
+  display:none;
+  background:rgba(0,0,0,.72);
+  backdrop-filter:blur(10px);
+  padding:18px;
+}
+.artifact-modal.active{display:flex;align-items:center;justify-content:center;}
+.artifact-shell{
+  width:min(100%,1100px);
+  height:min(92vh,820px);
+  background:#18181b;
+  border:1px solid rgba(255,255,255,.14);
+  border-radius:22px;
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+}
+.artifact-toolbar{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:13px 15px;
+  border-bottom:1px solid rgba(255,255,255,.1);
+}
+.artifact-tabs{display:flex;gap:8px;}
+.artifact-tabs button,.artifact-close{
+  border:0;background:transparent;color:var(--text);
+  padding:9px 12px;border-radius:10px;cursor:pointer;
+}
+.artifact-tabs button.active{background:rgba(255,255,255,.1);}
+.artifact-body{flex:1;min-height:0;}
+.artifact-body iframe{width:100%;height:100%;border:0;background:#fff;}
+.artifact-code{
+  display:none;width:100%;height:100%;
+  margin:0;padding:20px;overflow:auto;
+  white-space:pre-wrap;
+  font:13px/1.55 monospace;
+  color:#e5e7eb;background:#111114;
+}
+@media(max-width:640px){
+  .artifact-card{width:100%;}
+  .artifact-preview{height:150px;}
+  .artifact-modal{padding:0;}
+  .artifact-shell{height:100%;border-radius:0;}
+}
+
 </style>
 </head>
 <body>
@@ -2768,6 +3128,147 @@ function appendTyping(msgBox) {
 }
 
 // ── chat / code → POST /api/chat ────────────────────────────────────
+function createCodeArtifact(rawText) {
+  const fenced = String(rawText || '').match(/```([a-zA-Z0-9+#.-]*)\s*([\s\S]*?)```/);
+  const language = (fenced?.[1] || '').toLowerCase();
+
+  let code = (fenced ? fenced[2] : String(rawText || '')).trim();
+  const htmlStart = code.search(/<!doctype html|<html[\s>]/i);
+  if (htmlStart > 0) code = code.slice(htmlStart);
+
+  if (!code) return null;
+
+  const isHtml = /<!doctype html|<html[\s>]|<body[\s>]/i.test(code);
+  const extensions = {
+    javascript: 'js',
+    js: 'js',
+    typescript: 'ts',
+    ts: 'ts',
+    python: 'py',
+    css: 'css',
+    html: 'html'
+  };
+
+  const extension = isHtml ? 'html' : (extensions[language] || 'txt');
+  const fileName = isHtml ? 'index.html' : `main.${extension}`;
+
+  const escapeHtml = value => String(value)
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;');
+
+  const previewDocument = isHtml
+    ? code
+    : `<!doctype html><html><body style="margin:0;background:#111114;color:#e5e7eb;"><pre style="padding:24px;white-space:pre-wrap;font:14px/1.6 monospace;">${escapeHtml(code)}</pre></body></html>`;
+
+  const card = document.createElement('div');
+  card.className = 'artifact-card';
+
+  card.innerHTML = `
+    <div class="artifact-head">
+      <div class="artifact-title">
+        <div class="artifact-icon">⌨️</div>
+        <div>
+          <div class="artifact-name">${fileName}</div>
+          <div class="artifact-type">${isHtml ? 'Application web interactive' : 'Code généré'}</div>
+        </div>
+      </div>
+      <button class="artifact-open" type="button">Ouvrir ↗</button>
+    </div>
+
+    <iframe class="artifact-preview" title="Aperçu du code"></iframe>
+
+    <div class="artifact-actions">
+      <button type="button" data-artifact-preview>Aperçu</button>
+      <button type="button" data-artifact-code>Code</button>
+      <button type="button" data-artifact-copy>Copier</button>
+      <button type="button" data-artifact-download>Télécharger</button>
+    </div>
+  `;
+
+  const modal = document.createElement('div');
+  modal.className = 'artifact-modal';
+
+  modal.innerHTML = `
+    <div class="artifact-shell">
+      <div class="artifact-toolbar">
+        <div class="artifact-tabs">
+          <button type="button" data-tab="preview" class="active">Aperçu</button>
+          <button type="button" data-tab="code">Code</button>
+        </div>
+        <button type="button" class="artifact-close">✕</button>
+      </div>
+
+      <div class="artifact-body">
+        <iframe title="Aperçu complet"></iframe>
+        <pre class="artifact-code"></pre>
+      </div>
+    </div>
+  `;
+
+  document.body.appendChild(modal);
+
+  const cardFrame = card.querySelector('.artifact-preview');
+  const modalFrame = modal.querySelector('iframe');
+  const modalCode = modal.querySelector('.artifact-code');
+
+  cardFrame.srcdoc = previewDocument;
+  modalFrame.srcdoc = previewDocument;
+  modalCode.textContent = code;
+
+  function showTab(tab) {
+    const previewActive = tab === 'preview';
+
+    modalFrame.style.display = previewActive ? 'block' : 'none';
+    modalCode.style.display = previewActive ? 'none' : 'block';
+
+    modal.querySelectorAll('[data-tab]').forEach(button => {
+      button.classList.toggle('active', button.dataset.tab === tab);
+    });
+  }
+
+  function openArtifact(tab = 'preview') {
+    showTab(tab);
+    modal.classList.add('active');
+  }
+
+  card.querySelector('.artifact-open').onclick = () => openArtifact('preview');
+  card.querySelector('[data-artifact-preview]').onclick = () => openArtifact('preview');
+  card.querySelector('[data-artifact-code]').onclick = () => openArtifact('code');
+
+  card.querySelector('[data-artifact-copy]').onclick = async event => {
+    await navigator.clipboard.writeText(code);
+    event.currentTarget.textContent = 'Copié ✓';
+    setTimeout(() => event.currentTarget.textContent = 'Copier', 1500);
+  };
+
+  card.querySelector('[data-artifact-download]').onclick = () => {
+    const blob = new Blob([code], {
+      type: isHtml ? 'text/html;charset=utf-8' : 'text/plain;charset=utf-8'
+    });
+
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = fileName;
+    link.click();
+
+    setTimeout(() => URL.revokeObjectURL(link.href), 1000);
+  };
+
+  modal.querySelectorAll('[data-tab]').forEach(button => {
+    button.onclick = () => showTab(button.dataset.tab);
+  });
+
+  modal.querySelector('.artifact-close').onclick = () => {
+    modal.classList.remove('active');
+  };
+
+  modal.onclick = event => {
+    if (event.target === modal) modal.classList.remove('active');
+  };
+
+  return card;
+}
 async function sendChat(feature, text, msgBox) {
   if (feature === 'code') appendMsg(msgBox, 'status', 'Coût estimé : 2 à 10 Credits');
   const typing = appendTyping(msgBox);
@@ -2808,7 +3309,18 @@ async function sendChat(feature, text, msgBox) {
     }
     if (!res.ok) { appendMsg(msgBox, 'error', data.message || 'Erreur — tous les modèles ont échoué.'); return; }
 
+    if (feature === 'code') {
+  const artifact = createCodeArtifact(data.text);
+
+  if (artifact) {
+    msgBox.appendChild(artifact);
+    msgBox.scrollTop = msgBox.scrollHeight;
+  } else {
     appendMsg(msgBox, 'bot', data.text);
+  }
+} else {
+  appendMsg(msgBox, 'bot', data.text);
+}
   if (feature === 'code' && typeof data.creditsCharged === 'number') {
     appendMsg(msgBox, 'status', `Coût final : ${data.creditsCharged} Credits`);
   }
