@@ -5,3 +5,6 @@ frontend/.env
 *.env
 .env.*
 !.env.example
+
+# Local backup snapshots
+*.before-*
