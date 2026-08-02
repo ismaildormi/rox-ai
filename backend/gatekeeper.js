@@ -97,6 +97,23 @@ async function reserveCredits({ userId, requestId, feature, modelUsed = 'pending
  * failed, or a queued job exhausted its retries). Safe to call more
  * than once for the same requestId â€” only refunds once.
  */
+
+async function settleCredits(requestId, finalCredits) {
+  const { data, error } = await supabaseAdmin.rpc('settle_credit_charge', {
+    p_request_id: requestId,
+    p_final_credits: finalCredits,
+  });
+
+  if (error) throw error;
+
+  if (!data?.success) {
+    const err = new Error(data?.error || 'credit_settlement_failed');
+    err.code = data?.error;
+    throw err;
+  }
+
+  return data;
+}
 async function refundCredits(requestId) {
   const { data, error } = await supabaseAdmin.rpc('refund_credit_and_log', { p_request_id: requestId });
   if (error) throw error;
@@ -167,6 +184,7 @@ module.exports = {
   gatekeeperMiddleware,
   reserveCredits,
   refundCredits,
+  settleCredits,
   logCreditEvent,
   reportRefundFailure,
 };

@@ -21,14 +21,15 @@ const { requireAuth } = require('./lib/auth');
 const { rateLimit } = require('./lib/rateLimit');
 const { ipRateLimit, ipBlockGuard } = require('./lib/ipGuard');
 const { validateChatBody, validatePromptBody } = require('./lib/inputValidation');
-const { gatekeeperMiddleware, reserveCredits, refundCredits, logCreditEvent, reportRefundFailure } = require('./gatekeeper');
+const { gatekeeperMiddleware, reserveCredits, refundCredits, settleCredits, logCreditEvent, reportRefundFailure } = require('./gatekeeper');
 const { routeRequest } = require('./aiRouter');
 const { imageQueue, videoQueue, defaultJobOptions, connection: queueConnection } = require('./lib/queue');
 const { supabaseAdmin } = require('./lib/supabaseAdmin');
 const { register, setQueueDepth, recordCost, recordMargin, recordLoadLevel } = require('./lib/metrics');
 const loadGuard = require('./lib/loadGuard');
-const { marginUsd } = require('./lib/creditEconomics');
+const { CREDIT_PRICE_USD, marginUsd } = require('./lib/creditEconomics');
 const { quoteGeneration } = require('./lib/dynamicPricing');
+const CODE_RESERVATION_CREDITS = 10;
 const { checkAndIncrementDailyChat, peekDailyChat } = require('./lib/dailyChatLimit');
 const stripeWebhookRouter = require('./stripeWebhook');
 const createCheckoutSessionRouter = require('./createCheckoutSession');
@@ -367,7 +368,7 @@ app.post('/api/chat', requireAuth, rateLimit('chat'), validateChatBody, gatekeep
         userId,
         requestId,
         feature: 'code',
-        creditsConsumed: featureCost('code').credits,
+        creditsConsumed: CODE_RESERVATION_CREDITS,
       });
     } catch (err) {
       if (err.code === 'insufficient_credits') {
@@ -408,7 +409,16 @@ app.post('/api/chat', requireAuth, rateLimit('chat'), validateChatBody, gatekeep
   try {
     const result = await routeRequest(feature || 'chat', messages, { loadLevel, isPro });
 
-    const creditsChargedForMargin = isCode ? featureCost('code').credits : 0;
+    let settlement = null;
+    const finalCodeCredits = isCode
+      ? Math.max(featureCost('code').credits, Math.ceil((result.cost_usd * 2) / CREDIT_PRICE_USD))
+      : 0;
+
+    if (isCode) {
+      settlement = await settleCredits(requestId, finalCodeCredits);
+    }
+
+    const creditsChargedForMargin = finalCodeCredits;
     const margin = marginUsd(creditsChargedForMargin, result.cost_usd);
     recordCost(result.model, result.cost_usd);
     recordMargin(feature || 'chat', margin);
@@ -441,7 +451,8 @@ app.post('/api/chat', requireAuth, rateLimit('chat'), validateChatBody, gatekeep
       model: result.model,
       dailyChatUsed: dailyStatus ? dailyStatus.current : undefined,
       dailyChatLimit: dailyStatus ? dailyStatus.limit : undefined,
-      newBalance: reservation ? reservation.newBalance : undefined,
+      newBalance: settlement ? settlement.new_balance : (reservation ? reservation.newBalance : undefined),
+      creditsCharged: isCode ? finalCodeCredits : 0,
     });
   } catch (err) {
     // Only refund if this request actually charged credits (Pro path).
