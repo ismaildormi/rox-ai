@@ -938,11 +938,73 @@ async function demoFetch(path, options = {}) {
   await new Promise(r => setTimeout(r, 500 + Math.random() * 400));
 
   if (path === '/api/chat') {
-    profile.credits_used = Math.min(profile.credits_total, profile.credits_used + 2);
+    let payload = {};
+    try { payload = JSON.parse(options.body || '{}'); } catch {}
+
+    const isCode = payload.feature === 'code';
+    const charged = isCode ? 6 : 2;
+
+    profile.credits_used = Math.min(
+      profile.credits_total,
+      profile.credits_used + charged
+    );
+
     const remaining = profile.credits_total - profile.credits_used;
+
+    const demoHtml = `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>rox-demo-calculator</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;display:grid;place-items:center;background:#0f1020;font-family:Arial;color:white}
+.calculator{width:min(92vw,360px);padding:22px;border-radius:24px;background:#191a2e;box-shadow:0 25px 70px #0008}
+#d{width:100%;height:80px;margin-bottom:16px;border:0;border-radius:15px;padding:16px;background:#0d0e19;color:white;text-align:right;font-size:30px}
+.keys{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+button{height:58px;border:0;border-radius:14px;background:#292b48;color:white;font-size:20px;cursor:pointer}
+button:hover{filter:brightness(1.2)}
+.op{background:#6d5dfc}
+.equal{background:#ec4899}
+.clear{background:#ef4444}
+.zero{grid-column:span 2}
+</style>
+</head>
+<body>
+<div class="calculator">
+<input id="d" readonly placeholder="0">
+<div class="keys">
+<button class="clear" onclick="document.getElementById('d').value=''">C</button>
+<button onclick="document.getElementById('d').value=document.getElementById('d').value.slice(0,-1)">⌫</button>
+<button class="op" onclick="document.getElementById('d').value+='%'">%</button>
+<button class="op" onclick="document.getElementById('d').value+='/'">÷</button>
+<button onclick="document.getElementById('d').value+='7'">7</button>
+<button onclick="document.getElementById('d').value+='8'">8</button>
+<button onclick="document.getElementById('d').value+='9'">9</button>
+<button class="op" onclick="document.getElementById('d').value+='*'">×</button>
+<button onclick="document.getElementById('d').value+='4'">4</button>
+<button onclick="document.getElementById('d').value+='5'">5</button>
+<button onclick="document.getElementById('d').value+='6'">6</button>
+<button class="op" onclick="document.getElementById('d').value+='-'">−</button>
+<button onclick="document.getElementById('d').value+='1'">1</button>
+<button onclick="document.getElementById('d').value+='2'">2</button>
+<button onclick="document.getElementById('d').value+='3'">3</button>
+<button class="op" onclick="document.getElementById('d').value+='+'">+</button>
+<button class="zero" onclick="document.getElementById('d').value+='0'">0</button>
+<button onclick="document.getElementById('d').value+='.'">.</button>
+<button class="equal" onclick="try{document.getElementById('d').value=Function('return '+document.getElementById('d').value)()}catch(e){document.getElementById('d').value='Error'}">=</button>
+</div>
+</div>
+</body>
+</html>`;
+
     return jsonResponse(200, {
-      text: 'هادي إجابة ديمو — ماشي متصلة بحيت الملف خدام بلا backend حقيقي دابا. عمر SUPABASE_URL/API_BASE باش توصل بالفعل.',
+      text: isCode
+        ? demoHtml
+        : 'هادي إجابة تجريبية من Rox AI Demo Mode.',
       newBalance: remaining,
+      creditsCharged: charged
     });
   }
   if (path === '/api/generate-image' || path === '/api/generate-video') {
@@ -2787,11 +2849,73 @@ async function demoFetch(path, options = {}) {
   await new Promise(r => setTimeout(r, 500 + Math.random() * 400));
 
   if (path === '/api/chat') {
-    profile.credits_used = Math.min(profile.credits_total, profile.credits_used + 2);
+    let payload = {};
+    try { payload = JSON.parse(options.body || '{}'); } catch {}
+
+    const isCode = payload.feature === 'code';
+    const charged = isCode ? 6 : 2;
+
+    profile.credits_used = Math.min(
+      profile.credits_total,
+      profile.credits_used + charged
+    );
+
     const remaining = profile.credits_total - profile.credits_used;
+
+    const demoHtml = `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>rox-demo-calculator</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;display:grid;place-items:center;background:#0f1020;font-family:Arial;color:white}
+.calculator{width:min(92vw,360px);padding:22px;border-radius:24px;background:#191a2e;box-shadow:0 25px 70px #0008}
+#d{width:100%;height:80px;margin-bottom:16px;border:0;border-radius:15px;padding:16px;background:#0d0e19;color:white;text-align:right;font-size:30px}
+.keys{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+button{height:58px;border:0;border-radius:14px;background:#292b48;color:white;font-size:20px;cursor:pointer}
+button:hover{filter:brightness(1.2)}
+.op{background:#6d5dfc}
+.equal{background:#ec4899}
+.clear{background:#ef4444}
+.zero{grid-column:span 2}
+</style>
+</head>
+<body>
+<div class="calculator">
+<input id="d" readonly placeholder="0">
+<div class="keys">
+<button class="clear" onclick="document.getElementById('d').value=''">C</button>
+<button onclick="document.getElementById('d').value=document.getElementById('d').value.slice(0,-1)">⌫</button>
+<button class="op" onclick="document.getElementById('d').value+='%'">%</button>
+<button class="op" onclick="document.getElementById('d').value+='/'">÷</button>
+<button onclick="document.getElementById('d').value+='7'">7</button>
+<button onclick="document.getElementById('d').value+='8'">8</button>
+<button onclick="document.getElementById('d').value+='9'">9</button>
+<button class="op" onclick="document.getElementById('d').value+='*'">×</button>
+<button onclick="document.getElementById('d').value+='4'">4</button>
+<button onclick="document.getElementById('d').value+='5'">5</button>
+<button onclick="document.getElementById('d').value+='6'">6</button>
+<button class="op" onclick="document.getElementById('d').value+='-'">−</button>
+<button onclick="document.getElementById('d').value+='1'">1</button>
+<button onclick="document.getElementById('d').value+='2'">2</button>
+<button onclick="document.getElementById('d').value+='3'">3</button>
+<button class="op" onclick="document.getElementById('d').value+='+'">+</button>
+<button class="zero" onclick="document.getElementById('d').value+='0'">0</button>
+<button onclick="document.getElementById('d').value+='.'">.</button>
+<button class="equal" onclick="try{document.getElementById('d').value=Function('return '+document.getElementById('d').value)()}catch(e){document.getElementById('d').value='Error'}">=</button>
+</div>
+</div>
+</body>
+</html>`;
+
     return jsonResponse(200, {
-      text: 'هادي إجابة ديمو — ماشي متصلة بحيت الملف خدام بلا backend حقيقي دابا. عمر SUPABASE_URL/API_BASE باش توصل بالفعل.',
+      text: isCode
+        ? demoHtml
+        : 'هادي إجابة تجريبية من Rox AI Demo Mode.',
       newBalance: remaining,
+      creditsCharged: charged
     });
   }
   if (path === '/api/generate-image' || path === '/api/generate-video') {
