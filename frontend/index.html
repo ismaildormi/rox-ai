@@ -1148,6 +1148,7 @@ function appendTyping(msgBox) {
 
 // ── chat / code → POST /api/chat ────────────────────────────────────
 async function sendChat(feature, text, msgBox) {
+  if (feature === 'code') appendMsg(msgBox, 'status', 'Coût estimé : 2 à 10 Credits');
   const typing = appendTyping(msgBox);
   // Send the stored history PLUS this new turn, but don't commit the new
   // turn to `conversations[feature]` until the call actually succeeds.
@@ -1187,6 +1188,9 @@ async function sendChat(feature, text, msgBox) {
     if (!res.ok) { appendMsg(msgBox, 'error', data.message || 'Erreur — tous les modèles ont échoué.'); return; }
 
     appendMsg(msgBox, 'bot', data.text);
+  if (feature === 'code' && typeof data.creditsCharged === 'number') {
+    appendMsg(msgBox, 'status', `Coût final : ${data.creditsCharged} Credits`);
+  }
     pushHistory(feature, 'user', text);
     pushHistory(feature, 'assistant', data.text);
     if (typeof data.dailyChatUsed === 'number') {
@@ -2765,6 +2769,7 @@ function appendTyping(msgBox) {
 
 // ── chat / code → POST /api/chat ────────────────────────────────────
 async function sendChat(feature, text, msgBox) {
+  if (feature === 'code') appendMsg(msgBox, 'status', 'Coût estimé : 2 à 10 Credits');
   const typing = appendTyping(msgBox);
   // Send the stored history PLUS this new turn, but don't commit the new
   // turn to `conversations[feature]` until the call actually succeeds.
@@ -2804,6 +2809,9 @@ async function sendChat(feature, text, msgBox) {
     if (!res.ok) { appendMsg(msgBox, 'error', data.message || 'Erreur — tous les modèles ont échoué.'); return; }
 
     appendMsg(msgBox, 'bot', data.text);
+  if (feature === 'code' && typeof data.creditsCharged === 'number') {
+    appendMsg(msgBox, 'status', `Coût final : ${data.creditsCharged} Credits`);
+  }
     pushHistory(feature, 'user', text);
     pushHistory(feature, 'assistant', data.text);
     if (typeof data.dailyChatUsed === 'number') {
@@ -3032,4 +3040,5 @@ initAuth();
 </script>
 </body>
 </html>
+
 
