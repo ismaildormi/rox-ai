@@ -461,7 +461,9 @@ app.post('/api/chat', requireAuth, rateLimit('chat'), validateChatBody, gatekeep
         ? [
             'You are operating inside Rox AI Code Studio.',
             'When code is requested, return complete, valid, usable code.',
-            'Apply the selected response language to explanations, headings, comments, and documentation.',
+            'The selected response language MUST be used for every natural-language part of the answer.',
+            'This includes explanations, headings, code comments, docstrings, examples, labels, and documentation.',
+            'Never use the language of the user message for code comments when a different response language is selected.',
             'Keep programming-language syntax and technical identifiers unchanged.'
           ].join(' ')
         : [
