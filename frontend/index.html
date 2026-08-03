@@ -842,6 +842,12 @@
     </div>
     <div class="chat-input-row">
       <input type="text" placeholder="Décrivez votre image..." data-feature="images">
+      <select
+        class="voice-language-select"
+        data-voice-language="images"
+        aria-label="Langue de dictée"
+        title="Langue de dictée"
+      ></select>
       <button
         type="button"
         class="voice-input-btn"
@@ -864,6 +870,12 @@
     </div>
     <div class="chat-input-row">
       <input type="text" placeholder="Décrivez votre vidéo..." data-feature="videos">
+      <select
+        class="voice-language-select"
+        data-voice-language="videos"
+        aria-label="Langue de dictée"
+        title="Langue de dictée"
+      ></select>
       <button
         type="button"
         class="voice-input-btn"
@@ -886,6 +898,12 @@
     </div>
     <div class="chat-input-row">
       <input type="text" placeholder="Entrez l'adresse IP..." data-feature="roxip">
+      <select
+        class="voice-language-select"
+        data-voice-language="roxip"
+        aria-label="Langue de dictée"
+        title="Langue de dictée"
+      ></select>
       <button
         type="button"
         class="voice-input-btn"
@@ -908,6 +926,12 @@
     </div>
     <div class="chat-input-row">
       <input type="text" placeholder="Posez votre question..." data-feature="chat">
+      <select
+        class="voice-language-select"
+        data-voice-language="chat"
+        aria-label="Langue de dictée"
+        title="Langue de dictée"
+      ></select>
       <button
         type="button"
         class="voice-input-btn"
@@ -930,6 +954,12 @@
     </div>
     <div class="chat-input-row">
       <input type="text" placeholder="Ex: une fonction qui trie un tableau..." data-feature="code">
+      <select
+        class="voice-language-select"
+        data-voice-language="code"
+        aria-label="Langue de dictée"
+        title="Langue de dictée"
+      ></select>
       <button
         type="button"
         class="voice-input-btn"
@@ -2098,6 +2128,158 @@ document.querySelectorAll('input[data-feature]').forEach(inp=>{
     window.SpeechRecognition ||
     window.webkitSpeechRecognition;
 
+  const voiceLanguages = [
+    ['', 'Auto (device / browser)'],
+
+    ['ar-MA', 'Arabic — Morocco'],
+    ['ar-DZ', 'Arabic — Algeria'],
+    ['ar-TN', 'Arabic — Tunisia'],
+    ['ar-EG', 'Arabic — Egypt'],
+    ['ar-SA', 'Arabic — Saudi Arabia'],
+    ['ar-AE', 'Arabic — UAE'],
+
+    ['fr-FR', 'French — France'],
+    ['fr-MA', 'French — Morocco'],
+    ['fr-CA', 'French — Canada'],
+    ['fr-BE', 'French — Belgium'],
+    ['fr-CH', 'French — Switzerland'],
+
+    ['en-US', 'English — United States'],
+    ['en-GB', 'English — United Kingdom'],
+    ['en-CA', 'English — Canada'],
+    ['en-AU', 'English — Australia'],
+    ['en-IN', 'English — India'],
+    ['en-ZA', 'English — South Africa'],
+
+    ['es-ES', 'Spanish — Spain'],
+    ['es-MX', 'Spanish — Mexico'],
+    ['es-AR', 'Spanish — Argentina'],
+    ['es-CO', 'Spanish — Colombia'],
+    ['es-US', 'Spanish — United States'],
+
+    ['pt-PT', 'Portuguese — Portugal'],
+    ['pt-BR', 'Portuguese — Brazil'],
+
+    ['de-DE', 'German — Germany'],
+    ['de-AT', 'German — Austria'],
+    ['de-CH', 'German — Switzerland'],
+    ['it-IT', 'Italian'],
+    ['nl-NL', 'Dutch'],
+    ['nl-BE', 'Dutch — Belgium'],
+
+    ['tr-TR', 'Turkish'],
+    ['ru-RU', 'Russian'],
+    ['uk-UA', 'Ukrainian'],
+    ['pl-PL', 'Polish'],
+    ['cs-CZ', 'Czech'],
+    ['sk-SK', 'Slovak'],
+    ['hu-HU', 'Hungarian'],
+    ['ro-RO', 'Romanian'],
+    ['bg-BG', 'Bulgarian'],
+    ['el-GR', 'Greek'],
+    ['hr-HR', 'Croatian'],
+    ['sr-RS', 'Serbian'],
+    ['bs-BA', 'Bosnian'],
+    ['sl-SI', 'Slovenian'],
+    ['sq-AL', 'Albanian'],
+    ['mk-MK', 'Macedonian'],
+
+    ['sv-SE', 'Swedish'],
+    ['no-NO', 'Norwegian'],
+    ['da-DK', 'Danish'],
+    ['fi-FI', 'Finnish'],
+    ['is-IS', 'Icelandic'],
+    ['et-EE', 'Estonian'],
+    ['lv-LV', 'Latvian'],
+    ['lt-LT', 'Lithuanian'],
+
+    ['he-IL', 'Hebrew'],
+    ['fa-IR', 'Persian'],
+    ['ur-PK', 'Urdu'],
+
+    ['hi-IN', 'Hindi'],
+    ['bn-BD', 'Bengali'],
+    ['pa-IN', 'Punjabi'],
+    ['gu-IN', 'Gujarati'],
+    ['mr-IN', 'Marathi'],
+    ['ta-IN', 'Tamil'],
+    ['te-IN', 'Telugu'],
+    ['ml-IN', 'Malayalam'],
+    ['kn-IN', 'Kannada'],
+    ['ne-NP', 'Nepali'],
+    ['si-LK', 'Sinhala'],
+
+    ['zh-CN', 'Chinese — Simplified'],
+    ['zh-TW', 'Chinese — Traditional'],
+    ['zh-HK', 'Chinese — Hong Kong'],
+    ['ja-JP', 'Japanese'],
+    ['ko-KR', 'Korean'],
+
+    ['id-ID', 'Indonesian'],
+    ['ms-MY', 'Malay'],
+    ['th-TH', 'Thai'],
+    ['vi-VN', 'Vietnamese'],
+    ['fil-PH', 'Filipino'],
+    ['km-KH', 'Khmer'],
+    ['lo-LA', 'Lao'],
+    ['my-MM', 'Burmese'],
+
+    ['sw-KE', 'Swahili'],
+    ['am-ET', 'Amharic'],
+    ['af-ZA', 'Afrikaans'],
+    ['zu-ZA', 'Zulu'],
+    ['xh-ZA', 'Xhosa'],
+
+    ['ca-ES', 'Catalan'],
+    ['eu-ES', 'Basque'],
+    ['gl-ES', 'Galician'],
+    ['cy-GB', 'Welsh'],
+    ['ga-IE', 'Irish'],
+    ['hy-AM', 'Armenian'],
+    ['ka-GE', 'Georgian']
+  ];
+
+  const getVoiceLanguage = () =>
+    localStorage.getItem('roxVoiceLanguage') ||
+    (navigator.languages && navigator.languages[0]) ||
+    navigator.language ||
+    'ar-MA';
+
+  document
+    .querySelectorAll('[data-voice-language]')
+    .forEach((select) => {
+      voiceLanguages.forEach(([value, label]) => {
+        const option = document.createElement('option');
+
+        option.value = value;
+        option.textContent = label;
+
+        select.appendChild(option);
+      });
+
+      select.value =
+        localStorage.getItem('roxVoiceLanguage') || '';
+
+      select.addEventListener('change', () => {
+        const selectedLanguage = select.value;
+
+        if (selectedLanguage) {
+          localStorage.setItem(
+            'roxVoiceLanguage',
+            selectedLanguage
+          );
+        } else {
+          localStorage.removeItem('roxVoiceLanguage');
+        }
+
+        document
+          .querySelectorAll('[data-voice-language]')
+          .forEach((otherSelect) => {
+            otherSelect.value = selectedLanguage;
+          });
+      });
+    });
+
   document
     .querySelectorAll('[data-voice-input]')
     .forEach((button) => {
@@ -2121,7 +2303,15 @@ document.querySelectorAll('input[data-feature]').forEach(inp=>{
 
       const recognition = new VoiceRecognition();
 
-      recognition.lang = 'ar-MA';
+      recognition.lang =
+
+        localStorage.getItem("roxVoiceLanguage") ||
+
+        (navigator.languages && navigator.languages[0]) ||
+
+        navigator.language ||
+
+        "ar-MA";
       recognition.continuous = false;
       recognition.interimResults = true;
       recognition.maxAlternatives = 1;
@@ -2139,6 +2329,7 @@ document.querySelectorAll('input[data-feature]').forEach(inp=>{
         }
 
         textBeforeRecording = input.value.trim();
+        recognition.lang = getVoiceLanguage();
 
         try {
           recognition.start();
@@ -3282,6 +3473,12 @@ initAuth();
     </div>
     <div class="chat-input-row">
       <input type="text" placeholder="Décrivez votre image..." data-feature="images">
+      <select
+        class="voice-language-select"
+        data-voice-language="images"
+        aria-label="Langue de dictée"
+        title="Langue de dictée"
+      ></select>
       <button
         type="button"
         class="voice-input-btn"
@@ -3306,6 +3503,12 @@ initAuth();
     </div>
     <div class="chat-input-row">
       <input type="text" placeholder="Décrivez votre vidéo..." data-feature="videos">
+      <select
+        class="voice-language-select"
+        data-voice-language="videos"
+        aria-label="Langue de dictée"
+        title="Langue de dictée"
+      ></select>
       <button
         type="button"
         class="voice-input-btn"
@@ -3330,6 +3533,12 @@ initAuth();
     </div>
     <div class="chat-input-row">
       <input type="text" placeholder="Entrez l'adresse IP..." data-feature="roxip">
+      <select
+        class="voice-language-select"
+        data-voice-language="roxip"
+        aria-label="Langue de dictée"
+        title="Langue de dictée"
+      ></select>
       <button
         type="button"
         class="voice-input-btn"
@@ -3354,6 +3563,12 @@ initAuth();
     </div>
     <div class="chat-input-row">
       <input type="text" placeholder="Posez votre question..." data-feature="chat">
+      <select
+        class="voice-language-select"
+        data-voice-language="chat"
+        aria-label="Langue de dictée"
+        title="Langue de dictée"
+      ></select>
       <button
         type="button"
         class="voice-input-btn"
@@ -3378,6 +3593,12 @@ initAuth();
     </div>
     <div class="chat-input-row">
       <input type="text" placeholder="Ex: une fonction qui trie un tableau..." data-feature="code">
+      <select
+        class="voice-language-select"
+        data-voice-language="code"
+        aria-label="Langue de dictée"
+        title="Langue de dictée"
+      ></select>
       <button
         type="button"
         class="voice-input-btn"
@@ -4640,6 +4861,158 @@ document.querySelectorAll('input[data-quickfeature]').forEach(inp=>{
     window.SpeechRecognition ||
     window.webkitSpeechRecognition;
 
+  const voiceLanguages = [
+    ['', 'Auto (device / browser)'],
+
+    ['ar-MA', 'Arabic — Morocco'],
+    ['ar-DZ', 'Arabic — Algeria'],
+    ['ar-TN', 'Arabic — Tunisia'],
+    ['ar-EG', 'Arabic — Egypt'],
+    ['ar-SA', 'Arabic — Saudi Arabia'],
+    ['ar-AE', 'Arabic — UAE'],
+
+    ['fr-FR', 'French — France'],
+    ['fr-MA', 'French — Morocco'],
+    ['fr-CA', 'French — Canada'],
+    ['fr-BE', 'French — Belgium'],
+    ['fr-CH', 'French — Switzerland'],
+
+    ['en-US', 'English — United States'],
+    ['en-GB', 'English — United Kingdom'],
+    ['en-CA', 'English — Canada'],
+    ['en-AU', 'English — Australia'],
+    ['en-IN', 'English — India'],
+    ['en-ZA', 'English — South Africa'],
+
+    ['es-ES', 'Spanish — Spain'],
+    ['es-MX', 'Spanish — Mexico'],
+    ['es-AR', 'Spanish — Argentina'],
+    ['es-CO', 'Spanish — Colombia'],
+    ['es-US', 'Spanish — United States'],
+
+    ['pt-PT', 'Portuguese — Portugal'],
+    ['pt-BR', 'Portuguese — Brazil'],
+
+    ['de-DE', 'German — Germany'],
+    ['de-AT', 'German — Austria'],
+    ['de-CH', 'German — Switzerland'],
+    ['it-IT', 'Italian'],
+    ['nl-NL', 'Dutch'],
+    ['nl-BE', 'Dutch — Belgium'],
+
+    ['tr-TR', 'Turkish'],
+    ['ru-RU', 'Russian'],
+    ['uk-UA', 'Ukrainian'],
+    ['pl-PL', 'Polish'],
+    ['cs-CZ', 'Czech'],
+    ['sk-SK', 'Slovak'],
+    ['hu-HU', 'Hungarian'],
+    ['ro-RO', 'Romanian'],
+    ['bg-BG', 'Bulgarian'],
+    ['el-GR', 'Greek'],
+    ['hr-HR', 'Croatian'],
+    ['sr-RS', 'Serbian'],
+    ['bs-BA', 'Bosnian'],
+    ['sl-SI', 'Slovenian'],
+    ['sq-AL', 'Albanian'],
+    ['mk-MK', 'Macedonian'],
+
+    ['sv-SE', 'Swedish'],
+    ['no-NO', 'Norwegian'],
+    ['da-DK', 'Danish'],
+    ['fi-FI', 'Finnish'],
+    ['is-IS', 'Icelandic'],
+    ['et-EE', 'Estonian'],
+    ['lv-LV', 'Latvian'],
+    ['lt-LT', 'Lithuanian'],
+
+    ['he-IL', 'Hebrew'],
+    ['fa-IR', 'Persian'],
+    ['ur-PK', 'Urdu'],
+
+    ['hi-IN', 'Hindi'],
+    ['bn-BD', 'Bengali'],
+    ['pa-IN', 'Punjabi'],
+    ['gu-IN', 'Gujarati'],
+    ['mr-IN', 'Marathi'],
+    ['ta-IN', 'Tamil'],
+    ['te-IN', 'Telugu'],
+    ['ml-IN', 'Malayalam'],
+    ['kn-IN', 'Kannada'],
+    ['ne-NP', 'Nepali'],
+    ['si-LK', 'Sinhala'],
+
+    ['zh-CN', 'Chinese — Simplified'],
+    ['zh-TW', 'Chinese — Traditional'],
+    ['zh-HK', 'Chinese — Hong Kong'],
+    ['ja-JP', 'Japanese'],
+    ['ko-KR', 'Korean'],
+
+    ['id-ID', 'Indonesian'],
+    ['ms-MY', 'Malay'],
+    ['th-TH', 'Thai'],
+    ['vi-VN', 'Vietnamese'],
+    ['fil-PH', 'Filipino'],
+    ['km-KH', 'Khmer'],
+    ['lo-LA', 'Lao'],
+    ['my-MM', 'Burmese'],
+
+    ['sw-KE', 'Swahili'],
+    ['am-ET', 'Amharic'],
+    ['af-ZA', 'Afrikaans'],
+    ['zu-ZA', 'Zulu'],
+    ['xh-ZA', 'Xhosa'],
+
+    ['ca-ES', 'Catalan'],
+    ['eu-ES', 'Basque'],
+    ['gl-ES', 'Galician'],
+    ['cy-GB', 'Welsh'],
+    ['ga-IE', 'Irish'],
+    ['hy-AM', 'Armenian'],
+    ['ka-GE', 'Georgian']
+  ];
+
+  const getVoiceLanguage = () =>
+    localStorage.getItem('roxVoiceLanguage') ||
+    (navigator.languages && navigator.languages[0]) ||
+    navigator.language ||
+    'ar-MA';
+
+  document
+    .querySelectorAll('[data-voice-language]')
+    .forEach((select) => {
+      voiceLanguages.forEach(([value, label]) => {
+        const option = document.createElement('option');
+
+        option.value = value;
+        option.textContent = label;
+
+        select.appendChild(option);
+      });
+
+      select.value =
+        localStorage.getItem('roxVoiceLanguage') || '';
+
+      select.addEventListener('change', () => {
+        const selectedLanguage = select.value;
+
+        if (selectedLanguage) {
+          localStorage.setItem(
+            'roxVoiceLanguage',
+            selectedLanguage
+          );
+        } else {
+          localStorage.removeItem('roxVoiceLanguage');
+        }
+
+        document
+          .querySelectorAll('[data-voice-language]')
+          .forEach((otherSelect) => {
+            otherSelect.value = selectedLanguage;
+          });
+      });
+    });
+
   document
     .querySelectorAll('[data-voice-input]')
     .forEach((button) => {
@@ -4663,7 +5036,15 @@ document.querySelectorAll('input[data-quickfeature]').forEach(inp=>{
 
       const recognition = new VoiceRecognition();
 
-      recognition.lang = 'ar-MA';
+      recognition.lang =
+
+        localStorage.getItem("roxVoiceLanguage") ||
+
+        (navigator.languages && navigator.languages[0]) ||
+
+        navigator.language ||
+
+        "ar-MA";
       recognition.continuous = false;
       recognition.interimResults = true;
       recognition.maxAlternatives = 1;
@@ -4681,6 +5062,7 @@ document.querySelectorAll('input[data-quickfeature]').forEach(inp=>{
         }
 
         textBeforeRecording = input.value.trim();
+        recognition.lang = getVoiceLanguage();
 
         try {
           recognition.start();
