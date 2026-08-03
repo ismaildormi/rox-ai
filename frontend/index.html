@@ -1291,6 +1291,98 @@
     right:14px;
   }
 }
+/* ROX SETTINGS CORE STYLES START */
+html[data-rox-theme="light"]{
+  color-scheme:light;
+  --bg:#eef2ff;
+  --panel:rgba(255,255,255,.9);
+  --panel-2:#f1f5f9;
+  --panel-3:#e2e8f0;
+  --text:#0f172a;
+  --text-dim:#64748b;
+  --border:rgba(30,41,59,.13);
+}
+
+html[data-rox-theme="dark"]{
+  color-scheme:dark;
+}
+
+html[data-rox-theme="light"] body{
+  color:var(--text);
+  background:
+    radial-gradient(circle at 12% 12%,rgba(14,165,233,.15),transparent 36%),
+    radial-gradient(circle at 88% 18%,rgba(124,58,237,.14),transparent 34%),
+    linear-gradient(145deg,#eff6ff,#eef2ff 48%,#f8fafc);
+}
+
+html[data-rox-theme="light"] .rox-settings-nav,
+html[data-rox-theme="light"] .rox-settings-section,
+html[data-rox-theme="light"] .rox-settings-hero .placeholder-view{
+  background:
+    linear-gradient(145deg,rgba(255,255,255,.92),rgba(241,245,249,.82));
+  border-color:rgba(30,41,59,.11);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.9),
+    0 16px 36px rgba(51,65,85,.12);
+}
+
+html[data-rox-theme="light"] .rox-settings-row,
+html[data-rox-theme="light"] .rox-settings-toggle-row{
+  background:rgba(255,255,255,.58);
+  border-color:rgba(30,41,59,.1);
+}
+
+html[data-rox-theme="light"] .rox-settings-row select{
+  color:#0f172a;
+  background-color:rgba(255,255,255,.94);
+}
+
+html[data-rox-theme="light"] .rox-settings-row select option{
+  color:#0f172a;
+  background:#fff;
+}
+
+html[data-rox-theme="light"] .rox-settings-action{
+  color:#1e293b;
+}
+
+html[data-rox-theme="light"] .rox-settings-action.danger{
+  color:#991b1b;
+}
+
+html[data-rox-density="compact"] .rox-settings-body{
+  padding:13px;
+}
+
+html[data-rox-density="compact"] .rox-settings-section{
+  padding:13px;
+}
+
+html[data-rox-density="compact"] .rox-settings-row,
+html[data-rox-density="compact"] .rox-settings-toggle-row{
+  min-height:56px;
+  margin-top:7px;
+  padding:9px 11px;
+}
+
+html[data-rox-density="compact"] .rox-settings-heading{
+  margin-bottom:11px;
+  padding-bottom:11px;
+}
+
+html[data-rox-density="compact"] .prow{
+  padding-top:9px;
+  padding-bottom:9px;
+}
+
+html[data-rox-density="compact"] .fcard{
+  padding:12px;
+}
+
+html[data-rox-density="compact"] .chat-input-row{
+  gap:6px;
+}
+/* ROX SETTINGS CORE STYLES END */
 /* ROX SETTINGS DESIGN END */
 
   .placeholder-view{color:var(--text-dim);font-size:13.5px;padding:30px 20px;text-align:center;border:1px dashed var(--border);border-radius:16px;margin-top:20px;}
@@ -2482,6 +2574,8 @@ async function onLoggedIn(s) {
   session = s;
   document.getElementById('login-overlay').classList.add('hidden');
   await refreshProfile();
+  syncRoxSettingsAccount();
+  scheduleRoxStartPage();
 }
 
 function showLogin() { document.getElementById('login-overlay').classList.remove('hidden'); }
@@ -2822,6 +2916,705 @@ async function submitTopupPayment() {
   }
 }
 
+/* ROX SETTINGS CORE FUNCTIONS START */
+const ROX_SETTINGS_KEYS = {
+  uiLanguage: 'roxUiLanguage',
+  theme: 'roxTheme',
+  startPage: 'roxStartPage',
+  density: 'roxDensity',
+  voiceName: 'roxVoiceName',
+  voiceRate: 'roxVoiceRate',
+  autoRead: 'roxAutoRead',
+  stopVoiceOnRecord: 'roxStopVoiceOnRecord'
+};
+
+function getRoxBooleanSetting(key, fallback = false) {
+  const value = localStorage.getItem(key);
+
+  if (value === null) {
+    return fallback;
+  }
+
+  return value === 'true';
+}
+
+function setRoxBooleanSetting(key, value) {
+  localStorage.setItem(
+    key,
+    String(Boolean(value))
+  );
+}
+
+function getRoxSystemTheme() {
+  return window.matchMedia &&
+    window.matchMedia('(prefers-color-scheme: light)').matches
+      ? 'light'
+      : 'dark';
+}
+
+function applyRoxTheme(themeValue) {
+  const selectedTheme =
+    themeValue || 'system';
+
+  const resolvedTheme =
+    selectedTheme === 'system'
+      ? getRoxSystemTheme()
+      : selectedTheme;
+
+  document.documentElement.dataset.roxTheme =
+    resolvedTheme;
+
+  document.documentElement.dataset.roxThemePreference =
+    selectedTheme;
+}
+
+function applyRoxDensity(densityValue) {
+  document.documentElement.dataset.roxDensity =
+    densityValue === 'compact'
+      ? 'compact'
+      : 'comfortable';
+}
+
+function resolveRoxUiLanguage(languageValue) {
+  if (
+    languageValue &&
+    languageValue !== 'auto'
+  ) {
+    return languageValue;
+  }
+
+  return (
+    navigator.languages &&
+    navigator.languages[0]
+      ? navigator.languages[0]
+      : navigator.language || 'fr'
+  ).split('-')[0];
+}
+
+function applyRoxUiLanguage(languageValue) {
+  const resolvedLanguage =
+    resolveRoxUiLanguage(languageValue);
+
+  document.documentElement.lang =
+    resolvedLanguage;
+
+  document.documentElement.dir =
+    resolvedLanguage === 'ar'
+      ? 'rtl'
+      : 'ltr';
+
+  document.documentElement.dataset.roxUiLanguage =
+    resolvedLanguage;
+}
+
+function getRoxSpeechRate() {
+  const savedRate = Number(
+    localStorage.getItem(
+      ROX_SETTINGS_KEYS.voiceRate
+    )
+  );
+
+  if (
+    Number.isFinite(savedRate) &&
+    savedRate >= 0.75 &&
+    savedRate <= 1.5
+  ) {
+    return savedRate;
+  }
+
+  return 1;
+}
+
+function getRoxSelectedVoice(voices) {
+  const selectedVoiceId =
+    localStorage.getItem(
+      ROX_SETTINGS_KEYS.voiceName
+    );
+
+  if (!selectedVoiceId) {
+    return null;
+  }
+
+  return voices.find(
+    voice =>
+      voice.voiceURI === selectedVoiceId ||
+      voice.name === selectedVoiceId
+  ) || null;
+}
+
+function speakRoxText(text) {
+  if (
+    !text ||
+    !('speechSynthesis' in window)
+  ) {
+    return;
+  }
+
+  const speech =
+    new SpeechSynthesisUtterance(
+      String(text)
+    );
+
+  const selectedLanguage =
+    localStorage.getItem(
+      'roxVoiceLanguage'
+    );
+
+  const isArabic =
+    /[\u0600-\u06FF]/.test(
+      String(text)
+    );
+
+  const preferredLang =
+    selectedLanguage ||
+    (
+      isArabic
+        ? 'ar-MA'
+        : (
+            document.documentElement.lang ||
+            navigator.language ||
+            'fr-FR'
+          )
+    );
+
+  speech.lang = preferredLang;
+  speech.rate = getRoxSpeechRate();
+  speech.pitch = 1;
+  speech.volume = 1;
+
+  const voices =
+    window.speechSynthesis.getVoices();
+
+  const selectedVoice =
+    getRoxSelectedVoice(voices);
+
+  const exactVoice = voices.find(
+    voice =>
+      voice.lang.toLowerCase() ===
+      preferredLang.toLowerCase()
+  );
+
+  const languageVoice = voices.find(
+    voice =>
+      voice.lang.toLowerCase().startsWith(
+        preferredLang
+          .toLowerCase()
+          .split('-')[0]
+      )
+  );
+
+  speech.voice =
+    selectedVoice ||
+    exactVoice ||
+    languageVoice ||
+    null;
+
+  window.speechSynthesis.cancel();
+  window.speechSynthesis.speak(speech);
+}
+
+function maybeAutoReadRoxMessage(text) {
+  if (
+    !getRoxBooleanSetting(
+      ROX_SETTINGS_KEYS.autoRead,
+      false
+    )
+  ) {
+    return;
+  }
+
+  speakRoxText(text);
+}
+
+function populateRoxSettingsVoiceLanguages() {
+  const select =
+    document.getElementById(
+      'settingsVoiceLanguage'
+    );
+
+  if (
+    !select ||
+    typeof voiceLanguages === 'undefined'
+  ) {
+    return;
+  }
+
+  select.innerHTML = '';
+
+  voiceLanguages.forEach(
+    ([value, label]) => {
+      const option =
+        document.createElement('option');
+
+      option.value = value;
+      option.textContent = label;
+
+      select.appendChild(option);
+    }
+  );
+
+  select.value =
+    localStorage.getItem(
+      'roxVoiceLanguage'
+    ) || '';
+}
+
+function populateRoxSettingsVoices() {
+  const select =
+    document.getElementById(
+      'settingsVoiceName'
+    );
+
+  if (
+    !select ||
+    !('speechSynthesis' in window)
+  ) {
+    return;
+  }
+
+  const previousValue =
+    localStorage.getItem(
+      ROX_SETTINGS_KEYS.voiceName
+    ) || '';
+
+  const voices =
+    window.speechSynthesis
+      .getVoices()
+      .slice()
+      .sort((a, b) =>
+        `${a.lang} ${a.name}`.localeCompare(
+          `${b.lang} ${b.name}`
+        )
+      );
+
+  select.innerHTML = '';
+
+  const automaticOption =
+    document.createElement('option');
+
+  automaticOption.value = '';
+  automaticOption.textContent =
+    'Automatique';
+
+  select.appendChild(
+    automaticOption
+  );
+
+  voices.forEach(voice => {
+    const option =
+      document.createElement('option');
+
+    option.value =
+      voice.voiceURI || voice.name;
+
+    option.textContent =
+      `${voice.name} — ${voice.lang}`;
+
+    select.appendChild(option);
+  });
+
+  select.value = voices.some(
+    voice =>
+      voice.voiceURI === previousValue ||
+      voice.name === previousValue
+  )
+    ? previousValue
+    : '';
+}
+
+function syncRoxSettingsAccount() {
+  const nameElement =
+    document.getElementById(
+      'settingsAccountName'
+    );
+
+  const emailElement =
+    document.getElementById(
+      'settingsAccountEmail'
+    );
+
+  const planElement =
+    document.getElementById(
+      'settingsPlanStatus'
+    );
+
+  const usageElement =
+    document.getElementById(
+      'settingsUsageStatus'
+    );
+
+  const accountEmail =
+    profile?.email ||
+    session?.user?.email ||
+    '—';
+
+  const accountName =
+    profile?.full_name ||
+    accountEmail.split('@')[0] ||
+    '—';
+
+  const isPro =
+    profile?.subscription_status ===
+    'pro';
+
+  if (nameElement) {
+    nameElement.textContent =
+      accountName;
+  }
+
+  if (emailElement) {
+    emailElement.textContent =
+      accountEmail;
+  }
+
+  if (planElement) {
+    planElement.textContent =
+      isPro
+        ? 'Plan Pro'
+        : 'Plan Gratuit';
+  }
+
+  if (usageElement) {
+    const usageSource =
+      document.getElementById(
+        'sidebarCreditsNum'
+      );
+
+    usageElement.textContent =
+      usageSource?.textContent ||
+      'Chargement...';
+  }
+}
+
+function refreshRoxSettingsFormValues() {
+  const fields = {
+    settingsUiLanguage:
+      localStorage.getItem(
+        ROX_SETTINGS_KEYS.uiLanguage
+      ) || 'auto',
+
+    settingsTheme:
+      localStorage.getItem(
+        ROX_SETTINGS_KEYS.theme
+      ) || 'system',
+
+    settingsStartPage:
+      localStorage.getItem(
+        ROX_SETTINGS_KEYS.startPage
+      ) || 'home',
+
+    settingsDensity:
+      localStorage.getItem(
+        ROX_SETTINGS_KEYS.density
+      ) || 'comfortable',
+
+    settingsVoiceLanguage:
+      localStorage.getItem(
+        'roxVoiceLanguage'
+      ) || '',
+
+    settingsVoiceName:
+      localStorage.getItem(
+        ROX_SETTINGS_KEYS.voiceName
+      ) || ''
+  };
+
+  Object.entries(fields).forEach(
+    ([id, value]) => {
+      const element =
+        document.getElementById(id);
+
+      if (element) {
+        element.value = value;
+      }
+    }
+  );
+
+  const voiceRate =
+    document.getElementById(
+      'settingsVoiceRate'
+    );
+
+  if (voiceRate) {
+    voiceRate.value =
+      String(getRoxSpeechRate());
+
+    voiceRate.title =
+      `${voiceRate.value}x`;
+  }
+
+  const autoRead =
+    document.getElementById(
+      'settingsAutoRead'
+    );
+
+  if (autoRead) {
+    autoRead.checked =
+      getRoxBooleanSetting(
+        ROX_SETTINGS_KEYS.autoRead,
+        false
+      );
+  }
+
+  const stopVoice =
+    document.getElementById(
+      'settingsStopVoiceOnRecord'
+    );
+
+  if (stopVoice) {
+    stopVoice.checked =
+      getRoxBooleanSetting(
+        ROX_SETTINGS_KEYS.stopVoiceOnRecord,
+        true
+      );
+  }
+
+  syncRoxSettingsAccount();
+}
+
+function scheduleRoxStartPage() {
+  if (!session) {
+    return;
+  }
+
+  const startPage =
+    localStorage.getItem(
+      ROX_SETTINGS_KEYS.startPage
+    ) || 'home';
+
+  const userId =
+    session.user?.id || 'current';
+
+  const sessionKey =
+    `roxStartPageOpened:${userId}`;
+
+  if (
+    sessionStorage.getItem(sessionKey)
+  ) {
+    return;
+  }
+
+  sessionStorage.setItem(
+    sessionKey,
+    'true'
+  );
+
+  setTimeout(() => {
+    if (startPage === 'home') {
+      document
+        .querySelector('[data-tab="home"]')
+        ?.click();
+
+      return;
+    }
+
+    document
+      .querySelector(
+        `[data-open="${startPage}"]`
+      )
+      ?.click();
+  }, 250);
+}
+
+function setupRoxSettingsCore() {
+  const bindSelect = (
+    id,
+    storageKey,
+    applyFunction = null
+  ) => {
+    const element =
+      document.getElementById(id);
+
+    element?.addEventListener(
+      'change',
+      () => {
+        localStorage.setItem(
+          storageKey,
+          element.value
+        );
+
+        applyFunction?.(
+          element.value
+        );
+      }
+    );
+  };
+
+  applyRoxTheme(
+    localStorage.getItem(
+      ROX_SETTINGS_KEYS.theme
+    ) || 'system'
+  );
+
+  applyRoxDensity(
+    localStorage.getItem(
+      ROX_SETTINGS_KEYS.density
+    ) || 'comfortable'
+  );
+
+  applyRoxUiLanguage(
+    localStorage.getItem(
+      ROX_SETTINGS_KEYS.uiLanguage
+    ) || 'auto'
+  );
+
+  populateRoxSettingsVoiceLanguages();
+  populateRoxSettingsVoices();
+  refreshRoxSettingsFormValues();
+
+  bindSelect(
+    'settingsUiLanguage',
+    ROX_SETTINGS_KEYS.uiLanguage,
+    applyRoxUiLanguage
+  );
+
+  bindSelect(
+    'settingsTheme',
+    ROX_SETTINGS_KEYS.theme,
+    applyRoxTheme
+  );
+
+  bindSelect(
+    'settingsStartPage',
+    ROX_SETTINGS_KEYS.startPage
+  );
+
+  bindSelect(
+    'settingsDensity',
+    ROX_SETTINGS_KEYS.density,
+    applyRoxDensity
+  );
+
+  const voiceLanguage =
+    document.getElementById(
+      'settingsVoiceLanguage'
+    );
+
+  voiceLanguage?.addEventListener(
+    'change',
+    () => {
+      setVoiceLanguage(
+        voiceLanguage.value
+      );
+    }
+  );
+
+  const voiceName =
+    document.getElementById(
+      'settingsVoiceName'
+    );
+
+  voiceName?.addEventListener(
+    'change',
+    () => {
+      if (voiceName.value) {
+        localStorage.setItem(
+          ROX_SETTINGS_KEYS.voiceName,
+          voiceName.value
+        );
+      } else {
+        localStorage.removeItem(
+          ROX_SETTINGS_KEYS.voiceName
+        );
+      }
+    }
+  );
+
+  const voiceRate =
+    document.getElementById(
+      'settingsVoiceRate'
+    );
+
+  voiceRate?.addEventListener(
+    'input',
+    () => {
+      localStorage.setItem(
+        ROX_SETTINGS_KEYS.voiceRate,
+        voiceRate.value
+      );
+
+      voiceRate.title =
+        `${voiceRate.value}x`;
+    }
+  );
+
+  const autoRead =
+    document.getElementById(
+      'settingsAutoRead'
+    );
+
+  autoRead?.addEventListener(
+    'change',
+    () => {
+      setRoxBooleanSetting(
+        ROX_SETTINGS_KEYS.autoRead,
+        autoRead.checked
+      );
+    }
+  );
+
+  const stopVoice =
+    document.getElementById(
+      'settingsStopVoiceOnRecord'
+    );
+
+  stopVoice?.addEventListener(
+    'change',
+    () => {
+      setRoxBooleanSetting(
+        ROX_SETTINGS_KEYS.stopVoiceOnRecord,
+        stopVoice.checked
+      );
+    }
+  );
+
+  document
+    .querySelectorAll(
+      '[data-open="settings"]'
+    )
+    .forEach(button => {
+      button.addEventListener(
+        'click',
+        () => {
+          setTimeout(() => {
+            populateRoxSettingsVoiceLanguages();
+            populateRoxSettingsVoices();
+            refreshRoxSettingsFormValues();
+          }, 0);
+        }
+      );
+    });
+
+  window.speechSynthesis
+    ?.addEventListener?.(
+      'voiceschanged',
+      populateRoxSettingsVoices
+    );
+
+  const usageSource =
+    document.getElementById(
+      'sidebarCreditsNum'
+    );
+
+  if (usageSource) {
+    new MutationObserver(
+      syncRoxSettingsAccount
+    ).observe(
+      usageSource,
+      {
+        childList:true,
+        subtree:true,
+        characterData:true
+      }
+    );
+  }
+}
+
+setTimeout(
+  setupRoxSettingsCore,
+  0
+);
+/* ROX SETTINGS CORE FUNCTIONS END */
 /* ROX SETTINGS TABS START */
 const settingsTabButtons = [
   ...document.querySelectorAll(
@@ -3140,7 +3933,7 @@ function appendMsg(msgBox, cls, content, isNode, meta = {}) {
            'fr-FR');
 
       speech.lang = preferredLang;
-      speech.rate = isArabic ? 0.92 : 1;
+      speech.rate = getRoxSpeechRate();
       speech.pitch = 1;
       speech.volume = 1;
 
@@ -3162,8 +3955,14 @@ function appendMsg(msgBox, cls, content, isNode, meta = {}) {
           )
       );
 
+      const savedVoice =
+        getRoxSelectedVoice(voices);
+
       const selectedVoice =
-        exactVoice || arabicVoice || languageVoice;
+        savedVoice ||
+        exactVoice ||
+        arabicVoice ||
+        languageVoice;
 
       if (selectedVoice) {
         speech.voice = selectedVoice;
@@ -3514,6 +4313,9 @@ async function sendChat(feature, text, msgBox) {
 } else {
   appendMsg(msgBox, 'bot', data.text, false, { responseId: data.responseId, model: data.model, feature });
 }
+  if (feature === 'chat') {
+    maybeAutoReadRoxMessage(data.text);
+  }
   if (feature === 'code' && typeof data.creditsCharged === 'number') {
     appendMsg(msgBox, 'status', `Coût final : ${data.creditsCharged} Credits`);
   }
@@ -4322,6 +5124,17 @@ document.querySelectorAll('input[data-feature]').forEach(inp=>{
         }
 
         textBeforeRecording = input.value.trim();
+
+        if (
+          getRoxBooleanSetting(
+            ROX_SETTINGS_KEYS.stopVoiceOnRecord,
+            true
+          ) &&
+          'speechSynthesis' in window
+        ) {
+          window.speechSynthesis.cancel();
+        }
+
         recognition.lang = getVoiceLanguage();
 
         try {
@@ -5289,6 +6102,98 @@ initAuth();
     right:14px;
   }
 }
+/* ROX SETTINGS CORE STYLES START */
+html[data-rox-theme="light"]{
+  color-scheme:light;
+  --bg:#eef2ff;
+  --panel:rgba(255,255,255,.9);
+  --panel-2:#f1f5f9;
+  --panel-3:#e2e8f0;
+  --text:#0f172a;
+  --text-dim:#64748b;
+  --border:rgba(30,41,59,.13);
+}
+
+html[data-rox-theme="dark"]{
+  color-scheme:dark;
+}
+
+html[data-rox-theme="light"] body{
+  color:var(--text);
+  background:
+    radial-gradient(circle at 12% 12%,rgba(14,165,233,.15),transparent 36%),
+    radial-gradient(circle at 88% 18%,rgba(124,58,237,.14),transparent 34%),
+    linear-gradient(145deg,#eff6ff,#eef2ff 48%,#f8fafc);
+}
+
+html[data-rox-theme="light"] .rox-settings-nav,
+html[data-rox-theme="light"] .rox-settings-section,
+html[data-rox-theme="light"] .rox-settings-hero .placeholder-view{
+  background:
+    linear-gradient(145deg,rgba(255,255,255,.92),rgba(241,245,249,.82));
+  border-color:rgba(30,41,59,.11);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.9),
+    0 16px 36px rgba(51,65,85,.12);
+}
+
+html[data-rox-theme="light"] .rox-settings-row,
+html[data-rox-theme="light"] .rox-settings-toggle-row{
+  background:rgba(255,255,255,.58);
+  border-color:rgba(30,41,59,.1);
+}
+
+html[data-rox-theme="light"] .rox-settings-row select{
+  color:#0f172a;
+  background-color:rgba(255,255,255,.94);
+}
+
+html[data-rox-theme="light"] .rox-settings-row select option{
+  color:#0f172a;
+  background:#fff;
+}
+
+html[data-rox-theme="light"] .rox-settings-action{
+  color:#1e293b;
+}
+
+html[data-rox-theme="light"] .rox-settings-action.danger{
+  color:#991b1b;
+}
+
+html[data-rox-density="compact"] .rox-settings-body{
+  padding:13px;
+}
+
+html[data-rox-density="compact"] .rox-settings-section{
+  padding:13px;
+}
+
+html[data-rox-density="compact"] .rox-settings-row,
+html[data-rox-density="compact"] .rox-settings-toggle-row{
+  min-height:56px;
+  margin-top:7px;
+  padding:9px 11px;
+}
+
+html[data-rox-density="compact"] .rox-settings-heading{
+  margin-bottom:11px;
+  padding-bottom:11px;
+}
+
+html[data-rox-density="compact"] .prow{
+  padding-top:9px;
+  padding-bottom:9px;
+}
+
+html[data-rox-density="compact"] .fcard{
+  padding:12px;
+}
+
+html[data-rox-density="compact"] .chat-input-row{
+  gap:6px;
+}
+/* ROX SETTINGS CORE STYLES END */
 /* ROX SETTINGS DESIGN END */
 
   .placeholder-view{color:var(--text-dim);font-size:13.5px;padding:44px 20px;text-align:center;border:1px dashed var(--border);border-radius:16px;}
@@ -7153,6 +8058,8 @@ async function onLoggedIn(s) {
   session = s;
   document.getElementById('login-overlay').classList.add('hidden');
   await refreshProfile();
+  syncRoxSettingsAccount();
+  scheduleRoxStartPage();
 }
 
 function showLogin() { document.getElementById('login-overlay').classList.remove('hidden'); }
@@ -7495,6 +8402,705 @@ async function submitTopupPayment() {
   }
 }
 
+/* ROX SETTINGS CORE FUNCTIONS START */
+const ROX_SETTINGS_KEYS = {
+  uiLanguage: 'roxUiLanguage',
+  theme: 'roxTheme',
+  startPage: 'roxStartPage',
+  density: 'roxDensity',
+  voiceName: 'roxVoiceName',
+  voiceRate: 'roxVoiceRate',
+  autoRead: 'roxAutoRead',
+  stopVoiceOnRecord: 'roxStopVoiceOnRecord'
+};
+
+function getRoxBooleanSetting(key, fallback = false) {
+  const value = localStorage.getItem(key);
+
+  if (value === null) {
+    return fallback;
+  }
+
+  return value === 'true';
+}
+
+function setRoxBooleanSetting(key, value) {
+  localStorage.setItem(
+    key,
+    String(Boolean(value))
+  );
+}
+
+function getRoxSystemTheme() {
+  return window.matchMedia &&
+    window.matchMedia('(prefers-color-scheme: light)').matches
+      ? 'light'
+      : 'dark';
+}
+
+function applyRoxTheme(themeValue) {
+  const selectedTheme =
+    themeValue || 'system';
+
+  const resolvedTheme =
+    selectedTheme === 'system'
+      ? getRoxSystemTheme()
+      : selectedTheme;
+
+  document.documentElement.dataset.roxTheme =
+    resolvedTheme;
+
+  document.documentElement.dataset.roxThemePreference =
+    selectedTheme;
+}
+
+function applyRoxDensity(densityValue) {
+  document.documentElement.dataset.roxDensity =
+    densityValue === 'compact'
+      ? 'compact'
+      : 'comfortable';
+}
+
+function resolveRoxUiLanguage(languageValue) {
+  if (
+    languageValue &&
+    languageValue !== 'auto'
+  ) {
+    return languageValue;
+  }
+
+  return (
+    navigator.languages &&
+    navigator.languages[0]
+      ? navigator.languages[0]
+      : navigator.language || 'fr'
+  ).split('-')[0];
+}
+
+function applyRoxUiLanguage(languageValue) {
+  const resolvedLanguage =
+    resolveRoxUiLanguage(languageValue);
+
+  document.documentElement.lang =
+    resolvedLanguage;
+
+  document.documentElement.dir =
+    resolvedLanguage === 'ar'
+      ? 'rtl'
+      : 'ltr';
+
+  document.documentElement.dataset.roxUiLanguage =
+    resolvedLanguage;
+}
+
+function getRoxSpeechRate() {
+  const savedRate = Number(
+    localStorage.getItem(
+      ROX_SETTINGS_KEYS.voiceRate
+    )
+  );
+
+  if (
+    Number.isFinite(savedRate) &&
+    savedRate >= 0.75 &&
+    savedRate <= 1.5
+  ) {
+    return savedRate;
+  }
+
+  return 1;
+}
+
+function getRoxSelectedVoice(voices) {
+  const selectedVoiceId =
+    localStorage.getItem(
+      ROX_SETTINGS_KEYS.voiceName
+    );
+
+  if (!selectedVoiceId) {
+    return null;
+  }
+
+  return voices.find(
+    voice =>
+      voice.voiceURI === selectedVoiceId ||
+      voice.name === selectedVoiceId
+  ) || null;
+}
+
+function speakRoxText(text) {
+  if (
+    !text ||
+    !('speechSynthesis' in window)
+  ) {
+    return;
+  }
+
+  const speech =
+    new SpeechSynthesisUtterance(
+      String(text)
+    );
+
+  const selectedLanguage =
+    localStorage.getItem(
+      'roxVoiceLanguage'
+    );
+
+  const isArabic =
+    /[\u0600-\u06FF]/.test(
+      String(text)
+    );
+
+  const preferredLang =
+    selectedLanguage ||
+    (
+      isArabic
+        ? 'ar-MA'
+        : (
+            document.documentElement.lang ||
+            navigator.language ||
+            'fr-FR'
+          )
+    );
+
+  speech.lang = preferredLang;
+  speech.rate = getRoxSpeechRate();
+  speech.pitch = 1;
+  speech.volume = 1;
+
+  const voices =
+    window.speechSynthesis.getVoices();
+
+  const selectedVoice =
+    getRoxSelectedVoice(voices);
+
+  const exactVoice = voices.find(
+    voice =>
+      voice.lang.toLowerCase() ===
+      preferredLang.toLowerCase()
+  );
+
+  const languageVoice = voices.find(
+    voice =>
+      voice.lang.toLowerCase().startsWith(
+        preferredLang
+          .toLowerCase()
+          .split('-')[0]
+      )
+  );
+
+  speech.voice =
+    selectedVoice ||
+    exactVoice ||
+    languageVoice ||
+    null;
+
+  window.speechSynthesis.cancel();
+  window.speechSynthesis.speak(speech);
+}
+
+function maybeAutoReadRoxMessage(text) {
+  if (
+    !getRoxBooleanSetting(
+      ROX_SETTINGS_KEYS.autoRead,
+      false
+    )
+  ) {
+    return;
+  }
+
+  speakRoxText(text);
+}
+
+function populateRoxSettingsVoiceLanguages() {
+  const select =
+    document.getElementById(
+      'settingsVoiceLanguage'
+    );
+
+  if (
+    !select ||
+    typeof voiceLanguages === 'undefined'
+  ) {
+    return;
+  }
+
+  select.innerHTML = '';
+
+  voiceLanguages.forEach(
+    ([value, label]) => {
+      const option =
+        document.createElement('option');
+
+      option.value = value;
+      option.textContent = label;
+
+      select.appendChild(option);
+    }
+  );
+
+  select.value =
+    localStorage.getItem(
+      'roxVoiceLanguage'
+    ) || '';
+}
+
+function populateRoxSettingsVoices() {
+  const select =
+    document.getElementById(
+      'settingsVoiceName'
+    );
+
+  if (
+    !select ||
+    !('speechSynthesis' in window)
+  ) {
+    return;
+  }
+
+  const previousValue =
+    localStorage.getItem(
+      ROX_SETTINGS_KEYS.voiceName
+    ) || '';
+
+  const voices =
+    window.speechSynthesis
+      .getVoices()
+      .slice()
+      .sort((a, b) =>
+        `${a.lang} ${a.name}`.localeCompare(
+          `${b.lang} ${b.name}`
+        )
+      );
+
+  select.innerHTML = '';
+
+  const automaticOption =
+    document.createElement('option');
+
+  automaticOption.value = '';
+  automaticOption.textContent =
+    'Automatique';
+
+  select.appendChild(
+    automaticOption
+  );
+
+  voices.forEach(voice => {
+    const option =
+      document.createElement('option');
+
+    option.value =
+      voice.voiceURI || voice.name;
+
+    option.textContent =
+      `${voice.name} — ${voice.lang}`;
+
+    select.appendChild(option);
+  });
+
+  select.value = voices.some(
+    voice =>
+      voice.voiceURI === previousValue ||
+      voice.name === previousValue
+  )
+    ? previousValue
+    : '';
+}
+
+function syncRoxSettingsAccount() {
+  const nameElement =
+    document.getElementById(
+      'settingsAccountName'
+    );
+
+  const emailElement =
+    document.getElementById(
+      'settingsAccountEmail'
+    );
+
+  const planElement =
+    document.getElementById(
+      'settingsPlanStatus'
+    );
+
+  const usageElement =
+    document.getElementById(
+      'settingsUsageStatus'
+    );
+
+  const accountEmail =
+    profile?.email ||
+    session?.user?.email ||
+    '—';
+
+  const accountName =
+    profile?.full_name ||
+    accountEmail.split('@')[0] ||
+    '—';
+
+  const isPro =
+    profile?.subscription_status ===
+    'pro';
+
+  if (nameElement) {
+    nameElement.textContent =
+      accountName;
+  }
+
+  if (emailElement) {
+    emailElement.textContent =
+      accountEmail;
+  }
+
+  if (planElement) {
+    planElement.textContent =
+      isPro
+        ? 'Plan Pro'
+        : 'Plan Gratuit';
+  }
+
+  if (usageElement) {
+    const usageSource =
+      document.getElementById(
+        'sidebarCreditsNum'
+      );
+
+    usageElement.textContent =
+      usageSource?.textContent ||
+      'Chargement...';
+  }
+}
+
+function refreshRoxSettingsFormValues() {
+  const fields = {
+    settingsUiLanguage:
+      localStorage.getItem(
+        ROX_SETTINGS_KEYS.uiLanguage
+      ) || 'auto',
+
+    settingsTheme:
+      localStorage.getItem(
+        ROX_SETTINGS_KEYS.theme
+      ) || 'system',
+
+    settingsStartPage:
+      localStorage.getItem(
+        ROX_SETTINGS_KEYS.startPage
+      ) || 'home',
+
+    settingsDensity:
+      localStorage.getItem(
+        ROX_SETTINGS_KEYS.density
+      ) || 'comfortable',
+
+    settingsVoiceLanguage:
+      localStorage.getItem(
+        'roxVoiceLanguage'
+      ) || '',
+
+    settingsVoiceName:
+      localStorage.getItem(
+        ROX_SETTINGS_KEYS.voiceName
+      ) || ''
+  };
+
+  Object.entries(fields).forEach(
+    ([id, value]) => {
+      const element =
+        document.getElementById(id);
+
+      if (element) {
+        element.value = value;
+      }
+    }
+  );
+
+  const voiceRate =
+    document.getElementById(
+      'settingsVoiceRate'
+    );
+
+  if (voiceRate) {
+    voiceRate.value =
+      String(getRoxSpeechRate());
+
+    voiceRate.title =
+      `${voiceRate.value}x`;
+  }
+
+  const autoRead =
+    document.getElementById(
+      'settingsAutoRead'
+    );
+
+  if (autoRead) {
+    autoRead.checked =
+      getRoxBooleanSetting(
+        ROX_SETTINGS_KEYS.autoRead,
+        false
+      );
+  }
+
+  const stopVoice =
+    document.getElementById(
+      'settingsStopVoiceOnRecord'
+    );
+
+  if (stopVoice) {
+    stopVoice.checked =
+      getRoxBooleanSetting(
+        ROX_SETTINGS_KEYS.stopVoiceOnRecord,
+        true
+      );
+  }
+
+  syncRoxSettingsAccount();
+}
+
+function scheduleRoxStartPage() {
+  if (!session) {
+    return;
+  }
+
+  const startPage =
+    localStorage.getItem(
+      ROX_SETTINGS_KEYS.startPage
+    ) || 'home';
+
+  const userId =
+    session.user?.id || 'current';
+
+  const sessionKey =
+    `roxStartPageOpened:${userId}`;
+
+  if (
+    sessionStorage.getItem(sessionKey)
+  ) {
+    return;
+  }
+
+  sessionStorage.setItem(
+    sessionKey,
+    'true'
+  );
+
+  setTimeout(() => {
+    if (startPage === 'home') {
+      document
+        .querySelector('[data-tab="home"]')
+        ?.click();
+
+      return;
+    }
+
+    document
+      .querySelector(
+        `[data-open="${startPage}"]`
+      )
+      ?.click();
+  }, 250);
+}
+
+function setupRoxSettingsCore() {
+  const bindSelect = (
+    id,
+    storageKey,
+    applyFunction = null
+  ) => {
+    const element =
+      document.getElementById(id);
+
+    element?.addEventListener(
+      'change',
+      () => {
+        localStorage.setItem(
+          storageKey,
+          element.value
+        );
+
+        applyFunction?.(
+          element.value
+        );
+      }
+    );
+  };
+
+  applyRoxTheme(
+    localStorage.getItem(
+      ROX_SETTINGS_KEYS.theme
+    ) || 'system'
+  );
+
+  applyRoxDensity(
+    localStorage.getItem(
+      ROX_SETTINGS_KEYS.density
+    ) || 'comfortable'
+  );
+
+  applyRoxUiLanguage(
+    localStorage.getItem(
+      ROX_SETTINGS_KEYS.uiLanguage
+    ) || 'auto'
+  );
+
+  populateRoxSettingsVoiceLanguages();
+  populateRoxSettingsVoices();
+  refreshRoxSettingsFormValues();
+
+  bindSelect(
+    'settingsUiLanguage',
+    ROX_SETTINGS_KEYS.uiLanguage,
+    applyRoxUiLanguage
+  );
+
+  bindSelect(
+    'settingsTheme',
+    ROX_SETTINGS_KEYS.theme,
+    applyRoxTheme
+  );
+
+  bindSelect(
+    'settingsStartPage',
+    ROX_SETTINGS_KEYS.startPage
+  );
+
+  bindSelect(
+    'settingsDensity',
+    ROX_SETTINGS_KEYS.density,
+    applyRoxDensity
+  );
+
+  const voiceLanguage =
+    document.getElementById(
+      'settingsVoiceLanguage'
+    );
+
+  voiceLanguage?.addEventListener(
+    'change',
+    () => {
+      setVoiceLanguage(
+        voiceLanguage.value
+      );
+    }
+  );
+
+  const voiceName =
+    document.getElementById(
+      'settingsVoiceName'
+    );
+
+  voiceName?.addEventListener(
+    'change',
+    () => {
+      if (voiceName.value) {
+        localStorage.setItem(
+          ROX_SETTINGS_KEYS.voiceName,
+          voiceName.value
+        );
+      } else {
+        localStorage.removeItem(
+          ROX_SETTINGS_KEYS.voiceName
+        );
+      }
+    }
+  );
+
+  const voiceRate =
+    document.getElementById(
+      'settingsVoiceRate'
+    );
+
+  voiceRate?.addEventListener(
+    'input',
+    () => {
+      localStorage.setItem(
+        ROX_SETTINGS_KEYS.voiceRate,
+        voiceRate.value
+      );
+
+      voiceRate.title =
+        `${voiceRate.value}x`;
+    }
+  );
+
+  const autoRead =
+    document.getElementById(
+      'settingsAutoRead'
+    );
+
+  autoRead?.addEventListener(
+    'change',
+    () => {
+      setRoxBooleanSetting(
+        ROX_SETTINGS_KEYS.autoRead,
+        autoRead.checked
+      );
+    }
+  );
+
+  const stopVoice =
+    document.getElementById(
+      'settingsStopVoiceOnRecord'
+    );
+
+  stopVoice?.addEventListener(
+    'change',
+    () => {
+      setRoxBooleanSetting(
+        ROX_SETTINGS_KEYS.stopVoiceOnRecord,
+        stopVoice.checked
+      );
+    }
+  );
+
+  document
+    .querySelectorAll(
+      '[data-open="settings"]'
+    )
+    .forEach(button => {
+      button.addEventListener(
+        'click',
+        () => {
+          setTimeout(() => {
+            populateRoxSettingsVoiceLanguages();
+            populateRoxSettingsVoices();
+            refreshRoxSettingsFormValues();
+          }, 0);
+        }
+      );
+    });
+
+  window.speechSynthesis
+    ?.addEventListener?.(
+      'voiceschanged',
+      populateRoxSettingsVoices
+    );
+
+  const usageSource =
+    document.getElementById(
+      'sidebarCreditsNum'
+    );
+
+  if (usageSource) {
+    new MutationObserver(
+      syncRoxSettingsAccount
+    ).observe(
+      usageSource,
+      {
+        childList:true,
+        subtree:true,
+        characterData:true
+      }
+    );
+  }
+}
+
+setTimeout(
+  setupRoxSettingsCore,
+  0
+);
+/* ROX SETTINGS CORE FUNCTIONS END */
 /* ROX SETTINGS TABS START */
 const settingsTabButtons = [
   ...document.querySelectorAll(
@@ -7839,7 +9445,7 @@ function appendMsg(msgBox, cls, content, isNode, meta = {}) {
            'fr-FR');
 
       speech.lang = preferredLang;
-      speech.rate = isArabic ? 0.92 : 1;
+      speech.rate = getRoxSpeechRate();
       speech.pitch = 1;
       speech.volume = 1;
 
@@ -7861,8 +9467,14 @@ function appendMsg(msgBox, cls, content, isNode, meta = {}) {
           )
       );
 
+      const savedVoice =
+        getRoxSelectedVoice(voices);
+
       const selectedVoice =
-        exactVoice || arabicVoice || languageVoice;
+        savedVoice ||
+        exactVoice ||
+        arabicVoice ||
+        languageVoice;
 
       if (selectedVoice) {
         speech.voice = selectedVoice;
@@ -8213,6 +9825,9 @@ async function sendChat(feature, text, msgBox) {
 } else {
   appendMsg(msgBox, 'bot', data.text, false, { responseId: data.responseId, model: data.model, feature });
 }
+  if (feature === 'chat') {
+    maybeAutoReadRoxMessage(data.text);
+  }
   if (feature === 'code' && typeof data.creditsCharged === 'number') {
     appendMsg(msgBox, 'status', `Coût final : ${data.creditsCharged} Credits`);
   }
@@ -9048,6 +10663,17 @@ document.querySelectorAll('input[data-quickfeature]').forEach(inp=>{
         }
 
         textBeforeRecording = input.value.trim();
+
+        if (
+          getRoxBooleanSetting(
+            ROX_SETTINGS_KEYS.stopVoiceOnRecord,
+            true
+          ) &&
+          'speechSynthesis' in window
+        ) {
+          window.speechSynthesis.cancel();
+        }
+
         recognition.lang = getVoiceLanguage();
 
         try {
