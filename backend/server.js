@@ -51,6 +51,41 @@ const diskMaintenanceModule = require('./src/modules/diskMonitor/maintenance');
 
 const app = express();
 
+// ROX CORS START
+const allowedOrigins = new Set([
+  'http://localhost:5500',
+  'http://127.0.0.1:5500',
+  'https://rox-ai-sepia.vercel.app',
+  ...String(process.env.ALLOWED_ORIGINS || '')
+    .split(',')
+    .map(origin => origin.trim())
+    .filter(Boolean),
+]);
+
+app.use((req, res, next) => {
+  const origin = req.headers.origin;
+
+  if (origin && allowedOrigins.has(origin)) {
+    res.setHeader('Access-Control-Allow-Origin', origin);
+    res.setHeader('Vary', 'Origin');
+    res.setHeader(
+      'Access-Control-Allow-Headers',
+      'Authorization, Content-Type'
+    );
+    res.setHeader(
+      'Access-Control-Allow-Methods',
+      'GET, POST, PUT, PATCH, DELETE, OPTIONS'
+    );
+  }
+
+  if (req.method === 'OPTIONS') {
+    return res.sendStatus(204);
+  }
+
+  next();
+});
+// ROX CORS END
+
 // Stripe webhook needs the raw body, so it's mounted BEFORE express.json()
 // ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â and deliberately BEFORE the IP guard below. Stripe sends from a
 // shared/rotating pool of IPs, so subjecting it to the same per-IP limit
