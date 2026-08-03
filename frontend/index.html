@@ -4515,7 +4515,7 @@ const GEN_TIMEOUT_MS = 120000;
 async function sendGeneration(feature, text, msgBox) {
   const typing = appendTyping(msgBox);
   try {
-    const res = await authFetch(GEN_ROUTES[feature], { method: 'POST', body: JSON.stringify({ prompt: text }) });
+    const res = await authFetch(GEN_ROUTES[feature], { method: 'POST', body: JSON.stringify({ prompt: text, aiPreferences: getRoxAiPreferences() }) });
     const data = await res.json();
 
     if (res.status === 403 && data.code === 'pro_out_of_credits') {
@@ -4590,12 +4590,99 @@ async function pollJob(jobId, feature, msgBox, typing) {
 // ── roxip: no backend route yet, kept as a clearly-labeled demo ────
 function sendRoxIpDemo(text, msgBox) {
   const typing = appendTyping(msgBox);
+  const preferences = getRoxAiPreferences();
+
+  const messages = {
+    ar: {
+      concise:
+        `تجربة فقط — "${text}" ما زال ما كيتّاصلش بجهاز حقيقي.`,
+
+      balanced:
+        `Rox IP ما زال غير نسخة تجريبية. الأمر "${text}" ما كيتّاصلش حالياً بأي حاسوب حقيقي.`,
+
+      detailed:
+        `Rox IP ما زال في المرحلة التجريبية. الأمر "${text}" تم استقباله، ولكن خاصية التحكم في حاسوب حقيقي ما زال ما تزادتش في الـBackend، لذلك ما تم تنفيذ حتى إجراء على الجهاز.`
+    },
+
+    fr: {
+      concise:
+        `Démo uniquement — « ${text} » ne contrôle pas encore une vraie machine.`,
+
+      balanced:
+        `Rox IP est encore en mode démo. La commande « ${text} » n’est actuellement connectée à aucun ordinateur réel.`,
+
+      detailed:
+        `Rox IP est encore en phase de démonstration. La commande « ${text} » a bien été reçue, mais le contrôle d’une machine réelle n’est pas encore disponible dans le backend. Aucune action n’a donc été exécutée.`
+    },
+
+    en: {
+      concise:
+        `Demo only — “${text}” does not control a real machine yet.`,
+
+      balanced:
+        `Rox IP is still in demo mode. The command “${text}” is not currently connected to any real computer.`,
+
+      detailed:
+        `Rox IP is still in the demonstration stage. The command “${text}” was received, but real computer control has not yet been implemented in the backend, so no action was performed on a device.`
+    },
+
+    es: {
+      concise:
+        `Solo demostración: «${text}» todavía no controla una máquina real.`,
+
+      balanced:
+        `Rox IP sigue en modo demostración. La orden «${text}» no está conectada actualmente a ningún ordenador real.`,
+
+      detailed:
+        `Rox IP todavía está en fase de demostración. La orden «${text}» fue recibida, pero el control de un ordenador real aún no está implementado en el backend, por lo que no se ejecutó ninguna acción.`
+    }
+  };
+
+  let language = preferences.language;
+
+  if (language === 'auto') {
+    if (/[\u0600-\u06FF]/.test(text)) {
+      language = 'ar';
+    } else {
+      language = 'fr';
+    }
+  }
+
+  const selectedLanguage =
+    messages[language] || messages.fr;
+
+  const selectedLength =
+    selectedLanguage[preferences.length] ||
+    selectedLanguage.balanced;
+
+  let finalMessage = selectedLength;
+
+  if (
+    preferences.tone === 'professional' &&
+    preferences.length !== 'concise'
+  ) {
+    finalMessage =
+      language === 'ar'
+        ? `ملاحظة تقنية: ${finalMessage}`
+        : language === 'en'
+          ? `Technical note: ${finalMessage}`
+          : language === 'es'
+            ? `Nota técnica: ${finalMessage}`
+            : `Note technique : ${finalMessage}`;
+  }
+
+  if (
+    preferences.tone === 'creative' &&
+    preferences.length !== 'concise'
+  ) {
+    finalMessage = `✨ ${finalMessage}`;
+  }
+
   setTimeout(() => {
     typing.remove();
-    appendMsg(msgBox, 'status', `Démo — "${text}" ne se connecte pas encore à une vraie machine (fonctionnalité pas encore présente dans le backend).`);
+    appendMsg(msgBox, 'status', finalMessage);
   }, 700);
 }
-
 // ── dispatch ─────────────────────────────────────────────────────────
 function sendMessage(feature){
   const input = document.querySelector('input[data-feature="'+feature+'"]');
@@ -10200,7 +10287,7 @@ const GEN_TIMEOUT_MS = 120000;
 async function sendGeneration(feature, text, msgBox) {
   const typing = appendTyping(msgBox);
   try {
-    const res = await authFetch(GEN_ROUTES[feature], { method: 'POST', body: JSON.stringify({ prompt: text }) });
+    const res = await authFetch(GEN_ROUTES[feature], { method: 'POST', body: JSON.stringify({ prompt: text, aiPreferences: getRoxAiPreferences() }) });
     const data = await res.json();
 
     if (res.status === 403 && data.code === 'pro_out_of_credits') {
@@ -10276,12 +10363,99 @@ async function pollJob(jobId, feature, msgBox, typing) {
 // ── roxip: no backend route yet, kept as a clearly-labeled demo ────
 function sendRoxIpDemo(text, msgBox) {
   const typing = appendTyping(msgBox);
+  const preferences = getRoxAiPreferences();
+
+  const messages = {
+    ar: {
+      concise:
+        `تجربة فقط — "${text}" ما زال ما كيتّاصلش بجهاز حقيقي.`,
+
+      balanced:
+        `Rox IP ما زال غير نسخة تجريبية. الأمر "${text}" ما كيتّاصلش حالياً بأي حاسوب حقيقي.`,
+
+      detailed:
+        `Rox IP ما زال في المرحلة التجريبية. الأمر "${text}" تم استقباله، ولكن خاصية التحكم في حاسوب حقيقي ما زال ما تزادتش في الـBackend، لذلك ما تم تنفيذ حتى إجراء على الجهاز.`
+    },
+
+    fr: {
+      concise:
+        `Démo uniquement — « ${text} » ne contrôle pas encore une vraie machine.`,
+
+      balanced:
+        `Rox IP est encore en mode démo. La commande « ${text} » n’est actuellement connectée à aucun ordinateur réel.`,
+
+      detailed:
+        `Rox IP est encore en phase de démonstration. La commande « ${text} » a bien été reçue, mais le contrôle d’une machine réelle n’est pas encore disponible dans le backend. Aucune action n’a donc été exécutée.`
+    },
+
+    en: {
+      concise:
+        `Demo only — “${text}” does not control a real machine yet.`,
+
+      balanced:
+        `Rox IP is still in demo mode. The command “${text}” is not currently connected to any real computer.`,
+
+      detailed:
+        `Rox IP is still in the demonstration stage. The command “${text}” was received, but real computer control has not yet been implemented in the backend, so no action was performed on a device.`
+    },
+
+    es: {
+      concise:
+        `Solo demostración: «${text}» todavía no controla una máquina real.`,
+
+      balanced:
+        `Rox IP sigue en modo demostración. La orden «${text}» no está conectada actualmente a ningún ordenador real.`,
+
+      detailed:
+        `Rox IP todavía está en fase de demostración. La orden «${text}» fue recibida, pero el control de un ordenador real aún no está implementado en el backend, por lo que no se ejecutó ninguna acción.`
+    }
+  };
+
+  let language = preferences.language;
+
+  if (language === 'auto') {
+    if (/[\u0600-\u06FF]/.test(text)) {
+      language = 'ar';
+    } else {
+      language = 'fr';
+    }
+  }
+
+  const selectedLanguage =
+    messages[language] || messages.fr;
+
+  const selectedLength =
+    selectedLanguage[preferences.length] ||
+    selectedLanguage.balanced;
+
+  let finalMessage = selectedLength;
+
+  if (
+    preferences.tone === 'professional' &&
+    preferences.length !== 'concise'
+  ) {
+    finalMessage =
+      language === 'ar'
+        ? `ملاحظة تقنية: ${finalMessage}`
+        : language === 'en'
+          ? `Technical note: ${finalMessage}`
+          : language === 'es'
+            ? `Nota técnica: ${finalMessage}`
+            : `Note technique : ${finalMessage}`;
+  }
+
+  if (
+    preferences.tone === 'creative' &&
+    preferences.length !== 'concise'
+  ) {
+    finalMessage = `✨ ${finalMessage}`;
+  }
+
   setTimeout(() => {
     typing.remove();
-    appendMsg(msgBox, 'status', `Démo — "${text}" ne se connecte pas encore à une vraie machine (fonctionnalité pas encore présente dans le backend).`);
+    appendMsg(msgBox, 'status', finalMessage);
   }, 700);
 }
-
 // ── dispatch ─────────────────────────────────────────────────────────
 function sendMessage(feature){
   const input = document.querySelector('input[data-feature="'+feature+'"]');
