@@ -417,6 +417,32 @@
   background:rgba(139,92,246,.20);
   color:var(--ember-2);
 }
+/* ROX ACTION FEEDBACK START */
+.msg-action.bump{
+  animation:msgActionPop .28s ease;
+}
+
+@keyframes msgActionPop{
+  0%{transform:scale(1);}
+  45%{transform:scale(1.18);}
+  100%{transform:scale(1);}
+}
+
+.msg-feedback{
+  align-self:flex-start;
+  margin:-3px 0 8px 9px;
+  font-size:12px;
+  color:var(--text-dim);
+  opacity:0;
+  transform:translateY(-4px);
+  transition:opacity .2s ease, transform .2s ease;
+}
+
+.msg-feedback.show{
+  opacity:1;
+  transform:translateY(0);
+}
+/* ROX ACTION FEEDBACK END */
   .msg.user{background:var(--ember-grad);color:#ffffff;font-weight:500;align-self:flex-end;border-bottom-right-radius:4px;}
   .typing{display:flex;gap:5px;align-self:flex-start;background:var(--panel-2);border:1px solid var(--border);padding:13px 16px;border-radius:14px;border-bottom-left-radius:4px;}
   .typing span{width:6px;height:6px;background:var(--ember-2);border-radius:50%;box-shadow:0 0 8px rgba(167,139,250,.8);animation:emberBlink 1.2s infinite ease-in-out;}
@@ -1357,6 +1383,24 @@ function appendMsg(msgBox, cls, content, isNode) {
     const actions = document.createElement('div');
     actions.className = 'msg-actions';
 
+    const showFeedback = (message) => {
+      let note = actions.nextElementSibling;
+
+      if (!note || !note.classList.contains('msg-feedback')) {
+        note = document.createElement('div');
+        note.className = 'msg-feedback';
+        actions.insertAdjacentElement('afterend', note);
+      }
+
+      note.textContent = message;
+      note.classList.add('show');
+
+      clearTimeout(note._hideTimer);
+      note._hideTimer = setTimeout(() => {
+        note.classList.remove('show');
+      }, 1600);
+    };
+
     const getMessageText = () =>
       (el.innerText || el.textContent || '').trim();
 
@@ -1446,13 +1490,35 @@ function appendMsg(msgBox, cls, content, isNode) {
     let dislikeButton;
 
     likeButton = makeAction('\uD83D\uDC4D', "J'aime", (button) => {
-      button.classList.toggle('is-active');
+      const nowActive = !button.classList.contains('is-active');
+
+      button.classList.toggle('is-active', nowActive);
       dislikeButton?.classList.remove('is-active');
+
+      button.classList.add('bump');
+      setTimeout(() => button.classList.remove('bump'), 280);
+
+      showFeedback(
+        nowActive
+          ? 'Merci, votre avis aide Rox AI \uD83D\uDC4D'
+          : 'Avis retiré'
+      );
     });
 
     dislikeButton = makeAction('\uD83D\uDC4E', "Je n'aime pas", (button) => {
-      button.classList.toggle('is-active');
+      const nowActive = !button.classList.contains('is-active');
+
+      button.classList.toggle('is-active', nowActive);
       likeButton?.classList.remove('is-active');
+
+      button.classList.add('bump');
+      setTimeout(() => button.classList.remove('bump'), 280);
+
+      showFeedback(
+        nowActive
+          ? 'Merci, votre avis aide Rox AI'
+          : 'Avis retiré'
+      );
     });
 
     makeAction('\u2197', 'Partager', async () => {
@@ -2368,6 +2434,32 @@ initAuth();
   background:rgba(139,92,246,.20);
   color:var(--ember-2);
 }
+/* ROX ACTION FEEDBACK START */
+.msg-action.bump{
+  animation:msgActionPop .28s ease;
+}
+
+@keyframes msgActionPop{
+  0%{transform:scale(1);}
+  45%{transform:scale(1.18);}
+  100%{transform:scale(1);}
+}
+
+.msg-feedback{
+  align-self:flex-start;
+  margin:-3px 0 8px 9px;
+  font-size:12px;
+  color:var(--text-dim);
+  opacity:0;
+  transform:translateY(-4px);
+  transition:opacity .2s ease, transform .2s ease;
+}
+
+.msg-feedback.show{
+  opacity:1;
+  transform:translateY(0);
+}
+/* ROX ACTION FEEDBACK END */
   .msg.user{background:var(--ember-grad);color:#ffffff;font-weight:500;align-self:flex-end;border-bottom-right-radius:4px;}
   .typing{display:flex;gap:5px;align-self:flex-start;background:var(--panel-2);border:1px solid var(--border);padding:13px 16px;border-radius:14px;border-bottom-left-radius:4px;}
   .typing span{width:6px;height:6px;background:var(--ember-2);border-radius:50%;box-shadow:0 0 8px rgba(167,139,250,.8);animation:emberBlink 1.2s infinite ease-in-out;}
@@ -3489,6 +3581,24 @@ function appendMsg(msgBox, cls, content, isNode) {
     const actions = document.createElement('div');
     actions.className = 'msg-actions';
 
+    const showFeedback = (message) => {
+      let note = actions.nextElementSibling;
+
+      if (!note || !note.classList.contains('msg-feedback')) {
+        note = document.createElement('div');
+        note.className = 'msg-feedback';
+        actions.insertAdjacentElement('afterend', note);
+      }
+
+      note.textContent = message;
+      note.classList.add('show');
+
+      clearTimeout(note._hideTimer);
+      note._hideTimer = setTimeout(() => {
+        note.classList.remove('show');
+      }, 1600);
+    };
+
     const getMessageText = () =>
       (el.innerText || el.textContent || '').trim();
 
@@ -3578,13 +3688,35 @@ function appendMsg(msgBox, cls, content, isNode) {
     let dislikeButton;
 
     likeButton = makeAction('\uD83D\uDC4D', "J'aime", (button) => {
-      button.classList.toggle('is-active');
+      const nowActive = !button.classList.contains('is-active');
+
+      button.classList.toggle('is-active', nowActive);
       dislikeButton?.classList.remove('is-active');
+
+      button.classList.add('bump');
+      setTimeout(() => button.classList.remove('bump'), 280);
+
+      showFeedback(
+        nowActive
+          ? 'Merci, votre avis aide Rox AI \uD83D\uDC4D'
+          : 'Avis retiré'
+      );
     });
 
     dislikeButton = makeAction('\uD83D\uDC4E', "Je n'aime pas", (button) => {
-      button.classList.toggle('is-active');
+      const nowActive = !button.classList.contains('is-active');
+
+      button.classList.toggle('is-active', nowActive);
       likeButton?.classList.remove('is-active');
+
+      button.classList.add('bump');
+      setTimeout(() => button.classList.remove('bump'), 280);
+
+      showFeedback(
+        nowActive
+          ? 'Merci, votre avis aide Rox AI'
+          : 'Avis retiré'
+      );
     });
 
     makeAction('\u2197', 'Partager', async () => {
