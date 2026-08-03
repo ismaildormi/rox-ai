@@ -862,6 +862,436 @@
   }
   /* ROX VOICE INPUT DESIGN END */
   .chat-input-row button:active{transform:scale(.92);}
+/* ROX SETTINGS DESIGN START */
+.rox-settings-body{
+  width:100%;
+  height:100%;
+  overflow-y:auto;
+  padding:20px;
+  color:var(--text);
+  scrollbar-width:thin;
+  scrollbar-color:rgba(139,92,246,.45) transparent;
+}
+
+.rox-settings-body::-webkit-scrollbar{
+  width:7px;
+}
+
+.rox-settings-body::-webkit-scrollbar-thumb{
+  border-radius:99px;
+  background:rgba(139,92,246,.42);
+}
+
+.rox-settings-hero{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto;
+  align-items:stretch;
+  gap:12px;
+  margin-bottom:16px;
+}
+
+.rox-settings-hero .placeholder-view{
+  min-height:88px;
+  margin:0 !important;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:18px;
+  border:1px solid rgba(139,92,246,.2);
+  border-radius:18px;
+  background:
+    radial-gradient(circle at 80% 20%,rgba(124,58,237,.18),transparent 44%),
+    linear-gradient(135deg,rgba(17,24,39,.55),rgba(30,41,59,.28));
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.06),
+    0 12px 30px rgba(2,6,23,.18);
+  color:var(--text);
+  text-align:center;
+  line-height:1.6;
+  backdrop-filter:blur(18px);
+  -webkit-backdrop-filter:blur(18px);
+}
+
+.rox-settings-hero .upgrade-btn{
+  width:auto !important;
+  min-width:190px;
+  margin:0 !important;
+  border-radius:18px;
+  padding:0 20px;
+}
+
+.rox-settings-nav{
+  position:sticky;
+  top:0;
+  z-index:25;
+  display:flex;
+  gap:8px;
+  margin-bottom:16px;
+  padding:8px;
+  overflow-x:auto;
+  border:1px solid rgba(255,255,255,.07);
+  border-radius:17px;
+  background:rgba(12,17,30,.76);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.05),
+    0 12px 28px rgba(2,6,23,.18);
+  backdrop-filter:blur(20px);
+  -webkit-backdrop-filter:blur(20px);
+  scrollbar-width:none;
+}
+
+.rox-settings-nav::-webkit-scrollbar{
+  display:none;
+}
+
+.rox-settings-nav button{
+  flex:0 0 auto;
+  min-height:38px;
+  padding:0 14px;
+  border:1px solid transparent;
+  border-radius:12px;
+  background:transparent;
+  color:var(--text-dim);
+  cursor:pointer;
+  font:inherit;
+  font-size:12px;
+  font-weight:750;
+  white-space:nowrap;
+  transition:
+    color .18s ease,
+    background .18s ease,
+    border-color .18s ease,
+    transform .18s ease;
+}
+
+.rox-settings-nav button:hover{
+  color:var(--text);
+  background:rgba(139,92,246,.1);
+}
+
+.rox-settings-nav button:active{
+  transform:translateY(1px);
+}
+
+.rox-settings-nav button.is-active{
+  border-color:rgba(139,92,246,.35);
+  background:
+    linear-gradient(135deg,rgba(124,58,237,.3),rgba(37,99,235,.18));
+  color:#fff;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.08),
+    0 0 22px rgba(124,58,237,.12);
+}
+
+.rox-settings-sections{
+  padding-bottom:22px;
+}
+
+.rox-settings-section{
+  position:relative;
+  overflow:hidden;
+  padding:18px;
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:21px;
+  background:
+    radial-gradient(circle at 100% 0%,rgba(99,102,241,.1),transparent 38%),
+    linear-gradient(150deg,rgba(17,24,39,.72),rgba(12,18,31,.58));
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.05),
+    0 18px 42px rgba(2,6,23,.18);
+  backdrop-filter:blur(18px);
+  -webkit-backdrop-filter:blur(18px);
+  animation:roxSettingsSectionIn .2s ease-out;
+}
+
+.rox-settings-section[hidden]{
+  display:none !important;
+}
+
+@keyframes roxSettingsSectionIn{
+  from{
+    opacity:0;
+    transform:translateY(6px);
+  }
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
+}
+
+.rox-settings-heading{
+  display:flex;
+  align-items:center;
+  gap:13px;
+  margin-bottom:16px;
+  padding-bottom:15px;
+  border-bottom:1px solid rgba(255,255,255,.07);
+}
+
+.rox-settings-heading > span{
+  width:42px;
+  height:42px;
+  flex:0 0 42px;
+  display:grid;
+  place-items:center;
+  border:1px solid rgba(167,139,250,.22);
+  border-radius:14px;
+  background:
+    linear-gradient(135deg,rgba(124,58,237,.3),rgba(14,165,233,.18));
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.08),
+    0 0 24px rgba(124,58,237,.12);
+  font-size:19px;
+}
+
+.rox-settings-heading h3{
+  margin:0;
+  color:var(--text);
+  font-size:16px;
+  line-height:1.3;
+}
+
+.rox-settings-heading p{
+  margin:4px 0 0;
+  color:var(--text-dim);
+  font-size:11.5px;
+  line-height:1.45;
+}
+
+.rox-settings-row,
+.rox-settings-toggle-row{
+  min-height:70px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:18px;
+  margin-top:10px;
+  padding:13px 14px;
+  border:1px solid rgba(255,255,255,.065);
+  border-radius:16px;
+  background:rgba(255,255,255,.025);
+  transition:
+    border-color .18s ease,
+    background .18s ease,
+    transform .18s ease;
+}
+
+.rox-settings-row:hover,
+.rox-settings-toggle-row:hover{
+  border-color:rgba(139,92,246,.22);
+  background:rgba(139,92,246,.045);
+}
+
+.rox-settings-row > div,
+.rox-settings-toggle-row > div{
+  min-width:0;
+  flex:1;
+}
+
+.rox-settings-row strong,
+.rox-settings-toggle-row strong{
+  display:block;
+  color:var(--text);
+  font-size:12.5px;
+  line-height:1.35;
+}
+
+.rox-settings-row small,
+.rox-settings-toggle-row small{
+  display:block;
+  margin-top:4px;
+  color:var(--text-dim);
+  font-size:10.5px;
+  line-height:1.45;
+}
+
+.rox-settings-row select{
+  width:min(245px,46%);
+  min-width:150px;
+  height:41px;
+  padding:0 36px 0 12px;
+  border:1px solid rgba(167,139,250,.22);
+  border-radius:12px;
+  outline:0;
+  background-color:rgba(12,18,31,.88);
+  color:var(--text);
+  cursor:pointer;
+  font:inherit;
+  font-size:11.5px;
+  transition:
+    border-color .18s ease,
+    box-shadow .18s ease;
+}
+
+.rox-settings-row select:hover,
+.rox-settings-row select:focus{
+  border-color:rgba(139,92,246,.6);
+  box-shadow:0 0 0 3px rgba(139,92,246,.09);
+}
+
+.rox-settings-row select option{
+  background:#111827;
+  color:#fff;
+}
+
+.rox-settings-range-row input[type="range"]{
+  width:min(240px,44%);
+  min-width:150px;
+  accent-color:#8b5cf6;
+  cursor:pointer;
+}
+
+.rox-settings-toggle-row input[type="checkbox"]{
+  position:relative;
+  width:48px;
+  height:27px;
+  flex:0 0 48px;
+  margin:0;
+  appearance:none;
+  -webkit-appearance:none;
+  border:1px solid rgba(255,255,255,.13);
+  border-radius:99px;
+  outline:0;
+  background:rgba(255,255,255,.08);
+  cursor:pointer;
+  transition:
+    background .2s ease,
+    border-color .2s ease,
+    box-shadow .2s ease;
+}
+
+.rox-settings-toggle-row input[type="checkbox"]::after{
+  content:'';
+  position:absolute;
+  top:3px;
+  left:3px;
+  width:19px;
+  height:19px;
+  border-radius:50%;
+  background:#d7d9e2;
+  box-shadow:0 3px 8px rgba(0,0,0,.3);
+  transition:
+    transform .2s ease,
+    background .2s ease;
+}
+
+.rox-settings-toggle-row input[type="checkbox"]:checked{
+  border-color:rgba(139,92,246,.72);
+  background:linear-gradient(135deg,#7c3aed,#2563eb);
+  box-shadow:0 0 18px rgba(124,58,237,.2);
+}
+
+.rox-settings-toggle-row input[type="checkbox"]:checked::after{
+  transform:translateX(21px);
+  background:#fff;
+}
+
+.rox-settings-toggle-row input[type="checkbox"]:focus-visible{
+  box-shadow:0 0 0 4px rgba(139,92,246,.16);
+}
+
+.rox-settings-action{
+  width:100%;
+  min-height:48px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  margin-top:11px;
+  padding:10px 16px;
+  border:1px solid rgba(139,92,246,.23);
+  border-radius:14px;
+  background:
+    linear-gradient(135deg,rgba(124,58,237,.16),rgba(37,99,235,.1));
+  color:var(--text);
+  cursor:pointer;
+  font:inherit;
+  font-size:12px;
+  font-weight:750;
+  transition:
+    border-color .18s ease,
+    background .18s ease,
+    transform .18s ease,
+    box-shadow .18s ease;
+}
+
+.rox-settings-action:hover{
+  border-color:rgba(139,92,246,.55);
+  background:
+    linear-gradient(135deg,rgba(124,58,237,.28),rgba(37,99,235,.16));
+  box-shadow:0 10px 24px rgba(2,6,23,.2);
+}
+
+.rox-settings-action:active{
+  transform:translateY(1px);
+}
+
+.rox-settings-action.danger{
+  border-color:rgba(248,113,113,.23);
+  background:rgba(127,29,29,.13);
+  color:#fecaca;
+}
+
+.rox-settings-action.danger:hover{
+  border-color:rgba(248,113,113,.5);
+  background:rgba(153,27,27,.22);
+  box-shadow:0 10px 24px rgba(69,10,10,.17);
+}
+
+@media (max-width:720px){
+  .rox-settings-body{
+    padding:14px;
+  }
+
+  .rox-settings-hero{
+    grid-template-columns:1fr;
+  }
+
+  .rox-settings-hero .upgrade-btn{
+    width:100% !important;
+    min-height:48px;
+  }
+
+  .rox-settings-nav{
+    margin-right:-14px;
+    margin-left:-14px;
+    padding-right:14px;
+    padding-left:14px;
+    border-right:0;
+    border-left:0;
+    border-radius:0;
+  }
+
+  .rox-settings-section{
+    padding:14px;
+    border-radius:18px;
+  }
+
+  .rox-settings-row,
+  .rox-settings-toggle-row{
+    align-items:flex-start;
+    flex-direction:column;
+    gap:11px;
+  }
+
+  .rox-settings-row select,
+  .rox-settings-range-row input[type="range"]{
+    width:100%;
+    min-width:0;
+  }
+
+  .rox-settings-toggle-row{
+    position:relative;
+    padding-right:76px;
+  }
+
+  .rox-settings-toggle-row input[type="checkbox"]{
+    position:absolute;
+    top:19px;
+    right:14px;
+  }
+}
+/* ROX SETTINGS DESIGN END */
 
   .placeholder-view{color:var(--text-dim);font-size:13.5px;padding:30px 20px;text-align:center;border:1px dashed var(--border);border-radius:16px;margin-top:20px;}
 
@@ -1615,9 +2045,407 @@
       <div class="fic" style="background:var(--panel-2);">⚙️</div>
       <div class="meta"><div class="t">Paramètres</div><div class="s">Compte & préférences</div></div>
     </div>
-    <div class="placeholder-view" id="settingsSummary" style="margin:20px 16px;">Chargement...</div>
-    <button class="upgrade-btn shimmer-btn" id="settingsUpgradeBtn" style="margin:0 16px 12px;width:calc(100% - 32px);">⭐ Passer au Plan Pro</button>
-    <div class="prow" id="settingsLogoutBtn" style="margin:0 16px;"><div class="thumb" style="background:var(--panel-2);display:flex;align-items:center;justify-content:center;">🚪</div><div><div class="t">Se déconnecter</div></div></div>
+    <!-- ROX SETTINGS UI START -->
+    <div class="rox-settings-body">
+
+      <section class="rox-settings-hero">
+        <div
+          class="placeholder-view"
+          id="settingsSummary"
+        >Chargement...</div>
+
+        <button
+          type="button"
+          class="upgrade-btn shimmer-btn"
+          id="settingsUpgradeBtn"
+        >⭐ Passer au Plan Pro</button>
+      </section>
+
+      <nav
+        class="rox-settings-nav"
+        aria-label="Catégories des paramètres"
+      >
+        <button
+          type="button"
+          class="is-active"
+          data-settings-target="general"
+        >Général</button>
+
+        <button
+          type="button"
+          data-settings-target="ai"
+        >Préférences IA</button>
+
+        <button
+          type="button"
+          data-settings-target="voice"
+        >Voix</button>
+
+        <button
+          type="button"
+          data-settings-target="data"
+        >Chat & données</button>
+
+        <button
+          type="button"
+          data-settings-target="account"
+        >Compte</button>
+
+        <button
+          type="button"
+          data-settings-target="privacy"
+        >Confidentialité</button>
+      </nav>
+
+      <div class="rox-settings-sections">
+
+        <section
+          class="rox-settings-section is-active"
+          data-settings-section="general"
+        >
+          <div class="rox-settings-heading">
+            <span>⚙️</span>
+            <div>
+              <h3>Général</h3>
+              <p>Personnalisez l’interface de Rox AI.</p>
+            </div>
+          </div>
+
+          <label class="rox-settings-row">
+            <div>
+              <strong>Langue de l’interface</strong>
+              <small>Langue des boutons et des menus.</small>
+            </div>
+
+            <select id="settingsUiLanguage">
+              <option value="auto">Automatique</option>
+              <option value="fr">Français</option>
+              <option value="ar">العربية</option>
+              <option value="en">English</option>
+              <option value="es">Español</option>
+            </select>
+          </label>
+
+          <label class="rox-settings-row">
+            <div>
+              <strong>Apparence</strong>
+              <small>Choisissez le thème de la plateforme.</small>
+            </div>
+
+            <select id="settingsTheme">
+              <option value="system">Système</option>
+              <option value="dark">Sombre</option>
+              <option value="light">Clair</option>
+            </select>
+          </label>
+
+          <label class="rox-settings-row">
+            <div>
+              <strong>Page de démarrage</strong>
+              <small>Service affiché après la connexion.</small>
+            </div>
+
+            <select id="settingsStartPage">
+              <option value="home">Accueil</option>
+              <option value="chat">Chat AI</option>
+              <option value="images">Images</option>
+              <option value="videos">Vidéos</option>
+              <option value="code">Code Studio</option>
+              <option value="roxip">Rox IP</option>
+            </select>
+          </label>
+
+          <label class="rox-settings-row">
+            <div>
+              <strong>Densité de l’interface</strong>
+              <small>Contrôlez l’espacement des éléments.</small>
+            </div>
+
+            <select id="settingsDensity">
+              <option value="comfortable">Confortable</option>
+              <option value="compact">Compacte</option>
+            </select>
+          </label>
+        </section>
+
+        <section
+          class="rox-settings-section"
+          data-settings-section="ai"
+          hidden
+        >
+          <div class="rox-settings-heading">
+            <span>✨</span>
+            <div>
+              <h3>Préférences IA</h3>
+              <p>Choisissez la manière dont Rox vous répond.</p>
+            </div>
+          </div>
+
+          <label class="rox-settings-row">
+            <div>
+              <strong>Langue des réponses</strong>
+              <small>Rox peut suivre automatiquement votre langue.</small>
+            </div>
+
+            <select id="settingsResponseLanguage">
+              <option value="auto">Même langue que l’utilisateur</option>
+              <option value="ar">العربية</option>
+              <option value="fr">Français</option>
+              <option value="en">English</option>
+              <option value="es">Español</option>
+            </select>
+          </label>
+
+          <label class="rox-settings-row">
+            <div>
+              <strong>Longueur des réponses</strong>
+              <small>Contrôlez le niveau de détail.</small>
+            </div>
+
+            <select id="settingsResponseLength">
+              <option value="concise">Courte</option>
+              <option value="balanced">Équilibrée</option>
+              <option value="detailed">Détaillée</option>
+            </select>
+          </label>
+
+          <label class="rox-settings-row">
+            <div>
+              <strong>Ton des réponses</strong>
+              <small>Style général utilisé par Rox.</small>
+            </div>
+
+            <select id="settingsResponseTone">
+              <option value="natural">Naturel</option>
+              <option value="professional">Professionnel</option>
+              <option value="creative">Créatif</option>
+            </select>
+          </label>
+
+          <button
+            type="button"
+            class="rox-settings-action"
+            id="settingsResetAiPreferences"
+          >↺ Restaurer les préférences IA</button>
+        </section>
+
+        <section
+          class="rox-settings-section"
+          data-settings-section="voice"
+          hidden
+        >
+          <div class="rox-settings-heading">
+            <span>🎙️</span>
+            <div>
+              <h3>Voix</h3>
+              <p>Configurez la dictée et la lecture audio.</p>
+            </div>
+          </div>
+
+          <label class="rox-settings-row">
+            <div>
+              <strong>Langue de dictée</strong>
+              <small>Synchronisée avec la liste des langues Rox.</small>
+            </div>
+
+            <select id="settingsVoiceLanguage">
+              <option value="">Auto — appareil ou navigateur</option>
+            </select>
+          </label>
+
+          <label class="rox-settings-row">
+            <div>
+              <strong>Voix de lecture</strong>
+              <small>Voix utilisée pour lire les réponses.</small>
+            </div>
+
+            <select id="settingsVoiceName">
+              <option value="">Automatique</option>
+            </select>
+          </label>
+
+          <label class="rox-settings-row rox-settings-range-row">
+            <div>
+              <strong>Vitesse de lecture</strong>
+              <small>Réglez la vitesse de la voix.</small>
+            </div>
+
+            <input
+              type="range"
+              id="settingsVoiceRate"
+              min="0.75"
+              max="1.5"
+              step="0.05"
+              value="1"
+            >
+          </label>
+
+          <label class="rox-settings-toggle-row">
+            <div>
+              <strong>Lecture automatique</strong>
+              <small>Lire automatiquement les réponses de Rox.</small>
+            </div>
+
+            <input
+              type="checkbox"
+              id="settingsAutoRead"
+            >
+          </label>
+
+          <label class="rox-settings-toggle-row">
+            <div>
+              <strong>Arrêter la lecture pendant la dictée</strong>
+              <small>Évite que Rox parle pendant l’enregistrement.</small>
+            </div>
+
+            <input
+              type="checkbox"
+              id="settingsStopVoiceOnRecord"
+              checked
+            >
+          </label>
+        </section>
+
+        <section
+          class="rox-settings-section"
+          data-settings-section="data"
+          hidden
+        >
+          <div class="rox-settings-heading">
+            <span>💬</span>
+            <div>
+              <h3>Chat & données</h3>
+              <p>Gérez vos conversations et leur conservation.</p>
+            </div>
+          </div>
+
+          <label class="rox-settings-toggle-row">
+            <div>
+              <strong>Enregistrer l’historique</strong>
+              <small>Conserver les conversations dans votre compte.</small>
+            </div>
+
+            <input
+              type="checkbox"
+              id="settingsSaveHistory"
+              checked
+            >
+          </label>
+
+          <button
+            type="button"
+            class="rox-settings-action"
+            id="settingsExportChats"
+          >⇩ Télécharger mes conversations</button>
+
+          <button
+            type="button"
+            class="rox-settings-action danger"
+            id="settingsDeleteChats"
+          >🗑️ Supprimer toutes les conversations</button>
+        </section>
+
+        <section
+          class="rox-settings-section"
+          data-settings-section="account"
+          hidden
+        >
+          <div class="rox-settings-heading">
+            <span>👤</span>
+            <div>
+              <h3>Compte</h3>
+              <p>Vos informations et votre abonnement.</p>
+            </div>
+          </div>
+
+          <div class="rox-settings-row">
+            <div>
+              <strong>Nom</strong>
+              <small id="settingsAccountName">Chargement...</small>
+            </div>
+          </div>
+
+          <div class="rox-settings-row">
+            <div>
+              <strong>Adresse e-mail</strong>
+              <small id="settingsAccountEmail">Chargement...</small>
+            </div>
+          </div>
+
+          <div class="rox-settings-row">
+            <div>
+              <strong>Plan actuel</strong>
+              <small id="settingsPlanStatus">Chargement...</small>
+            </div>
+          </div>
+
+          <div class="rox-settings-row">
+            <div>
+              <strong>Utilisation</strong>
+              <small id="settingsUsageStatus">Chargement...</small>
+            </div>
+          </div>
+
+          <button
+            type="button"
+            class="rox-settings-action"
+            id="settingsLogoutBtn"
+          >🚪 Se déconnecter</button>
+
+          <button
+            type="button"
+            class="rox-settings-action danger"
+            id="settingsDeleteAccount"
+          >Supprimer définitivement le compte</button>
+        </section>
+
+        <section
+          class="rox-settings-section"
+          data-settings-section="privacy"
+          hidden
+        >
+          <div class="rox-settings-heading">
+            <span>🛡️</span>
+            <div>
+              <h3>Confidentialité & sécurité</h3>
+              <p>Contrôlez la sécurité de votre compte.</p>
+            </div>
+          </div>
+
+          <button
+            type="button"
+            class="rox-settings-action"
+            id="settingsConnectedDevices"
+          >💻 Appareils connectés</button>
+
+          <button
+            type="button"
+            class="rox-settings-action"
+            id="settingsChangePassword"
+          >🔑 Modifier le mot de passe</button>
+
+          <button
+            type="button"
+            class="rox-settings-action danger"
+            id="settingsLogoutAllDevices"
+          >Déconnecter tous les appareils</button>
+
+          <label class="rox-settings-toggle-row">
+            <div>
+              <strong>Amélioration de Rox AI</strong>
+              <small>Autoriser l’utilisation de vos retours pour améliorer Rox.</small>
+            </div>
+
+            <input
+              type="checkbox"
+              id="settingsImproveRox"
+            >
+          </label>
+        </section>
+
+      </div>
+    </div>
+    <!-- ROX SETTINGS UI END -->
   </div>
 
 </div>
@@ -1994,6 +2822,78 @@ async function submitTopupPayment() {
   }
 }
 
+/* ROX SETTINGS TABS START */
+const settingsTabButtons = [
+  ...document.querySelectorAll(
+    '[data-settings-target]'
+  )
+];
+
+const settingsSections = [
+  ...document.querySelectorAll(
+    '[data-settings-section]'
+  )
+];
+
+function activateSettingsSection(sectionName) {
+  const validSection =
+    settingsSections.some(
+      section =>
+        section.dataset.settingsSection ===
+        sectionName
+    )
+      ? sectionName
+      : 'general';
+
+  settingsTabButtons.forEach(button => {
+    const isActive =
+      button.dataset.settingsTarget ===
+      validSection;
+
+    button.classList.toggle(
+      'is-active',
+      isActive
+    );
+
+    button.setAttribute(
+      'aria-selected',
+      String(isActive)
+    );
+  });
+
+  settingsSections.forEach(section => {
+    const isActive =
+      section.dataset.settingsSection ===
+      validSection;
+
+    section.classList.toggle(
+      'is-active',
+      isActive
+    );
+
+    section.hidden = !isActive;
+  });
+
+  localStorage.setItem(
+    'roxSettingsSection',
+    validSection
+  );
+}
+
+settingsTabButtons.forEach(button => {
+  button.addEventListener('click', () => {
+    activateSettingsSection(
+      button.dataset.settingsTarget
+    );
+  });
+});
+
+activateSettingsSection(
+  localStorage.getItem(
+    'roxSettingsSection'
+  ) || 'general'
+);
+/* ROX SETTINGS TABS END */
 document.getElementById('upgradeBtn').addEventListener('click', handleUpgrade);
 document.getElementById('settingsUpgradeBtn').addEventListener('click', handleUpgrade);
 document.getElementById('topupBtn').addEventListener('click', handleTopup);
@@ -3960,6 +4860,436 @@ initAuth();
   .prow .t{font-size:13.5px;font-weight:600;}
   .prow .s{font-size:11.5px;color:var(--text-dim);}
   .prow .chev{margin-left:auto;color:var(--text-faint);}
+/* ROX SETTINGS DESIGN START */
+.rox-settings-body{
+  width:100%;
+  height:100%;
+  overflow-y:auto;
+  padding:20px;
+  color:var(--text);
+  scrollbar-width:thin;
+  scrollbar-color:rgba(139,92,246,.45) transparent;
+}
+
+.rox-settings-body::-webkit-scrollbar{
+  width:7px;
+}
+
+.rox-settings-body::-webkit-scrollbar-thumb{
+  border-radius:99px;
+  background:rgba(139,92,246,.42);
+}
+
+.rox-settings-hero{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto;
+  align-items:stretch;
+  gap:12px;
+  margin-bottom:16px;
+}
+
+.rox-settings-hero .placeholder-view{
+  min-height:88px;
+  margin:0 !important;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:18px;
+  border:1px solid rgba(139,92,246,.2);
+  border-radius:18px;
+  background:
+    radial-gradient(circle at 80% 20%,rgba(124,58,237,.18),transparent 44%),
+    linear-gradient(135deg,rgba(17,24,39,.55),rgba(30,41,59,.28));
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.06),
+    0 12px 30px rgba(2,6,23,.18);
+  color:var(--text);
+  text-align:center;
+  line-height:1.6;
+  backdrop-filter:blur(18px);
+  -webkit-backdrop-filter:blur(18px);
+}
+
+.rox-settings-hero .upgrade-btn{
+  width:auto !important;
+  min-width:190px;
+  margin:0 !important;
+  border-radius:18px;
+  padding:0 20px;
+}
+
+.rox-settings-nav{
+  position:sticky;
+  top:0;
+  z-index:25;
+  display:flex;
+  gap:8px;
+  margin-bottom:16px;
+  padding:8px;
+  overflow-x:auto;
+  border:1px solid rgba(255,255,255,.07);
+  border-radius:17px;
+  background:rgba(12,17,30,.76);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.05),
+    0 12px 28px rgba(2,6,23,.18);
+  backdrop-filter:blur(20px);
+  -webkit-backdrop-filter:blur(20px);
+  scrollbar-width:none;
+}
+
+.rox-settings-nav::-webkit-scrollbar{
+  display:none;
+}
+
+.rox-settings-nav button{
+  flex:0 0 auto;
+  min-height:38px;
+  padding:0 14px;
+  border:1px solid transparent;
+  border-radius:12px;
+  background:transparent;
+  color:var(--text-dim);
+  cursor:pointer;
+  font:inherit;
+  font-size:12px;
+  font-weight:750;
+  white-space:nowrap;
+  transition:
+    color .18s ease,
+    background .18s ease,
+    border-color .18s ease,
+    transform .18s ease;
+}
+
+.rox-settings-nav button:hover{
+  color:var(--text);
+  background:rgba(139,92,246,.1);
+}
+
+.rox-settings-nav button:active{
+  transform:translateY(1px);
+}
+
+.rox-settings-nav button.is-active{
+  border-color:rgba(139,92,246,.35);
+  background:
+    linear-gradient(135deg,rgba(124,58,237,.3),rgba(37,99,235,.18));
+  color:#fff;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.08),
+    0 0 22px rgba(124,58,237,.12);
+}
+
+.rox-settings-sections{
+  padding-bottom:22px;
+}
+
+.rox-settings-section{
+  position:relative;
+  overflow:hidden;
+  padding:18px;
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:21px;
+  background:
+    radial-gradient(circle at 100% 0%,rgba(99,102,241,.1),transparent 38%),
+    linear-gradient(150deg,rgba(17,24,39,.72),rgba(12,18,31,.58));
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.05),
+    0 18px 42px rgba(2,6,23,.18);
+  backdrop-filter:blur(18px);
+  -webkit-backdrop-filter:blur(18px);
+  animation:roxSettingsSectionIn .2s ease-out;
+}
+
+.rox-settings-section[hidden]{
+  display:none !important;
+}
+
+@keyframes roxSettingsSectionIn{
+  from{
+    opacity:0;
+    transform:translateY(6px);
+  }
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
+}
+
+.rox-settings-heading{
+  display:flex;
+  align-items:center;
+  gap:13px;
+  margin-bottom:16px;
+  padding-bottom:15px;
+  border-bottom:1px solid rgba(255,255,255,.07);
+}
+
+.rox-settings-heading > span{
+  width:42px;
+  height:42px;
+  flex:0 0 42px;
+  display:grid;
+  place-items:center;
+  border:1px solid rgba(167,139,250,.22);
+  border-radius:14px;
+  background:
+    linear-gradient(135deg,rgba(124,58,237,.3),rgba(14,165,233,.18));
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.08),
+    0 0 24px rgba(124,58,237,.12);
+  font-size:19px;
+}
+
+.rox-settings-heading h3{
+  margin:0;
+  color:var(--text);
+  font-size:16px;
+  line-height:1.3;
+}
+
+.rox-settings-heading p{
+  margin:4px 0 0;
+  color:var(--text-dim);
+  font-size:11.5px;
+  line-height:1.45;
+}
+
+.rox-settings-row,
+.rox-settings-toggle-row{
+  min-height:70px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:18px;
+  margin-top:10px;
+  padding:13px 14px;
+  border:1px solid rgba(255,255,255,.065);
+  border-radius:16px;
+  background:rgba(255,255,255,.025);
+  transition:
+    border-color .18s ease,
+    background .18s ease,
+    transform .18s ease;
+}
+
+.rox-settings-row:hover,
+.rox-settings-toggle-row:hover{
+  border-color:rgba(139,92,246,.22);
+  background:rgba(139,92,246,.045);
+}
+
+.rox-settings-row > div,
+.rox-settings-toggle-row > div{
+  min-width:0;
+  flex:1;
+}
+
+.rox-settings-row strong,
+.rox-settings-toggle-row strong{
+  display:block;
+  color:var(--text);
+  font-size:12.5px;
+  line-height:1.35;
+}
+
+.rox-settings-row small,
+.rox-settings-toggle-row small{
+  display:block;
+  margin-top:4px;
+  color:var(--text-dim);
+  font-size:10.5px;
+  line-height:1.45;
+}
+
+.rox-settings-row select{
+  width:min(245px,46%);
+  min-width:150px;
+  height:41px;
+  padding:0 36px 0 12px;
+  border:1px solid rgba(167,139,250,.22);
+  border-radius:12px;
+  outline:0;
+  background-color:rgba(12,18,31,.88);
+  color:var(--text);
+  cursor:pointer;
+  font:inherit;
+  font-size:11.5px;
+  transition:
+    border-color .18s ease,
+    box-shadow .18s ease;
+}
+
+.rox-settings-row select:hover,
+.rox-settings-row select:focus{
+  border-color:rgba(139,92,246,.6);
+  box-shadow:0 0 0 3px rgba(139,92,246,.09);
+}
+
+.rox-settings-row select option{
+  background:#111827;
+  color:#fff;
+}
+
+.rox-settings-range-row input[type="range"]{
+  width:min(240px,44%);
+  min-width:150px;
+  accent-color:#8b5cf6;
+  cursor:pointer;
+}
+
+.rox-settings-toggle-row input[type="checkbox"]{
+  position:relative;
+  width:48px;
+  height:27px;
+  flex:0 0 48px;
+  margin:0;
+  appearance:none;
+  -webkit-appearance:none;
+  border:1px solid rgba(255,255,255,.13);
+  border-radius:99px;
+  outline:0;
+  background:rgba(255,255,255,.08);
+  cursor:pointer;
+  transition:
+    background .2s ease,
+    border-color .2s ease,
+    box-shadow .2s ease;
+}
+
+.rox-settings-toggle-row input[type="checkbox"]::after{
+  content:'';
+  position:absolute;
+  top:3px;
+  left:3px;
+  width:19px;
+  height:19px;
+  border-radius:50%;
+  background:#d7d9e2;
+  box-shadow:0 3px 8px rgba(0,0,0,.3);
+  transition:
+    transform .2s ease,
+    background .2s ease;
+}
+
+.rox-settings-toggle-row input[type="checkbox"]:checked{
+  border-color:rgba(139,92,246,.72);
+  background:linear-gradient(135deg,#7c3aed,#2563eb);
+  box-shadow:0 0 18px rgba(124,58,237,.2);
+}
+
+.rox-settings-toggle-row input[type="checkbox"]:checked::after{
+  transform:translateX(21px);
+  background:#fff;
+}
+
+.rox-settings-toggle-row input[type="checkbox"]:focus-visible{
+  box-shadow:0 0 0 4px rgba(139,92,246,.16);
+}
+
+.rox-settings-action{
+  width:100%;
+  min-height:48px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  margin-top:11px;
+  padding:10px 16px;
+  border:1px solid rgba(139,92,246,.23);
+  border-radius:14px;
+  background:
+    linear-gradient(135deg,rgba(124,58,237,.16),rgba(37,99,235,.1));
+  color:var(--text);
+  cursor:pointer;
+  font:inherit;
+  font-size:12px;
+  font-weight:750;
+  transition:
+    border-color .18s ease,
+    background .18s ease,
+    transform .18s ease,
+    box-shadow .18s ease;
+}
+
+.rox-settings-action:hover{
+  border-color:rgba(139,92,246,.55);
+  background:
+    linear-gradient(135deg,rgba(124,58,237,.28),rgba(37,99,235,.16));
+  box-shadow:0 10px 24px rgba(2,6,23,.2);
+}
+
+.rox-settings-action:active{
+  transform:translateY(1px);
+}
+
+.rox-settings-action.danger{
+  border-color:rgba(248,113,113,.23);
+  background:rgba(127,29,29,.13);
+  color:#fecaca;
+}
+
+.rox-settings-action.danger:hover{
+  border-color:rgba(248,113,113,.5);
+  background:rgba(153,27,27,.22);
+  box-shadow:0 10px 24px rgba(69,10,10,.17);
+}
+
+@media (max-width:720px){
+  .rox-settings-body{
+    padding:14px;
+  }
+
+  .rox-settings-hero{
+    grid-template-columns:1fr;
+  }
+
+  .rox-settings-hero .upgrade-btn{
+    width:100% !important;
+    min-height:48px;
+  }
+
+  .rox-settings-nav{
+    margin-right:-14px;
+    margin-left:-14px;
+    padding-right:14px;
+    padding-left:14px;
+    border-right:0;
+    border-left:0;
+    border-radius:0;
+  }
+
+  .rox-settings-section{
+    padding:14px;
+    border-radius:18px;
+  }
+
+  .rox-settings-row,
+  .rox-settings-toggle-row{
+    align-items:flex-start;
+    flex-direction:column;
+    gap:11px;
+  }
+
+  .rox-settings-row select,
+  .rox-settings-range-row input[type="range"]{
+    width:100%;
+    min-width:0;
+  }
+
+  .rox-settings-toggle-row{
+    position:relative;
+    padding-right:76px;
+  }
+
+  .rox-settings-toggle-row input[type="checkbox"]{
+    position:absolute;
+    top:19px;
+    right:14px;
+  }
+}
+/* ROX SETTINGS DESIGN END */
 
   .placeholder-view{color:var(--text-dim);font-size:13.5px;padding:44px 20px;text-align:center;border:1px dashed var(--border);border-radius:16px;}
 
@@ -5355,9 +6685,407 @@ initAuth();
       <div class="fic" style="background:var(--panel-2);">⚙️</div>
       <div class="meta"><div class="t">Paramètres</div><div class="s">Compte & préférences</div></div>
     </div>
-    <div class="placeholder-view" id="settingsSummary" style="margin:20px;">Chargement...</div>
-    <button class="upgrade-btn shimmer-btn" id="settingsUpgradeBtn" style="margin:0 20px 12px;width:calc(100% - 40px);">⭐ Passer au Plan Pro</button>
-    <div class="prow" id="settingsLogoutBtn" style="margin:0 20px 20px;"><div class="thumb" style="background:var(--panel-2);display:flex;align-items:center;justify-content:center;">🚪</div><div><div class="t">Se déconnecter</div></div></div>
+    <!-- ROX SETTINGS UI START -->
+    <div class="rox-settings-body">
+
+      <section class="rox-settings-hero">
+        <div
+          class="placeholder-view"
+          id="settingsSummary"
+        >Chargement...</div>
+
+        <button
+          type="button"
+          class="upgrade-btn shimmer-btn"
+          id="settingsUpgradeBtn"
+        >⭐ Passer au Plan Pro</button>
+      </section>
+
+      <nav
+        class="rox-settings-nav"
+        aria-label="Catégories des paramètres"
+      >
+        <button
+          type="button"
+          class="is-active"
+          data-settings-target="general"
+        >Général</button>
+
+        <button
+          type="button"
+          data-settings-target="ai"
+        >Préférences IA</button>
+
+        <button
+          type="button"
+          data-settings-target="voice"
+        >Voix</button>
+
+        <button
+          type="button"
+          data-settings-target="data"
+        >Chat & données</button>
+
+        <button
+          type="button"
+          data-settings-target="account"
+        >Compte</button>
+
+        <button
+          type="button"
+          data-settings-target="privacy"
+        >Confidentialité</button>
+      </nav>
+
+      <div class="rox-settings-sections">
+
+        <section
+          class="rox-settings-section is-active"
+          data-settings-section="general"
+        >
+          <div class="rox-settings-heading">
+            <span>⚙️</span>
+            <div>
+              <h3>Général</h3>
+              <p>Personnalisez l’interface de Rox AI.</p>
+            </div>
+          </div>
+
+          <label class="rox-settings-row">
+            <div>
+              <strong>Langue de l’interface</strong>
+              <small>Langue des boutons et des menus.</small>
+            </div>
+
+            <select id="settingsUiLanguage">
+              <option value="auto">Automatique</option>
+              <option value="fr">Français</option>
+              <option value="ar">العربية</option>
+              <option value="en">English</option>
+              <option value="es">Español</option>
+            </select>
+          </label>
+
+          <label class="rox-settings-row">
+            <div>
+              <strong>Apparence</strong>
+              <small>Choisissez le thème de la plateforme.</small>
+            </div>
+
+            <select id="settingsTheme">
+              <option value="system">Système</option>
+              <option value="dark">Sombre</option>
+              <option value="light">Clair</option>
+            </select>
+          </label>
+
+          <label class="rox-settings-row">
+            <div>
+              <strong>Page de démarrage</strong>
+              <small>Service affiché après la connexion.</small>
+            </div>
+
+            <select id="settingsStartPage">
+              <option value="home">Accueil</option>
+              <option value="chat">Chat AI</option>
+              <option value="images">Images</option>
+              <option value="videos">Vidéos</option>
+              <option value="code">Code Studio</option>
+              <option value="roxip">Rox IP</option>
+            </select>
+          </label>
+
+          <label class="rox-settings-row">
+            <div>
+              <strong>Densité de l’interface</strong>
+              <small>Contrôlez l’espacement des éléments.</small>
+            </div>
+
+            <select id="settingsDensity">
+              <option value="comfortable">Confortable</option>
+              <option value="compact">Compacte</option>
+            </select>
+          </label>
+        </section>
+
+        <section
+          class="rox-settings-section"
+          data-settings-section="ai"
+          hidden
+        >
+          <div class="rox-settings-heading">
+            <span>✨</span>
+            <div>
+              <h3>Préférences IA</h3>
+              <p>Choisissez la manière dont Rox vous répond.</p>
+            </div>
+          </div>
+
+          <label class="rox-settings-row">
+            <div>
+              <strong>Langue des réponses</strong>
+              <small>Rox peut suivre automatiquement votre langue.</small>
+            </div>
+
+            <select id="settingsResponseLanguage">
+              <option value="auto">Même langue que l’utilisateur</option>
+              <option value="ar">العربية</option>
+              <option value="fr">Français</option>
+              <option value="en">English</option>
+              <option value="es">Español</option>
+            </select>
+          </label>
+
+          <label class="rox-settings-row">
+            <div>
+              <strong>Longueur des réponses</strong>
+              <small>Contrôlez le niveau de détail.</small>
+            </div>
+
+            <select id="settingsResponseLength">
+              <option value="concise">Courte</option>
+              <option value="balanced">Équilibrée</option>
+              <option value="detailed">Détaillée</option>
+            </select>
+          </label>
+
+          <label class="rox-settings-row">
+            <div>
+              <strong>Ton des réponses</strong>
+              <small>Style général utilisé par Rox.</small>
+            </div>
+
+            <select id="settingsResponseTone">
+              <option value="natural">Naturel</option>
+              <option value="professional">Professionnel</option>
+              <option value="creative">Créatif</option>
+            </select>
+          </label>
+
+          <button
+            type="button"
+            class="rox-settings-action"
+            id="settingsResetAiPreferences"
+          >↺ Restaurer les préférences IA</button>
+        </section>
+
+        <section
+          class="rox-settings-section"
+          data-settings-section="voice"
+          hidden
+        >
+          <div class="rox-settings-heading">
+            <span>🎙️</span>
+            <div>
+              <h3>Voix</h3>
+              <p>Configurez la dictée et la lecture audio.</p>
+            </div>
+          </div>
+
+          <label class="rox-settings-row">
+            <div>
+              <strong>Langue de dictée</strong>
+              <small>Synchronisée avec la liste des langues Rox.</small>
+            </div>
+
+            <select id="settingsVoiceLanguage">
+              <option value="">Auto — appareil ou navigateur</option>
+            </select>
+          </label>
+
+          <label class="rox-settings-row">
+            <div>
+              <strong>Voix de lecture</strong>
+              <small>Voix utilisée pour lire les réponses.</small>
+            </div>
+
+            <select id="settingsVoiceName">
+              <option value="">Automatique</option>
+            </select>
+          </label>
+
+          <label class="rox-settings-row rox-settings-range-row">
+            <div>
+              <strong>Vitesse de lecture</strong>
+              <small>Réglez la vitesse de la voix.</small>
+            </div>
+
+            <input
+              type="range"
+              id="settingsVoiceRate"
+              min="0.75"
+              max="1.5"
+              step="0.05"
+              value="1"
+            >
+          </label>
+
+          <label class="rox-settings-toggle-row">
+            <div>
+              <strong>Lecture automatique</strong>
+              <small>Lire automatiquement les réponses de Rox.</small>
+            </div>
+
+            <input
+              type="checkbox"
+              id="settingsAutoRead"
+            >
+          </label>
+
+          <label class="rox-settings-toggle-row">
+            <div>
+              <strong>Arrêter la lecture pendant la dictée</strong>
+              <small>Évite que Rox parle pendant l’enregistrement.</small>
+            </div>
+
+            <input
+              type="checkbox"
+              id="settingsStopVoiceOnRecord"
+              checked
+            >
+          </label>
+        </section>
+
+        <section
+          class="rox-settings-section"
+          data-settings-section="data"
+          hidden
+        >
+          <div class="rox-settings-heading">
+            <span>💬</span>
+            <div>
+              <h3>Chat & données</h3>
+              <p>Gérez vos conversations et leur conservation.</p>
+            </div>
+          </div>
+
+          <label class="rox-settings-toggle-row">
+            <div>
+              <strong>Enregistrer l’historique</strong>
+              <small>Conserver les conversations dans votre compte.</small>
+            </div>
+
+            <input
+              type="checkbox"
+              id="settingsSaveHistory"
+              checked
+            >
+          </label>
+
+          <button
+            type="button"
+            class="rox-settings-action"
+            id="settingsExportChats"
+          >⇩ Télécharger mes conversations</button>
+
+          <button
+            type="button"
+            class="rox-settings-action danger"
+            id="settingsDeleteChats"
+          >🗑️ Supprimer toutes les conversations</button>
+        </section>
+
+        <section
+          class="rox-settings-section"
+          data-settings-section="account"
+          hidden
+        >
+          <div class="rox-settings-heading">
+            <span>👤</span>
+            <div>
+              <h3>Compte</h3>
+              <p>Vos informations et votre abonnement.</p>
+            </div>
+          </div>
+
+          <div class="rox-settings-row">
+            <div>
+              <strong>Nom</strong>
+              <small id="settingsAccountName">Chargement...</small>
+            </div>
+          </div>
+
+          <div class="rox-settings-row">
+            <div>
+              <strong>Adresse e-mail</strong>
+              <small id="settingsAccountEmail">Chargement...</small>
+            </div>
+          </div>
+
+          <div class="rox-settings-row">
+            <div>
+              <strong>Plan actuel</strong>
+              <small id="settingsPlanStatus">Chargement...</small>
+            </div>
+          </div>
+
+          <div class="rox-settings-row">
+            <div>
+              <strong>Utilisation</strong>
+              <small id="settingsUsageStatus">Chargement...</small>
+            </div>
+          </div>
+
+          <button
+            type="button"
+            class="rox-settings-action"
+            id="settingsLogoutBtn"
+          >🚪 Se déconnecter</button>
+
+          <button
+            type="button"
+            class="rox-settings-action danger"
+            id="settingsDeleteAccount"
+          >Supprimer définitivement le compte</button>
+        </section>
+
+        <section
+          class="rox-settings-section"
+          data-settings-section="privacy"
+          hidden
+        >
+          <div class="rox-settings-heading">
+            <span>🛡️</span>
+            <div>
+              <h3>Confidentialité & sécurité</h3>
+              <p>Contrôlez la sécurité de votre compte.</p>
+            </div>
+          </div>
+
+          <button
+            type="button"
+            class="rox-settings-action"
+            id="settingsConnectedDevices"
+          >💻 Appareils connectés</button>
+
+          <button
+            type="button"
+            class="rox-settings-action"
+            id="settingsChangePassword"
+          >🔑 Modifier le mot de passe</button>
+
+          <button
+            type="button"
+            class="rox-settings-action danger"
+            id="settingsLogoutAllDevices"
+          >Déconnecter tous les appareils</button>
+
+          <label class="rox-settings-toggle-row">
+            <div>
+              <strong>Amélioration de Rox AI</strong>
+              <small>Autoriser l’utilisation de vos retours pour améliorer Rox.</small>
+            </div>
+
+            <input
+              type="checkbox"
+              id="settingsImproveRox"
+            >
+          </label>
+        </section>
+
+      </div>
+    </div>
+    <!-- ROX SETTINGS UI END -->
   </div>
 </div>
 
@@ -5767,6 +7495,78 @@ async function submitTopupPayment() {
   }
 }
 
+/* ROX SETTINGS TABS START */
+const settingsTabButtons = [
+  ...document.querySelectorAll(
+    '[data-settings-target]'
+  )
+];
+
+const settingsSections = [
+  ...document.querySelectorAll(
+    '[data-settings-section]'
+  )
+];
+
+function activateSettingsSection(sectionName) {
+  const validSection =
+    settingsSections.some(
+      section =>
+        section.dataset.settingsSection ===
+        sectionName
+    )
+      ? sectionName
+      : 'general';
+
+  settingsTabButtons.forEach(button => {
+    const isActive =
+      button.dataset.settingsTarget ===
+      validSection;
+
+    button.classList.toggle(
+      'is-active',
+      isActive
+    );
+
+    button.setAttribute(
+      'aria-selected',
+      String(isActive)
+    );
+  });
+
+  settingsSections.forEach(section => {
+    const isActive =
+      section.dataset.settingsSection ===
+      validSection;
+
+    section.classList.toggle(
+      'is-active',
+      isActive
+    );
+
+    section.hidden = !isActive;
+  });
+
+  localStorage.setItem(
+    'roxSettingsSection',
+    validSection
+  );
+}
+
+settingsTabButtons.forEach(button => {
+  button.addEventListener('click', () => {
+    activateSettingsSection(
+      button.dataset.settingsTarget
+    );
+  });
+});
+
+activateSettingsSection(
+  localStorage.getItem(
+    'roxSettingsSection'
+  ) || 'general'
+);
+/* ROX SETTINGS TABS END */
 document.getElementById('upgradeBtn').addEventListener('click', handleUpgrade);
 document.getElementById('settingsUpgradeBtn').addEventListener('click', handleUpgrade);
 document.getElementById('topupBtn').addEventListener('click', handleTopup);
