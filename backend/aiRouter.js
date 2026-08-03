@@ -152,6 +152,22 @@ async function routeRequest(feature, messages, opts = {}) {
     } catch (err) {
       attempts.push({ model: route.model, status: 'error', message: err.message });
 
+      console.error('[aiRouter] model failed', {
+        feature,
+        model: route.model,
+        message: err?.message || 'Unknown model error',
+        status:
+          err?.status ||
+          err?.statusCode ||
+          err?.response?.status ||
+          null,
+        details:
+          err?.details ||
+          err?.body ||
+          err?.response?.data ||
+          null
+      });
+
       await reportOutcome(route.model, false);
       recordModelLatency(route.model, Date.now() - startedAt);
       recordModelOutcome(route.model, 'failure');
