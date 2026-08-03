@@ -1363,7 +1363,7 @@ function pushHistory(feature, role, content) {
 }
 
 // ── message rendering helpers ───────────────────────────────────────
-function appendMsg(msgBox, cls, content, isNode) {
+function appendMsg(msgBox, cls, content, isNode, meta = {}) {
   const el = document.createElement('div');
   el.className = 'msg ' + cls;
 
@@ -1401,6 +1401,49 @@ function appendMsg(msgBox, cls, content, isNode) {
       }, 1600);
     };
 
+    // ROX SAVE FEEDBACK START
+    const saveFeedback = async (rating) => {
+      if (!meta.responseId) {
+        showFeedback(
+          'Évaluation disponible pour les nouvelles réponses du chat.'
+        );
+        return false;
+      }
+
+      try {
+        const response = await authFetch('/api/chat-feedback', {
+          method: 'POST',
+          body: JSON.stringify({
+            responseId: meta.responseId,
+            rating,
+            model: meta.model || null,
+            feature: meta.feature || 'chat'
+          })
+        });
+
+        const data = await response.json().catch(() => ({}));
+
+        if (!response.ok) {
+          throw new Error(
+            data.message || 'feedback_save_failed'
+          );
+        }
+
+        return true;
+      } catch (error) {
+        console.error(
+          'ROX AI feedback save failed:',
+          error
+        );
+
+        showFeedback(
+          "Impossible d'enregistrer votre avis."
+        );
+
+        return false;
+      }
+    };
+    // ROX SAVE FEEDBACK END
     const getMessageText = () =>
       (el.innerText || el.textContent || '').trim();
 
@@ -1521,14 +1564,41 @@ function appendMsg(msgBox, cls, content, isNode) {
     let likeButton;
     let dislikeButton;
 
-    likeButton = makeAction('\uD83D\uDC4D', "J'aime", (button) => {
-      const nowActive = !button.classList.contains('is-active');
+    likeButton = makeAction('\uD83D\uDC4D', "J'aime", async (button) => {
+      const nowActive =
+        !button.classList.contains('is-active');
 
-      button.classList.toggle('is-active', nowActive);
+      const rating = nowActive ? 1 : 0;
+
+      button.disabled = true;
+
+      if (dislikeButton) {
+        dislikeButton.disabled = true;
+      }
+
+      const saved = await saveFeedback(rating);
+
+      button.disabled = false;
+
+      if (dislikeButton) {
+        dislikeButton.disabled = false;
+      }
+
+      if (!saved) return;
+
+      button.classList.toggle(
+        'is-active',
+        nowActive
+      );
+
       dislikeButton?.classList.remove('is-active');
 
       button.classList.add('bump');
-      setTimeout(() => button.classList.remove('bump'), 280);
+
+      setTimeout(
+        () => button.classList.remove('bump'),
+        280
+      );
 
       showFeedback(
         nowActive
@@ -1537,14 +1607,41 @@ function appendMsg(msgBox, cls, content, isNode) {
       );
     });
 
-    dislikeButton = makeAction('\uD83D\uDC4E', "Je n'aime pas", (button) => {
-      const nowActive = !button.classList.contains('is-active');
+    dislikeButton = makeAction('\uD83D\uDC4E', "Je n'aime pas", async (button) => {
+      const nowActive =
+        !button.classList.contains('is-active');
 
-      button.classList.toggle('is-active', nowActive);
+      const rating = nowActive ? -1 : 0;
+
+      button.disabled = true;
+
+      if (likeButton) {
+        likeButton.disabled = true;
+      }
+
+      const saved = await saveFeedback(rating);
+
+      button.disabled = false;
+
+      if (likeButton) {
+        likeButton.disabled = false;
+      }
+
+      if (!saved) return;
+
+      button.classList.toggle(
+        'is-active',
+        nowActive
+      );
+
       likeButton?.classList.remove('is-active');
 
       button.classList.add('bump');
-      setTimeout(() => button.classList.remove('bump'), 280);
+
+      setTimeout(
+        () => button.classList.remove('bump'),
+        280
+      );
 
       showFeedback(
         nowActive
@@ -1791,10 +1888,10 @@ async function sendChat(feature, text, msgBox) {
     msgBox.appendChild(artifact);
     msgBox.scrollTop = msgBox.scrollHeight;
   } else {
-    appendMsg(msgBox, 'bot', data.text);
+    appendMsg(msgBox, 'bot', data.text, false, { responseId: data.responseId, model: data.model, feature });
   }
 } else {
-  appendMsg(msgBox, 'bot', data.text);
+  appendMsg(msgBox, 'bot', data.text, false, { responseId: data.responseId, model: data.model, feature });
 }
   if (feature === 'code' && typeof data.creditsCharged === 'number') {
     appendMsg(msgBox, 'status', `Coût final : ${data.creditsCharged} Credits`);
@@ -3593,7 +3690,7 @@ function pushHistory(feature, role, content) {
 }
 
 // ── message rendering helpers ───────────────────────────────────────
-function appendMsg(msgBox, cls, content, isNode) {
+function appendMsg(msgBox, cls, content, isNode, meta = {}) {
   const el = document.createElement('div');
   el.className = 'msg ' + cls;
 
@@ -3631,6 +3728,49 @@ function appendMsg(msgBox, cls, content, isNode) {
       }, 1600);
     };
 
+    // ROX SAVE FEEDBACK START
+    const saveFeedback = async (rating) => {
+      if (!meta.responseId) {
+        showFeedback(
+          'Évaluation disponible pour les nouvelles réponses du chat.'
+        );
+        return false;
+      }
+
+      try {
+        const response = await authFetch('/api/chat-feedback', {
+          method: 'POST',
+          body: JSON.stringify({
+            responseId: meta.responseId,
+            rating,
+            model: meta.model || null,
+            feature: meta.feature || 'chat'
+          })
+        });
+
+        const data = await response.json().catch(() => ({}));
+
+        if (!response.ok) {
+          throw new Error(
+            data.message || 'feedback_save_failed'
+          );
+        }
+
+        return true;
+      } catch (error) {
+        console.error(
+          'ROX AI feedback save failed:',
+          error
+        );
+
+        showFeedback(
+          "Impossible d'enregistrer votre avis."
+        );
+
+        return false;
+      }
+    };
+    // ROX SAVE FEEDBACK END
     const getMessageText = () =>
       (el.innerText || el.textContent || '').trim();
 
@@ -3751,14 +3891,41 @@ function appendMsg(msgBox, cls, content, isNode) {
     let likeButton;
     let dislikeButton;
 
-    likeButton = makeAction('\uD83D\uDC4D', "J'aime", (button) => {
-      const nowActive = !button.classList.contains('is-active');
+    likeButton = makeAction('\uD83D\uDC4D', "J'aime", async (button) => {
+      const nowActive =
+        !button.classList.contains('is-active');
 
-      button.classList.toggle('is-active', nowActive);
+      const rating = nowActive ? 1 : 0;
+
+      button.disabled = true;
+
+      if (dislikeButton) {
+        dislikeButton.disabled = true;
+      }
+
+      const saved = await saveFeedback(rating);
+
+      button.disabled = false;
+
+      if (dislikeButton) {
+        dislikeButton.disabled = false;
+      }
+
+      if (!saved) return;
+
+      button.classList.toggle(
+        'is-active',
+        nowActive
+      );
+
       dislikeButton?.classList.remove('is-active');
 
       button.classList.add('bump');
-      setTimeout(() => button.classList.remove('bump'), 280);
+
+      setTimeout(
+        () => button.classList.remove('bump'),
+        280
+      );
 
       showFeedback(
         nowActive
@@ -3767,14 +3934,41 @@ function appendMsg(msgBox, cls, content, isNode) {
       );
     });
 
-    dislikeButton = makeAction('\uD83D\uDC4E', "Je n'aime pas", (button) => {
-      const nowActive = !button.classList.contains('is-active');
+    dislikeButton = makeAction('\uD83D\uDC4E', "Je n'aime pas", async (button) => {
+      const nowActive =
+        !button.classList.contains('is-active');
 
-      button.classList.toggle('is-active', nowActive);
+      const rating = nowActive ? -1 : 0;
+
+      button.disabled = true;
+
+      if (likeButton) {
+        likeButton.disabled = true;
+      }
+
+      const saved = await saveFeedback(rating);
+
+      button.disabled = false;
+
+      if (likeButton) {
+        likeButton.disabled = false;
+      }
+
+      if (!saved) return;
+
+      button.classList.toggle(
+        'is-active',
+        nowActive
+      );
+
       likeButton?.classList.remove('is-active');
 
       button.classList.add('bump');
-      setTimeout(() => button.classList.remove('bump'), 280);
+
+      setTimeout(
+        () => button.classList.remove('bump'),
+        280
+      );
 
       showFeedback(
         nowActive
@@ -4021,10 +4215,10 @@ async function sendChat(feature, text, msgBox) {
     msgBox.appendChild(artifact);
     msgBox.scrollTop = msgBox.scrollHeight;
   } else {
-    appendMsg(msgBox, 'bot', data.text);
+    appendMsg(msgBox, 'bot', data.text, false, { responseId: data.responseId, model: data.model, feature });
   }
 } else {
-  appendMsg(msgBox, 'bot', data.text);
+  appendMsg(msgBox, 'bot', data.text, false, { responseId: data.responseId, model: data.model, feature });
 }
   if (feature === 'code' && typeof data.creditsCharged === 'number') {
     appendMsg(msgBox, 'status', `Coût final : ${data.creditsCharged} Credits`);
