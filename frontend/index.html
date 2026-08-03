@@ -805,6 +805,28 @@
     transform-origin:bottom center;
   }
 }
+/* ROX VOICE COUNTRY FLAGS START */
+.rox-voice-language-icon,
+.rox-voice-language-option-icon{
+  overflow:hidden;
+}
+
+.rox-voice-language-icon img,
+.rox-voice-language-option-icon img{
+  display:block;
+  width:24px;
+  height:16px;
+  object-fit:cover;
+  border-radius:4px;
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,.12),
+    0 3px 8px rgba(0,0,0,.28);
+}
+
+.rox-voice-language-icon.is-auto{
+  font-size:15px;
+}
+/* ROX VOICE COUNTRY FLAGS END */
 /* ROX VOICE LANGUAGE UI END */
   .chat-input-row .voice-input-btn{
     width:44px;
@@ -2870,15 +2892,64 @@ document.querySelectorAll('input[data-feature]').forEach(inp=>{
       : voiceLanguages[0][1];
   };
 
-  const getVoiceLanguageBadge = (value) => {
+  const getVoiceLanguageRegion = (value) => {
+    const parts = String(value || '').split('-');
+    const region = parts[parts.length - 1];
+
+    return /^[A-Za-z]{2}$/.test(region)
+      ? region.toLowerCase()
+      : '';
+  };
+
+  const renderVoiceLanguageFlag = (
+    container,
+    value
+  ) => {
+    container.replaceChildren();
+
     if (!value) {
-      return 'A';
+      container.textContent = '🌐';
+      container.classList.add('is-auto');
+      return;
     }
 
-    return value
-      .split('-')[0]
-      .slice(0, 2)
-      .toUpperCase();
+    container.classList.remove('is-auto');
+
+    const region =
+      getVoiceLanguageRegion(value);
+
+    if (!region) {
+      container.textContent =
+        String(value)
+          .split('-')[0]
+          .slice(0, 2)
+          .toUpperCase();
+
+      return;
+    }
+
+    const image =
+      document.createElement('img');
+
+    image.src =
+      `https://flagcdn.com/w40/${region}.png`;
+
+    image.alt = '';
+    image.loading = 'lazy';
+    image.decoding = 'async';
+    image.referrerPolicy = 'no-referrer';
+
+    image.addEventListener(
+      'error',
+      () => {
+        container.replaceChildren();
+        container.textContent =
+          region.toUpperCase();
+      },
+      { once: true }
+    );
+
+    container.appendChild(image);
   };
 
   const closeRoxVoiceLanguageMenus = (
@@ -2960,6 +3031,17 @@ document.querySelectorAll('input[data-feature]').forEach(inp=>{
           getVoiceLanguageLabel(
             selectedLanguage
           );
+        const selectedIcon =
+          root.querySelector(
+            '.rox-voice-language-icon'
+          );
+
+        if (selectedIcon) {
+          renderVoiceLanguageFlag(
+            selectedIcon,
+            selectedLanguage
+          );
+        }
 
         if (label) {
           label.textContent = selectedLabel;
@@ -3073,8 +3155,10 @@ document.querySelectorAll('input[data-feature]').forEach(inp=>{
         icon.className =
           'rox-voice-language-option-icon';
 
-        icon.textContent =
-          getVoiceLanguageBadge(value);
+        renderVoiceLanguageFlag(
+          icon,
+          value
+        );
 
         const text =
           document.createElement('span');
@@ -4339,6 +4423,28 @@ initAuth();
     transform-origin:bottom center;
   }
 }
+/* ROX VOICE COUNTRY FLAGS START */
+.rox-voice-language-icon,
+.rox-voice-language-option-icon{
+  overflow:hidden;
+}
+
+.rox-voice-language-icon img,
+.rox-voice-language-option-icon img{
+  display:block;
+  width:24px;
+  height:16px;
+  object-fit:cover;
+  border-radius:4px;
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,.12),
+    0 3px 8px rgba(0,0,0,.28);
+}
+
+.rox-voice-language-icon.is-auto{
+  font-size:15px;
+}
+/* ROX VOICE COUNTRY FLAGS END */
 /* ROX VOICE LANGUAGE UI END */
   .chat-input-row .voice-input-btn{
     width:44px;
@@ -6612,15 +6718,64 @@ document.querySelectorAll('input[data-quickfeature]').forEach(inp=>{
       : voiceLanguages[0][1];
   };
 
-  const getVoiceLanguageBadge = (value) => {
+  const getVoiceLanguageRegion = (value) => {
+    const parts = String(value || '').split('-');
+    const region = parts[parts.length - 1];
+
+    return /^[A-Za-z]{2}$/.test(region)
+      ? region.toLowerCase()
+      : '';
+  };
+
+  const renderVoiceLanguageFlag = (
+    container,
+    value
+  ) => {
+    container.replaceChildren();
+
     if (!value) {
-      return 'A';
+      container.textContent = '🌐';
+      container.classList.add('is-auto');
+      return;
     }
 
-    return value
-      .split('-')[0]
-      .slice(0, 2)
-      .toUpperCase();
+    container.classList.remove('is-auto');
+
+    const region =
+      getVoiceLanguageRegion(value);
+
+    if (!region) {
+      container.textContent =
+        String(value)
+          .split('-')[0]
+          .slice(0, 2)
+          .toUpperCase();
+
+      return;
+    }
+
+    const image =
+      document.createElement('img');
+
+    image.src =
+      `https://flagcdn.com/w40/${region}.png`;
+
+    image.alt = '';
+    image.loading = 'lazy';
+    image.decoding = 'async';
+    image.referrerPolicy = 'no-referrer';
+
+    image.addEventListener(
+      'error',
+      () => {
+        container.replaceChildren();
+        container.textContent =
+          region.toUpperCase();
+      },
+      { once: true }
+    );
+
+    container.appendChild(image);
   };
 
   const closeRoxVoiceLanguageMenus = (
@@ -6702,6 +6857,17 @@ document.querySelectorAll('input[data-quickfeature]').forEach(inp=>{
           getVoiceLanguageLabel(
             selectedLanguage
           );
+        const selectedIcon =
+          root.querySelector(
+            '.rox-voice-language-icon'
+          );
+
+        if (selectedIcon) {
+          renderVoiceLanguageFlag(
+            selectedIcon,
+            selectedLanguage
+          );
+        }
 
         if (label) {
           label.textContent = selectedLabel;
@@ -6815,8 +6981,10 @@ document.querySelectorAll('input[data-quickfeature]').forEach(inp=>{
         icon.className =
           'rox-voice-language-option-icon';
 
-        icon.textContent =
-          getVoiceLanguageBadge(value);
+        renderVoiceLanguageFlag(
+          icon,
+          value
+        );
 
         const text =
           document.createElement('span');
