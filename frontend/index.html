@@ -461,6 +461,351 @@
     transition:transform .15s ease;
   }
   /* ROX VOICE INPUT DESIGN START */
+/* ROX VOICE LANGUAGE UI START */
+.chat-input-row .rox-voice-language{
+  position:relative;
+  flex:0 1 240px;
+  min-width:170px;
+  max-width:260px;
+  z-index:40;
+}
+
+.rox-voice-language-trigger{
+  width:100%;
+  height:44px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:0 13px;
+  border:1px solid rgba(167,139,250,.28);
+  border-radius:14px;
+  background:
+    linear-gradient(135deg,rgba(23,21,38,.92),rgba(18,28,46,.86));
+  color:#f8f7ff;
+  cursor:pointer;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.07),
+    0 8px 22px rgba(5,7,20,.22);
+  backdrop-filter:blur(18px);
+  -webkit-backdrop-filter:blur(18px);
+  transition:
+    border-color .2s ease,
+    box-shadow .2s ease,
+    transform .2s ease;
+}
+
+.rox-voice-language-trigger:hover{
+  border-color:rgba(167,139,250,.65);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.09),
+    0 0 0 3px rgba(139,92,246,.11),
+    0 10px 26px rgba(5,7,20,.28);
+}
+
+.rox-voice-language-trigger:active{
+  transform:translateY(1px);
+}
+
+.rox-voice-language.is-open .rox-voice-language-trigger{
+  border-color:rgba(129,140,248,.82);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.1),
+    0 0 0 3px rgba(139,92,246,.14),
+    0 0 28px rgba(124,58,237,.18);
+}
+
+.rox-voice-language-icon{
+  width:25px;
+  height:25px;
+  flex:0 0 25px;
+  display:grid;
+  place-items:center;
+  border-radius:9px;
+  background:linear-gradient(135deg,rgba(139,92,246,.34),rgba(34,211,238,.2));
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.08);
+  font-size:13px;
+}
+
+.rox-voice-language-label{
+  min-width:0;
+  flex:1;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  text-align:left;
+  font-size:13px;
+  font-weight:650;
+  letter-spacing:.01em;
+}
+
+.rox-voice-language-caret{
+  flex:0 0 auto;
+  color:#b9b4cc;
+  font-size:13px;
+  transition:transform .2s ease,color .2s ease;
+}
+
+.rox-voice-language.is-open .rox-voice-language-caret{
+  color:#c4b5fd;
+  transform:rotate(180deg);
+}
+
+.rox-voice-language-menu{
+  position:absolute;
+  right:0;
+  bottom:calc(100% + 12px);
+  width:min(360px,calc(100vw - 28px));
+  max-height:min(480px,70vh);
+  display:flex;
+  flex-direction:column;
+  overflow:hidden;
+  border:1px solid rgba(167,139,250,.25);
+  border-radius:21px;
+  background:
+    radial-gradient(circle at 90% 0%,rgba(99,102,241,.16),transparent 36%),
+    linear-gradient(155deg,rgba(20,19,34,.98),rgba(12,18,31,.97));
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.07),
+    0 24px 65px rgba(2,4,15,.58),
+    0 0 38px rgba(91,33,182,.13);
+  backdrop-filter:blur(24px);
+  -webkit-backdrop-filter:blur(24px);
+  transform-origin:bottom right;
+  animation:roxVoiceLanguageOpen .18s ease-out;
+  z-index:500;
+}
+
+.rox-voice-language-menu[hidden]{
+  display:none !important;
+}
+
+@keyframes roxVoiceLanguageOpen{
+  from{
+    opacity:0;
+    transform:translateY(8px) scale(.97);
+  }
+  to{
+    opacity:1;
+    transform:translateY(0) scale(1);
+  }
+}
+
+.rox-voice-language-header{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:16px 16px 13px;
+  border-bottom:1px solid rgba(255,255,255,.07);
+}
+
+.rox-voice-language-wave{
+  width:36px;
+  height:36px;
+  flex:0 0 36px;
+  display:grid;
+  place-items:center;
+  border-radius:12px;
+  color:#ddd6fe;
+  background:linear-gradient(135deg,rgba(139,92,246,.4),rgba(37,99,235,.25));
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,.08),
+    0 0 22px rgba(124,58,237,.16);
+  font-size:22px;
+  font-weight:700;
+}
+
+.rox-voice-language-header div{
+  min-width:0;
+}
+
+.rox-voice-language-header strong{
+  display:block;
+  color:#fff;
+  font-size:14px;
+  line-height:1.3;
+}
+
+.rox-voice-language-header small{
+  display:block;
+  margin-top:3px;
+  color:#9d9aaf;
+  font-size:11px;
+  line-height:1.3;
+}
+
+.rox-voice-language-search{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  margin:12px;
+  padding:0 12px;
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:12px;
+  background:rgba(255,255,255,.045);
+  color:#8e8aa1;
+  transition:border-color .2s ease,box-shadow .2s ease;
+}
+
+.rox-voice-language-search:focus-within{
+  border-color:rgba(139,92,246,.55);
+  box-shadow:0 0 0 3px rgba(139,92,246,.1);
+}
+
+.rox-voice-language-search input{
+  width:100%;
+  height:39px;
+  padding:0;
+  border:0;
+  outline:0;
+  background:transparent;
+  color:#f7f5ff;
+  font:inherit;
+  font-size:13px;
+}
+
+.rox-voice-language-search input::placeholder{
+  color:#777386;
+}
+
+.rox-voice-language-options{
+  min-height:80px;
+  overflow-y:auto;
+  padding:0 8px 10px;
+  scrollbar-width:thin;
+  scrollbar-color:rgba(139,92,246,.45) transparent;
+}
+
+.rox-voice-language-options::-webkit-scrollbar{
+  width:6px;
+}
+
+.rox-voice-language-options::-webkit-scrollbar-thumb{
+  border-radius:99px;
+  background:rgba(139,92,246,.42);
+}
+
+.rox-voice-language-section{
+  padding:10px 9px 6px;
+  color:#777386;
+  font-size:10px;
+  font-weight:800;
+  letter-spacing:.11em;
+  text-transform:uppercase;
+}
+
+.rox-voice-language-option{
+  width:100%;
+  min-height:42px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin:2px 0;
+  padding:8px 10px;
+  border:1px solid transparent;
+  border-radius:12px;
+  background:transparent;
+  color:#ddd9e8;
+  cursor:pointer;
+  text-align:left;
+  transition:
+    background .16s ease,
+    border-color .16s ease,
+    color .16s ease,
+    transform .16s ease;
+}
+
+.rox-voice-language-option:hover{
+  border-color:rgba(167,139,250,.15);
+  background:rgba(139,92,246,.11);
+  color:#fff;
+  transform:translateX(2px);
+}
+
+.rox-voice-language-option.is-selected{
+  border-color:rgba(139,92,246,.34);
+  background:
+    linear-gradient(100deg,rgba(124,58,237,.26),rgba(59,130,246,.12));
+  color:#fff;
+  box-shadow:inset 3px 0 0 #8b5cf6;
+}
+
+.rox-voice-language-option-icon{
+  width:27px;
+  height:27px;
+  flex:0 0 27px;
+  display:grid;
+  place-items:center;
+  border-radius:9px;
+  background:rgba(255,255,255,.055);
+  font-size:14px;
+}
+
+.rox-voice-language-option-text{
+  min-width:0;
+  flex:1;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  font-size:12px;
+  font-weight:600;
+}
+
+.rox-voice-language-check{
+  width:19px;
+  height:19px;
+  display:grid;
+  place-items:center;
+  border-radius:50%;
+  color:transparent;
+  font-size:11px;
+}
+
+.rox-voice-language-option.is-selected .rox-voice-language-check{
+  color:#fff;
+  background:linear-gradient(135deg,#8b5cf6,#2563eb);
+}
+
+.rox-voice-language-empty{
+  padding:24px 12px;
+  color:#8e8a9e;
+  font-size:12px;
+  text-align:center;
+}
+
+@media (max-width:720px){
+  .chat-input-row .rox-voice-language{
+    flex:0 0 58px;
+    min-width:58px;
+    max-width:58px;
+  }
+
+  .rox-voice-language-trigger{
+    justify-content:center;
+    gap:5px;
+    padding:0 8px;
+  }
+
+  .rox-voice-language-label{
+    display:none;
+  }
+
+  .rox-voice-language-icon{
+    width:24px;
+    height:24px;
+    flex-basis:24px;
+  }
+
+  .rox-voice-language-menu{
+    position:fixed;
+    right:14px;
+    bottom:86px;
+    left:14px;
+    width:auto;
+    max-height:min(520px,68vh);
+    transform-origin:bottom center;
+  }
+}
+/* ROX VOICE LANGUAGE UI END */
   .chat-input-row .voice-input-btn{
     width:44px;
     height:44px;
@@ -842,12 +1187,63 @@
     </div>
     <div class="chat-input-row">
       <input type="text" placeholder="Décrivez votre image..." data-feature="images">
-      <select
-        class="voice-language-select"
-        data-voice-language="images"
-        aria-label="Langue de dictée"
-        title="Langue de dictée"
-      ></select>
+      <div
+        class="rox-voice-language"
+        data-rox-voice-language="images"
+      >
+        <button
+          type="button"
+          class="rox-voice-language-trigger"
+          data-rox-voice-language-trigger
+          aria-haspopup="listbox"
+          aria-expanded="false"
+          title="Voice language"
+        >
+          <span class="rox-voice-language-icon" aria-hidden="true">🌐</span>
+          <span
+            class="rox-voice-language-label"
+            data-rox-voice-language-label
+          >Auto</span>
+          <span class="rox-voice-language-caret" aria-hidden="true">⌃</span>
+        </button>
+
+        <div
+          class="rox-voice-language-menu"
+          data-rox-voice-language-menu
+          hidden
+        >
+          <div class="rox-voice-language-header">
+            <span class="rox-voice-language-wave" aria-hidden="true">≋</span>
+            <div>
+              <strong>Voice language</strong>
+              <small>Choose the language for voice input</small>
+            </div>
+          </div>
+
+          <label class="rox-voice-language-search">
+            <span aria-hidden="true">⌕</span>
+            <input
+              type="search"
+              placeholder="Search languages..."
+              data-rox-voice-language-search
+            >
+          </label>
+
+          <div
+            class="rox-voice-language-options"
+            data-rox-voice-language-options
+            role="listbox"
+          ></div>
+        </div>
+
+        <select
+          class="voice-language-select rox-voice-language-native"
+          data-voice-language="images"
+          aria-label="Langue de dictée"
+          title="Langue de dictée"
+          hidden
+        ></select>
+      </div>
       <button
         type="button"
         class="voice-input-btn"
@@ -870,12 +1266,63 @@
     </div>
     <div class="chat-input-row">
       <input type="text" placeholder="Décrivez votre vidéo..." data-feature="videos">
-      <select
-        class="voice-language-select"
-        data-voice-language="videos"
-        aria-label="Langue de dictée"
-        title="Langue de dictée"
-      ></select>
+      <div
+        class="rox-voice-language"
+        data-rox-voice-language="videos"
+      >
+        <button
+          type="button"
+          class="rox-voice-language-trigger"
+          data-rox-voice-language-trigger
+          aria-haspopup="listbox"
+          aria-expanded="false"
+          title="Voice language"
+        >
+          <span class="rox-voice-language-icon" aria-hidden="true">🌐</span>
+          <span
+            class="rox-voice-language-label"
+            data-rox-voice-language-label
+          >Auto</span>
+          <span class="rox-voice-language-caret" aria-hidden="true">⌃</span>
+        </button>
+
+        <div
+          class="rox-voice-language-menu"
+          data-rox-voice-language-menu
+          hidden
+        >
+          <div class="rox-voice-language-header">
+            <span class="rox-voice-language-wave" aria-hidden="true">≋</span>
+            <div>
+              <strong>Voice language</strong>
+              <small>Choose the language for voice input</small>
+            </div>
+          </div>
+
+          <label class="rox-voice-language-search">
+            <span aria-hidden="true">⌕</span>
+            <input
+              type="search"
+              placeholder="Search languages..."
+              data-rox-voice-language-search
+            >
+          </label>
+
+          <div
+            class="rox-voice-language-options"
+            data-rox-voice-language-options
+            role="listbox"
+          ></div>
+        </div>
+
+        <select
+          class="voice-language-select rox-voice-language-native"
+          data-voice-language="videos"
+          aria-label="Langue de dictée"
+          title="Langue de dictée"
+          hidden
+        ></select>
+      </div>
       <button
         type="button"
         class="voice-input-btn"
@@ -898,12 +1345,63 @@
     </div>
     <div class="chat-input-row">
       <input type="text" placeholder="Entrez l'adresse IP..." data-feature="roxip">
-      <select
-        class="voice-language-select"
-        data-voice-language="roxip"
-        aria-label="Langue de dictée"
-        title="Langue de dictée"
-      ></select>
+      <div
+        class="rox-voice-language"
+        data-rox-voice-language="roxip"
+      >
+        <button
+          type="button"
+          class="rox-voice-language-trigger"
+          data-rox-voice-language-trigger
+          aria-haspopup="listbox"
+          aria-expanded="false"
+          title="Voice language"
+        >
+          <span class="rox-voice-language-icon" aria-hidden="true">🌐</span>
+          <span
+            class="rox-voice-language-label"
+            data-rox-voice-language-label
+          >Auto</span>
+          <span class="rox-voice-language-caret" aria-hidden="true">⌃</span>
+        </button>
+
+        <div
+          class="rox-voice-language-menu"
+          data-rox-voice-language-menu
+          hidden
+        >
+          <div class="rox-voice-language-header">
+            <span class="rox-voice-language-wave" aria-hidden="true">≋</span>
+            <div>
+              <strong>Voice language</strong>
+              <small>Choose the language for voice input</small>
+            </div>
+          </div>
+
+          <label class="rox-voice-language-search">
+            <span aria-hidden="true">⌕</span>
+            <input
+              type="search"
+              placeholder="Search languages..."
+              data-rox-voice-language-search
+            >
+          </label>
+
+          <div
+            class="rox-voice-language-options"
+            data-rox-voice-language-options
+            role="listbox"
+          ></div>
+        </div>
+
+        <select
+          class="voice-language-select rox-voice-language-native"
+          data-voice-language="roxip"
+          aria-label="Langue de dictée"
+          title="Langue de dictée"
+          hidden
+        ></select>
+      </div>
       <button
         type="button"
         class="voice-input-btn"
@@ -926,12 +1424,63 @@
     </div>
     <div class="chat-input-row">
       <input type="text" placeholder="Posez votre question..." data-feature="chat">
-      <select
-        class="voice-language-select"
-        data-voice-language="chat"
-        aria-label="Langue de dictée"
-        title="Langue de dictée"
-      ></select>
+      <div
+        class="rox-voice-language"
+        data-rox-voice-language="chat"
+      >
+        <button
+          type="button"
+          class="rox-voice-language-trigger"
+          data-rox-voice-language-trigger
+          aria-haspopup="listbox"
+          aria-expanded="false"
+          title="Voice language"
+        >
+          <span class="rox-voice-language-icon" aria-hidden="true">🌐</span>
+          <span
+            class="rox-voice-language-label"
+            data-rox-voice-language-label
+          >Auto</span>
+          <span class="rox-voice-language-caret" aria-hidden="true">⌃</span>
+        </button>
+
+        <div
+          class="rox-voice-language-menu"
+          data-rox-voice-language-menu
+          hidden
+        >
+          <div class="rox-voice-language-header">
+            <span class="rox-voice-language-wave" aria-hidden="true">≋</span>
+            <div>
+              <strong>Voice language</strong>
+              <small>Choose the language for voice input</small>
+            </div>
+          </div>
+
+          <label class="rox-voice-language-search">
+            <span aria-hidden="true">⌕</span>
+            <input
+              type="search"
+              placeholder="Search languages..."
+              data-rox-voice-language-search
+            >
+          </label>
+
+          <div
+            class="rox-voice-language-options"
+            data-rox-voice-language-options
+            role="listbox"
+          ></div>
+        </div>
+
+        <select
+          class="voice-language-select rox-voice-language-native"
+          data-voice-language="chat"
+          aria-label="Langue de dictée"
+          title="Langue de dictée"
+          hidden
+        ></select>
+      </div>
       <button
         type="button"
         class="voice-input-btn"
@@ -954,12 +1503,63 @@
     </div>
     <div class="chat-input-row">
       <input type="text" placeholder="Ex: une fonction qui trie un tableau..." data-feature="code">
-      <select
-        class="voice-language-select"
-        data-voice-language="code"
-        aria-label="Langue de dictée"
-        title="Langue de dictée"
-      ></select>
+      <div
+        class="rox-voice-language"
+        data-rox-voice-language="code"
+      >
+        <button
+          type="button"
+          class="rox-voice-language-trigger"
+          data-rox-voice-language-trigger
+          aria-haspopup="listbox"
+          aria-expanded="false"
+          title="Voice language"
+        >
+          <span class="rox-voice-language-icon" aria-hidden="true">🌐</span>
+          <span
+            class="rox-voice-language-label"
+            data-rox-voice-language-label
+          >Auto</span>
+          <span class="rox-voice-language-caret" aria-hidden="true">⌃</span>
+        </button>
+
+        <div
+          class="rox-voice-language-menu"
+          data-rox-voice-language-menu
+          hidden
+        >
+          <div class="rox-voice-language-header">
+            <span class="rox-voice-language-wave" aria-hidden="true">≋</span>
+            <div>
+              <strong>Voice language</strong>
+              <small>Choose the language for voice input</small>
+            </div>
+          </div>
+
+          <label class="rox-voice-language-search">
+            <span aria-hidden="true">⌕</span>
+            <input
+              type="search"
+              placeholder="Search languages..."
+              data-rox-voice-language-search
+            >
+          </label>
+
+          <div
+            class="rox-voice-language-options"
+            data-rox-voice-language-options
+            role="listbox"
+          ></div>
+        </div>
+
+        <select
+          class="voice-language-select rox-voice-language-native"
+          data-voice-language="code"
+          aria-label="Langue de dictée"
+          title="Langue de dictée"
+          hidden
+        ></select>
+      </div>
       <button
         type="button"
         class="voice-input-btn"
@@ -2245,41 +2845,450 @@ document.querySelectorAll('input[data-feature]').forEach(inp=>{
     navigator.language ||
     'ar-MA';
 
+  const roxVoiceQuickLanguages = [
+    '',
+    'ar-MA',
+    'fr-FR',
+    'en-US',
+    'es-ES'
+  ];
+
+  const normalizeVoiceSearch = (value) =>
+    String(value || '')
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .toLowerCase()
+      .trim();
+
+  const getVoiceLanguageLabel = (value) => {
+    const language = voiceLanguages.find(
+      ([code]) => code === value
+    );
+
+    return language
+      ? language[1]
+      : voiceLanguages[0][1];
+  };
+
+  const getVoiceLanguageBadge = (value) => {
+    if (!value) {
+      return 'A';
+    }
+
+    return value
+      .split('-')[0]
+      .slice(0, 2)
+      .toUpperCase();
+  };
+
+  const closeRoxVoiceLanguageMenus = (
+    exceptRoot = null
+  ) => {
+    document
+      .querySelectorAll('[data-rox-voice-language]')
+      .forEach((root) => {
+        if (root === exceptRoot) {
+          return;
+        }
+
+        const trigger = root.querySelector(
+          '[data-rox-voice-language-trigger]'
+        );
+
+        const menu = root.querySelector(
+          '[data-rox-voice-language-menu]'
+        );
+
+        const search = root.querySelector(
+          '[data-rox-voice-language-search]'
+        );
+
+        root.classList.remove('is-open');
+
+        if (trigger) {
+          trigger.setAttribute(
+            'aria-expanded',
+            'false'
+          );
+        }
+
+        if (menu) {
+          menu.hidden = true;
+        }
+
+        if (search && search.value) {
+          search.value = '';
+          search.dispatchEvent(
+            new Event('input')
+          );
+        }
+      });
+  };
+
+  const setVoiceLanguage = (
+    selectedLanguage
+  ) => {
+    if (selectedLanguage) {
+      localStorage.setItem(
+        'roxVoiceLanguage',
+        selectedLanguage
+      );
+    } else {
+      localStorage.removeItem(
+        'roxVoiceLanguage'
+      );
+    }
+
+    document
+      .querySelectorAll('[data-voice-language]')
+      .forEach((select) => {
+        select.value = selectedLanguage;
+      });
+
+    document
+      .querySelectorAll('[data-rox-voice-language]')
+      .forEach((root) => {
+        const label = root.querySelector(
+          '[data-rox-voice-language-label]'
+        );
+
+        const trigger = root.querySelector(
+          '[data-rox-voice-language-trigger]'
+        );
+
+        const selectedLabel =
+          getVoiceLanguageLabel(
+            selectedLanguage
+          );
+
+        if (label) {
+          label.textContent = selectedLabel;
+        }
+
+        if (trigger) {
+          trigger.title =
+            `Voice language: ${selectedLabel}`;
+        }
+
+        root
+          .querySelectorAll(
+            '.rox-voice-language-option'
+          )
+          .forEach((option) => {
+            const isSelected =
+              option.dataset.value ===
+              selectedLanguage;
+
+            option.classList.toggle(
+              'is-selected',
+              isSelected
+            );
+
+            option.setAttribute(
+              'aria-selected',
+              String(isSelected)
+            );
+          });
+      });
+  };
+
   document
     .querySelectorAll('[data-voice-language]')
     .forEach((select) => {
-      voiceLanguages.forEach(([value, label]) => {
-        const option = document.createElement('option');
+      select.innerHTML = '';
 
-        option.value = value;
-        option.textContent = label;
+      voiceLanguages.forEach(
+        ([value, label]) => {
+          const option =
+            document.createElement('option');
 
-        select.appendChild(option);
-      });
+          option.value = value;
+          option.textContent = label;
 
-      select.value =
-        localStorage.getItem('roxVoiceLanguage') || '';
-
-      select.addEventListener('change', () => {
-        const selectedLanguage = select.value;
-
-        if (selectedLanguage) {
-          localStorage.setItem(
-            'roxVoiceLanguage',
-            selectedLanguage
-          );
-        } else {
-          localStorage.removeItem('roxVoiceLanguage');
+          select.appendChild(option);
         }
-
-        document
-          .querySelectorAll('[data-voice-language]')
-          .forEach((otherSelect) => {
-            otherSelect.value = selectedLanguage;
-          });
-      });
+      );
     });
 
+  document
+    .querySelectorAll('[data-rox-voice-language]')
+    .forEach((root) => {
+      const trigger = root.querySelector(
+        '[data-rox-voice-language-trigger]'
+      );
+
+      const menu = root.querySelector(
+        '[data-rox-voice-language-menu]'
+      );
+
+      const search = root.querySelector(
+        '[data-rox-voice-language-search]'
+      );
+
+      const optionsBox = root.querySelector(
+        '[data-rox-voice-language-options]'
+      );
+
+      if (
+        !trigger ||
+        !menu ||
+        !search ||
+        !optionsBox
+      ) {
+        return;
+      }
+
+      optionsBox.innerHTML = '';
+
+      const createLanguageOption = (
+        value,
+        label
+      ) => {
+        const button =
+          document.createElement('button');
+
+        button.type = 'button';
+        button.className =
+          'rox-voice-language-option';
+
+        button.dataset.value = value;
+        button.dataset.search =
+          normalizeVoiceSearch(
+            `${label} ${value}`
+          );
+
+        button.setAttribute(
+          'role',
+          'option'
+        );
+
+        button.setAttribute(
+          'aria-selected',
+          'false'
+        );
+
+        const icon =
+          document.createElement('span');
+
+        icon.className =
+          'rox-voice-language-option-icon';
+
+        icon.textContent =
+          getVoiceLanguageBadge(value);
+
+        const text =
+          document.createElement('span');
+
+        text.className =
+          'rox-voice-language-option-text';
+
+        text.textContent = label;
+
+        const check =
+          document.createElement('span');
+
+        check.className =
+          'rox-voice-language-check';
+
+        check.textContent = '✓';
+
+        button.append(
+          icon,
+          text,
+          check
+        );
+
+        button.addEventListener(
+          'click',
+          () => {
+            setVoiceLanguage(value);
+            closeRoxVoiceLanguageMenus();
+          }
+        );
+
+        return button;
+      };
+
+      const appendSection = (
+        title,
+        languages
+      ) => {
+        if (!languages.length) {
+          return;
+        }
+
+        const section =
+          document.createElement('div');
+
+        section.className =
+          'rox-voice-language-section';
+
+        section.textContent = title;
+
+        optionsBox.appendChild(section);
+
+        languages.forEach(
+          ([value, label]) => {
+            optionsBox.appendChild(
+              createLanguageOption(
+                value,
+                label
+              )
+            );
+          }
+        );
+      };
+
+      const quickLanguages =
+        roxVoiceQuickLanguages
+          .map((code) =>
+            voiceLanguages.find(
+              ([value]) => value === code
+            )
+          )
+          .filter(Boolean);
+
+      const allLanguages =
+        voiceLanguages.filter(
+          ([value]) =>
+            !roxVoiceQuickLanguages.includes(
+              value
+            )
+        );
+
+      appendSection(
+        'Quick access',
+        quickLanguages
+      );
+
+      appendSection(
+        'All languages',
+        allLanguages
+      );
+
+      const emptyMessage =
+        document.createElement('div');
+
+      emptyMessage.className =
+        'rox-voice-language-empty';
+
+      emptyMessage.textContent =
+        'No language found';
+
+      emptyMessage.hidden = true;
+
+      optionsBox.appendChild(emptyMessage);
+
+      search.addEventListener(
+        'input',
+        () => {
+          const query =
+            normalizeVoiceSearch(
+              search.value
+            );
+
+          let visibleOptions = 0;
+
+          optionsBox
+            .querySelectorAll(
+              '.rox-voice-language-option'
+            )
+            .forEach((option) => {
+              const matches =
+                !query ||
+                option.dataset.search.includes(
+                  query
+                );
+
+              option.hidden = !matches;
+
+              if (matches) {
+                visibleOptions += 1;
+              }
+            });
+
+          optionsBox
+            .querySelectorAll(
+              '.rox-voice-language-section'
+            )
+            .forEach((section) => {
+              section.hidden = Boolean(query);
+            });
+
+          emptyMessage.hidden =
+            visibleOptions !== 0;
+        }
+      );
+
+      trigger.addEventListener(
+        'click',
+        (event) => {
+          event.stopPropagation();
+
+          const shouldOpen = menu.hidden;
+
+          closeRoxVoiceLanguageMenus(root);
+
+          root.classList.toggle(
+            'is-open',
+            shouldOpen
+          );
+
+          menu.hidden = !shouldOpen;
+
+          trigger.setAttribute(
+            'aria-expanded',
+            String(shouldOpen)
+          );
+
+          if (shouldOpen) {
+            requestAnimationFrame(() => {
+              search.focus();
+            });
+          }
+        }
+      );
+
+      menu.addEventListener(
+        'click',
+        (event) => {
+          event.stopPropagation();
+        }
+      );
+    });
+
+  const savedVoiceLanguage =
+    localStorage.getItem(
+      'roxVoiceLanguage'
+    ) || '';
+
+  const validVoiceLanguage =
+    voiceLanguages.some(
+      ([value]) =>
+        value === savedVoiceLanguage
+    )
+      ? savedVoiceLanguage
+      : '';
+
+  setVoiceLanguage(
+    validVoiceLanguage
+  );
+
+  document.addEventListener(
+    'click',
+    () => {
+      closeRoxVoiceLanguageMenus();
+    }
+  );
+
+  document.addEventListener(
+    'keydown',
+    (event) => {
+      if (event.key === 'Escape') {
+        closeRoxVoiceLanguageMenus();
+      }
+    }
+  );
   document
     .querySelectorAll('[data-voice-input]')
     .forEach((button) => {
@@ -2986,6 +3995,351 @@ initAuth();
     transition:transform .15s ease;
   }
   /* ROX VOICE INPUT DESIGN START */
+/* ROX VOICE LANGUAGE UI START */
+.chat-input-row .rox-voice-language{
+  position:relative;
+  flex:0 1 240px;
+  min-width:170px;
+  max-width:260px;
+  z-index:40;
+}
+
+.rox-voice-language-trigger{
+  width:100%;
+  height:44px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:0 13px;
+  border:1px solid rgba(167,139,250,.28);
+  border-radius:14px;
+  background:
+    linear-gradient(135deg,rgba(23,21,38,.92),rgba(18,28,46,.86));
+  color:#f8f7ff;
+  cursor:pointer;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.07),
+    0 8px 22px rgba(5,7,20,.22);
+  backdrop-filter:blur(18px);
+  -webkit-backdrop-filter:blur(18px);
+  transition:
+    border-color .2s ease,
+    box-shadow .2s ease,
+    transform .2s ease;
+}
+
+.rox-voice-language-trigger:hover{
+  border-color:rgba(167,139,250,.65);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.09),
+    0 0 0 3px rgba(139,92,246,.11),
+    0 10px 26px rgba(5,7,20,.28);
+}
+
+.rox-voice-language-trigger:active{
+  transform:translateY(1px);
+}
+
+.rox-voice-language.is-open .rox-voice-language-trigger{
+  border-color:rgba(129,140,248,.82);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.1),
+    0 0 0 3px rgba(139,92,246,.14),
+    0 0 28px rgba(124,58,237,.18);
+}
+
+.rox-voice-language-icon{
+  width:25px;
+  height:25px;
+  flex:0 0 25px;
+  display:grid;
+  place-items:center;
+  border-radius:9px;
+  background:linear-gradient(135deg,rgba(139,92,246,.34),rgba(34,211,238,.2));
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.08);
+  font-size:13px;
+}
+
+.rox-voice-language-label{
+  min-width:0;
+  flex:1;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  text-align:left;
+  font-size:13px;
+  font-weight:650;
+  letter-spacing:.01em;
+}
+
+.rox-voice-language-caret{
+  flex:0 0 auto;
+  color:#b9b4cc;
+  font-size:13px;
+  transition:transform .2s ease,color .2s ease;
+}
+
+.rox-voice-language.is-open .rox-voice-language-caret{
+  color:#c4b5fd;
+  transform:rotate(180deg);
+}
+
+.rox-voice-language-menu{
+  position:absolute;
+  right:0;
+  bottom:calc(100% + 12px);
+  width:min(360px,calc(100vw - 28px));
+  max-height:min(480px,70vh);
+  display:flex;
+  flex-direction:column;
+  overflow:hidden;
+  border:1px solid rgba(167,139,250,.25);
+  border-radius:21px;
+  background:
+    radial-gradient(circle at 90% 0%,rgba(99,102,241,.16),transparent 36%),
+    linear-gradient(155deg,rgba(20,19,34,.98),rgba(12,18,31,.97));
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.07),
+    0 24px 65px rgba(2,4,15,.58),
+    0 0 38px rgba(91,33,182,.13);
+  backdrop-filter:blur(24px);
+  -webkit-backdrop-filter:blur(24px);
+  transform-origin:bottom right;
+  animation:roxVoiceLanguageOpen .18s ease-out;
+  z-index:500;
+}
+
+.rox-voice-language-menu[hidden]{
+  display:none !important;
+}
+
+@keyframes roxVoiceLanguageOpen{
+  from{
+    opacity:0;
+    transform:translateY(8px) scale(.97);
+  }
+  to{
+    opacity:1;
+    transform:translateY(0) scale(1);
+  }
+}
+
+.rox-voice-language-header{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:16px 16px 13px;
+  border-bottom:1px solid rgba(255,255,255,.07);
+}
+
+.rox-voice-language-wave{
+  width:36px;
+  height:36px;
+  flex:0 0 36px;
+  display:grid;
+  place-items:center;
+  border-radius:12px;
+  color:#ddd6fe;
+  background:linear-gradient(135deg,rgba(139,92,246,.4),rgba(37,99,235,.25));
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,.08),
+    0 0 22px rgba(124,58,237,.16);
+  font-size:22px;
+  font-weight:700;
+}
+
+.rox-voice-language-header div{
+  min-width:0;
+}
+
+.rox-voice-language-header strong{
+  display:block;
+  color:#fff;
+  font-size:14px;
+  line-height:1.3;
+}
+
+.rox-voice-language-header small{
+  display:block;
+  margin-top:3px;
+  color:#9d9aaf;
+  font-size:11px;
+  line-height:1.3;
+}
+
+.rox-voice-language-search{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  margin:12px;
+  padding:0 12px;
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:12px;
+  background:rgba(255,255,255,.045);
+  color:#8e8aa1;
+  transition:border-color .2s ease,box-shadow .2s ease;
+}
+
+.rox-voice-language-search:focus-within{
+  border-color:rgba(139,92,246,.55);
+  box-shadow:0 0 0 3px rgba(139,92,246,.1);
+}
+
+.rox-voice-language-search input{
+  width:100%;
+  height:39px;
+  padding:0;
+  border:0;
+  outline:0;
+  background:transparent;
+  color:#f7f5ff;
+  font:inherit;
+  font-size:13px;
+}
+
+.rox-voice-language-search input::placeholder{
+  color:#777386;
+}
+
+.rox-voice-language-options{
+  min-height:80px;
+  overflow-y:auto;
+  padding:0 8px 10px;
+  scrollbar-width:thin;
+  scrollbar-color:rgba(139,92,246,.45) transparent;
+}
+
+.rox-voice-language-options::-webkit-scrollbar{
+  width:6px;
+}
+
+.rox-voice-language-options::-webkit-scrollbar-thumb{
+  border-radius:99px;
+  background:rgba(139,92,246,.42);
+}
+
+.rox-voice-language-section{
+  padding:10px 9px 6px;
+  color:#777386;
+  font-size:10px;
+  font-weight:800;
+  letter-spacing:.11em;
+  text-transform:uppercase;
+}
+
+.rox-voice-language-option{
+  width:100%;
+  min-height:42px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin:2px 0;
+  padding:8px 10px;
+  border:1px solid transparent;
+  border-radius:12px;
+  background:transparent;
+  color:#ddd9e8;
+  cursor:pointer;
+  text-align:left;
+  transition:
+    background .16s ease,
+    border-color .16s ease,
+    color .16s ease,
+    transform .16s ease;
+}
+
+.rox-voice-language-option:hover{
+  border-color:rgba(167,139,250,.15);
+  background:rgba(139,92,246,.11);
+  color:#fff;
+  transform:translateX(2px);
+}
+
+.rox-voice-language-option.is-selected{
+  border-color:rgba(139,92,246,.34);
+  background:
+    linear-gradient(100deg,rgba(124,58,237,.26),rgba(59,130,246,.12));
+  color:#fff;
+  box-shadow:inset 3px 0 0 #8b5cf6;
+}
+
+.rox-voice-language-option-icon{
+  width:27px;
+  height:27px;
+  flex:0 0 27px;
+  display:grid;
+  place-items:center;
+  border-radius:9px;
+  background:rgba(255,255,255,.055);
+  font-size:14px;
+}
+
+.rox-voice-language-option-text{
+  min-width:0;
+  flex:1;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  font-size:12px;
+  font-weight:600;
+}
+
+.rox-voice-language-check{
+  width:19px;
+  height:19px;
+  display:grid;
+  place-items:center;
+  border-radius:50%;
+  color:transparent;
+  font-size:11px;
+}
+
+.rox-voice-language-option.is-selected .rox-voice-language-check{
+  color:#fff;
+  background:linear-gradient(135deg,#8b5cf6,#2563eb);
+}
+
+.rox-voice-language-empty{
+  padding:24px 12px;
+  color:#8e8a9e;
+  font-size:12px;
+  text-align:center;
+}
+
+@media (max-width:720px){
+  .chat-input-row .rox-voice-language{
+    flex:0 0 58px;
+    min-width:58px;
+    max-width:58px;
+  }
+
+  .rox-voice-language-trigger{
+    justify-content:center;
+    gap:5px;
+    padding:0 8px;
+  }
+
+  .rox-voice-language-label{
+    display:none;
+  }
+
+  .rox-voice-language-icon{
+    width:24px;
+    height:24px;
+    flex-basis:24px;
+  }
+
+  .rox-voice-language-menu{
+    position:fixed;
+    right:14px;
+    bottom:86px;
+    left:14px;
+    width:auto;
+    max-height:min(520px,68vh);
+    transform-origin:bottom center;
+  }
+}
+/* ROX VOICE LANGUAGE UI END */
   .chat-input-row .voice-input-btn{
     width:44px;
     height:44px;
@@ -3473,12 +4827,63 @@ initAuth();
     </div>
     <div class="chat-input-row">
       <input type="text" placeholder="Décrivez votre image..." data-feature="images">
-      <select
-        class="voice-language-select"
-        data-voice-language="images"
-        aria-label="Langue de dictée"
-        title="Langue de dictée"
-      ></select>
+      <div
+        class="rox-voice-language"
+        data-rox-voice-language="images"
+      >
+        <button
+          type="button"
+          class="rox-voice-language-trigger"
+          data-rox-voice-language-trigger
+          aria-haspopup="listbox"
+          aria-expanded="false"
+          title="Voice language"
+        >
+          <span class="rox-voice-language-icon" aria-hidden="true">🌐</span>
+          <span
+            class="rox-voice-language-label"
+            data-rox-voice-language-label
+          >Auto</span>
+          <span class="rox-voice-language-caret" aria-hidden="true">⌃</span>
+        </button>
+
+        <div
+          class="rox-voice-language-menu"
+          data-rox-voice-language-menu
+          hidden
+        >
+          <div class="rox-voice-language-header">
+            <span class="rox-voice-language-wave" aria-hidden="true">≋</span>
+            <div>
+              <strong>Voice language</strong>
+              <small>Choose the language for voice input</small>
+            </div>
+          </div>
+
+          <label class="rox-voice-language-search">
+            <span aria-hidden="true">⌕</span>
+            <input
+              type="search"
+              placeholder="Search languages..."
+              data-rox-voice-language-search
+            >
+          </label>
+
+          <div
+            class="rox-voice-language-options"
+            data-rox-voice-language-options
+            role="listbox"
+          ></div>
+        </div>
+
+        <select
+          class="voice-language-select rox-voice-language-native"
+          data-voice-language="images"
+          aria-label="Langue de dictée"
+          title="Langue de dictée"
+          hidden
+        ></select>
+      </div>
       <button
         type="button"
         class="voice-input-btn"
@@ -3503,12 +4908,63 @@ initAuth();
     </div>
     <div class="chat-input-row">
       <input type="text" placeholder="Décrivez votre vidéo..." data-feature="videos">
-      <select
-        class="voice-language-select"
-        data-voice-language="videos"
-        aria-label="Langue de dictée"
-        title="Langue de dictée"
-      ></select>
+      <div
+        class="rox-voice-language"
+        data-rox-voice-language="videos"
+      >
+        <button
+          type="button"
+          class="rox-voice-language-trigger"
+          data-rox-voice-language-trigger
+          aria-haspopup="listbox"
+          aria-expanded="false"
+          title="Voice language"
+        >
+          <span class="rox-voice-language-icon" aria-hidden="true">🌐</span>
+          <span
+            class="rox-voice-language-label"
+            data-rox-voice-language-label
+          >Auto</span>
+          <span class="rox-voice-language-caret" aria-hidden="true">⌃</span>
+        </button>
+
+        <div
+          class="rox-voice-language-menu"
+          data-rox-voice-language-menu
+          hidden
+        >
+          <div class="rox-voice-language-header">
+            <span class="rox-voice-language-wave" aria-hidden="true">≋</span>
+            <div>
+              <strong>Voice language</strong>
+              <small>Choose the language for voice input</small>
+            </div>
+          </div>
+
+          <label class="rox-voice-language-search">
+            <span aria-hidden="true">⌕</span>
+            <input
+              type="search"
+              placeholder="Search languages..."
+              data-rox-voice-language-search
+            >
+          </label>
+
+          <div
+            class="rox-voice-language-options"
+            data-rox-voice-language-options
+            role="listbox"
+          ></div>
+        </div>
+
+        <select
+          class="voice-language-select rox-voice-language-native"
+          data-voice-language="videos"
+          aria-label="Langue de dictée"
+          title="Langue de dictée"
+          hidden
+        ></select>
+      </div>
       <button
         type="button"
         class="voice-input-btn"
@@ -3533,12 +4989,63 @@ initAuth();
     </div>
     <div class="chat-input-row">
       <input type="text" placeholder="Entrez l'adresse IP..." data-feature="roxip">
-      <select
-        class="voice-language-select"
-        data-voice-language="roxip"
-        aria-label="Langue de dictée"
-        title="Langue de dictée"
-      ></select>
+      <div
+        class="rox-voice-language"
+        data-rox-voice-language="roxip"
+      >
+        <button
+          type="button"
+          class="rox-voice-language-trigger"
+          data-rox-voice-language-trigger
+          aria-haspopup="listbox"
+          aria-expanded="false"
+          title="Voice language"
+        >
+          <span class="rox-voice-language-icon" aria-hidden="true">🌐</span>
+          <span
+            class="rox-voice-language-label"
+            data-rox-voice-language-label
+          >Auto</span>
+          <span class="rox-voice-language-caret" aria-hidden="true">⌃</span>
+        </button>
+
+        <div
+          class="rox-voice-language-menu"
+          data-rox-voice-language-menu
+          hidden
+        >
+          <div class="rox-voice-language-header">
+            <span class="rox-voice-language-wave" aria-hidden="true">≋</span>
+            <div>
+              <strong>Voice language</strong>
+              <small>Choose the language for voice input</small>
+            </div>
+          </div>
+
+          <label class="rox-voice-language-search">
+            <span aria-hidden="true">⌕</span>
+            <input
+              type="search"
+              placeholder="Search languages..."
+              data-rox-voice-language-search
+            >
+          </label>
+
+          <div
+            class="rox-voice-language-options"
+            data-rox-voice-language-options
+            role="listbox"
+          ></div>
+        </div>
+
+        <select
+          class="voice-language-select rox-voice-language-native"
+          data-voice-language="roxip"
+          aria-label="Langue de dictée"
+          title="Langue de dictée"
+          hidden
+        ></select>
+      </div>
       <button
         type="button"
         class="voice-input-btn"
@@ -3563,12 +5070,63 @@ initAuth();
     </div>
     <div class="chat-input-row">
       <input type="text" placeholder="Posez votre question..." data-feature="chat">
-      <select
-        class="voice-language-select"
-        data-voice-language="chat"
-        aria-label="Langue de dictée"
-        title="Langue de dictée"
-      ></select>
+      <div
+        class="rox-voice-language"
+        data-rox-voice-language="chat"
+      >
+        <button
+          type="button"
+          class="rox-voice-language-trigger"
+          data-rox-voice-language-trigger
+          aria-haspopup="listbox"
+          aria-expanded="false"
+          title="Voice language"
+        >
+          <span class="rox-voice-language-icon" aria-hidden="true">🌐</span>
+          <span
+            class="rox-voice-language-label"
+            data-rox-voice-language-label
+          >Auto</span>
+          <span class="rox-voice-language-caret" aria-hidden="true">⌃</span>
+        </button>
+
+        <div
+          class="rox-voice-language-menu"
+          data-rox-voice-language-menu
+          hidden
+        >
+          <div class="rox-voice-language-header">
+            <span class="rox-voice-language-wave" aria-hidden="true">≋</span>
+            <div>
+              <strong>Voice language</strong>
+              <small>Choose the language for voice input</small>
+            </div>
+          </div>
+
+          <label class="rox-voice-language-search">
+            <span aria-hidden="true">⌕</span>
+            <input
+              type="search"
+              placeholder="Search languages..."
+              data-rox-voice-language-search
+            >
+          </label>
+
+          <div
+            class="rox-voice-language-options"
+            data-rox-voice-language-options
+            role="listbox"
+          ></div>
+        </div>
+
+        <select
+          class="voice-language-select rox-voice-language-native"
+          data-voice-language="chat"
+          aria-label="Langue de dictée"
+          title="Langue de dictée"
+          hidden
+        ></select>
+      </div>
       <button
         type="button"
         class="voice-input-btn"
@@ -3593,12 +5151,63 @@ initAuth();
     </div>
     <div class="chat-input-row">
       <input type="text" placeholder="Ex: une fonction qui trie un tableau..." data-feature="code">
-      <select
-        class="voice-language-select"
-        data-voice-language="code"
-        aria-label="Langue de dictée"
-        title="Langue de dictée"
-      ></select>
+      <div
+        class="rox-voice-language"
+        data-rox-voice-language="code"
+      >
+        <button
+          type="button"
+          class="rox-voice-language-trigger"
+          data-rox-voice-language-trigger
+          aria-haspopup="listbox"
+          aria-expanded="false"
+          title="Voice language"
+        >
+          <span class="rox-voice-language-icon" aria-hidden="true">🌐</span>
+          <span
+            class="rox-voice-language-label"
+            data-rox-voice-language-label
+          >Auto</span>
+          <span class="rox-voice-language-caret" aria-hidden="true">⌃</span>
+        </button>
+
+        <div
+          class="rox-voice-language-menu"
+          data-rox-voice-language-menu
+          hidden
+        >
+          <div class="rox-voice-language-header">
+            <span class="rox-voice-language-wave" aria-hidden="true">≋</span>
+            <div>
+              <strong>Voice language</strong>
+              <small>Choose the language for voice input</small>
+            </div>
+          </div>
+
+          <label class="rox-voice-language-search">
+            <span aria-hidden="true">⌕</span>
+            <input
+              type="search"
+              placeholder="Search languages..."
+              data-rox-voice-language-search
+            >
+          </label>
+
+          <div
+            class="rox-voice-language-options"
+            data-rox-voice-language-options
+            role="listbox"
+          ></div>
+        </div>
+
+        <select
+          class="voice-language-select rox-voice-language-native"
+          data-voice-language="code"
+          aria-label="Langue de dictée"
+          title="Langue de dictée"
+          hidden
+        ></select>
+      </div>
       <button
         type="button"
         class="voice-input-btn"
@@ -4978,41 +6587,450 @@ document.querySelectorAll('input[data-quickfeature]').forEach(inp=>{
     navigator.language ||
     'ar-MA';
 
+  const roxVoiceQuickLanguages = [
+    '',
+    'ar-MA',
+    'fr-FR',
+    'en-US',
+    'es-ES'
+  ];
+
+  const normalizeVoiceSearch = (value) =>
+    String(value || '')
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .toLowerCase()
+      .trim();
+
+  const getVoiceLanguageLabel = (value) => {
+    const language = voiceLanguages.find(
+      ([code]) => code === value
+    );
+
+    return language
+      ? language[1]
+      : voiceLanguages[0][1];
+  };
+
+  const getVoiceLanguageBadge = (value) => {
+    if (!value) {
+      return 'A';
+    }
+
+    return value
+      .split('-')[0]
+      .slice(0, 2)
+      .toUpperCase();
+  };
+
+  const closeRoxVoiceLanguageMenus = (
+    exceptRoot = null
+  ) => {
+    document
+      .querySelectorAll('[data-rox-voice-language]')
+      .forEach((root) => {
+        if (root === exceptRoot) {
+          return;
+        }
+
+        const trigger = root.querySelector(
+          '[data-rox-voice-language-trigger]'
+        );
+
+        const menu = root.querySelector(
+          '[data-rox-voice-language-menu]'
+        );
+
+        const search = root.querySelector(
+          '[data-rox-voice-language-search]'
+        );
+
+        root.classList.remove('is-open');
+
+        if (trigger) {
+          trigger.setAttribute(
+            'aria-expanded',
+            'false'
+          );
+        }
+
+        if (menu) {
+          menu.hidden = true;
+        }
+
+        if (search && search.value) {
+          search.value = '';
+          search.dispatchEvent(
+            new Event('input')
+          );
+        }
+      });
+  };
+
+  const setVoiceLanguage = (
+    selectedLanguage
+  ) => {
+    if (selectedLanguage) {
+      localStorage.setItem(
+        'roxVoiceLanguage',
+        selectedLanguage
+      );
+    } else {
+      localStorage.removeItem(
+        'roxVoiceLanguage'
+      );
+    }
+
+    document
+      .querySelectorAll('[data-voice-language]')
+      .forEach((select) => {
+        select.value = selectedLanguage;
+      });
+
+    document
+      .querySelectorAll('[data-rox-voice-language]')
+      .forEach((root) => {
+        const label = root.querySelector(
+          '[data-rox-voice-language-label]'
+        );
+
+        const trigger = root.querySelector(
+          '[data-rox-voice-language-trigger]'
+        );
+
+        const selectedLabel =
+          getVoiceLanguageLabel(
+            selectedLanguage
+          );
+
+        if (label) {
+          label.textContent = selectedLabel;
+        }
+
+        if (trigger) {
+          trigger.title =
+            `Voice language: ${selectedLabel}`;
+        }
+
+        root
+          .querySelectorAll(
+            '.rox-voice-language-option'
+          )
+          .forEach((option) => {
+            const isSelected =
+              option.dataset.value ===
+              selectedLanguage;
+
+            option.classList.toggle(
+              'is-selected',
+              isSelected
+            );
+
+            option.setAttribute(
+              'aria-selected',
+              String(isSelected)
+            );
+          });
+      });
+  };
+
   document
     .querySelectorAll('[data-voice-language]')
     .forEach((select) => {
-      voiceLanguages.forEach(([value, label]) => {
-        const option = document.createElement('option');
+      select.innerHTML = '';
 
-        option.value = value;
-        option.textContent = label;
+      voiceLanguages.forEach(
+        ([value, label]) => {
+          const option =
+            document.createElement('option');
 
-        select.appendChild(option);
-      });
+          option.value = value;
+          option.textContent = label;
 
-      select.value =
-        localStorage.getItem('roxVoiceLanguage') || '';
-
-      select.addEventListener('change', () => {
-        const selectedLanguage = select.value;
-
-        if (selectedLanguage) {
-          localStorage.setItem(
-            'roxVoiceLanguage',
-            selectedLanguage
-          );
-        } else {
-          localStorage.removeItem('roxVoiceLanguage');
+          select.appendChild(option);
         }
-
-        document
-          .querySelectorAll('[data-voice-language]')
-          .forEach((otherSelect) => {
-            otherSelect.value = selectedLanguage;
-          });
-      });
+      );
     });
 
+  document
+    .querySelectorAll('[data-rox-voice-language]')
+    .forEach((root) => {
+      const trigger = root.querySelector(
+        '[data-rox-voice-language-trigger]'
+      );
+
+      const menu = root.querySelector(
+        '[data-rox-voice-language-menu]'
+      );
+
+      const search = root.querySelector(
+        '[data-rox-voice-language-search]'
+      );
+
+      const optionsBox = root.querySelector(
+        '[data-rox-voice-language-options]'
+      );
+
+      if (
+        !trigger ||
+        !menu ||
+        !search ||
+        !optionsBox
+      ) {
+        return;
+      }
+
+      optionsBox.innerHTML = '';
+
+      const createLanguageOption = (
+        value,
+        label
+      ) => {
+        const button =
+          document.createElement('button');
+
+        button.type = 'button';
+        button.className =
+          'rox-voice-language-option';
+
+        button.dataset.value = value;
+        button.dataset.search =
+          normalizeVoiceSearch(
+            `${label} ${value}`
+          );
+
+        button.setAttribute(
+          'role',
+          'option'
+        );
+
+        button.setAttribute(
+          'aria-selected',
+          'false'
+        );
+
+        const icon =
+          document.createElement('span');
+
+        icon.className =
+          'rox-voice-language-option-icon';
+
+        icon.textContent =
+          getVoiceLanguageBadge(value);
+
+        const text =
+          document.createElement('span');
+
+        text.className =
+          'rox-voice-language-option-text';
+
+        text.textContent = label;
+
+        const check =
+          document.createElement('span');
+
+        check.className =
+          'rox-voice-language-check';
+
+        check.textContent = '✓';
+
+        button.append(
+          icon,
+          text,
+          check
+        );
+
+        button.addEventListener(
+          'click',
+          () => {
+            setVoiceLanguage(value);
+            closeRoxVoiceLanguageMenus();
+          }
+        );
+
+        return button;
+      };
+
+      const appendSection = (
+        title,
+        languages
+      ) => {
+        if (!languages.length) {
+          return;
+        }
+
+        const section =
+          document.createElement('div');
+
+        section.className =
+          'rox-voice-language-section';
+
+        section.textContent = title;
+
+        optionsBox.appendChild(section);
+
+        languages.forEach(
+          ([value, label]) => {
+            optionsBox.appendChild(
+              createLanguageOption(
+                value,
+                label
+              )
+            );
+          }
+        );
+      };
+
+      const quickLanguages =
+        roxVoiceQuickLanguages
+          .map((code) =>
+            voiceLanguages.find(
+              ([value]) => value === code
+            )
+          )
+          .filter(Boolean);
+
+      const allLanguages =
+        voiceLanguages.filter(
+          ([value]) =>
+            !roxVoiceQuickLanguages.includes(
+              value
+            )
+        );
+
+      appendSection(
+        'Quick access',
+        quickLanguages
+      );
+
+      appendSection(
+        'All languages',
+        allLanguages
+      );
+
+      const emptyMessage =
+        document.createElement('div');
+
+      emptyMessage.className =
+        'rox-voice-language-empty';
+
+      emptyMessage.textContent =
+        'No language found';
+
+      emptyMessage.hidden = true;
+
+      optionsBox.appendChild(emptyMessage);
+
+      search.addEventListener(
+        'input',
+        () => {
+          const query =
+            normalizeVoiceSearch(
+              search.value
+            );
+
+          let visibleOptions = 0;
+
+          optionsBox
+            .querySelectorAll(
+              '.rox-voice-language-option'
+            )
+            .forEach((option) => {
+              const matches =
+                !query ||
+                option.dataset.search.includes(
+                  query
+                );
+
+              option.hidden = !matches;
+
+              if (matches) {
+                visibleOptions += 1;
+              }
+            });
+
+          optionsBox
+            .querySelectorAll(
+              '.rox-voice-language-section'
+            )
+            .forEach((section) => {
+              section.hidden = Boolean(query);
+            });
+
+          emptyMessage.hidden =
+            visibleOptions !== 0;
+        }
+      );
+
+      trigger.addEventListener(
+        'click',
+        (event) => {
+          event.stopPropagation();
+
+          const shouldOpen = menu.hidden;
+
+          closeRoxVoiceLanguageMenus(root);
+
+          root.classList.toggle(
+            'is-open',
+            shouldOpen
+          );
+
+          menu.hidden = !shouldOpen;
+
+          trigger.setAttribute(
+            'aria-expanded',
+            String(shouldOpen)
+          );
+
+          if (shouldOpen) {
+            requestAnimationFrame(() => {
+              search.focus();
+            });
+          }
+        }
+      );
+
+      menu.addEventListener(
+        'click',
+        (event) => {
+          event.stopPropagation();
+        }
+      );
+    });
+
+  const savedVoiceLanguage =
+    localStorage.getItem(
+      'roxVoiceLanguage'
+    ) || '';
+
+  const validVoiceLanguage =
+    voiceLanguages.some(
+      ([value]) =>
+        value === savedVoiceLanguage
+    )
+      ? savedVoiceLanguage
+      : '';
+
+  setVoiceLanguage(
+    validVoiceLanguage
+  );
+
+  document.addEventListener(
+    'click',
+    () => {
+      closeRoxVoiceLanguageMenus();
+    }
+  );
+
+  document.addEventListener(
+    'keydown',
+    (event) => {
+      if (event.key === 'Escape') {
+        closeRoxVoiceLanguageMenus();
+      }
+    }
+  );
   document
     .querySelectorAll('[data-voice-input]')
     .forEach((button) => {
