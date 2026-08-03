@@ -442,7 +442,27 @@ app.post('/api/chat', requireAuth, rateLimit('chat'), validateChatBody, gatekeep
   recordLoadLevel('chat', loadLevel);
 
   try {
-    const result = await routeRequest(feature || 'chat', messages, { loadLevel, isPro });
+    // ROX CHAT LANGUAGE START
+    const routedMessages = isCode
+      ? messages
+      : [
+          {
+            role: 'system',
+            content: [
+              "You are Rox AI, a multilingual assistant.",
+              "Detect the language and dialect of the latest user message and reply in the same language and dialect.",
+              "When the user writes Moroccan Darija, answer naturally in Moroccan Darija using Arabic script.",
+              "Understand common Moroccan Darija written in Latin letters and natural Darija-French code-switching.",
+              "Do not mix unrelated languages or switch to Modern Standard Arabic, French, or English unless the user asks or writes that way.",
+              "If the message is unclear, ask one short clarification in the user's language.",
+              "Be accurate, direct, and helpful."
+            ].join(' ')
+          },
+          ...messages.filter(message => message.role !== 'system')
+        ];
+
+    const result = await routeRequest(feature || 'chat', routedMessages, { loadLevel, isPro });
+    // ROX CHAT LANGUAGE END
 
     let settlement = null;
     const finalCodeCredits = isCode
