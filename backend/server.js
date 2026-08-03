@@ -553,6 +553,8 @@ app.post('/api/chat', requireAuth, rateLimit('chat'), validateChatBody, gatekeep
           ];
     // ROX AI PREFERENCES PROMPT END
 
+    const result = await routeRequest(feature || 'chat', routedMessages, { loadLevel, isPro });
+
     let settlement = null;
     const finalCodeCredits = isCode
       ? Math.max(featureCost('code').credits, Math.ceil((result.cost_usd * 2) / CREDIT_PRICE_USD))
