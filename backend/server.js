@@ -1,4 +1,4 @@
-// ROX AI ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â API server (hardened)
+﻿// ROX AI ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â API server (hardened)
 // npm install express @supabase/supabase-js stripe replicate dotenv bullmq ioredis prom-client
 //
 // Changes from the original:
@@ -504,6 +504,7 @@ app.post('/api/chat', requireAuth, rateLimit('chat'), validateChatBody, gatekeep
       status: 'success',
       text: result.text,
       model: result.model,
+      responseId: requestId,
       dailyChatUsed: dailyStatus ? dailyStatus.current : undefined,
       dailyChatLimit: dailyStatus ? dailyStatus.limit : undefined,
       newBalance: settlement ? settlement.new_balance : (reservation ? reservation.newBalance : undefined),
@@ -669,6 +670,94 @@ app.get('/api/pricing', requireAuth, (req, res) => {
     services,
   });
 });
+// ROX CHAT FEEDBACK API START
+app.post('/api/chat-feedback', requireAuth, async (req, res) => {
+  const {
+    responseId,
+    rating,
+    model,
+    feature = 'chat',
+  } = req.body || {};
+
+  const uuidPattern =
+    /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+
+  const numericRating = Number(rating);
+
+  if (!uuidPattern.test(String(responseId || ''))) {
+    return res.status(400).json({
+      status: 'error',
+      message: 'Invalid responseId.',
+    });
+  }
+
+  if (![1, -1, 0].includes(numericRating)) {
+    return res.status(400).json({
+      status: 'error',
+      message: 'Rating must be 1, -1, or 0.',
+    });
+  }
+
+  if (!['chat', 'code'].includes(feature)) {
+    return res.status(400).json({
+      status: 'error',
+      message: 'Invalid feature.',
+    });
+  }
+
+  if (numericRating === 0) {
+    const { error } = await supabaseAdmin
+      .from('chat_response_feedback')
+      .delete()
+      .eq('user_id', req.userId)
+      .eq('response_id', responseId);
+
+    if (error) {
+      console.error('[chat-feedback] delete failed:', error.message);
+      return res.status(500).json({
+        status: 'error',
+        message: 'Feedback could not be removed.',
+      });
+    }
+
+    return res.json({
+      status: 'success',
+      rating: 0,
+    });
+  }
+
+  const feedbackRow = {
+    response_id: responseId,
+    user_id: req.userId,
+    feature,
+    rating: numericRating,
+    model:
+      typeof model === 'string'
+        ? model.slice(0, 200)
+        : null,
+    updated_at: new Date().toISOString(),
+  };
+
+  const { error } = await supabaseAdmin
+    .from('chat_response_feedback')
+    .upsert([feedbackRow], {
+      onConflict: 'user_id,response_id',
+    });
+
+  if (error) {
+    console.error('[chat-feedback] upsert failed:', error.message);
+    return res.status(500).json({
+      status: 'error',
+      message: 'Feedback could not be saved.',
+    });
+  }
+
+  return res.json({
+    status: 'success',
+    rating: numericRating,
+  });
+});
+// ROX CHAT FEEDBACK API END
 app.post('/api/generate-image', requireAuth, rateLimit('image'), validatePromptBody, gatekeeperMiddleware, (req, res) =>
   handleGenerationRequest(req, res, { feature: 'image', queue: imageQueue })
 );
