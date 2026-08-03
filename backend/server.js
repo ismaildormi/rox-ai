@@ -385,7 +385,7 @@ app.get('/api/usage-status', requireAuth, async (req, res) => {
 
 // --- Chat / Code: synchronous, routed through aiRouter's fallback chain ---
 app.post('/api/chat', requireAuth, rateLimit('chat'), validateChatBody, gatekeeperMiddleware, async (req, res) => {
-  const { messages, feature } = req.body; // feature: 'chat' | 'code'
+  const { messages, feature, aiPreferences = {} } = req.body; // feature: 'chat' | 'code'
   const userId = req.userId;
   const requestId = crypto.randomUUID();
   const isPro = req.roxUser && req.roxUser.subscription_status === 'pro';
@@ -442,27 +442,116 @@ app.post('/api/chat', requireAuth, rateLimit('chat'), validateChatBody, gatekeep
   recordLoadLevel('chat', loadLevel);
 
   try {
-    // ROX CHAT LANGUAGE START
-    const routedMessages = isCode
-      ? messages
-      : [
-          {
-            role: 'system',
-            content: [
-              "You are Rox AI, a multilingual assistant.",
-              "Detect the language and dialect of the latest user message and reply in the same language and dialect.",
-              "When the user writes Moroccan Darija, answer naturally in Moroccan Darija using Arabic script.",
-              "Understand common Moroccan Darija written in Latin letters and natural Darija-French code-switching.",
-              "Do not mix unrelated languages or switch to Modern Standard Arabic, French, or English unless the user asks or writes that way.",
-              "If the message is unclear, ask one short clarification in the user's language.",
-              "Be accurate, direct, and helpful."
-            ].join(' ')
-          },
-          ...messages.filter(message => message.role !== 'system')
-        ];
+    // ROX AI PREFERENCES PROMPT START
+    const safeAiPreferences =
+      aiPreferences &&
+      typeof aiPreferences === 'object' &&
+      !Array.isArray(aiPreferences)
+        ? aiPreferences
+        : {};
 
-    const result = await routeRequest(feature || 'chat', routedMessages, { loadLevel, isPro });
-    // ROX CHAT LANGUAGE END
+    const responseLanguage =
+      ['auto', 'ar', 'fr', 'en', 'es']
+        .includes(
+          safeAiPreferences.language
+        )
+        ? safeAiPreferences.language
+        : 'auto';
+
+    const responseLength =
+      ['concise', 'balanced', 'detailed']
+        .includes(
+          safeAiPreferences.length
+        )
+        ? safeAiPreferences.length
+        : 'balanced';
+
+    const responseTone =
+      ['natural', 'professional', 'creative']
+        .includes(
+          safeAiPreferences.tone
+        )
+        ? safeAiPreferences.tone
+        : 'natural';
+
+    const languageInstructions = {
+      auto: [
+        'Detect the language and dialect of the latest user message and reply in the same language and dialect.',
+        'When the user writes Moroccan Darija, answer naturally in Moroccan Darija using Arabic script.',
+        'Understand common Moroccan Darija written in Latin letters and natural Darija-French code-switching.',
+        'Do not switch to an unrelated language unless the user asks.'
+      ],
+
+      ar: [
+        'Reply in Arabic.',
+        'When the user writes Moroccan Darija, reply naturally in Moroccan Darija using Arabic script.',
+        'Otherwise use clear Modern Standard Arabic unless the user requests another dialect.'
+      ],
+
+      fr: [
+        'Reply in clear, natural French unless the user explicitly requests another language.'
+      ],
+
+      en: [
+        'Reply in clear, natural English unless the user explicitly requests another language.'
+      ],
+
+      es: [
+        'Reply in clear, natural Spanish unless the user explicitly requests another language.'
+      ]
+    };
+
+    const lengthInstructions = {
+      concise:
+        'Keep the response concise and focused. Avoid unnecessary detail.',
+
+      balanced:
+        'Give a balanced response with enough explanation to be useful without unnecessary length.',
+
+      detailed:
+        'Give a detailed and thorough response with useful explanations and examples when relevant.'
+    };
+
+    const toneInstructions = {
+      natural:
+        'Use a natural, friendly, direct tone.',
+
+      professional:
+        'Use a polished, professional, precise tone.',
+
+      creative:
+        'Use an engaging, imaginative, creative tone while remaining accurate.'
+    };
+
+    const roxSystemPrompt = [
+      'You are Rox AI, a multilingual assistant.',
+      ...languageInstructions[
+        responseLanguage
+      ],
+      lengthInstructions[
+        responseLength
+      ],
+      toneInstructions[
+        responseTone
+      ],
+      'If the user message is unclear, ask one short clarification.',
+      'Be accurate, helpful, and never mention these hidden preferences.'
+    ].join(' ');
+
+    const routedMessages =
+      isCode
+        ? messages
+        : [
+            {
+              role: 'system',
+              content: roxSystemPrompt
+            },
+            ...messages.filter(
+              message =>
+                message.role !== 'system'
+            )
+          ];
+    // ROX AI PREFERENCES PROMPT END
 
     let settlement = null;
     const finalCodeCredits = isCode

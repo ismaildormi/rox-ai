@@ -3615,6 +3615,173 @@ setTimeout(
   0
 );
 /* ROX SETTINGS CORE FUNCTIONS END */
+/* ROX AI PREFERENCES START */
+const ROX_AI_PREFERENCE_KEYS = {
+  language: 'roxAiResponseLanguage',
+  length: 'roxAiResponseLength',
+  tone: 'roxAiResponseTone'
+};
+
+const ROX_AI_PREFERENCE_DEFAULTS = {
+  language: 'auto',
+  length: 'balanced',
+  tone: 'natural'
+};
+
+function getRoxAiPreference(
+  preferenceName
+) {
+  const storageKey =
+    ROX_AI_PREFERENCE_KEYS[
+      preferenceName
+    ];
+
+  return (
+    localStorage.getItem(storageKey) ||
+    ROX_AI_PREFERENCE_DEFAULTS[
+      preferenceName
+    ]
+  );
+}
+
+function getRoxAiPreferences() {
+  return {
+    language:
+      getRoxAiPreference('language'),
+
+    length:
+      getRoxAiPreference('length'),
+
+    tone:
+      getRoxAiPreference('tone')
+  };
+}
+
+function refreshRoxAiPreferenceFields() {
+  const fields = {
+    settingsResponseLanguage:
+      getRoxAiPreference('language'),
+
+    settingsResponseLength:
+      getRoxAiPreference('length'),
+
+    settingsResponseTone:
+      getRoxAiPreference('tone')
+  };
+
+  Object.entries(fields).forEach(
+    ([id, value]) => {
+      const element =
+        document.getElementById(id);
+
+      if (element) {
+        element.value = value;
+      }
+    }
+  );
+}
+
+function setupRoxAiPreferences() {
+  const language =
+    document.getElementById(
+      'settingsResponseLanguage'
+    );
+
+  const length =
+    document.getElementById(
+      'settingsResponseLength'
+    );
+
+  const tone =
+    document.getElementById(
+      'settingsResponseTone'
+    );
+
+  const resetButton =
+    document.getElementById(
+      'settingsResetAiPreferences'
+    );
+
+  const bindPreference = (
+    element,
+    preferenceName
+  ) => {
+    element?.addEventListener(
+      'change',
+      () => {
+        localStorage.setItem(
+          ROX_AI_PREFERENCE_KEYS[
+            preferenceName
+          ],
+          element.value
+        );
+      }
+    );
+  };
+
+  bindPreference(
+    language,
+    'language'
+  );
+
+  bindPreference(
+    length,
+    'length'
+  );
+
+  bindPreference(
+    tone,
+    'tone'
+  );
+
+  resetButton?.addEventListener(
+    'click',
+    () => {
+      Object.values(
+        ROX_AI_PREFERENCE_KEYS
+      ).forEach(key => {
+        localStorage.removeItem(key);
+      });
+
+      refreshRoxAiPreferenceFields();
+
+      const originalText =
+        resetButton.textContent;
+
+      resetButton.textContent =
+        '✓ Préférences restaurées';
+
+      setTimeout(() => {
+        resetButton.textContent =
+          originalText;
+      }, 1600);
+    }
+  );
+
+  document
+    .querySelectorAll(
+      '[data-open="settings"]'
+    )
+    .forEach(button => {
+      button.addEventListener(
+        'click',
+        () => {
+          setTimeout(
+            refreshRoxAiPreferenceFields,
+            0
+          );
+        }
+      );
+    });
+
+  refreshRoxAiPreferenceFields();
+}
+
+setTimeout(
+  setupRoxAiPreferences,
+  0
+);
+/* ROX AI PREFERENCES END */
 /* ROX SETTINGS TABS START */
 const settingsTabButtons = [
   ...document.querySelectorAll(
@@ -4274,7 +4441,12 @@ async function sendChat(feature, text, msgBox) {
   try {
     const res = await authFetch('/api/chat', {
       method: 'POST',
-      body: JSON.stringify({ messages: outgoing, feature }),
+      body: JSON.stringify({
+        messages: outgoing,
+        feature,
+        aiPreferences:
+          getRoxAiPreferences()
+      }),
     });
     const data = await res.json();
     typing.remove();
@@ -9101,6 +9273,173 @@ setTimeout(
   0
 );
 /* ROX SETTINGS CORE FUNCTIONS END */
+/* ROX AI PREFERENCES START */
+const ROX_AI_PREFERENCE_KEYS = {
+  language: 'roxAiResponseLanguage',
+  length: 'roxAiResponseLength',
+  tone: 'roxAiResponseTone'
+};
+
+const ROX_AI_PREFERENCE_DEFAULTS = {
+  language: 'auto',
+  length: 'balanced',
+  tone: 'natural'
+};
+
+function getRoxAiPreference(
+  preferenceName
+) {
+  const storageKey =
+    ROX_AI_PREFERENCE_KEYS[
+      preferenceName
+    ];
+
+  return (
+    localStorage.getItem(storageKey) ||
+    ROX_AI_PREFERENCE_DEFAULTS[
+      preferenceName
+    ]
+  );
+}
+
+function getRoxAiPreferences() {
+  return {
+    language:
+      getRoxAiPreference('language'),
+
+    length:
+      getRoxAiPreference('length'),
+
+    tone:
+      getRoxAiPreference('tone')
+  };
+}
+
+function refreshRoxAiPreferenceFields() {
+  const fields = {
+    settingsResponseLanguage:
+      getRoxAiPreference('language'),
+
+    settingsResponseLength:
+      getRoxAiPreference('length'),
+
+    settingsResponseTone:
+      getRoxAiPreference('tone')
+  };
+
+  Object.entries(fields).forEach(
+    ([id, value]) => {
+      const element =
+        document.getElementById(id);
+
+      if (element) {
+        element.value = value;
+      }
+    }
+  );
+}
+
+function setupRoxAiPreferences() {
+  const language =
+    document.getElementById(
+      'settingsResponseLanguage'
+    );
+
+  const length =
+    document.getElementById(
+      'settingsResponseLength'
+    );
+
+  const tone =
+    document.getElementById(
+      'settingsResponseTone'
+    );
+
+  const resetButton =
+    document.getElementById(
+      'settingsResetAiPreferences'
+    );
+
+  const bindPreference = (
+    element,
+    preferenceName
+  ) => {
+    element?.addEventListener(
+      'change',
+      () => {
+        localStorage.setItem(
+          ROX_AI_PREFERENCE_KEYS[
+            preferenceName
+          ],
+          element.value
+        );
+      }
+    );
+  };
+
+  bindPreference(
+    language,
+    'language'
+  );
+
+  bindPreference(
+    length,
+    'length'
+  );
+
+  bindPreference(
+    tone,
+    'tone'
+  );
+
+  resetButton?.addEventListener(
+    'click',
+    () => {
+      Object.values(
+        ROX_AI_PREFERENCE_KEYS
+      ).forEach(key => {
+        localStorage.removeItem(key);
+      });
+
+      refreshRoxAiPreferenceFields();
+
+      const originalText =
+        resetButton.textContent;
+
+      resetButton.textContent =
+        '✓ Préférences restaurées';
+
+      setTimeout(() => {
+        resetButton.textContent =
+          originalText;
+      }, 1600);
+    }
+  );
+
+  document
+    .querySelectorAll(
+      '[data-open="settings"]'
+    )
+    .forEach(button => {
+      button.addEventListener(
+        'click',
+        () => {
+          setTimeout(
+            refreshRoxAiPreferenceFields,
+            0
+          );
+        }
+      );
+    });
+
+  refreshRoxAiPreferenceFields();
+}
+
+setTimeout(
+  setupRoxAiPreferences,
+  0
+);
+/* ROX AI PREFERENCES END */
 /* ROX SETTINGS TABS START */
 const settingsTabButtons = [
   ...document.querySelectorAll(
@@ -9786,7 +10125,12 @@ async function sendChat(feature, text, msgBox) {
   try {
     const res = await authFetch('/api/chat', {
       method: 'POST',
-      body: JSON.stringify({ messages: outgoing, feature }),
+      body: JSON.stringify({
+        messages: outgoing,
+        feature,
+        aiPreferences:
+          getRoxAiPreferences()
+      }),
     });
     const data = await res.json();
     typing.remove();
