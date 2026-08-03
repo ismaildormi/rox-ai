@@ -1467,11 +1467,43 @@ function appendMsg(msgBox, cls, content, isNode) {
       if (!text) return;
 
       const speech = new SpeechSynthesisUtterance(text);
-      speech.lang = /[\u0600-\u06FF]/.test(text)
+      const isArabic = /[\u0600-\u06FF]/.test(text);
+
+      const preferredLang = isArabic
         ? 'ar-MA'
         : (document.documentElement.lang ||
            navigator.language ||
            'fr-FR');
+
+      speech.lang = preferredLang;
+      speech.rate = isArabic ? 0.92 : 1;
+      speech.pitch = 1;
+      speech.volume = 1;
+
+      const voices = window.speechSynthesis.getVoices();
+
+      const exactVoice = voices.find(
+        voice =>
+          voice.lang.toLowerCase() === preferredLang.toLowerCase()
+      );
+
+      const arabicVoice = isArabic
+        ? voices.find(voice => /^ar(-|$)/i.test(voice.lang))
+        : null;
+
+      const languageVoice = voices.find(
+        voice =>
+          voice.lang.toLowerCase().startsWith(
+            preferredLang.toLowerCase().split('-')[0]
+          )
+      );
+
+      const selectedVoice =
+        exactVoice || arabicVoice || languageVoice;
+
+      if (selectedVoice) {
+        speech.voice = selectedVoice;
+      }
 
       button.classList.add('is-active');
 
@@ -3665,11 +3697,43 @@ function appendMsg(msgBox, cls, content, isNode) {
       if (!text) return;
 
       const speech = new SpeechSynthesisUtterance(text);
-      speech.lang = /[\u0600-\u06FF]/.test(text)
+      const isArabic = /[\u0600-\u06FF]/.test(text);
+
+      const preferredLang = isArabic
         ? 'ar-MA'
         : (document.documentElement.lang ||
            navigator.language ||
            'fr-FR');
+
+      speech.lang = preferredLang;
+      speech.rate = isArabic ? 0.92 : 1;
+      speech.pitch = 1;
+      speech.volume = 1;
+
+      const voices = window.speechSynthesis.getVoices();
+
+      const exactVoice = voices.find(
+        voice =>
+          voice.lang.toLowerCase() === preferredLang.toLowerCase()
+      );
+
+      const arabicVoice = isArabic
+        ? voices.find(voice => /^ar(-|$)/i.test(voice.lang))
+        : null;
+
+      const languageVoice = voices.find(
+        voice =>
+          voice.lang.toLowerCase().startsWith(
+            preferredLang.toLowerCase().split('-')[0]
+          )
+      );
+
+      const selectedVoice =
+        exactVoice || arabicVoice || languageVoice;
+
+      if (selectedVoice) {
+        speech.voice = selectedVoice;
+      }
 
       button.classList.add('is-active');
 
