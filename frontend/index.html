@@ -460,6 +460,40 @@
     border:none;border-radius:12px;padding:0 18px;font-weight:600;color:#ffffff;cursor:pointer;flex-shrink:0;
     transition:transform .15s ease;
   }
+  /* ROX VOICE INPUT DESIGN START */
+  .chat-input-row .voice-input-btn{
+    width:44px;
+    height:44px;
+    padding:0;
+    display:grid;
+    place-items:center;
+    background:rgba(255,255,255,.06);
+    border:1px solid var(--border);
+    color:var(--text-dim);
+    font-size:18px;
+  }
+
+  .chat-input-row .voice-input-btn:hover{
+    background:rgba(139,92,246,.14);
+    color:var(--ember-2);
+  }
+
+  .chat-input-row .voice-input-btn.is-listening{
+    background:rgba(255,107,122,.16);
+    border-color:rgba(255,107,122,.45);
+    color:#ff7b88;
+    animation:voicePulse 1s ease-in-out infinite;
+  }
+
+  @keyframes voicePulse{
+    0%,100%{
+      box-shadow:0 0 0 0 rgba(255,107,122,.30);
+    }
+    50%{
+      box-shadow:0 0 0 7px rgba(255,107,122,0);
+    }
+  }
+  /* ROX VOICE INPUT DESIGN END */
   .chat-input-row button:active{transform:scale(.92);}
 
   .placeholder-view{color:var(--text-dim);font-size:13.5px;padding:30px 20px;text-align:center;border:1px dashed var(--border);border-radius:16px;margin-top:20px;}
@@ -853,6 +887,13 @@
     </div>
     <div class="chat-input-row">
       <input type="text" placeholder="Posez votre question..." data-feature="chat">
+      <button
+        type="button"
+        class="voice-input-btn"
+        data-voice-input="chat"
+        aria-label="Dicter un message"
+        title="Dicter un message"
+      >🎙️</button>
       <button style="background:var(--ember-grad);" data-send="chat">➤</button>
     </div>
   </div>
@@ -2023,6 +2064,125 @@ document.querySelectorAll('input[data-feature]').forEach(inp=>{
   inp.addEventListener('keydown', e=>{ if(e.key==='Enter') sendMessage(inp.dataset.feature); });
 });
 
+// ROX VOICE INPUT LOGIC START
+{
+  const VoiceRecognition =
+    window.SpeechRecognition ||
+    window.webkitSpeechRecognition;
+
+  document
+    .querySelectorAll('[data-voice-input]')
+    .forEach((button) => {
+      const feature = button.dataset.voiceInput;
+
+      const input = document.querySelector(
+        `input[data-feature="${feature}"]`
+      );
+
+      if (!input) return;
+
+      if (!VoiceRecognition) {
+        button.addEventListener('click', () => {
+          input.placeholder =
+            "La dictée vocale n'est pas disponible dans ce navigateur.";
+          input.focus();
+        });
+
+        return;
+      }
+
+      const recognition = new VoiceRecognition();
+
+      recognition.lang = 'ar-MA';
+      recognition.continuous = false;
+      recognition.interimResults = true;
+      recognition.maxAlternatives = 1;
+
+      const normalPlaceholder =
+        input.getAttribute('placeholder') ||
+        'Posez votre question...';
+
+      let textBeforeRecording = '';
+
+      button.addEventListener('click', () => {
+        if (button.classList.contains('is-listening')) {
+          recognition.stop();
+          return;
+        }
+
+        textBeforeRecording = input.value.trim();
+
+        try {
+          recognition.start();
+        } catch (error) {
+          console.warn(
+            'Voice recognition is already active:',
+            error
+          );
+        }
+      });
+
+      recognition.addEventListener('start', () => {
+        button.classList.add('is-listening');
+        button.setAttribute('aria-pressed', 'true');
+        button.title = 'Arrêter la dictée';
+        input.placeholder = 'كنسمع ليك...';
+      });
+
+      recognition.addEventListener('result', (event) => {
+        let spokenText = '';
+
+        for (
+          let index = event.resultIndex;
+          index < event.results.length;
+          index++
+        ) {
+          spokenText +=
+            event.results[index][0].transcript + ' ';
+        }
+
+        spokenText = spokenText.trim();
+
+        input.value = [
+          textBeforeRecording,
+          spokenText
+        ]
+          .filter(Boolean)
+          .join(' ');
+
+        input.dispatchEvent(
+          new Event('input', {
+            bubbles: true
+          })
+        );
+      });
+
+      recognition.addEventListener('end', () => {
+        button.classList.remove('is-listening');
+        button.setAttribute('aria-pressed', 'false');
+        button.title = 'Dicter un message';
+        input.placeholder = normalPlaceholder;
+        input.focus();
+      });
+
+      recognition.addEventListener('error', (event) => {
+        console.warn(
+          'Voice recognition error:',
+          event.error
+        );
+
+        button.classList.remove('is-listening');
+        button.setAttribute('aria-pressed', 'false');
+        button.title = 'Dicter un message';
+
+        input.placeholder =
+          event.error === 'not-allowed'
+            ? "Autorisez l'accès au microphone."
+            : normalPlaceholder;
+      });
+    });
+}
+// ROX VOICE INPUT LOGIC END
 initAuth();
 <\/script>
 </body>
@@ -2606,6 +2766,40 @@ initAuth();
     border:none;border-radius:12px;padding:0 20px;font-weight:600;color:#ffffff;cursor:pointer;flex-shrink:0;
     transition:transform .15s ease;
   }
+  /* ROX VOICE INPUT DESIGN START */
+  .chat-input-row .voice-input-btn{
+    width:44px;
+    height:44px;
+    padding:0;
+    display:grid;
+    place-items:center;
+    background:rgba(255,255,255,.06);
+    border:1px solid var(--border);
+    color:var(--text-dim);
+    font-size:18px;
+  }
+
+  .chat-input-row .voice-input-btn:hover{
+    background:rgba(139,92,246,.14);
+    color:var(--ember-2);
+  }
+
+  .chat-input-row .voice-input-btn.is-listening{
+    background:rgba(255,107,122,.16);
+    border-color:rgba(255,107,122,.45);
+    color:#ff7b88;
+    animation:voicePulse 1s ease-in-out infinite;
+  }
+
+  @keyframes voicePulse{
+    0%,100%{
+      box-shadow:0 0 0 0 rgba(255,107,122,.30);
+    }
+    50%{
+      box-shadow:0 0 0 7px rgba(255,107,122,0);
+    }
+  }
+  /* ROX VOICE INPUT DESIGN END */
   .chat-input-row button:hover{transform:scale(1.04);}
 
   .msg.status{background:transparent;border:1px dashed var(--border);color:var(--text-dim);align-self:center;font-size:12px;text-align:center;max-width:92%;}
@@ -3111,6 +3305,13 @@ initAuth();
     </div>
     <div class="chat-input-row">
       <input type="text" placeholder="Posez votre question..." data-feature="chat">
+      <button
+        type="button"
+        class="voice-input-btn"
+        data-voice-input="chat"
+        aria-label="Dicter un message"
+        title="Dicter un message"
+      >🎙️</button>
       <button style="background:var(--ember-grad);" data-send="chat">➤</button>
     </div>
   </div>
@@ -4377,6 +4578,125 @@ document.querySelectorAll('input[data-quickfeature]').forEach(inp=>{
   inp.addEventListener('keydown', e=>{ if(e.key==='Enter') quickSend(inp.dataset.quickfeature); });
 });
 
+// ROX VOICE INPUT LOGIC START
+{
+  const VoiceRecognition =
+    window.SpeechRecognition ||
+    window.webkitSpeechRecognition;
+
+  document
+    .querySelectorAll('[data-voice-input]')
+    .forEach((button) => {
+      const feature = button.dataset.voiceInput;
+
+      const input = document.querySelector(
+        `input[data-feature="${feature}"]`
+      );
+
+      if (!input) return;
+
+      if (!VoiceRecognition) {
+        button.addEventListener('click', () => {
+          input.placeholder =
+            "La dictée vocale n'est pas disponible dans ce navigateur.";
+          input.focus();
+        });
+
+        return;
+      }
+
+      const recognition = new VoiceRecognition();
+
+      recognition.lang = 'ar-MA';
+      recognition.continuous = false;
+      recognition.interimResults = true;
+      recognition.maxAlternatives = 1;
+
+      const normalPlaceholder =
+        input.getAttribute('placeholder') ||
+        'Posez votre question...';
+
+      let textBeforeRecording = '';
+
+      button.addEventListener('click', () => {
+        if (button.classList.contains('is-listening')) {
+          recognition.stop();
+          return;
+        }
+
+        textBeforeRecording = input.value.trim();
+
+        try {
+          recognition.start();
+        } catch (error) {
+          console.warn(
+            'Voice recognition is already active:',
+            error
+          );
+        }
+      });
+
+      recognition.addEventListener('start', () => {
+        button.classList.add('is-listening');
+        button.setAttribute('aria-pressed', 'true');
+        button.title = 'Arrêter la dictée';
+        input.placeholder = 'كنسمع ليك...';
+      });
+
+      recognition.addEventListener('result', (event) => {
+        let spokenText = '';
+
+        for (
+          let index = event.resultIndex;
+          index < event.results.length;
+          index++
+        ) {
+          spokenText +=
+            event.results[index][0].transcript + ' ';
+        }
+
+        spokenText = spokenText.trim();
+
+        input.value = [
+          textBeforeRecording,
+          spokenText
+        ]
+          .filter(Boolean)
+          .join(' ');
+
+        input.dispatchEvent(
+          new Event('input', {
+            bubbles: true
+          })
+        );
+      });
+
+      recognition.addEventListener('end', () => {
+        button.classList.remove('is-listening');
+        button.setAttribute('aria-pressed', 'false');
+        button.title = 'Dicter un message';
+        input.placeholder = normalPlaceholder;
+        input.focus();
+      });
+
+      recognition.addEventListener('error', (event) => {
+        console.warn(
+          'Voice recognition error:',
+          event.error
+        );
+
+        button.classList.remove('is-listening');
+        button.setAttribute('aria-pressed', 'false');
+        button.title = 'Dicter un message';
+
+        input.placeholder =
+          event.error === 'not-allowed'
+            ? "Autorisez l'accès au microphone."
+            : normalPlaceholder;
+      });
+    });
+}
+// ROX VOICE INPUT LOGIC END
 initAuth();
 <\/script>
 </body>
