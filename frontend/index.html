@@ -381,15 +381,22 @@
   display:flex;
   align-items:center;
   align-self:flex-start;
-  gap:4px;
-  margin:2px 0 8px 5px;
+  gap:3px;
+  margin:6px 0 9px 4px;
+  padding:3px;
+  width:max-content;
+  max-width:100%;
+  border-radius:12px;
+  background:rgba(255,255,255,.035);
+  border:1px solid rgba(255,255,255,.07);
   direction:ltr;
 }
+
 .msg-action{
-  width:30px;
-  height:30px;
+  width:32px;
+  height:32px;
   border:0;
-  border-radius:8px;
+  border-radius:9px;
   background:transparent;
   color:var(--text-dim);
   display:grid;
@@ -397,14 +404,17 @@
   cursor:pointer;
   font-size:16px;
   line-height:1;
-  transition:.18s ease;
+  transition:transform .18s ease, background .18s ease, color .18s ease;
 }
+
 .msg-action:hover{
-  background:rgba(255,255,255,.08);
+  background:rgba(255,255,255,.09);
   color:var(--text);
+  transform:translateY(-1px);
 }
+
 .msg-action.is-active{
-  background:rgba(139,92,246,.16);
+  background:rgba(139,92,246,.20);
   color:var(--ember-2);
 }
   .msg.user{background:var(--ember-grad);color:#ffffff;font-weight:500;align-self:flex-end;border-bottom-right-radius:4px;}
@@ -2322,15 +2332,22 @@ initAuth();
   display:flex;
   align-items:center;
   align-self:flex-start;
-  gap:4px;
-  margin:2px 0 8px 5px;
+  gap:3px;
+  margin:6px 0 9px 4px;
+  padding:3px;
+  width:max-content;
+  max-width:100%;
+  border-radius:12px;
+  background:rgba(255,255,255,.035);
+  border:1px solid rgba(255,255,255,.07);
   direction:ltr;
 }
+
 .msg-action{
-  width:30px;
-  height:30px;
+  width:32px;
+  height:32px;
   border:0;
-  border-radius:8px;
+  border-radius:9px;
   background:transparent;
   color:var(--text-dim);
   display:grid;
@@ -2338,14 +2355,17 @@ initAuth();
   cursor:pointer;
   font-size:16px;
   line-height:1;
-  transition:.18s ease;
+  transition:transform .18s ease, background .18s ease, color .18s ease;
 }
+
 .msg-action:hover{
-  background:rgba(255,255,255,.08);
+  background:rgba(255,255,255,.09);
   color:var(--text);
+  transform:translateY(-1px);
 }
+
 .msg-action.is-active{
-  background:rgba(139,92,246,.16);
+  background:rgba(139,92,246,.20);
   color:var(--ember-2);
 }
   .msg.user{background:var(--ember-grad);color:#ffffff;font-weight:500;align-self:flex-end;border-bottom-right-radius:4px;}
