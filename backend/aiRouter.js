@@ -38,8 +38,8 @@ const ROUTES = {
     { provider: 'openrouter', model: 'openrouter/free' }
   ],
   code: [
-    { provider: 'openrouter', model: 'openrouter/free' },
-    { provider: 'anthropic', model: 'claude-sonnet-5' }
+    { provider: 'openrouter', model: 'nvidia/nemotron-3-super-120b-a12b:free' },
+    { provider: 'openrouter', model: 'openrouter/free' }
   ]
 };
 
