@@ -2791,9 +2791,9 @@ function renderDailyUsage(used, limit) {
   const pct = Math.min(100, Math.round((used / limit) * 100));
   document.getElementById('sidebarUsagePct').textContent = pct + '%';
   document.getElementById('sidebarUsageFill').style.width = pct + '%';
-  document.getElementById('sidebarCreditsNum').textContent = `${used} / ${limit} رسالة اليوم`;
+  document.getElementById('sidebarCreditsNum').textContent = `${used} / ${limit} messages aujourd'hui`;
   document.getElementById('settingsSummary').textContent =
-    `الخطة الحالية: مجاني · ${used}/${limit} رسالة شات اليوم · الكود/الصور/الفيديو Pro فقط`;
+    `Plan actuel : Gratuit · ${used}/${limit} messages de chat aujourd'hui · Code, images et vidéos réservés au plan Pro`;
   document.getElementById('topupBtn').style.display = 'block';
 }
 
@@ -2801,9 +2801,9 @@ function renderProUsage(used, total, remaining) {
   const pct = Math.min(100, Math.round((used / total) * 100));
   document.getElementById('sidebarUsagePct').textContent = pct + '%';
   document.getElementById('sidebarUsageFill').style.width = pct + '%';
-  document.getElementById('sidebarCreditsNum').textContent = `${used} / ${total} credits (${remaining} متبقي)`;
+  document.getElementById('sidebarCreditsNum').textContent = `${used} / ${total} crédits (${remaining} restants)`;
   document.getElementById('settingsSummary').textContent =
-    `الخطة الحالية: Pro · ${used}/${total} credits هاد الشهر (${remaining} متبقي)`;
+    `Plan actuel : Pro · ${used}/${total} crédits utilisés ce mois-ci (${remaining} restants)`;
   // Surface the top-up option proactively once the pool is getting low,
   // not only after they've already hit a hard block mid-message.
   document.getElementById('topupBtn').style.display = 'block';
@@ -2856,7 +2856,7 @@ function setTopupCredits(value) {
   document.getElementById('topupSlider').value = String(credits);
   document.getElementById('topupCreditsValue').textContent = credits.toLocaleString();
   document.getElementById('topupSummaryCredits').textContent =
-    `${credits.toLocaleString()} Credits`;
+    `${credits.toLocaleString()} crédits`;
   const topupPriceUsd =
     credits >= 5000
       ? credits * 0.008
@@ -4495,7 +4495,7 @@ async function sendChat(feature, text, msgBox) {
     maybeAutoReadRoxMessage(data.text);
   }
   if (feature === 'code' && typeof data.creditsCharged === 'number') {
-    appendMsg(msgBox, 'status', `Coût final : ${data.creditsCharged} Credits`);
+    appendMsg(msgBox, 'status', `Coût final : ${data.creditsCharged} crédits`);
   }
     pushHistory(feature, 'user', text);
     pushHistory(feature, 'assistant', data.text);
@@ -8539,9 +8539,9 @@ function renderDailyUsage(used, limit) {
   const pct = Math.min(100, Math.round((used / limit) * 100));
   document.getElementById('sidebarUsagePct').textContent = pct + '%';
   document.getElementById('sidebarUsageFill').style.width = pct + '%';
-  document.getElementById('sidebarCreditsNum').textContent = `${used} / ${limit} رسالة اليوم`;
+  document.getElementById('sidebarCreditsNum').textContent = `${used} / ${limit} messages aujourd'hui`;
   document.getElementById('settingsSummary').textContent =
-    `الخطة الحالية: مجاني · ${used}/${limit} رسالة شات اليوم · الكود/الصور/الفيديو Pro فقط`;
+    `Plan actuel : Gratuit · ${used}/${limit} messages de chat aujourd'hui · Code, images et vidéos réservés au plan Pro`;
   document.getElementById('topupBtn').style.display = 'block';
 }
 
@@ -8549,9 +8549,9 @@ function renderProUsage(used, total, remaining) {
   const pct = Math.min(100, Math.round((used / total) * 100));
   document.getElementById('sidebarUsagePct').textContent = pct + '%';
   document.getElementById('sidebarUsageFill').style.width = pct + '%';
-  document.getElementById('sidebarCreditsNum').textContent = `${used} / ${total} credits (${remaining} متبقي)`;
+  document.getElementById('sidebarCreditsNum').textContent = `${used} / ${total} crédits (${remaining} restants)`;
   document.getElementById('settingsSummary').textContent =
-    `الخطة الحالية: Pro · ${used}/${total} credits هاد الشهر (${remaining} متبقي)`;
+    `Plan actuel : Pro · ${used}/${total} crédits utilisés ce mois-ci (${remaining} restants)`;
   // Surface the top-up option proactively once the pool is getting low,
   // not only after they've already hit a hard block mid-message.
   document.getElementById('topupBtn').style.display = 'block';
@@ -8606,7 +8606,7 @@ function setTopupCredits(value) {
   document.getElementById('topupSlider').value = String(credits);
   document.getElementById('topupCreditsValue').textContent = credits.toLocaleString();
   document.getElementById('topupSummaryCredits').textContent =
-    `${credits.toLocaleString()} Credits`;
+    `${credits.toLocaleString()} crédits`;
   const topupPriceUsd =
     credits >= 5000
       ? credits * 0.008
@@ -10271,7 +10271,7 @@ async function sendChat(feature, text, msgBox) {
     maybeAutoReadRoxMessage(data.text);
   }
   if (feature === 'code' && typeof data.creditsCharged === 'number') {
-    appendMsg(msgBox, 'status', `Coût final : ${data.creditsCharged} Credits`);
+    appendMsg(msgBox, 'status', `Coût final : ${data.creditsCharged} crédits`);
   }
     pushHistory(feature, 'user', text);
     pushHistory(feature, 'assistant', data.text);
