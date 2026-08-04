@@ -1708,7 +1708,7 @@ html[data-rox-density="compact"] .chat-input-row{
     <div class="project-list">
       <div class="prow" data-open="automations"><div class="thumb" style="background:var(--panel-2);display:flex;align-items:center;justify-content:center;">🤖</div><div><div class="t">Automatisations</div></div><div class="chev">›</div></div>
       <div class="prow" data-open="history"><div class="thumb" style="background:var(--panel-2);display:flex;align-items:center;justify-content:center;">🕘</div><div><div class="t">Historique</div></div><div class="chev">›</div></div>
-      <div class="prow" data-open="settings"><div class="thumb" style="background:var(--panel-2);display:flex;align-items:center;justify-content:center;">⚙️</div><div><div class="t">Paramètres</div></div><div class="chev">›</div></div>
+      <div class="prow" data-open="settings"><div class="thumb" style="background:var(--panel-2);display:flex;align-items:center;justify-content:center;">⚙️</div><div><div class="t" data-i18n="settings.shell.title">Settings</div></div><div class="chev">›</div></div>
     </div>
   </div>
 
@@ -2136,7 +2136,7 @@ html[data-rox-density="compact"] .chat-input-row{
     <div class="feature-topbar">
       <div class="back" data-close>←</div>
       <div class="fic" style="background:var(--panel-2);">⚙️</div>
-      <div class="meta"><div class="t">Paramètres</div><div class="s">Compte & préférences</div></div>
+      <div class="meta"><div class="t" data-i18n="settings.shell.title">Settings</div><div class="s" data-i18n="settings.shell.subtitle">Account & preferences</div></div>
     </div>
     <!-- ROX SETTINGS UI START -->
     <div class="rox-settings-body">
@@ -2145,7 +2145,7 @@ html[data-rox-density="compact"] .chat-input-row{
         <div
           class="placeholder-view"
           id="settingsSummary"
-        >Chargement...</div>
+         data-i18n="settings.common.loading">Loading...</div>
 
         <button
           type="button"
@@ -2162,32 +2162,32 @@ html[data-rox-density="compact"] .chat-input-row{
           type="button"
           class="is-active"
           data-settings-target="general"
-        >Général</button>
+         data-i18n="settings.general.title">General</button>
 
         <button
           type="button"
           data-settings-target="ai"
-        >Préférences IA</button>
+         data-i18n="settings.ai.title">AI preferences</button>
 
         <button
           type="button"
           data-settings-target="voice"
-        >Voix</button>
+         data-i18n="settings.voice.title">Voice</button>
 
         <button
           type="button"
           data-settings-target="data"
-        >Chat & données</button>
+         data-i18n="settings.data.title">Chat & data</button>
 
         <button
           type="button"
           data-settings-target="account"
-        >Compte</button>
+         data-i18n="settings.account.title">Account</button>
 
         <button
           type="button"
           data-settings-target="privacy"
-        >Confidentialité</button>
+         data-i18n="settings.shell.privacyTab">Privacy</button>
       </nav>
 
       <div class="rox-settings-sections">
@@ -3028,6 +3028,9 @@ const ROX_I18N = {
     'settings.privacy.logoutAllDevices': 'Log out all devices',
     'settings.privacy.improveRox': 'Improve Rox AI',
     'settings.privacy.improveRoxHelp': 'Allow your feedback to be used to improve Rox.',
+    'settings.shell.title': 'Settings',
+    'settings.shell.subtitle': 'Account & preferences',
+    'settings.shell.privacyTab': 'Privacy',
   },
 
   fr: {
@@ -3117,6 +3120,9 @@ const ROX_I18N = {
     'settings.privacy.logoutAllDevices': 'Déconnecter tous les appareils',
     'settings.privacy.improveRox': 'Amélioration de Rox AI',
     'settings.privacy.improveRoxHelp': 'Autoriser l’utilisation de vos retours pour améliorer Rox.',
+    'settings.shell.title': 'Paramètres',
+    'settings.shell.subtitle': 'Compte et préférences',
+    'settings.shell.privacyTab': 'Confidentialité',
   },
 
   ar: {
@@ -3206,6 +3212,9 @@ const ROX_I18N = {
     'settings.privacy.logoutAllDevices': 'تسجيل الخروج من جميع الأجهزة',
     'settings.privacy.improveRox': 'تحسين Rox AI',
     'settings.privacy.improveRoxHelp': 'السماح باستخدام ملاحظاتك لتحسين Rox.',
+    'settings.shell.title': 'الإعدادات',
+    'settings.shell.subtitle': 'الحساب والتفضيلات',
+    'settings.shell.privacyTab': 'الخصوصية',
   },
 
   es: {
@@ -3295,6 +3304,9 @@ const ROX_I18N = {
     'settings.privacy.logoutAllDevices': 'Cerrar sesión en todos los dispositivos',
     'settings.privacy.improveRox': 'Mejorar Rox AI',
     'settings.privacy.improveRoxHelp': 'Permitir el uso de tus comentarios para mejorar Rox.',
+    'settings.shell.title': 'Configuración',
+    'settings.shell.subtitle': 'Cuenta y preferencias',
+    'settings.shell.privacyTab': 'Privacidad',
   },
 
   zh: {
@@ -3384,6 +3396,9 @@ const ROX_I18N = {
     'settings.privacy.logoutAllDevices': '从所有设备退出登录',
     'settings.privacy.improveRox': '改进 Rox AI',
     'settings.privacy.improveRoxHelp': '允许使用你的反馈来改进 Rox。',
+    'settings.shell.title': '设置',
+    'settings.shell.subtitle': '账户与偏好设置',
+    'settings.shell.privacyTab': '隐私',
   }
 };
 
@@ -7697,7 +7712,7 @@ html[data-rox-density="compact"] .chat-input-row{
       <div class="nav-item" data-tab="projects"><span class="ic">📁</span>Projets</div>
       <div class="nav-item" data-open="automations"><span class="ic">🤖</span>Automatisations</div>
       <div class="nav-item" data-open="history"><span class="ic">🕘</span>Historique</div>
-      <div class="nav-item" data-open="settings"><span class="ic">⚙️</span>Paramètres</div>
+      <div class="nav-item" data-open="settings"><span class="ic">⚙️</span><span data-i18n="settings.shell.title">Settings</span></div>
     </div>
 
     <div class="sidebar-bottom">
@@ -8389,7 +8404,7 @@ html[data-rox-density="compact"] .chat-input-row{
     <div class="modal-topbar">
       <div class="back" data-close>←</div>
       <div class="fic" style="background:var(--panel-2);">⚙️</div>
-      <div class="meta"><div class="t">Paramètres</div><div class="s">Compte & préférences</div></div>
+      <div class="meta"><div class="t" data-i18n="settings.shell.title">Settings</div><div class="s" data-i18n="settings.shell.subtitle">Account & preferences</div></div>
     </div>
     <!-- ROX SETTINGS UI START -->
     <div class="rox-settings-body">
@@ -8398,7 +8413,7 @@ html[data-rox-density="compact"] .chat-input-row{
         <div
           class="placeholder-view"
           id="settingsSummary"
-        >Chargement...</div>
+         data-i18n="settings.common.loading">Loading...</div>
 
         <button
           type="button"
@@ -8415,32 +8430,32 @@ html[data-rox-density="compact"] .chat-input-row{
           type="button"
           class="is-active"
           data-settings-target="general"
-        >Général</button>
+         data-i18n="settings.general.title">General</button>
 
         <button
           type="button"
           data-settings-target="ai"
-        >Préférences IA</button>
+         data-i18n="settings.ai.title">AI preferences</button>
 
         <button
           type="button"
           data-settings-target="voice"
-        >Voix</button>
+         data-i18n="settings.voice.title">Voice</button>
 
         <button
           type="button"
           data-settings-target="data"
-        >Chat & données</button>
+         data-i18n="settings.data.title">Chat & data</button>
 
         <button
           type="button"
           data-settings-target="account"
-        >Compte</button>
+         data-i18n="settings.account.title">Account</button>
 
         <button
           type="button"
           data-settings-target="privacy"
-        >Confidentialité</button>
+         data-i18n="settings.shell.privacyTab">Privacy</button>
       </nav>
 
       <div class="rox-settings-sections">
@@ -9314,6 +9329,9 @@ const ROX_I18N = {
     'settings.privacy.logoutAllDevices': 'Log out all devices',
     'settings.privacy.improveRox': 'Improve Rox AI',
     'settings.privacy.improveRoxHelp': 'Allow your feedback to be used to improve Rox.',
+    'settings.shell.title': 'Settings',
+    'settings.shell.subtitle': 'Account & preferences',
+    'settings.shell.privacyTab': 'Privacy',
   },
 
   fr: {
@@ -9403,6 +9421,9 @@ const ROX_I18N = {
     'settings.privacy.logoutAllDevices': 'Déconnecter tous les appareils',
     'settings.privacy.improveRox': 'Amélioration de Rox AI',
     'settings.privacy.improveRoxHelp': 'Autoriser l’utilisation de vos retours pour améliorer Rox.',
+    'settings.shell.title': 'Paramètres',
+    'settings.shell.subtitle': 'Compte et préférences',
+    'settings.shell.privacyTab': 'Confidentialité',
   },
 
   ar: {
@@ -9492,6 +9513,9 @@ const ROX_I18N = {
     'settings.privacy.logoutAllDevices': 'تسجيل الخروج من جميع الأجهزة',
     'settings.privacy.improveRox': 'تحسين Rox AI',
     'settings.privacy.improveRoxHelp': 'السماح باستخدام ملاحظاتك لتحسين Rox.',
+    'settings.shell.title': 'الإعدادات',
+    'settings.shell.subtitle': 'الحساب والتفضيلات',
+    'settings.shell.privacyTab': 'الخصوصية',
   },
 
   es: {
@@ -9581,6 +9605,9 @@ const ROX_I18N = {
     'settings.privacy.logoutAllDevices': 'Cerrar sesión en todos los dispositivos',
     'settings.privacy.improveRox': 'Mejorar Rox AI',
     'settings.privacy.improveRoxHelp': 'Permitir el uso de tus comentarios para mejorar Rox.',
+    'settings.shell.title': 'Configuración',
+    'settings.shell.subtitle': 'Cuenta y preferencias',
+    'settings.shell.privacyTab': 'Privacidad',
   },
 
   zh: {
@@ -9670,6 +9697,9 @@ const ROX_I18N = {
     'settings.privacy.logoutAllDevices': '从所有设备退出登录',
     'settings.privacy.improveRox': '改进 Rox AI',
     'settings.privacy.improveRoxHelp': '允许使用你的反馈来改进 Rox。',
+    'settings.shell.title': '设置',
+    'settings.shell.subtitle': '账户与偏好设置',
+    'settings.shell.privacyTab': '隐私',
   }
 };
 
