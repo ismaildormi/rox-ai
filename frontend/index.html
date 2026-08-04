@@ -2332,37 +2332,37 @@ html[data-rox-density="compact"] .chat-input-row{
           <div class="rox-settings-heading">
             <span>🎙️</span>
             <div>
-              <h3>Voix</h3>
-              <p>Configurez la dictée et la lecture audio.</p>
+              <h3 data-i18n="settings.voice.title">Voice</h3>
+              <p data-i18n="settings.voice.description">Configure dictation and audio playback.</p>
             </div>
           </div>
 
           <label class="rox-settings-row">
             <div>
-              <strong>Langue de dictée</strong>
-              <small>Synchronisée avec la liste des langues Rox.</small>
+              <strong data-i18n="settings.voice.dictationLanguage">Dictation language</strong>
+              <small data-i18n="settings.voice.dictationLanguageHelp">Synchronized with the Rox language list.</small>
             </div>
 
             <select id="settingsVoiceLanguage">
-              <option value="">Auto — appareil ou navigateur</option>
+              <option value="" data-i18n="settings.voice.languageAuto">Automatic — device or browser</option>
             </select>
           </label>
 
           <label class="rox-settings-row">
             <div>
-              <strong>Voix de lecture</strong>
-              <small>Voix utilisée pour lire les réponses.</small>
+              <strong data-i18n="settings.voice.readingVoice">Reading voice</strong>
+              <small data-i18n="settings.voice.readingVoiceHelp">Voice used to read responses aloud.</small>
             </div>
 
             <select id="settingsVoiceName">
-              <option value="">Automatique</option>
+              <option value="" data-i18n="settings.voice.voiceAuto">Automatic</option>
             </select>
           </label>
 
           <label class="rox-settings-row rox-settings-range-row">
             <div>
-              <strong>Vitesse de lecture</strong>
-              <small>Réglez la vitesse de la voix.</small>
+              <strong data-i18n="settings.voice.readingSpeed">Reading speed</strong>
+              <small data-i18n="settings.voice.readingSpeedHelp">Adjust the voice playback speed.</small>
             </div>
 
             <input
@@ -2377,8 +2377,8 @@ html[data-rox-density="compact"] .chat-input-row{
 
           <label class="rox-settings-toggle-row">
             <div>
-              <strong>Lecture automatique</strong>
-              <small>Lire automatiquement les réponses de Rox.</small>
+              <strong data-i18n="settings.voice.autoRead">Automatic playback</strong>
+              <small data-i18n="settings.voice.autoReadHelp">Automatically read Rox responses aloud.</small>
             </div>
 
             <input
@@ -2389,8 +2389,8 @@ html[data-rox-density="compact"] .chat-input-row{
 
           <label class="rox-settings-toggle-row">
             <div>
-              <strong>Arrêter la lecture pendant la dictée</strong>
-              <small>Évite que Rox parle pendant l’enregistrement.</small>
+              <strong data-i18n="settings.voice.stopOnRecord">Stop playback during dictation</strong>
+              <small data-i18n="settings.voice.stopOnRecordHelp">Prevents Rox from speaking while recording.</small>
             </div>
 
             <input
@@ -2983,6 +2983,20 @@ const ROX_I18N = {
     'settings.ai.tone.professional': 'Professional',
     'settings.ai.tone.creative': 'Creative',
     'settings.ai.reset': '↺ Reset AI preferences',
+    'settings.voice.title': 'Voice',
+    'settings.voice.description': 'Configure dictation and audio playback.',
+    'settings.voice.dictationLanguage': 'Dictation language',
+    'settings.voice.dictationLanguageHelp': 'Synchronized with the Rox language list.',
+    'settings.voice.languageAuto': 'Automatic — device or browser',
+    'settings.voice.readingVoice': 'Reading voice',
+    'settings.voice.readingVoiceHelp': 'Voice used to read responses aloud.',
+    'settings.voice.voiceAuto': 'Automatic',
+    'settings.voice.readingSpeed': 'Reading speed',
+    'settings.voice.readingSpeedHelp': 'Adjust the voice playback speed.',
+    'settings.voice.autoRead': 'Automatic playback',
+    'settings.voice.autoReadHelp': 'Automatically read Rox responses aloud.',
+    'settings.voice.stopOnRecord': 'Stop playback during dictation',
+    'settings.voice.stopOnRecordHelp': 'Prevents Rox from speaking while recording.',
   },
 
   fr: {
@@ -3034,6 +3048,20 @@ const ROX_I18N = {
     'settings.ai.tone.professional': 'Professionnel',
     'settings.ai.tone.creative': 'Créatif',
     'settings.ai.reset': '↺ Restaurer les préférences IA',
+    'settings.voice.title': 'Voix',
+    'settings.voice.description': 'Configurez la dictée et la lecture audio.',
+    'settings.voice.dictationLanguage': 'Langue de dictée',
+    'settings.voice.dictationLanguageHelp': 'Synchronisée avec la liste des langues Rox.',
+    'settings.voice.languageAuto': 'Automatique — appareil ou navigateur',
+    'settings.voice.readingVoice': 'Voix de lecture',
+    'settings.voice.readingVoiceHelp': 'Voix utilisée pour lire les réponses.',
+    'settings.voice.voiceAuto': 'Automatique',
+    'settings.voice.readingSpeed': 'Vitesse de lecture',
+    'settings.voice.readingSpeedHelp': 'Réglez la vitesse de la voix.',
+    'settings.voice.autoRead': 'Lecture automatique',
+    'settings.voice.autoReadHelp': 'Lire automatiquement les réponses de Rox.',
+    'settings.voice.stopOnRecord': 'Arrêter la lecture pendant la dictée',
+    'settings.voice.stopOnRecordHelp': 'Évite que Rox parle pendant l’enregistrement.',
   },
 
   ar: {
@@ -3085,6 +3113,20 @@ const ROX_I18N = {
     'settings.ai.tone.professional': 'احترافية',
     'settings.ai.tone.creative': 'إبداعية',
     'settings.ai.reset': '↺ إعادة ضبط تفضيلات الذكاء الاصطناعي',
+    'settings.voice.title': 'الصوت',
+    'settings.voice.description': 'اضبط الإملاء والقراءة الصوتية.',
+    'settings.voice.dictationLanguage': 'لغة الإملاء',
+    'settings.voice.dictationLanguageHelp': 'متزامنة مع قائمة لغات Rox.',
+    'settings.voice.languageAuto': 'تلقائي — الجهاز أو المتصفح',
+    'settings.voice.readingVoice': 'صوت القراءة',
+    'settings.voice.readingVoiceHelp': 'الصوت المستخدم لقراءة الإجابات.',
+    'settings.voice.voiceAuto': 'تلقائي',
+    'settings.voice.readingSpeed': 'سرعة القراءة',
+    'settings.voice.readingSpeedHelp': 'اضبط سرعة تشغيل الصوت.',
+    'settings.voice.autoRead': 'القراءة التلقائية',
+    'settings.voice.autoReadHelp': 'قراءة إجابات Rox تلقائياً.',
+    'settings.voice.stopOnRecord': 'إيقاف القراءة أثناء الإملاء',
+    'settings.voice.stopOnRecordHelp': 'يمنع Rox من التحدث أثناء التسجيل.',
   },
 
   es: {
@@ -3136,6 +3178,20 @@ const ROX_I18N = {
     'settings.ai.tone.professional': 'Profesional',
     'settings.ai.tone.creative': 'Creativo',
     'settings.ai.reset': '↺ Restablecer preferencias de IA',
+    'settings.voice.title': 'Voz',
+    'settings.voice.description': 'Configura el dictado y la reproducción de audio.',
+    'settings.voice.dictationLanguage': 'Idioma de dictado',
+    'settings.voice.dictationLanguageHelp': 'Sincronizado con la lista de idiomas de Rox.',
+    'settings.voice.languageAuto': 'Automático — dispositivo o navegador',
+    'settings.voice.readingVoice': 'Voz de lectura',
+    'settings.voice.readingVoiceHelp': 'Voz utilizada para leer las respuestas.',
+    'settings.voice.voiceAuto': 'Automática',
+    'settings.voice.readingSpeed': 'Velocidad de lectura',
+    'settings.voice.readingSpeedHelp': 'Ajusta la velocidad de reproducción de la voz.',
+    'settings.voice.autoRead': 'Lectura automática',
+    'settings.voice.autoReadHelp': 'Leer automáticamente las respuestas de Rox.',
+    'settings.voice.stopOnRecord': 'Detener la lectura durante el dictado',
+    'settings.voice.stopOnRecordHelp': 'Evita que Rox hable durante la grabación.',
   },
 
   zh: {
@@ -3187,6 +3243,20 @@ const ROX_I18N = {
     'settings.ai.tone.professional': '专业',
     'settings.ai.tone.creative': '创意',
     'settings.ai.reset': '↺ 重置 AI 偏好设置',
+    'settings.voice.title': '语音',
+    'settings.voice.description': '配置听写和音频朗读。',
+    'settings.voice.dictationLanguage': '听写语言',
+    'settings.voice.dictationLanguageHelp': '与 Rox 语言列表同步。',
+    'settings.voice.languageAuto': '自动 — 设备或浏览器',
+    'settings.voice.readingVoice': '朗读声音',
+    'settings.voice.readingVoiceHelp': '用于朗读回复的声音。',
+    'settings.voice.voiceAuto': '自动',
+    'settings.voice.readingSpeed': '朗读速度',
+    'settings.voice.readingSpeedHelp': '调整语音播放速度。',
+    'settings.voice.autoRead': '自动朗读',
+    'settings.voice.autoReadHelp': '自动朗读 Rox 的回复。',
+    'settings.voice.stopOnRecord': '听写时停止朗读',
+    'settings.voice.stopOnRecordHelp': '防止 Rox 在录音时说话。',
   }
 };
 
@@ -8387,37 +8457,37 @@ html[data-rox-density="compact"] .chat-input-row{
           <div class="rox-settings-heading">
             <span>🎙️</span>
             <div>
-              <h3>Voix</h3>
-              <p>Configurez la dictée et la lecture audio.</p>
+              <h3 data-i18n="settings.voice.title">Voice</h3>
+              <p data-i18n="settings.voice.description">Configure dictation and audio playback.</p>
             </div>
           </div>
 
           <label class="rox-settings-row">
             <div>
-              <strong>Langue de dictée</strong>
-              <small>Synchronisée avec la liste des langues Rox.</small>
+              <strong data-i18n="settings.voice.dictationLanguage">Dictation language</strong>
+              <small data-i18n="settings.voice.dictationLanguageHelp">Synchronized with the Rox language list.</small>
             </div>
 
             <select id="settingsVoiceLanguage">
-              <option value="">Auto — appareil ou navigateur</option>
+              <option value="" data-i18n="settings.voice.languageAuto">Automatic — device or browser</option>
             </select>
           </label>
 
           <label class="rox-settings-row">
             <div>
-              <strong>Voix de lecture</strong>
-              <small>Voix utilisée pour lire les réponses.</small>
+              <strong data-i18n="settings.voice.readingVoice">Reading voice</strong>
+              <small data-i18n="settings.voice.readingVoiceHelp">Voice used to read responses aloud.</small>
             </div>
 
             <select id="settingsVoiceName">
-              <option value="">Automatique</option>
+              <option value="" data-i18n="settings.voice.voiceAuto">Automatic</option>
             </select>
           </label>
 
           <label class="rox-settings-row rox-settings-range-row">
             <div>
-              <strong>Vitesse de lecture</strong>
-              <small>Réglez la vitesse de la voix.</small>
+              <strong data-i18n="settings.voice.readingSpeed">Reading speed</strong>
+              <small data-i18n="settings.voice.readingSpeedHelp">Adjust the voice playback speed.</small>
             </div>
 
             <input
@@ -8432,8 +8502,8 @@ html[data-rox-density="compact"] .chat-input-row{
 
           <label class="rox-settings-toggle-row">
             <div>
-              <strong>Lecture automatique</strong>
-              <small>Lire automatiquement les réponses de Rox.</small>
+              <strong data-i18n="settings.voice.autoRead">Automatic playback</strong>
+              <small data-i18n="settings.voice.autoReadHelp">Automatically read Rox responses aloud.</small>
             </div>
 
             <input
@@ -8444,8 +8514,8 @@ html[data-rox-density="compact"] .chat-input-row{
 
           <label class="rox-settings-toggle-row">
             <div>
-              <strong>Arrêter la lecture pendant la dictée</strong>
-              <small>Évite que Rox parle pendant l’enregistrement.</small>
+              <strong data-i18n="settings.voice.stopOnRecord">Stop playback during dictation</strong>
+              <small data-i18n="settings.voice.stopOnRecordHelp">Prevents Rox from speaking while recording.</small>
             </div>
 
             <input
@@ -9071,6 +9141,20 @@ const ROX_I18N = {
     'settings.ai.tone.professional': 'Professional',
     'settings.ai.tone.creative': 'Creative',
     'settings.ai.reset': '↺ Reset AI preferences',
+    'settings.voice.title': 'Voice',
+    'settings.voice.description': 'Configure dictation and audio playback.',
+    'settings.voice.dictationLanguage': 'Dictation language',
+    'settings.voice.dictationLanguageHelp': 'Synchronized with the Rox language list.',
+    'settings.voice.languageAuto': 'Automatic — device or browser',
+    'settings.voice.readingVoice': 'Reading voice',
+    'settings.voice.readingVoiceHelp': 'Voice used to read responses aloud.',
+    'settings.voice.voiceAuto': 'Automatic',
+    'settings.voice.readingSpeed': 'Reading speed',
+    'settings.voice.readingSpeedHelp': 'Adjust the voice playback speed.',
+    'settings.voice.autoRead': 'Automatic playback',
+    'settings.voice.autoReadHelp': 'Automatically read Rox responses aloud.',
+    'settings.voice.stopOnRecord': 'Stop playback during dictation',
+    'settings.voice.stopOnRecordHelp': 'Prevents Rox from speaking while recording.',
   },
 
   fr: {
@@ -9122,6 +9206,20 @@ const ROX_I18N = {
     'settings.ai.tone.professional': 'Professionnel',
     'settings.ai.tone.creative': 'Créatif',
     'settings.ai.reset': '↺ Restaurer les préférences IA',
+    'settings.voice.title': 'Voix',
+    'settings.voice.description': 'Configurez la dictée et la lecture audio.',
+    'settings.voice.dictationLanguage': 'Langue de dictée',
+    'settings.voice.dictationLanguageHelp': 'Synchronisée avec la liste des langues Rox.',
+    'settings.voice.languageAuto': 'Automatique — appareil ou navigateur',
+    'settings.voice.readingVoice': 'Voix de lecture',
+    'settings.voice.readingVoiceHelp': 'Voix utilisée pour lire les réponses.',
+    'settings.voice.voiceAuto': 'Automatique',
+    'settings.voice.readingSpeed': 'Vitesse de lecture',
+    'settings.voice.readingSpeedHelp': 'Réglez la vitesse de la voix.',
+    'settings.voice.autoRead': 'Lecture automatique',
+    'settings.voice.autoReadHelp': 'Lire automatiquement les réponses de Rox.',
+    'settings.voice.stopOnRecord': 'Arrêter la lecture pendant la dictée',
+    'settings.voice.stopOnRecordHelp': 'Évite que Rox parle pendant l’enregistrement.',
   },
 
   ar: {
@@ -9173,6 +9271,20 @@ const ROX_I18N = {
     'settings.ai.tone.professional': 'احترافية',
     'settings.ai.tone.creative': 'إبداعية',
     'settings.ai.reset': '↺ إعادة ضبط تفضيلات الذكاء الاصطناعي',
+    'settings.voice.title': 'الصوت',
+    'settings.voice.description': 'اضبط الإملاء والقراءة الصوتية.',
+    'settings.voice.dictationLanguage': 'لغة الإملاء',
+    'settings.voice.dictationLanguageHelp': 'متزامنة مع قائمة لغات Rox.',
+    'settings.voice.languageAuto': 'تلقائي — الجهاز أو المتصفح',
+    'settings.voice.readingVoice': 'صوت القراءة',
+    'settings.voice.readingVoiceHelp': 'الصوت المستخدم لقراءة الإجابات.',
+    'settings.voice.voiceAuto': 'تلقائي',
+    'settings.voice.readingSpeed': 'سرعة القراءة',
+    'settings.voice.readingSpeedHelp': 'اضبط سرعة تشغيل الصوت.',
+    'settings.voice.autoRead': 'القراءة التلقائية',
+    'settings.voice.autoReadHelp': 'قراءة إجابات Rox تلقائياً.',
+    'settings.voice.stopOnRecord': 'إيقاف القراءة أثناء الإملاء',
+    'settings.voice.stopOnRecordHelp': 'يمنع Rox من التحدث أثناء التسجيل.',
   },
 
   es: {
@@ -9224,6 +9336,20 @@ const ROX_I18N = {
     'settings.ai.tone.professional': 'Profesional',
     'settings.ai.tone.creative': 'Creativo',
     'settings.ai.reset': '↺ Restablecer preferencias de IA',
+    'settings.voice.title': 'Voz',
+    'settings.voice.description': 'Configura el dictado y la reproducción de audio.',
+    'settings.voice.dictationLanguage': 'Idioma de dictado',
+    'settings.voice.dictationLanguageHelp': 'Sincronizado con la lista de idiomas de Rox.',
+    'settings.voice.languageAuto': 'Automático — dispositivo o navegador',
+    'settings.voice.readingVoice': 'Voz de lectura',
+    'settings.voice.readingVoiceHelp': 'Voz utilizada para leer las respuestas.',
+    'settings.voice.voiceAuto': 'Automática',
+    'settings.voice.readingSpeed': 'Velocidad de lectura',
+    'settings.voice.readingSpeedHelp': 'Ajusta la velocidad de reproducción de la voz.',
+    'settings.voice.autoRead': 'Lectura automática',
+    'settings.voice.autoReadHelp': 'Leer automáticamente las respuestas de Rox.',
+    'settings.voice.stopOnRecord': 'Detener la lectura durante el dictado',
+    'settings.voice.stopOnRecordHelp': 'Evita que Rox hable durante la grabación.',
   },
 
   zh: {
@@ -9275,6 +9401,20 @@ const ROX_I18N = {
     'settings.ai.tone.professional': '专业',
     'settings.ai.tone.creative': '创意',
     'settings.ai.reset': '↺ 重置 AI 偏好设置',
+    'settings.voice.title': '语音',
+    'settings.voice.description': '配置听写和音频朗读。',
+    'settings.voice.dictationLanguage': '听写语言',
+    'settings.voice.dictationLanguageHelp': '与 Rox 语言列表同步。',
+    'settings.voice.languageAuto': '自动 — 设备或浏览器',
+    'settings.voice.readingVoice': '朗读声音',
+    'settings.voice.readingVoiceHelp': '用于朗读回复的声音。',
+    'settings.voice.voiceAuto': '自动',
+    'settings.voice.readingSpeed': '朗读速度',
+    'settings.voice.readingSpeedHelp': '调整语音播放速度。',
+    'settings.voice.autoRead': '自动朗读',
+    'settings.voice.autoReadHelp': '自动朗读 Rox 的回复。',
+    'settings.voice.stopOnRecord': '听写时停止朗读',
+    'settings.voice.stopOnRecordHelp': '防止 Rox 在录音时说话。',
   }
 };
 
