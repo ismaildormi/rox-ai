@@ -376,12 +376,15 @@ app.get('/api/usage-status', requireAuth, async (req, res) => {
 
   const isPro = user.subscription_status === 'pro';
   if (isPro) {
+    const creditsUsed = Number(user.credits_used) || 0;
+    const creditsTotal = Number(user.credits_total) || 0;
+
     return res.json({
       status: 'success',
       isPro: true,
-      creditsUsed: user.credits_used,
-      creditsTotal: user.credits_total,
-      creditsRemaining: Math.max(0, user.credits_total - user.credits_used),
+      creditsUsed,
+      creditsTotal,
+      creditsRemaining: Math.max(0, creditsTotal - creditsUsed),
     });
   }
   const daily = await peekDailyChat(req.userId);
