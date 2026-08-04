@@ -2506,8 +2506,8 @@ html[data-rox-density="compact"] .chat-input-row{
           <div class="rox-settings-heading">
             <span>🛡️</span>
             <div>
-              <h3>Confidentialité & sécurité</h3>
-              <p>Contrôlez la sécurité de votre compte.</p>
+              <h3 data-i18n="settings.privacy.title">Privacy & security</h3>
+              <p data-i18n="settings.privacy.description">Control the security of your account.</p>
             </div>
           </div>
 
@@ -2515,24 +2515,27 @@ html[data-rox-density="compact"] .chat-input-row{
             type="button"
             class="rox-settings-action"
             id="settingsConnectedDevices"
-          >💻 Appareils connectés</button>
+            data-i18n="settings.privacy.connectedDevices"
+          >💻 Connected devices</button>
 
           <button
             type="button"
             class="rox-settings-action"
             id="settingsChangePassword"
-          >🔑 Modifier le mot de passe</button>
+            data-i18n="settings.privacy.changePassword"
+          >🔑 Change password</button>
 
           <button
             type="button"
             class="rox-settings-action danger"
             id="settingsLogoutAllDevices"
-          >Déconnecter tous les appareils</button>
+            data-i18n="settings.privacy.logoutAllDevices"
+          >Log out all devices</button>
 
           <label class="rox-settings-toggle-row">
             <div>
-              <strong>Amélioration de Rox AI</strong>
-              <small>Autoriser l’utilisation de vos retours pour améliorer Rox.</small>
+              <strong data-i18n="settings.privacy.improveRox">Improve Rox AI</strong>
+              <small data-i18n="settings.privacy.improveRoxHelp">Allow your feedback to be used to improve Rox.</small>
             </div>
 
             <input
@@ -3018,6 +3021,13 @@ const ROX_I18N = {
     'settings.account.planFree': 'Free plan',
     'settings.account.logout': '🚪 Log out',
     'settings.account.deleteAccount': 'Permanently delete account',
+    'settings.privacy.title': 'Privacy & security',
+    'settings.privacy.description': 'Control the security of your account.',
+    'settings.privacy.connectedDevices': '💻 Connected devices',
+    'settings.privacy.changePassword': '🔑 Change password',
+    'settings.privacy.logoutAllDevices': 'Log out all devices',
+    'settings.privacy.improveRox': 'Improve Rox AI',
+    'settings.privacy.improveRoxHelp': 'Allow your feedback to be used to improve Rox.',
   },
 
   fr: {
@@ -3100,6 +3110,13 @@ const ROX_I18N = {
     'settings.account.planFree': 'Plan Gratuit',
     'settings.account.logout': '🚪 Se déconnecter',
     'settings.account.deleteAccount': 'Supprimer définitivement le compte',
+    'settings.privacy.title': 'Confidentialité et sécurité',
+    'settings.privacy.description': 'Contrôlez la sécurité de votre compte.',
+    'settings.privacy.connectedDevices': '💻 Appareils connectés',
+    'settings.privacy.changePassword': '🔑 Modifier le mot de passe',
+    'settings.privacy.logoutAllDevices': 'Déconnecter tous les appareils',
+    'settings.privacy.improveRox': 'Amélioration de Rox AI',
+    'settings.privacy.improveRoxHelp': 'Autoriser l’utilisation de vos retours pour améliorer Rox.',
   },
 
   ar: {
@@ -3182,6 +3199,13 @@ const ROX_I18N = {
     'settings.account.planFree': 'الخطة المجانية',
     'settings.account.logout': '🚪 تسجيل الخروج',
     'settings.account.deleteAccount': 'حذف الحساب نهائياً',
+    'settings.privacy.title': 'الخصوصية والأمان',
+    'settings.privacy.description': 'تحكم في أمان حسابك.',
+    'settings.privacy.connectedDevices': '💻 الأجهزة المتصلة',
+    'settings.privacy.changePassword': '🔑 تغيير كلمة المرور',
+    'settings.privacy.logoutAllDevices': 'تسجيل الخروج من جميع الأجهزة',
+    'settings.privacy.improveRox': 'تحسين Rox AI',
+    'settings.privacy.improveRoxHelp': 'السماح باستخدام ملاحظاتك لتحسين Rox.',
   },
 
   es: {
@@ -3264,6 +3288,13 @@ const ROX_I18N = {
     'settings.account.planFree': 'Plan gratuito',
     'settings.account.logout': '🚪 Cerrar sesión',
     'settings.account.deleteAccount': 'Eliminar la cuenta permanentemente',
+    'settings.privacy.title': 'Privacidad y seguridad',
+    'settings.privacy.description': 'Controla la seguridad de tu cuenta.',
+    'settings.privacy.connectedDevices': '💻 Dispositivos conectados',
+    'settings.privacy.changePassword': '🔑 Cambiar contraseña',
+    'settings.privacy.logoutAllDevices': 'Cerrar sesión en todos los dispositivos',
+    'settings.privacy.improveRox': 'Mejorar Rox AI',
+    'settings.privacy.improveRoxHelp': 'Permitir el uso de tus comentarios para mejorar Rox.',
   },
 
   zh: {
@@ -3346,6 +3377,13 @@ const ROX_I18N = {
     'settings.account.planFree': '免费方案',
     'settings.account.logout': '🚪 退出登录',
     'settings.account.deleteAccount': '永久删除账户',
+    'settings.privacy.title': '隐私与安全',
+    'settings.privacy.description': '管理你的账户安全。',
+    'settings.privacy.connectedDevices': '💻 已连接的设备',
+    'settings.privacy.changePassword': '🔑 修改密码',
+    'settings.privacy.logoutAllDevices': '从所有设备退出登录',
+    'settings.privacy.improveRox': '改进 Rox AI',
+    'settings.privacy.improveRoxHelp': '允许使用你的反馈来改进 Rox。',
   }
 };
 
@@ -8721,8 +8759,8 @@ html[data-rox-density="compact"] .chat-input-row{
           <div class="rox-settings-heading">
             <span>🛡️</span>
             <div>
-              <h3>Confidentialité & sécurité</h3>
-              <p>Contrôlez la sécurité de votre compte.</p>
+              <h3 data-i18n="settings.privacy.title">Privacy & security</h3>
+              <p data-i18n="settings.privacy.description">Control the security of your account.</p>
             </div>
           </div>
 
@@ -8730,24 +8768,27 @@ html[data-rox-density="compact"] .chat-input-row{
             type="button"
             class="rox-settings-action"
             id="settingsConnectedDevices"
-          >💻 Appareils connectés</button>
+            data-i18n="settings.privacy.connectedDevices"
+          >💻 Connected devices</button>
 
           <button
             type="button"
             class="rox-settings-action"
             id="settingsChangePassword"
-          >🔑 Modifier le mot de passe</button>
+            data-i18n="settings.privacy.changePassword"
+          >🔑 Change password</button>
 
           <button
             type="button"
             class="rox-settings-action danger"
             id="settingsLogoutAllDevices"
-          >Déconnecter tous les appareils</button>
+            data-i18n="settings.privacy.logoutAllDevices"
+          >Log out all devices</button>
 
           <label class="rox-settings-toggle-row">
             <div>
-              <strong>Amélioration de Rox AI</strong>
-              <small>Autoriser l’utilisation de vos retours pour améliorer Rox.</small>
+              <strong data-i18n="settings.privacy.improveRox">Improve Rox AI</strong>
+              <small data-i18n="settings.privacy.improveRoxHelp">Allow your feedback to be used to improve Rox.</small>
             </div>
 
             <input
@@ -9266,6 +9307,13 @@ const ROX_I18N = {
     'settings.account.planFree': 'Free plan',
     'settings.account.logout': '🚪 Log out',
     'settings.account.deleteAccount': 'Permanently delete account',
+    'settings.privacy.title': 'Privacy & security',
+    'settings.privacy.description': 'Control the security of your account.',
+    'settings.privacy.connectedDevices': '💻 Connected devices',
+    'settings.privacy.changePassword': '🔑 Change password',
+    'settings.privacy.logoutAllDevices': 'Log out all devices',
+    'settings.privacy.improveRox': 'Improve Rox AI',
+    'settings.privacy.improveRoxHelp': 'Allow your feedback to be used to improve Rox.',
   },
 
   fr: {
@@ -9348,6 +9396,13 @@ const ROX_I18N = {
     'settings.account.planFree': 'Plan Gratuit',
     'settings.account.logout': '🚪 Se déconnecter',
     'settings.account.deleteAccount': 'Supprimer définitivement le compte',
+    'settings.privacy.title': 'Confidentialité et sécurité',
+    'settings.privacy.description': 'Contrôlez la sécurité de votre compte.',
+    'settings.privacy.connectedDevices': '💻 Appareils connectés',
+    'settings.privacy.changePassword': '🔑 Modifier le mot de passe',
+    'settings.privacy.logoutAllDevices': 'Déconnecter tous les appareils',
+    'settings.privacy.improveRox': 'Amélioration de Rox AI',
+    'settings.privacy.improveRoxHelp': 'Autoriser l’utilisation de vos retours pour améliorer Rox.',
   },
 
   ar: {
@@ -9430,6 +9485,13 @@ const ROX_I18N = {
     'settings.account.planFree': 'الخطة المجانية',
     'settings.account.logout': '🚪 تسجيل الخروج',
     'settings.account.deleteAccount': 'حذف الحساب نهائياً',
+    'settings.privacy.title': 'الخصوصية والأمان',
+    'settings.privacy.description': 'تحكم في أمان حسابك.',
+    'settings.privacy.connectedDevices': '💻 الأجهزة المتصلة',
+    'settings.privacy.changePassword': '🔑 تغيير كلمة المرور',
+    'settings.privacy.logoutAllDevices': 'تسجيل الخروج من جميع الأجهزة',
+    'settings.privacy.improveRox': 'تحسين Rox AI',
+    'settings.privacy.improveRoxHelp': 'السماح باستخدام ملاحظاتك لتحسين Rox.',
   },
 
   es: {
@@ -9512,6 +9574,13 @@ const ROX_I18N = {
     'settings.account.planFree': 'Plan gratuito',
     'settings.account.logout': '🚪 Cerrar sesión',
     'settings.account.deleteAccount': 'Eliminar la cuenta permanentemente',
+    'settings.privacy.title': 'Privacidad y seguridad',
+    'settings.privacy.description': 'Controla la seguridad de tu cuenta.',
+    'settings.privacy.connectedDevices': '💻 Dispositivos conectados',
+    'settings.privacy.changePassword': '🔑 Cambiar contraseña',
+    'settings.privacy.logoutAllDevices': 'Cerrar sesión en todos los dispositivos',
+    'settings.privacy.improveRox': 'Mejorar Rox AI',
+    'settings.privacy.improveRoxHelp': 'Permitir el uso de tus comentarios para mejorar Rox.',
   },
 
   zh: {
@@ -9594,6 +9663,13 @@ const ROX_I18N = {
     'settings.account.planFree': '免费方案',
     'settings.account.logout': '🚪 退出登录',
     'settings.account.deleteAccount': '永久删除账户',
+    'settings.privacy.title': '隐私与安全',
+    'settings.privacy.description': '管理你的账户安全。',
+    'settings.privacy.connectedDevices': '💻 已连接的设备',
+    'settings.privacy.changePassword': '🔑 修改密码',
+    'settings.privacy.logoutAllDevices': '从所有设备退出登录',
+    'settings.privacy.improveRox': '改进 Rox AI',
+    'settings.privacy.improveRoxHelp': '允许使用你的反馈来改进 Rox。',
   }
 };
 
