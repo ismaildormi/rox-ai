@@ -4396,9 +4396,14 @@ function createCodeArtifact(rawText) {
   card.querySelector('[data-artifact-code]').onclick = () => openArtifact('code');
 
   card.querySelector('[data-artifact-copy]').onclick = async event => {
+    const copyButton = event.currentTarget;
     await navigator.clipboard.writeText(code);
-    event.currentTarget.textContent = 'Copié ✓';
-    setTimeout(() => event.currentTarget.textContent = 'Copier', 1500);
+
+    copyButton.textContent = 'Copi\u00E9 \u2713';
+
+    setTimeout(() => {
+      copyButton.textContent = 'Copier';
+    }, 1500);
   };
 
   card.querySelector('[data-artifact-download]').onclick = () => {
@@ -10167,9 +10172,14 @@ function createCodeArtifact(rawText) {
   card.querySelector('[data-artifact-code]').onclick = () => openArtifact('code');
 
   card.querySelector('[data-artifact-copy]').onclick = async event => {
+    const copyButton = event.currentTarget;
     await navigator.clipboard.writeText(code);
-    event.currentTarget.textContent = 'Copié ✓';
-    setTimeout(() => event.currentTarget.textContent = 'Copier', 1500);
+
+    copyButton.textContent = 'Copi\u00E9 \u2713';
+
+    setTimeout(() => {
+      copyButton.textContent = 'Copier';
+    }, 1500);
   };
 
   card.querySelector('[data-artifact-download]').onclick = () => {
