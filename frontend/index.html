@@ -2199,23 +2199,24 @@ html[data-rox-density="compact"] .chat-input-row{
           <div class="rox-settings-heading">
             <span>⚙️</span>
             <div>
-              <h3>Général</h3>
-              <p>Personnalisez l’interface de Rox AI.</p>
+              <h3 data-i18n="settings.general.title">General</h3>
+              <p data-i18n="settings.general.description">Customize the Rox AI interface.</p>
             </div>
           </div>
 
           <label class="rox-settings-row">
             <div>
-              <strong>Langue de l’interface</strong>
-              <small>Langue des boutons et des menus.</small>
+              <strong data-i18n="settings.general.uiLanguage">Interface language</strong>
+              <small data-i18n="settings.general.uiLanguageHelp">Language used for buttons and menus.</small>
             </div>
 
             <select id="settingsUiLanguage">
-              <option value="auto">Automatique</option>
-              <option value="fr">Français</option>
-              <option value="ar">العربية</option>
-              <option value="en">English</option>
-              <option value="es">Español</option>
+              <option value="auto" data-i18n="settings.language.auto">Automatic</option>
+              <option value="fr" data-i18n="settings.language.french">French</option>
+              <option value="ar" data-i18n="settings.language.arabic">Arabic</option>
+              <option value="en" data-i18n="settings.language.english">English</option>
+              <option value="es" data-i18n="settings.language.spanish">Spanish</option>
+              <option value="zh" data-i18n="settings.language.chinese">Chinese</option>
             </select>
           </label>
 
@@ -2932,11 +2933,70 @@ const ROX_SETTINGS_KEYS = {
 const ROX_UI_LANGUAGES = ['en', 'fr', 'ar', 'es', 'zh'];
 
 const ROX_I18N = {
-  en: {},
-  fr: {},
-  ar: {},
-  es: {},
-  zh: {}
+  en: {
+    'settings.general.title': 'General',
+    'settings.general.description': 'Customize the Rox AI interface.',
+    'settings.general.uiLanguage': 'Interface language',
+    'settings.general.uiLanguageHelp': 'Language used for buttons and menus.',
+    'settings.language.auto': 'Automatic',
+    'settings.language.french': 'French',
+    'settings.language.arabic': 'Arabic',
+    'settings.language.english': 'English',
+    'settings.language.spanish': 'Spanish',
+    'settings.language.chinese': 'Chinese'
+  },
+
+  fr: {
+    'settings.general.title': 'Général',
+    'settings.general.description': 'Personnalisez l’interface de Rox AI.',
+    'settings.general.uiLanguage': 'Langue de l’interface',
+    'settings.general.uiLanguageHelp': 'Langue utilisée pour les boutons et les menus.',
+    'settings.language.auto': 'Automatique',
+    'settings.language.french': 'Français',
+    'settings.language.arabic': 'Arabe',
+    'settings.language.english': 'Anglais',
+    'settings.language.spanish': 'Espagnol',
+    'settings.language.chinese': 'Chinois'
+  },
+
+  ar: {
+    'settings.general.title': 'عام',
+    'settings.general.description': 'خصّص واجهة Rox AI.',
+    'settings.general.uiLanguage': 'لغة الواجهة',
+    'settings.general.uiLanguageHelp': 'اللغة المستخدمة في الأزرار والقوائم.',
+    'settings.language.auto': 'تلقائي',
+    'settings.language.french': 'الفرنسية',
+    'settings.language.arabic': 'العربية',
+    'settings.language.english': 'الإنجليزية',
+    'settings.language.spanish': 'الإسبانية',
+    'settings.language.chinese': 'الصينية'
+  },
+
+  es: {
+    'settings.general.title': 'General',
+    'settings.general.description': 'Personaliza la interfaz de Rox AI.',
+    'settings.general.uiLanguage': 'Idioma de la interfaz',
+    'settings.general.uiLanguageHelp': 'Idioma utilizado en botones y menús.',
+    'settings.language.auto': 'Automático',
+    'settings.language.french': 'Francés',
+    'settings.language.arabic': 'Árabe',
+    'settings.language.english': 'Inglés',
+    'settings.language.spanish': 'Español',
+    'settings.language.chinese': 'Chino'
+  },
+
+  zh: {
+    'settings.general.title': '常规',
+    'settings.general.description': '自定义 Rox AI 界面。',
+    'settings.general.uiLanguage': '界面语言',
+    'settings.general.uiLanguageHelp': '按钮和菜单使用的语言。',
+    'settings.language.auto': '自动',
+    'settings.language.french': '法语',
+    'settings.language.arabic': '阿拉伯语',
+    'settings.language.english': '英语',
+    'settings.language.spanish': '西班牙语',
+    'settings.language.chinese': '中文'
+  }
 };
 
 function getRoxUiLanguage() {
@@ -8003,23 +8063,24 @@ html[data-rox-density="compact"] .chat-input-row{
           <div class="rox-settings-heading">
             <span>⚙️</span>
             <div>
-              <h3>Général</h3>
-              <p>Personnalisez l’interface de Rox AI.</p>
+              <h3 data-i18n="settings.general.title">General</h3>
+              <p data-i18n="settings.general.description">Customize the Rox AI interface.</p>
             </div>
           </div>
 
           <label class="rox-settings-row">
             <div>
-              <strong>Langue de l’interface</strong>
-              <small>Langue des boutons et des menus.</small>
+              <strong data-i18n="settings.general.uiLanguage">Interface language</strong>
+              <small data-i18n="settings.general.uiLanguageHelp">Language used for buttons and menus.</small>
             </div>
 
             <select id="settingsUiLanguage">
-              <option value="auto">Automatique</option>
-              <option value="fr">Français</option>
-              <option value="ar">العربية</option>
-              <option value="en">English</option>
-              <option value="es">Español</option>
+              <option value="auto" data-i18n="settings.language.auto">Automatic</option>
+              <option value="fr" data-i18n="settings.language.french">French</option>
+              <option value="ar" data-i18n="settings.language.arabic">Arabic</option>
+              <option value="en" data-i18n="settings.language.english">English</option>
+              <option value="es" data-i18n="settings.language.spanish">Spanish</option>
+              <option value="zh" data-i18n="settings.language.chinese">Chinese</option>
             </select>
           </label>
 
@@ -8769,11 +8830,70 @@ const ROX_SETTINGS_KEYS = {
 const ROX_UI_LANGUAGES = ['en', 'fr', 'ar', 'es', 'zh'];
 
 const ROX_I18N = {
-  en: {},
-  fr: {},
-  ar: {},
-  es: {},
-  zh: {}
+  en: {
+    'settings.general.title': 'General',
+    'settings.general.description': 'Customize the Rox AI interface.',
+    'settings.general.uiLanguage': 'Interface language',
+    'settings.general.uiLanguageHelp': 'Language used for buttons and menus.',
+    'settings.language.auto': 'Automatic',
+    'settings.language.french': 'French',
+    'settings.language.arabic': 'Arabic',
+    'settings.language.english': 'English',
+    'settings.language.spanish': 'Spanish',
+    'settings.language.chinese': 'Chinese'
+  },
+
+  fr: {
+    'settings.general.title': 'Général',
+    'settings.general.description': 'Personnalisez l’interface de Rox AI.',
+    'settings.general.uiLanguage': 'Langue de l’interface',
+    'settings.general.uiLanguageHelp': 'Langue utilisée pour les boutons et les menus.',
+    'settings.language.auto': 'Automatique',
+    'settings.language.french': 'Français',
+    'settings.language.arabic': 'Arabe',
+    'settings.language.english': 'Anglais',
+    'settings.language.spanish': 'Espagnol',
+    'settings.language.chinese': 'Chinois'
+  },
+
+  ar: {
+    'settings.general.title': 'عام',
+    'settings.general.description': 'خصّص واجهة Rox AI.',
+    'settings.general.uiLanguage': 'لغة الواجهة',
+    'settings.general.uiLanguageHelp': 'اللغة المستخدمة في الأزرار والقوائم.',
+    'settings.language.auto': 'تلقائي',
+    'settings.language.french': 'الفرنسية',
+    'settings.language.arabic': 'العربية',
+    'settings.language.english': 'الإنجليزية',
+    'settings.language.spanish': 'الإسبانية',
+    'settings.language.chinese': 'الصينية'
+  },
+
+  es: {
+    'settings.general.title': 'General',
+    'settings.general.description': 'Personaliza la interfaz de Rox AI.',
+    'settings.general.uiLanguage': 'Idioma de la interfaz',
+    'settings.general.uiLanguageHelp': 'Idioma utilizado en botones y menús.',
+    'settings.language.auto': 'Automático',
+    'settings.language.french': 'Francés',
+    'settings.language.arabic': 'Árabe',
+    'settings.language.english': 'Inglés',
+    'settings.language.spanish': 'Español',
+    'settings.language.chinese': 'Chino'
+  },
+
+  zh: {
+    'settings.general.title': '常规',
+    'settings.general.description': '自定义 Rox AI 界面。',
+    'settings.general.uiLanguage': '界面语言',
+    'settings.general.uiLanguageHelp': '按钮和菜单使用的语言。',
+    'settings.language.auto': '自动',
+    'settings.language.french': '法语',
+    'settings.language.arabic': '阿拉伯语',
+    'settings.language.english': '英语',
+    'settings.language.spanish': '西班牙语',
+    'settings.language.chinese': '中文'
+  }
 };
 
 function getRoxUiLanguage() {
