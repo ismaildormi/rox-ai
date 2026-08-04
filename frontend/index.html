@@ -2450,36 +2450,36 @@ html[data-rox-density="compact"] .chat-input-row{
           <div class="rox-settings-heading">
             <span>👤</span>
             <div>
-              <h3>Compte</h3>
-              <p>Vos informations et votre abonnement.</p>
+              <h3 data-i18n="settings.account.title">Account</h3>
+              <p data-i18n="settings.account.description">Your information and subscription.</p>
             </div>
           </div>
 
           <div class="rox-settings-row">
             <div>
-              <strong>Nom</strong>
-              <small id="settingsAccountName">Chargement...</small>
+              <strong data-i18n="settings.account.name">Name</strong>
+              <small id="settingsAccountName" data-i18n="settings.common.loading">Loading...</small>
             </div>
           </div>
 
           <div class="rox-settings-row">
             <div>
-              <strong>Adresse e-mail</strong>
-              <small id="settingsAccountEmail">Chargement...</small>
+              <strong data-i18n="settings.account.email">Email address</strong>
+              <small id="settingsAccountEmail" data-i18n="settings.common.loading">Loading...</small>
             </div>
           </div>
 
           <div class="rox-settings-row">
             <div>
-              <strong>Plan actuel</strong>
-              <small id="settingsPlanStatus">Chargement...</small>
+              <strong data-i18n="settings.account.currentPlan">Current plan</strong>
+              <small id="settingsPlanStatus" data-i18n="settings.common.loading">Loading...</small>
             </div>
           </div>
 
           <div class="rox-settings-row">
             <div>
-              <strong>Utilisation</strong>
-              <small id="settingsUsageStatus">Chargement...</small>
+              <strong data-i18n="settings.account.usage">Usage</strong>
+              <small id="settingsUsageStatus" data-i18n="settings.common.loading">Loading...</small>
             </div>
           </div>
 
@@ -2487,13 +2487,15 @@ html[data-rox-density="compact"] .chat-input-row{
             type="button"
             class="rox-settings-action"
             id="settingsLogoutBtn"
-          >🚪 Se déconnecter</button>
+            data-i18n="settings.account.logout"
+          >🚪 Log out</button>
 
           <button
             type="button"
             class="rox-settings-action danger"
             id="settingsDeleteAccount"
-          >Supprimer définitivement le compte</button>
+            data-i18n="settings.account.deleteAccount"
+          >Permanently delete account</button>
         </section>
 
         <section
@@ -3005,6 +3007,17 @@ const ROX_I18N = {
     'settings.data.saveHistoryHelp': 'Keep conversations in your account.',
     'settings.data.exportChats': '⇩ Download my conversations',
     'settings.data.deleteChats': '🗑️ Delete all conversations',
+    'settings.common.loading': 'Loading...',
+    'settings.account.title': 'Account',
+    'settings.account.description': 'Your information and subscription.',
+    'settings.account.name': 'Name',
+    'settings.account.email': 'Email address',
+    'settings.account.currentPlan': 'Current plan',
+    'settings.account.usage': 'Usage',
+    'settings.account.planPro': 'Pro plan',
+    'settings.account.planFree': 'Free plan',
+    'settings.account.logout': '🚪 Log out',
+    'settings.account.deleteAccount': 'Permanently delete account',
   },
 
   fr: {
@@ -3076,6 +3089,17 @@ const ROX_I18N = {
     'settings.data.saveHistoryHelp': 'Conserver les conversations dans votre compte.',
     'settings.data.exportChats': '⇩ Télécharger mes conversations',
     'settings.data.deleteChats': '🗑️ Supprimer toutes les conversations',
+    'settings.common.loading': 'Chargement...',
+    'settings.account.title': 'Compte',
+    'settings.account.description': 'Vos informations et votre abonnement.',
+    'settings.account.name': 'Nom',
+    'settings.account.email': 'Adresse e-mail',
+    'settings.account.currentPlan': 'Plan actuel',
+    'settings.account.usage': 'Utilisation',
+    'settings.account.planPro': 'Plan Pro',
+    'settings.account.planFree': 'Plan Gratuit',
+    'settings.account.logout': '🚪 Se déconnecter',
+    'settings.account.deleteAccount': 'Supprimer définitivement le compte',
   },
 
   ar: {
@@ -3147,6 +3171,17 @@ const ROX_I18N = {
     'settings.data.saveHistoryHelp': 'الاحتفاظ بالمحادثات داخل حسابك.',
     'settings.data.exportChats': '⇩ تنزيل محادثاتي',
     'settings.data.deleteChats': '🗑️ حذف جميع المحادثات',
+    'settings.common.loading': 'جارٍ التحميل...',
+    'settings.account.title': 'الحساب',
+    'settings.account.description': 'معلوماتك واشتراكك.',
+    'settings.account.name': 'الاسم',
+    'settings.account.email': 'عنوان البريد الإلكتروني',
+    'settings.account.currentPlan': 'الخطة الحالية',
+    'settings.account.usage': 'الاستخدام',
+    'settings.account.planPro': 'خطة Pro',
+    'settings.account.planFree': 'الخطة المجانية',
+    'settings.account.logout': '🚪 تسجيل الخروج',
+    'settings.account.deleteAccount': 'حذف الحساب نهائياً',
   },
 
   es: {
@@ -3218,6 +3253,17 @@ const ROX_I18N = {
     'settings.data.saveHistoryHelp': 'Conservar las conversaciones en tu cuenta.',
     'settings.data.exportChats': '⇩ Descargar mis conversaciones',
     'settings.data.deleteChats': '🗑️ Eliminar todas las conversaciones',
+    'settings.common.loading': 'Cargando...',
+    'settings.account.title': 'Cuenta',
+    'settings.account.description': 'Tu información y suscripción.',
+    'settings.account.name': 'Nombre',
+    'settings.account.email': 'Dirección de correo electrónico',
+    'settings.account.currentPlan': 'Plan actual',
+    'settings.account.usage': 'Uso',
+    'settings.account.planPro': 'Plan Pro',
+    'settings.account.planFree': 'Plan gratuito',
+    'settings.account.logout': '🚪 Cerrar sesión',
+    'settings.account.deleteAccount': 'Eliminar la cuenta permanentemente',
   },
 
   zh: {
@@ -3289,6 +3335,17 @@ const ROX_I18N = {
     'settings.data.saveHistoryHelp': '将对话保存在你的账户中。',
     'settings.data.exportChats': '⇩ 下载我的对话',
     'settings.data.deleteChats': '🗑️ 删除所有对话',
+    'settings.common.loading': '加载中...',
+    'settings.account.title': '账户',
+    'settings.account.description': '你的信息和订阅。',
+    'settings.account.name': '姓名',
+    'settings.account.email': '电子邮件地址',
+    'settings.account.currentPlan': '当前方案',
+    'settings.account.usage': '使用情况',
+    'settings.account.planPro': 'Pro 方案',
+    'settings.account.planFree': '免费方案',
+    'settings.account.logout': '🚪 退出登录',
+    'settings.account.deleteAccount': '永久删除账户',
   }
 };
 
@@ -3446,6 +3503,7 @@ function applyRoxUiLanguage(languageValue) {
 
 
   translateRoxUi();
+  syncRoxSettingsAccount();
 }
 
 function getRoxSpeechRate() {
@@ -3711,8 +3769,8 @@ function syncRoxSettingsAccount() {
   if (planElement) {
     planElement.textContent =
       isPro
-        ? 'Plan Pro'
-        : 'Plan Gratuit';
+        ? roxT('settings.account.planPro')
+        : roxT('settings.account.planFree');
   }
 
   if (usageElement) {
@@ -3723,7 +3781,7 @@ function syncRoxSettingsAccount() {
 
     usageElement.textContent =
       usageSource?.textContent ||
-      'Chargement...';
+      roxT('settings.common.loading');
   }
 }
 
@@ -8607,36 +8665,36 @@ html[data-rox-density="compact"] .chat-input-row{
           <div class="rox-settings-heading">
             <span>👤</span>
             <div>
-              <h3>Compte</h3>
-              <p>Vos informations et votre abonnement.</p>
+              <h3 data-i18n="settings.account.title">Account</h3>
+              <p data-i18n="settings.account.description">Your information and subscription.</p>
             </div>
           </div>
 
           <div class="rox-settings-row">
             <div>
-              <strong>Nom</strong>
-              <small id="settingsAccountName">Chargement...</small>
+              <strong data-i18n="settings.account.name">Name</strong>
+              <small id="settingsAccountName" data-i18n="settings.common.loading">Loading...</small>
             </div>
           </div>
 
           <div class="rox-settings-row">
             <div>
-              <strong>Adresse e-mail</strong>
-              <small id="settingsAccountEmail">Chargement...</small>
+              <strong data-i18n="settings.account.email">Email address</strong>
+              <small id="settingsAccountEmail" data-i18n="settings.common.loading">Loading...</small>
             </div>
           </div>
 
           <div class="rox-settings-row">
             <div>
-              <strong>Plan actuel</strong>
-              <small id="settingsPlanStatus">Chargement...</small>
+              <strong data-i18n="settings.account.currentPlan">Current plan</strong>
+              <small id="settingsPlanStatus" data-i18n="settings.common.loading">Loading...</small>
             </div>
           </div>
 
           <div class="rox-settings-row">
             <div>
-              <strong>Utilisation</strong>
-              <small id="settingsUsageStatus">Chargement...</small>
+              <strong data-i18n="settings.account.usage">Usage</strong>
+              <small id="settingsUsageStatus" data-i18n="settings.common.loading">Loading...</small>
             </div>
           </div>
 
@@ -8644,13 +8702,15 @@ html[data-rox-density="compact"] .chat-input-row{
             type="button"
             class="rox-settings-action"
             id="settingsLogoutBtn"
-          >🚪 Se déconnecter</button>
+            data-i18n="settings.account.logout"
+          >🚪 Log out</button>
 
           <button
             type="button"
             class="rox-settings-action danger"
             id="settingsDeleteAccount"
-          >Supprimer définitivement le compte</button>
+            data-i18n="settings.account.deleteAccount"
+          >Permanently delete account</button>
         </section>
 
         <section
@@ -9195,6 +9255,17 @@ const ROX_I18N = {
     'settings.data.saveHistoryHelp': 'Keep conversations in your account.',
     'settings.data.exportChats': '⇩ Download my conversations',
     'settings.data.deleteChats': '🗑️ Delete all conversations',
+    'settings.common.loading': 'Loading...',
+    'settings.account.title': 'Account',
+    'settings.account.description': 'Your information and subscription.',
+    'settings.account.name': 'Name',
+    'settings.account.email': 'Email address',
+    'settings.account.currentPlan': 'Current plan',
+    'settings.account.usage': 'Usage',
+    'settings.account.planPro': 'Pro plan',
+    'settings.account.planFree': 'Free plan',
+    'settings.account.logout': '🚪 Log out',
+    'settings.account.deleteAccount': 'Permanently delete account',
   },
 
   fr: {
@@ -9266,6 +9337,17 @@ const ROX_I18N = {
     'settings.data.saveHistoryHelp': 'Conserver les conversations dans votre compte.',
     'settings.data.exportChats': '⇩ Télécharger mes conversations',
     'settings.data.deleteChats': '🗑️ Supprimer toutes les conversations',
+    'settings.common.loading': 'Chargement...',
+    'settings.account.title': 'Compte',
+    'settings.account.description': 'Vos informations et votre abonnement.',
+    'settings.account.name': 'Nom',
+    'settings.account.email': 'Adresse e-mail',
+    'settings.account.currentPlan': 'Plan actuel',
+    'settings.account.usage': 'Utilisation',
+    'settings.account.planPro': 'Plan Pro',
+    'settings.account.planFree': 'Plan Gratuit',
+    'settings.account.logout': '🚪 Se déconnecter',
+    'settings.account.deleteAccount': 'Supprimer définitivement le compte',
   },
 
   ar: {
@@ -9337,6 +9419,17 @@ const ROX_I18N = {
     'settings.data.saveHistoryHelp': 'الاحتفاظ بالمحادثات داخل حسابك.',
     'settings.data.exportChats': '⇩ تنزيل محادثاتي',
     'settings.data.deleteChats': '🗑️ حذف جميع المحادثات',
+    'settings.common.loading': 'جارٍ التحميل...',
+    'settings.account.title': 'الحساب',
+    'settings.account.description': 'معلوماتك واشتراكك.',
+    'settings.account.name': 'الاسم',
+    'settings.account.email': 'عنوان البريد الإلكتروني',
+    'settings.account.currentPlan': 'الخطة الحالية',
+    'settings.account.usage': 'الاستخدام',
+    'settings.account.planPro': 'خطة Pro',
+    'settings.account.planFree': 'الخطة المجانية',
+    'settings.account.logout': '🚪 تسجيل الخروج',
+    'settings.account.deleteAccount': 'حذف الحساب نهائياً',
   },
 
   es: {
@@ -9408,6 +9501,17 @@ const ROX_I18N = {
     'settings.data.saveHistoryHelp': 'Conservar las conversaciones en tu cuenta.',
     'settings.data.exportChats': '⇩ Descargar mis conversaciones',
     'settings.data.deleteChats': '🗑️ Eliminar todas las conversaciones',
+    'settings.common.loading': 'Cargando...',
+    'settings.account.title': 'Cuenta',
+    'settings.account.description': 'Tu información y suscripción.',
+    'settings.account.name': 'Nombre',
+    'settings.account.email': 'Dirección de correo electrónico',
+    'settings.account.currentPlan': 'Plan actual',
+    'settings.account.usage': 'Uso',
+    'settings.account.planPro': 'Plan Pro',
+    'settings.account.planFree': 'Plan gratuito',
+    'settings.account.logout': '🚪 Cerrar sesión',
+    'settings.account.deleteAccount': 'Eliminar la cuenta permanentemente',
   },
 
   zh: {
@@ -9479,6 +9583,17 @@ const ROX_I18N = {
     'settings.data.saveHistoryHelp': '将对话保存在你的账户中。',
     'settings.data.exportChats': '⇩ 下载我的对话',
     'settings.data.deleteChats': '🗑️ 删除所有对话',
+    'settings.common.loading': '加载中...',
+    'settings.account.title': '账户',
+    'settings.account.description': '你的信息和订阅。',
+    'settings.account.name': '姓名',
+    'settings.account.email': '电子邮件地址',
+    'settings.account.currentPlan': '当前方案',
+    'settings.account.usage': '使用情况',
+    'settings.account.planPro': 'Pro 方案',
+    'settings.account.planFree': '免费方案',
+    'settings.account.logout': '🚪 退出登录',
+    'settings.account.deleteAccount': '永久删除账户',
   }
 };
 
@@ -9636,6 +9751,7 @@ function applyRoxUiLanguage(languageValue) {
 
 
   translateRoxUi();
+  syncRoxSettingsAccount();
 }
 
 function getRoxSpeechRate() {
@@ -9901,8 +10017,8 @@ function syncRoxSettingsAccount() {
   if (planElement) {
     planElement.textContent =
       isPro
-        ? 'Plan Pro'
-        : 'Plan Gratuit';
+        ? roxT('settings.account.planPro')
+        : roxT('settings.account.planFree');
   }
 
   if (usageElement) {
@@ -9913,7 +10029,7 @@ function syncRoxSettingsAccount() {
 
     usageElement.textContent =
       usageSource?.textContent ||
-      'Chargement...';
+      roxT('settings.common.loading');
   }
 }
 
