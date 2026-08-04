@@ -2270,49 +2270,50 @@ html[data-rox-density="compact"] .chat-input-row{
           <div class="rox-settings-heading">
             <span>✨</span>
             <div>
-              <h3>Préférences IA</h3>
-              <p>Choisissez la manière dont Rox vous répond.</p>
+              <h3 data-i18n="settings.ai.title">AI preferences</h3>
+              <p data-i18n="settings.ai.description">Choose how Rox responds to you.</p>
             </div>
           </div>
 
           <label class="rox-settings-row">
             <div>
-              <strong>Langue des réponses</strong>
-              <small>Rox peut suivre automatiquement votre langue.</small>
+              <strong data-i18n="settings.ai.responseLanguage">Response language</strong>
+              <small data-i18n="settings.ai.responseLanguageHelp">Rox can automatically follow your language.</small>
             </div>
 
             <select id="settingsResponseLanguage">
-              <option value="auto">Même langue que l’utilisateur</option>
-              <option value="ar">العربية</option>
-              <option value="fr">Français</option>
-              <option value="en">English</option>
-              <option value="es">Español</option>
+              <option value="auto" data-i18n="settings.ai.language.auto">Same language as the user</option>
+              <option value="ar" data-i18n="settings.ai.language.ar">Arabic</option>
+              <option value="fr" data-i18n="settings.ai.language.fr">French</option>
+              <option value="en" data-i18n="settings.ai.language.en">English</option>
+              <option value="es" data-i18n="settings.ai.language.es">Spanish</option>
+              <option value="zh" data-i18n="settings.ai.language.zh">Chinese</option>
             </select>
           </label>
 
           <label class="rox-settings-row">
             <div>
-              <strong>Longueur des réponses</strong>
-              <small>Contrôlez le niveau de détail.</small>
+              <strong data-i18n="settings.ai.responseLength">Response length</strong>
+              <small data-i18n="settings.ai.responseLengthHelp">Control the level of detail.</small>
             </div>
 
             <select id="settingsResponseLength">
-              <option value="concise">Courte</option>
-              <option value="balanced">Équilibrée</option>
-              <option value="detailed">Détaillée</option>
+              <option value="concise" data-i18n="settings.ai.length.concise">Concise</option>
+              <option value="balanced" data-i18n="settings.ai.length.balanced">Balanced</option>
+              <option value="detailed" data-i18n="settings.ai.length.detailed">Detailed</option>
             </select>
           </label>
 
           <label class="rox-settings-row">
             <div>
-              <strong>Ton des réponses</strong>
-              <small>Style général utilisé par Rox.</small>
+              <strong data-i18n="settings.ai.responseTone">Response tone</strong>
+              <small data-i18n="settings.ai.responseToneHelp">General style used by Rox.</small>
             </div>
 
             <select id="settingsResponseTone">
-              <option value="natural">Naturel</option>
-              <option value="professional">Professionnel</option>
-              <option value="creative">Créatif</option>
+              <option value="natural" data-i18n="settings.ai.tone.natural">Natural</option>
+              <option value="professional" data-i18n="settings.ai.tone.professional">Professional</option>
+              <option value="creative" data-i18n="settings.ai.tone.creative">Creative</option>
             </select>
           </label>
 
@@ -2320,7 +2321,7 @@ html[data-rox-density="compact"] .chat-input-row{
             type="button"
             class="rox-settings-action"
             id="settingsResetAiPreferences"
-          >↺ Restaurer les préférences IA</button>
+           data-i18n="settings.ai.reset">↺ Reset AI preferences</button>
         </section>
 
         <section
@@ -2961,6 +2962,27 @@ const ROX_I18N = {
     'settings.general.densityHelp': 'Control the spacing between interface elements.',
     'settings.density.comfortable': 'Comfortable',
     'settings.density.compact': 'Compact',
+    'settings.ai.title': 'AI preferences',
+    'settings.ai.description': 'Choose how Rox responds to you.',
+    'settings.ai.responseLanguage': 'Response language',
+    'settings.ai.responseLanguageHelp': 'Rox can automatically follow your language.',
+    'settings.ai.language.auto': 'Same language as the user',
+    'settings.ai.language.ar': 'Arabic',
+    'settings.ai.language.fr': 'French',
+    'settings.ai.language.en': 'English',
+    'settings.ai.language.es': 'Spanish',
+    'settings.ai.language.zh': 'Chinese',
+    'settings.ai.responseLength': 'Response length',
+    'settings.ai.responseLengthHelp': 'Control the level of detail.',
+    'settings.ai.length.concise': 'Concise',
+    'settings.ai.length.balanced': 'Balanced',
+    'settings.ai.length.detailed': 'Detailed',
+    'settings.ai.responseTone': 'Response tone',
+    'settings.ai.responseToneHelp': 'General style used by Rox.',
+    'settings.ai.tone.natural': 'Natural',
+    'settings.ai.tone.professional': 'Professional',
+    'settings.ai.tone.creative': 'Creative',
+    'settings.ai.reset': '↺ Reset AI preferences',
   },
 
   fr: {
@@ -2991,6 +3013,27 @@ const ROX_I18N = {
     'settings.general.densityHelp': 'Contrôlez l’espacement des éléments.',
     'settings.density.comfortable': 'Confortable',
     'settings.density.compact': 'Compacte',
+    'settings.ai.title': 'Préférences IA',
+    'settings.ai.description': 'Choisissez la manière dont Rox vous répond.',
+    'settings.ai.responseLanguage': 'Langue des réponses',
+    'settings.ai.responseLanguageHelp': 'Rox peut suivre automatiquement votre langue.',
+    'settings.ai.language.auto': 'Même langue que l’utilisateur',
+    'settings.ai.language.ar': 'Arabe',
+    'settings.ai.language.fr': 'Français',
+    'settings.ai.language.en': 'Anglais',
+    'settings.ai.language.es': 'Espagnol',
+    'settings.ai.language.zh': 'Chinois',
+    'settings.ai.responseLength': 'Longueur des réponses',
+    'settings.ai.responseLengthHelp': 'Contrôlez le niveau de détail.',
+    'settings.ai.length.concise': 'Courte',
+    'settings.ai.length.balanced': 'Équilibrée',
+    'settings.ai.length.detailed': 'Détaillée',
+    'settings.ai.responseTone': 'Ton des réponses',
+    'settings.ai.responseToneHelp': 'Style général utilisé par Rox.',
+    'settings.ai.tone.natural': 'Naturel',
+    'settings.ai.tone.professional': 'Professionnel',
+    'settings.ai.tone.creative': 'Créatif',
+    'settings.ai.reset': '↺ Restaurer les préférences IA',
   },
 
   ar: {
@@ -3021,6 +3064,27 @@ const ROX_I18N = {
     'settings.general.densityHelp': 'تحكم في المسافات بين عناصر الواجهة.',
     'settings.density.comfortable': 'مريحة',
     'settings.density.compact': 'مدمجة',
+    'settings.ai.title': 'تفضيلات الذكاء الاصطناعي',
+    'settings.ai.description': 'اختر الطريقة التي يجيبك بها Rox.',
+    'settings.ai.responseLanguage': 'لغة الإجابات',
+    'settings.ai.responseLanguageHelp': 'يمكن لـRox اتباع لغتك تلقائياً.',
+    'settings.ai.language.auto': 'نفس لغة المستخدم',
+    'settings.ai.language.ar': 'العربية',
+    'settings.ai.language.fr': 'الفرنسية',
+    'settings.ai.language.en': 'الإنجليزية',
+    'settings.ai.language.es': 'الإسبانية',
+    'settings.ai.language.zh': 'الصينية',
+    'settings.ai.responseLength': 'طول الإجابات',
+    'settings.ai.responseLengthHelp': 'تحكم في مستوى التفاصيل.',
+    'settings.ai.length.concise': 'مختصرة',
+    'settings.ai.length.balanced': 'متوازنة',
+    'settings.ai.length.detailed': 'مفصلة',
+    'settings.ai.responseTone': 'نبرة الإجابات',
+    'settings.ai.responseToneHelp': 'الأسلوب العام الذي يستعمله Rox.',
+    'settings.ai.tone.natural': 'طبيعية',
+    'settings.ai.tone.professional': 'احترافية',
+    'settings.ai.tone.creative': 'إبداعية',
+    'settings.ai.reset': '↺ إعادة ضبط تفضيلات الذكاء الاصطناعي',
   },
 
   es: {
@@ -3051,6 +3115,27 @@ const ROX_I18N = {
     'settings.general.densityHelp': 'Controla el espacio entre los elementos.',
     'settings.density.comfortable': 'Cómoda',
     'settings.density.compact': 'Compacta',
+    'settings.ai.title': 'Preferencias de IA',
+    'settings.ai.description': 'Elige cómo quieres que Rox te responda.',
+    'settings.ai.responseLanguage': 'Idioma de las respuestas',
+    'settings.ai.responseLanguageHelp': 'Rox puede seguir automáticamente tu idioma.',
+    'settings.ai.language.auto': 'Mismo idioma que el usuario',
+    'settings.ai.language.ar': 'Árabe',
+    'settings.ai.language.fr': 'Francés',
+    'settings.ai.language.en': 'Inglés',
+    'settings.ai.language.es': 'Español',
+    'settings.ai.language.zh': 'Chino',
+    'settings.ai.responseLength': 'Longitud de las respuestas',
+    'settings.ai.responseLengthHelp': 'Controla el nivel de detalle.',
+    'settings.ai.length.concise': 'Breve',
+    'settings.ai.length.balanced': 'Equilibrada',
+    'settings.ai.length.detailed': 'Detallada',
+    'settings.ai.responseTone': 'Tono de las respuestas',
+    'settings.ai.responseToneHelp': 'Estilo general utilizado por Rox.',
+    'settings.ai.tone.natural': 'Natural',
+    'settings.ai.tone.professional': 'Profesional',
+    'settings.ai.tone.creative': 'Creativo',
+    'settings.ai.reset': '↺ Restablecer preferencias de IA',
   },
 
   zh: {
@@ -3081,6 +3166,27 @@ const ROX_I18N = {
     'settings.general.densityHelp': '控制界面元素之间的间距。',
     'settings.density.comfortable': '舒适',
     'settings.density.compact': '紧凑',
+    'settings.ai.title': 'AI 偏好设置',
+    'settings.ai.description': '选择 Rox 回复你的方式。',
+    'settings.ai.responseLanguage': '回复语言',
+    'settings.ai.responseLanguageHelp': 'Rox 可以自动跟随你的语言。',
+    'settings.ai.language.auto': '与用户使用相同语言',
+    'settings.ai.language.ar': '阿拉伯语',
+    'settings.ai.language.fr': '法语',
+    'settings.ai.language.en': '英语',
+    'settings.ai.language.es': '西班牙语',
+    'settings.ai.language.zh': '中文',
+    'settings.ai.responseLength': '回复长度',
+    'settings.ai.responseLengthHelp': '控制回复的详细程度。',
+    'settings.ai.length.concise': '简短',
+    'settings.ai.length.balanced': '均衡',
+    'settings.ai.length.detailed': '详细',
+    'settings.ai.responseTone': '回复语气',
+    'settings.ai.responseToneHelp': 'Rox 使用的整体风格。',
+    'settings.ai.tone.natural': '自然',
+    'settings.ai.tone.professional': '专业',
+    'settings.ai.tone.creative': '创意',
+    'settings.ai.reset': '↺ 重置 AI 偏好设置',
   }
 };
 
@@ -8219,49 +8325,50 @@ html[data-rox-density="compact"] .chat-input-row{
           <div class="rox-settings-heading">
             <span>✨</span>
             <div>
-              <h3>Préférences IA</h3>
-              <p>Choisissez la manière dont Rox vous répond.</p>
+              <h3 data-i18n="settings.ai.title">AI preferences</h3>
+              <p data-i18n="settings.ai.description">Choose how Rox responds to you.</p>
             </div>
           </div>
 
           <label class="rox-settings-row">
             <div>
-              <strong>Langue des réponses</strong>
-              <small>Rox peut suivre automatiquement votre langue.</small>
+              <strong data-i18n="settings.ai.responseLanguage">Response language</strong>
+              <small data-i18n="settings.ai.responseLanguageHelp">Rox can automatically follow your language.</small>
             </div>
 
             <select id="settingsResponseLanguage">
-              <option value="auto">Même langue que l’utilisateur</option>
-              <option value="ar">العربية</option>
-              <option value="fr">Français</option>
-              <option value="en">English</option>
-              <option value="es">Español</option>
+              <option value="auto" data-i18n="settings.ai.language.auto">Same language as the user</option>
+              <option value="ar" data-i18n="settings.ai.language.ar">Arabic</option>
+              <option value="fr" data-i18n="settings.ai.language.fr">French</option>
+              <option value="en" data-i18n="settings.ai.language.en">English</option>
+              <option value="es" data-i18n="settings.ai.language.es">Spanish</option>
+              <option value="zh" data-i18n="settings.ai.language.zh">Chinese</option>
             </select>
           </label>
 
           <label class="rox-settings-row">
             <div>
-              <strong>Longueur des réponses</strong>
-              <small>Contrôlez le niveau de détail.</small>
+              <strong data-i18n="settings.ai.responseLength">Response length</strong>
+              <small data-i18n="settings.ai.responseLengthHelp">Control the level of detail.</small>
             </div>
 
             <select id="settingsResponseLength">
-              <option value="concise">Courte</option>
-              <option value="balanced">Équilibrée</option>
-              <option value="detailed">Détaillée</option>
+              <option value="concise" data-i18n="settings.ai.length.concise">Concise</option>
+              <option value="balanced" data-i18n="settings.ai.length.balanced">Balanced</option>
+              <option value="detailed" data-i18n="settings.ai.length.detailed">Detailed</option>
             </select>
           </label>
 
           <label class="rox-settings-row">
             <div>
-              <strong>Ton des réponses</strong>
-              <small>Style général utilisé par Rox.</small>
+              <strong data-i18n="settings.ai.responseTone">Response tone</strong>
+              <small data-i18n="settings.ai.responseToneHelp">General style used by Rox.</small>
             </div>
 
             <select id="settingsResponseTone">
-              <option value="natural">Naturel</option>
-              <option value="professional">Professionnel</option>
-              <option value="creative">Créatif</option>
+              <option value="natural" data-i18n="settings.ai.tone.natural">Natural</option>
+              <option value="professional" data-i18n="settings.ai.tone.professional">Professional</option>
+              <option value="creative" data-i18n="settings.ai.tone.creative">Creative</option>
             </select>
           </label>
 
@@ -8269,7 +8376,7 @@ html[data-rox-density="compact"] .chat-input-row{
             type="button"
             class="rox-settings-action"
             id="settingsResetAiPreferences"
-          >↺ Restaurer les préférences IA</button>
+           data-i18n="settings.ai.reset">↺ Reset AI preferences</button>
         </section>
 
         <section
@@ -8943,6 +9050,27 @@ const ROX_I18N = {
     'settings.general.densityHelp': 'Control the spacing between interface elements.',
     'settings.density.comfortable': 'Comfortable',
     'settings.density.compact': 'Compact',
+    'settings.ai.title': 'AI preferences',
+    'settings.ai.description': 'Choose how Rox responds to you.',
+    'settings.ai.responseLanguage': 'Response language',
+    'settings.ai.responseLanguageHelp': 'Rox can automatically follow your language.',
+    'settings.ai.language.auto': 'Same language as the user',
+    'settings.ai.language.ar': 'Arabic',
+    'settings.ai.language.fr': 'French',
+    'settings.ai.language.en': 'English',
+    'settings.ai.language.es': 'Spanish',
+    'settings.ai.language.zh': 'Chinese',
+    'settings.ai.responseLength': 'Response length',
+    'settings.ai.responseLengthHelp': 'Control the level of detail.',
+    'settings.ai.length.concise': 'Concise',
+    'settings.ai.length.balanced': 'Balanced',
+    'settings.ai.length.detailed': 'Detailed',
+    'settings.ai.responseTone': 'Response tone',
+    'settings.ai.responseToneHelp': 'General style used by Rox.',
+    'settings.ai.tone.natural': 'Natural',
+    'settings.ai.tone.professional': 'Professional',
+    'settings.ai.tone.creative': 'Creative',
+    'settings.ai.reset': '↺ Reset AI preferences',
   },
 
   fr: {
@@ -8973,6 +9101,27 @@ const ROX_I18N = {
     'settings.general.densityHelp': 'Contrôlez l’espacement des éléments.',
     'settings.density.comfortable': 'Confortable',
     'settings.density.compact': 'Compacte',
+    'settings.ai.title': 'Préférences IA',
+    'settings.ai.description': 'Choisissez la manière dont Rox vous répond.',
+    'settings.ai.responseLanguage': 'Langue des réponses',
+    'settings.ai.responseLanguageHelp': 'Rox peut suivre automatiquement votre langue.',
+    'settings.ai.language.auto': 'Même langue que l’utilisateur',
+    'settings.ai.language.ar': 'Arabe',
+    'settings.ai.language.fr': 'Français',
+    'settings.ai.language.en': 'Anglais',
+    'settings.ai.language.es': 'Espagnol',
+    'settings.ai.language.zh': 'Chinois',
+    'settings.ai.responseLength': 'Longueur des réponses',
+    'settings.ai.responseLengthHelp': 'Contrôlez le niveau de détail.',
+    'settings.ai.length.concise': 'Courte',
+    'settings.ai.length.balanced': 'Équilibrée',
+    'settings.ai.length.detailed': 'Détaillée',
+    'settings.ai.responseTone': 'Ton des réponses',
+    'settings.ai.responseToneHelp': 'Style général utilisé par Rox.',
+    'settings.ai.tone.natural': 'Naturel',
+    'settings.ai.tone.professional': 'Professionnel',
+    'settings.ai.tone.creative': 'Créatif',
+    'settings.ai.reset': '↺ Restaurer les préférences IA',
   },
 
   ar: {
@@ -9003,6 +9152,27 @@ const ROX_I18N = {
     'settings.general.densityHelp': 'تحكم في المسافات بين عناصر الواجهة.',
     'settings.density.comfortable': 'مريحة',
     'settings.density.compact': 'مدمجة',
+    'settings.ai.title': 'تفضيلات الذكاء الاصطناعي',
+    'settings.ai.description': 'اختر الطريقة التي يجيبك بها Rox.',
+    'settings.ai.responseLanguage': 'لغة الإجابات',
+    'settings.ai.responseLanguageHelp': 'يمكن لـRox اتباع لغتك تلقائياً.',
+    'settings.ai.language.auto': 'نفس لغة المستخدم',
+    'settings.ai.language.ar': 'العربية',
+    'settings.ai.language.fr': 'الفرنسية',
+    'settings.ai.language.en': 'الإنجليزية',
+    'settings.ai.language.es': 'الإسبانية',
+    'settings.ai.language.zh': 'الصينية',
+    'settings.ai.responseLength': 'طول الإجابات',
+    'settings.ai.responseLengthHelp': 'تحكم في مستوى التفاصيل.',
+    'settings.ai.length.concise': 'مختصرة',
+    'settings.ai.length.balanced': 'متوازنة',
+    'settings.ai.length.detailed': 'مفصلة',
+    'settings.ai.responseTone': 'نبرة الإجابات',
+    'settings.ai.responseToneHelp': 'الأسلوب العام الذي يستعمله Rox.',
+    'settings.ai.tone.natural': 'طبيعية',
+    'settings.ai.tone.professional': 'احترافية',
+    'settings.ai.tone.creative': 'إبداعية',
+    'settings.ai.reset': '↺ إعادة ضبط تفضيلات الذكاء الاصطناعي',
   },
 
   es: {
@@ -9033,6 +9203,27 @@ const ROX_I18N = {
     'settings.general.densityHelp': 'Controla el espacio entre los elementos.',
     'settings.density.comfortable': 'Cómoda',
     'settings.density.compact': 'Compacta',
+    'settings.ai.title': 'Preferencias de IA',
+    'settings.ai.description': 'Elige cómo quieres que Rox te responda.',
+    'settings.ai.responseLanguage': 'Idioma de las respuestas',
+    'settings.ai.responseLanguageHelp': 'Rox puede seguir automáticamente tu idioma.',
+    'settings.ai.language.auto': 'Mismo idioma que el usuario',
+    'settings.ai.language.ar': 'Árabe',
+    'settings.ai.language.fr': 'Francés',
+    'settings.ai.language.en': 'Inglés',
+    'settings.ai.language.es': 'Español',
+    'settings.ai.language.zh': 'Chino',
+    'settings.ai.responseLength': 'Longitud de las respuestas',
+    'settings.ai.responseLengthHelp': 'Controla el nivel de detalle.',
+    'settings.ai.length.concise': 'Breve',
+    'settings.ai.length.balanced': 'Equilibrada',
+    'settings.ai.length.detailed': 'Detallada',
+    'settings.ai.responseTone': 'Tono de las respuestas',
+    'settings.ai.responseToneHelp': 'Estilo general utilizado por Rox.',
+    'settings.ai.tone.natural': 'Natural',
+    'settings.ai.tone.professional': 'Profesional',
+    'settings.ai.tone.creative': 'Creativo',
+    'settings.ai.reset': '↺ Restablecer preferencias de IA',
   },
 
   zh: {
@@ -9063,6 +9254,27 @@ const ROX_I18N = {
     'settings.general.densityHelp': '控制界面元素之间的间距。',
     'settings.density.comfortable': '舒适',
     'settings.density.compact': '紧凑',
+    'settings.ai.title': 'AI 偏好设置',
+    'settings.ai.description': '选择 Rox 回复你的方式。',
+    'settings.ai.responseLanguage': '回复语言',
+    'settings.ai.responseLanguageHelp': 'Rox 可以自动跟随你的语言。',
+    'settings.ai.language.auto': '与用户使用相同语言',
+    'settings.ai.language.ar': '阿拉伯语',
+    'settings.ai.language.fr': '法语',
+    'settings.ai.language.en': '英语',
+    'settings.ai.language.es': '西班牙语',
+    'settings.ai.language.zh': '中文',
+    'settings.ai.responseLength': '回复长度',
+    'settings.ai.responseLengthHelp': '控制回复的详细程度。',
+    'settings.ai.length.concise': '简短',
+    'settings.ai.length.balanced': '均衡',
+    'settings.ai.length.detailed': '详细',
+    'settings.ai.responseTone': '回复语气',
+    'settings.ai.responseToneHelp': 'Rox 使用的整体风格。',
+    'settings.ai.tone.natural': '自然',
+    'settings.ai.tone.professional': '专业',
+    'settings.ai.tone.creative': '创意',
+    'settings.ai.reset': '↺ 重置 AI 偏好设置',
   }
 };
 
