@@ -2409,15 +2409,15 @@ html[data-rox-density="compact"] .chat-input-row{
           <div class="rox-settings-heading">
             <span>💬</span>
             <div>
-              <h3>Chat & données</h3>
-              <p>Gérez vos conversations et leur conservation.</p>
+              <h3 data-i18n="settings.data.title">Chat & data</h3>
+              <p data-i18n="settings.data.description">Manage your conversations and how they are stored.</p>
             </div>
           </div>
 
           <label class="rox-settings-toggle-row">
             <div>
-              <strong>Enregistrer l’historique</strong>
-              <small>Conserver les conversations dans votre compte.</small>
+              <strong data-i18n="settings.data.saveHistory">Save chat history</strong>
+              <small data-i18n="settings.data.saveHistoryHelp">Keep conversations in your account.</small>
             </div>
 
             <input
@@ -2431,13 +2431,15 @@ html[data-rox-density="compact"] .chat-input-row{
             type="button"
             class="rox-settings-action"
             id="settingsExportChats"
-          >⇩ Télécharger mes conversations</button>
+            data-i18n="settings.data.exportChats"
+          >⇩ Download my conversations</button>
 
           <button
             type="button"
             class="rox-settings-action danger"
             id="settingsDeleteChats"
-          >🗑️ Supprimer toutes les conversations</button>
+            data-i18n="settings.data.deleteChats"
+          >🗑️ Delete all conversations</button>
         </section>
 
         <section
@@ -2997,6 +2999,12 @@ const ROX_I18N = {
     'settings.voice.autoReadHelp': 'Automatically read Rox responses aloud.',
     'settings.voice.stopOnRecord': 'Stop playback during dictation',
     'settings.voice.stopOnRecordHelp': 'Prevents Rox from speaking while recording.',
+    'settings.data.title': 'Chat & data',
+    'settings.data.description': 'Manage your conversations and how they are stored.',
+    'settings.data.saveHistory': 'Save chat history',
+    'settings.data.saveHistoryHelp': 'Keep conversations in your account.',
+    'settings.data.exportChats': '⇩ Download my conversations',
+    'settings.data.deleteChats': '🗑️ Delete all conversations',
   },
 
   fr: {
@@ -3062,6 +3070,12 @@ const ROX_I18N = {
     'settings.voice.autoReadHelp': 'Lire automatiquement les réponses de Rox.',
     'settings.voice.stopOnRecord': 'Arrêter la lecture pendant la dictée',
     'settings.voice.stopOnRecordHelp': 'Évite que Rox parle pendant l’enregistrement.',
+    'settings.data.title': 'Chat et données',
+    'settings.data.description': 'Gérez vos conversations et leur conservation.',
+    'settings.data.saveHistory': 'Enregistrer l’historique',
+    'settings.data.saveHistoryHelp': 'Conserver les conversations dans votre compte.',
+    'settings.data.exportChats': '⇩ Télécharger mes conversations',
+    'settings.data.deleteChats': '🗑️ Supprimer toutes les conversations',
   },
 
   ar: {
@@ -3127,6 +3141,12 @@ const ROX_I18N = {
     'settings.voice.autoReadHelp': 'قراءة إجابات Rox تلقائياً.',
     'settings.voice.stopOnRecord': 'إيقاف القراءة أثناء الإملاء',
     'settings.voice.stopOnRecordHelp': 'يمنع Rox من التحدث أثناء التسجيل.',
+    'settings.data.title': 'الدردشة والبيانات',
+    'settings.data.description': 'أدر محادثاتك وكيفية الاحتفاظ بها.',
+    'settings.data.saveHistory': 'حفظ سجل المحادثات',
+    'settings.data.saveHistoryHelp': 'الاحتفاظ بالمحادثات داخل حسابك.',
+    'settings.data.exportChats': '⇩ تنزيل محادثاتي',
+    'settings.data.deleteChats': '🗑️ حذف جميع المحادثات',
   },
 
   es: {
@@ -3192,6 +3212,12 @@ const ROX_I18N = {
     'settings.voice.autoReadHelp': 'Leer automáticamente las respuestas de Rox.',
     'settings.voice.stopOnRecord': 'Detener la lectura durante el dictado',
     'settings.voice.stopOnRecordHelp': 'Evita que Rox hable durante la grabación.',
+    'settings.data.title': 'Chat y datos',
+    'settings.data.description': 'Gestiona tus conversaciones y su almacenamiento.',
+    'settings.data.saveHistory': 'Guardar historial de chats',
+    'settings.data.saveHistoryHelp': 'Conservar las conversaciones en tu cuenta.',
+    'settings.data.exportChats': '⇩ Descargar mis conversaciones',
+    'settings.data.deleteChats': '🗑️ Eliminar todas las conversaciones',
   },
 
   zh: {
@@ -3257,6 +3283,12 @@ const ROX_I18N = {
     'settings.voice.autoReadHelp': '自动朗读 Rox 的回复。',
     'settings.voice.stopOnRecord': '听写时停止朗读',
     'settings.voice.stopOnRecordHelp': '防止 Rox 在录音时说话。',
+    'settings.data.title': '聊天与数据',
+    'settings.data.description': '管理你的对话及其保存方式。',
+    'settings.data.saveHistory': '保存聊天记录',
+    'settings.data.saveHistoryHelp': '将对话保存在你的账户中。',
+    'settings.data.exportChats': '⇩ 下载我的对话',
+    'settings.data.deleteChats': '🗑️ 删除所有对话',
   }
 };
 
@@ -8534,15 +8566,15 @@ html[data-rox-density="compact"] .chat-input-row{
           <div class="rox-settings-heading">
             <span>💬</span>
             <div>
-              <h3>Chat & données</h3>
-              <p>Gérez vos conversations et leur conservation.</p>
+              <h3 data-i18n="settings.data.title">Chat & data</h3>
+              <p data-i18n="settings.data.description">Manage your conversations and how they are stored.</p>
             </div>
           </div>
 
           <label class="rox-settings-toggle-row">
             <div>
-              <strong>Enregistrer l’historique</strong>
-              <small>Conserver les conversations dans votre compte.</small>
+              <strong data-i18n="settings.data.saveHistory">Save chat history</strong>
+              <small data-i18n="settings.data.saveHistoryHelp">Keep conversations in your account.</small>
             </div>
 
             <input
@@ -8556,13 +8588,15 @@ html[data-rox-density="compact"] .chat-input-row{
             type="button"
             class="rox-settings-action"
             id="settingsExportChats"
-          >⇩ Télécharger mes conversations</button>
+            data-i18n="settings.data.exportChats"
+          >⇩ Download my conversations</button>
 
           <button
             type="button"
             class="rox-settings-action danger"
             id="settingsDeleteChats"
-          >🗑️ Supprimer toutes les conversations</button>
+            data-i18n="settings.data.deleteChats"
+          >🗑️ Delete all conversations</button>
         </section>
 
         <section
@@ -9155,6 +9189,12 @@ const ROX_I18N = {
     'settings.voice.autoReadHelp': 'Automatically read Rox responses aloud.',
     'settings.voice.stopOnRecord': 'Stop playback during dictation',
     'settings.voice.stopOnRecordHelp': 'Prevents Rox from speaking while recording.',
+    'settings.data.title': 'Chat & data',
+    'settings.data.description': 'Manage your conversations and how they are stored.',
+    'settings.data.saveHistory': 'Save chat history',
+    'settings.data.saveHistoryHelp': 'Keep conversations in your account.',
+    'settings.data.exportChats': '⇩ Download my conversations',
+    'settings.data.deleteChats': '🗑️ Delete all conversations',
   },
 
   fr: {
@@ -9220,6 +9260,12 @@ const ROX_I18N = {
     'settings.voice.autoReadHelp': 'Lire automatiquement les réponses de Rox.',
     'settings.voice.stopOnRecord': 'Arrêter la lecture pendant la dictée',
     'settings.voice.stopOnRecordHelp': 'Évite que Rox parle pendant l’enregistrement.',
+    'settings.data.title': 'Chat et données',
+    'settings.data.description': 'Gérez vos conversations et leur conservation.',
+    'settings.data.saveHistory': 'Enregistrer l’historique',
+    'settings.data.saveHistoryHelp': 'Conserver les conversations dans votre compte.',
+    'settings.data.exportChats': '⇩ Télécharger mes conversations',
+    'settings.data.deleteChats': '🗑️ Supprimer toutes les conversations',
   },
 
   ar: {
@@ -9285,6 +9331,12 @@ const ROX_I18N = {
     'settings.voice.autoReadHelp': 'قراءة إجابات Rox تلقائياً.',
     'settings.voice.stopOnRecord': 'إيقاف القراءة أثناء الإملاء',
     'settings.voice.stopOnRecordHelp': 'يمنع Rox من التحدث أثناء التسجيل.',
+    'settings.data.title': 'الدردشة والبيانات',
+    'settings.data.description': 'أدر محادثاتك وكيفية الاحتفاظ بها.',
+    'settings.data.saveHistory': 'حفظ سجل المحادثات',
+    'settings.data.saveHistoryHelp': 'الاحتفاظ بالمحادثات داخل حسابك.',
+    'settings.data.exportChats': '⇩ تنزيل محادثاتي',
+    'settings.data.deleteChats': '🗑️ حذف جميع المحادثات',
   },
 
   es: {
@@ -9350,6 +9402,12 @@ const ROX_I18N = {
     'settings.voice.autoReadHelp': 'Leer automáticamente las respuestas de Rox.',
     'settings.voice.stopOnRecord': 'Detener la lectura durante el dictado',
     'settings.voice.stopOnRecordHelp': 'Evita que Rox hable durante la grabación.',
+    'settings.data.title': 'Chat y datos',
+    'settings.data.description': 'Gestiona tus conversaciones y su almacenamiento.',
+    'settings.data.saveHistory': 'Guardar historial de chats',
+    'settings.data.saveHistoryHelp': 'Conservar las conversaciones en tu cuenta.',
+    'settings.data.exportChats': '⇩ Descargar mis conversaciones',
+    'settings.data.deleteChats': '🗑️ Eliminar todas las conversaciones',
   },
 
   zh: {
@@ -9415,6 +9473,12 @@ const ROX_I18N = {
     'settings.voice.autoReadHelp': '自动朗读 Rox 的回复。',
     'settings.voice.stopOnRecord': '听写时停止朗读',
     'settings.voice.stopOnRecordHelp': '防止 Rox 在录音时说话。',
+    'settings.data.title': '聊天与数据',
+    'settings.data.description': '管理你的对话及其保存方式。',
+    'settings.data.saveHistory': '保存聊天记录',
+    'settings.data.saveHistoryHelp': '将对话保存在你的账户中。',
+    'settings.data.exportChats': '⇩ 下载我的对话',
+    'settings.data.deleteChats': '🗑️ 删除所有对话',
   }
 };
 
