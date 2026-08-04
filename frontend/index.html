@@ -2929,6 +2929,90 @@ const ROX_SETTINGS_KEYS = {
   stopVoiceOnRecord: 'roxStopVoiceOnRecord'
 };
 
+const ROX_UI_LANGUAGES = ['en', 'fr', 'ar', 'es', 'zh'];
+
+const ROX_I18N = {
+  en: {},
+  fr: {},
+  ar: {},
+  es: {},
+  zh: {}
+};
+
+function getRoxUiLanguage() {
+  const selectedLanguage =
+    localStorage.getItem(
+      ROX_SETTINGS_KEYS.uiLanguage
+    ) || 'auto';
+
+  const resolvedLanguage =
+    resolveRoxUiLanguage(selectedLanguage);
+
+  return ROX_UI_LANGUAGES.includes(
+    resolvedLanguage
+  )
+    ? resolvedLanguage
+    : 'en';
+}
+
+function roxT(key, variables = {}) {
+  const language = getRoxUiLanguage();
+
+  const translatedText =
+    ROX_I18N[language]?.[key] ??
+    ROX_I18N.en?.[key] ??
+    key;
+
+  return Object.entries(variables).reduce(
+    (result, [variableName, value]) =>
+      result.replaceAll(
+        `{{${variableName}}}`,
+        String(value)
+      ),
+    translatedText
+  );
+}
+
+function translateRoxUi(root = document) {
+  root
+    .querySelectorAll('[data-i18n]')
+    .forEach(element => {
+      const key = element.dataset.i18n;
+
+      if (key) {
+        element.textContent = roxT(key);
+      }
+    });
+
+  root
+    .querySelectorAll('[data-i18n-placeholder]')
+    .forEach(element => {
+      const key =
+        element.dataset.i18nPlaceholder;
+
+      if (key) {
+        element.setAttribute(
+          'placeholder',
+          roxT(key)
+        );
+      }
+    });
+
+  root
+    .querySelectorAll('[data-i18n-title]')
+    .forEach(element => {
+      const key =
+        element.dataset.i18nTitle;
+
+      if (key) {
+        element.setAttribute(
+          'title',
+          roxT(key)
+        );
+      }
+    });
+}
+
 function getRoxBooleanSetting(key, fallback = false) {
   const value = localStorage.getItem(key);
 
@@ -3006,6 +3090,9 @@ function applyRoxUiLanguage(languageValue) {
 
   document.documentElement.dataset.roxUiLanguage =
     resolvedLanguage;
+
+
+  translateRoxUi();
 }
 
 function getRoxSpeechRate() {
@@ -8679,6 +8766,90 @@ const ROX_SETTINGS_KEYS = {
   stopVoiceOnRecord: 'roxStopVoiceOnRecord'
 };
 
+const ROX_UI_LANGUAGES = ['en', 'fr', 'ar', 'es', 'zh'];
+
+const ROX_I18N = {
+  en: {},
+  fr: {},
+  ar: {},
+  es: {},
+  zh: {}
+};
+
+function getRoxUiLanguage() {
+  const selectedLanguage =
+    localStorage.getItem(
+      ROX_SETTINGS_KEYS.uiLanguage
+    ) || 'auto';
+
+  const resolvedLanguage =
+    resolveRoxUiLanguage(selectedLanguage);
+
+  return ROX_UI_LANGUAGES.includes(
+    resolvedLanguage
+  )
+    ? resolvedLanguage
+    : 'en';
+}
+
+function roxT(key, variables = {}) {
+  const language = getRoxUiLanguage();
+
+  const translatedText =
+    ROX_I18N[language]?.[key] ??
+    ROX_I18N.en?.[key] ??
+    key;
+
+  return Object.entries(variables).reduce(
+    (result, [variableName, value]) =>
+      result.replaceAll(
+        `{{${variableName}}}`,
+        String(value)
+      ),
+    translatedText
+  );
+}
+
+function translateRoxUi(root = document) {
+  root
+    .querySelectorAll('[data-i18n]')
+    .forEach(element => {
+      const key = element.dataset.i18n;
+
+      if (key) {
+        element.textContent = roxT(key);
+      }
+    });
+
+  root
+    .querySelectorAll('[data-i18n-placeholder]')
+    .forEach(element => {
+      const key =
+        element.dataset.i18nPlaceholder;
+
+      if (key) {
+        element.setAttribute(
+          'placeholder',
+          roxT(key)
+        );
+      }
+    });
+
+  root
+    .querySelectorAll('[data-i18n-title]')
+    .forEach(element => {
+      const key =
+        element.dataset.i18nTitle;
+
+      if (key) {
+        element.setAttribute(
+          'title',
+          roxT(key)
+        );
+      }
+    });
+}
+
 function getRoxBooleanSetting(key, fallback = false) {
   const value = localStorage.getItem(key);
 
@@ -8756,6 +8927,9 @@ function applyRoxUiLanguage(languageValue) {
 
   document.documentElement.dataset.roxUiLanguage =
     resolvedLanguage;
+
+
+  translateRoxUi();
 }
 
 function getRoxSpeechRate() {
