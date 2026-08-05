@@ -97,10 +97,11 @@ jobs:
           IMAGE_TAG: ${{ inputs.image_tag }}
           ROLLBACK: ${{ inputs.rollback }}
         run: |
+          OWNER_REPO_LOWER="$(echo '${{ github.repository }}' | tr '[:upper:]' '[:lower:]')"
           ssh -p "${{ secrets.PRODUCTION_SSH_PORT }}" "${{ secrets.PRODUCTION_SSH_USER }}@${{ secrets.PRODUCTION_HOST }}" \
             "cd '${{ secrets.PRODUCTION_DEPLOY_DIR }}' && \
              REGISTRY=ghcr.io \
-             OWNER_REPO='${{ github.repository }}' \
+             OWNER_REPO='${OWNER_REPO_LOWER}' \
              IMAGE_TAG='${IMAGE_TAG}' \
              ROLLBACK='${ROLLBACK}' \
              GHCR_ACTOR='${{ github.actor }}' \

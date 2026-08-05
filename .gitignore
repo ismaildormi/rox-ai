@@ -8,3 +8,11 @@ frontend/.env
 
 # Local backup snapshots
 *.before-*
+.rox/
+backups/rox-support-*.zip
+frontend/rox-config.local.js
+
+.rox/profiles/
+/.vercel/
+/.railway/
+logs/*.json

@@ -4,13 +4,26 @@
 // no manual action needed on your side.
 
 const express = require('express');
-const Stripe = require('stripe');
 const { supabaseAdmin } = require('./lib/supabaseAdmin');
+const {
+  getStripeClient,
+  missingEnvironmentVariables,
+  sendBillingUnavailable,
+} = require('./lib/stripeClient');
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 const router = express.Router();
 
 router.post('/', express.raw({ type: 'application/json' }), async (req, res) => {
+  const missing = missingEnvironmentVariables([
+    'STRIPE_SECRET_KEY',
+    'STRIPE_WEBHOOK_SECRET',
+  ]);
+  const stripe = getStripeClient();
+
+  if (missing.length > 0 || !stripe) {
+    return sendBillingUnavailable(res, missing);
+  }
+
   const sig = req.headers['stripe-signature'];
   let event;
 

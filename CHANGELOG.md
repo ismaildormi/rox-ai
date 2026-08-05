@@ -1,6 +1,52 @@
+# v0.64.0 — Safe Bridge
+
+- Added isolated Local / Staging / Production private profiles.
+- Added safe import into the existing Git-linked project with rollback.
+- Added read-only live provider verification and launch smoke tests.
+- Added guarded staging branch and production deployment gates.
+- Added runtime profile badge and Coming Soon gates for unfinished Projects, History, Automations, and Rox IP.
+- Preserves GitHub, Railway, Vercel, Supabase link state, secrets, and local runtime state.
+
+# v0.63.0 — Windows One-Click Automation
+
+- Added `ROX-MANAGER.cmd` and an 18-action Windows control center.
+- Added one-click setup, secure configuration, start/stop/restart, health repair, and full validation.
+- Added safe ZIP updates with secret preservation, validation, automatic rollback snapshots, and manual rollback.
+- Added Supabase migration/bundle tools, Stripe sandbox webhook tools, and Railway/Vercel deployment helpers.
+- Added redacted support-report ZIP generation and desktop shortcut creation.
+- Moved browser endpoints into `frontend/rox-config.js`, shared by mobile and desktop without editing the duplicated HTML.
+- Added a dependency-free local frontend server and Windows automation regression checks.
+
 # Changelog
 
 All notable changes to ROX AI are documented here. Format: date, area, what changed, why.
+
+## 2026-08-05 — v0.62 (runtime safety and delivery pipeline)
+
+### Fixed
+
+- Consolidated the two conflicting CORS middlewares into one tested policy with a single origin allowlist, full API method coverage, preflight caching, and consistent `Vary: Origin` behavior.
+- Billing modules no longer instantiate Stripe while the server is loading. Missing or partial Stripe configuration now returns a controlled `503 billing_not_configured` response instead of preventing startup or producing an unhandled async error.
+- Subscription checkout redirects now return to the actual single-page frontend root instead of the nonexistent `/dashboard` route.
+- Stripe checkout and top-up provider failures now return controlled `502 billing_provider_error` responses.
+- Added startup environment validation for the API server and worker. Core production misconfiguration fails early with variable names only; optional integrations generate actionable warnings without exposing secret values.
+- Normalized the GitHub repository name to lowercase before GHCR staging/production deployment, avoiding invalid Docker image references for mixed-case repository names.
+
+### Added
+
+- Restored `.github/workflows/ci.yml`, `.github/workflows/cd.yml`, and `.github/workflows/deploy-staging.yml` to match the deployment architecture already documented in README/ARCHITECTURE.
+- Added `backend/test-runtime-safety.js` for CORS, environment validation, lazy Stripe setup, and billing redirect regression coverage.
+- Added `tools/validate-release.js`, a dependency-free release validator covering active JavaScript syntax, JSON, embedded mobile/desktop/router JavaScript, translation synchronization, and frontend security contracts.
+- Added `npm run validate:release` and expanded backend launch/unit scripts to include the runtime-safety suite.
+
+### Validation
+
+- Backend gatekeeper suite: 14 passed.
+- Launch-blocker and runtime-safety suites: passed.
+- Release validator: 7 groups passed, 0 failed.
+- CLI suite: 38 passed using a temporary, uncommitted `cross-spawn` compatibility shim because dependencies could not be installed in the audit sandbox.
+- Production deployment configuration suite: 11 passed.
+- All workflow/Compose YAML parsed successfully; deployment shell scripts passed `bash -n`.
 
 ## Unreleased — Phase 1 (Stabilization & Production Readiness), part 1
 

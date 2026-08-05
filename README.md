@@ -1,3 +1,8 @@
+
+## v0.64 Safe Bridge workflow
+
+Do not copy this ZIP manually over production. Extract it separately and run `ROX-BRIDGE.cmd`. The bridge preserves the existing Git/hosting links and secrets, activates Local, validates the import, and never pushes or deploys automatically. See `docs/SAFE_BRIDGE.md`.
+
 # ROX AI — مشروع موحد
 
 هاد المجلد فيه النسخة الوحيدة الصحيحة، مجمعة من الملفات المتفرقة اللي كانت
@@ -10,8 +15,8 @@
 backend/     — v6 (النسخة الكاملة الوحيدة: hardening + credits + metrics)
               server.js فيه CORS مفتوح غير على /metrics (باقي الـ API
               محمي بـ ALLOWED_ORIGINS كيفما كان)
-frontend/    — rox-ai-mobile_pro.html (نسخة "pro" ديال الموبايل، فيها Supabase
-              Auth حقيقي، API_BASE مضبوط دابا على http://localhost:3001)
+frontend/    — index.html (رابط واحد كايختار تلقائياً بين واجهة الهاتف
+              وواجهة الحاسوب، فيه Supabase Auth وواجهة الترجمة الكاملة)
 tools/       — rox-ai-telemetry.html (dashboard كيقرا /metrics مباشرة،
               بأسماء الحقول الصحيحة ديال v6)
 ```
@@ -29,7 +34,7 @@ tools/       — rox-ai-telemetry.html (dashboard كيقرا /metrics مباشر
 ## قبل ما تخدم
 
 1. `cd backend && npm install` (يخدم دابا — `package.json` مزيد فالمشروع)
-2. Supabase → SQL Editor: خدم `01_schema.sql` حتى `13_advisor_optimizer_schema.sql`
+2. Supabase → SQL Editor: خدم `01_schema.sql` حتى `16_settle_credit_charge.sql`
    **بالترتيب الرقمي** (`10_profile_column_lockdown.sql` كيسد ثغرة كانت
    كاينة فـ RLS، و`12_extension_schema.sql` جديد — كيزيد أعمدة/جداول
    فاضيين مقفولين بـ RLS لتحضير المشروع للميزات الجاية، و
@@ -38,7 +43,7 @@ tools/       — rox-ai-telemetry.html (dashboard كيقرا /metrics مباشر
    هوما، ماشي اختياري، ما كيبدلو أي حاجة كاينة).
 3. عمر `.env` (نسخ من `.env.example`) — خاصك على الأقل:
    `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, `REDIS_URL`
-4. **الوحيد اللي بقا معلق:** عمر فـ `frontend/rox-ai-mobile_pro.html` (سطر ~412):
+4. **الوحيد اللي بقا معلق:** راجع `CONFIG` داخل نسختي الهاتف والحاسوب فـ `frontend/index.html`:
    - `SUPABASE_URL`
    - `SUPABASE_ANON_KEY`
    (من نفس مشروع Supabase اللي فـ `.env` ديال backend)
@@ -49,7 +54,7 @@ tools/       — rox-ai-telemetry.html (dashboard كيقرا /metrics مباشر
    من بعد: `./cli/rox.js start` — كيبدا السيرفر والـ worker بجوج، ماخصكش
    تبدا كل واحد فـ terminal بوحدو. الكوماندات الكاملين (start/stop/
    update/backup/restore/health) فـ `docs/CLI.md`.
-6. افتح `frontend/rox-ai-mobile_pro.html` (فضل تخدمو بـ local server ماشي
+6. افتح `frontend/index.html` (فضل تخدمو بـ local server ماشي
    `file://` باش الـ Supabase Auth يخدم مزيان)، وزيد العنوان اللي كتفتح
    منو فـ `ALLOWED_ORIGINS` فـ `.env`
 7. افتح `tools/rox-ai-telemetry.html` وضغط Fetch باش تشوف `/metrics`
@@ -178,3 +183,20 @@ reviewers) يوافق قبل ما يبدا أي SSH.
   كانت كتشيك غير على الـ row، ماشي على الأعمدة). دابا محمي بـ trigger.
 - **`/metrics`**: زدنا `METRICS_TOKEN` اختياري (فـ `.env.example`) باش
   ماشي أي حد عندو الرابط يشوف المارج الحقيقي ديالك.
+
+## Windows one-click manager (v0.63)
+
+On Windows, extract the release ZIP and double-click `ROX-MANAGER.cmd`.
+The manager centralizes setup, configuration, start/stop/restart, health repair,
+full tests, logs, backups/restores, safe ZIP updates with rollback, Supabase
+migrations, Stripe sandbox tools, Railway/Vercel deploy helpers, and a redacted
+support-report ZIP.
+
+First run:
+
+1. Double-click `ROX-SETUP.cmd`.
+2. Enter the service values when prompted. Secrets are written only to
+   `backend/.env`; browser-safe values are written to `frontend/rox-config.js`.
+3. Use `ROX-MANAGER.cmd` for all later work.
+
+Detailed instructions: `docs/WINDOWS_ONE_CLICK.md`.

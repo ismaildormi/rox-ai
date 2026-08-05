@@ -1,4 +1,4 @@
-﻿// ROX AI ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â API server (hardened)
+// ROX AI ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â API server (hardened)
 // npm install express @supabase/supabase-js stripe replicate dotenv bullmq ioredis prom-client
 //
 // Changes from the original:
@@ -15,13 +15,23 @@
 //   - GET /metrics for Prometheus scraping.
 
 require('dotenv').config({ path: __dirname + '/.env' });
+const {
+  validateServerEnvironment,
+  reportEnvironmentValidation,
+} = require('./lib/envValidation');
+
+reportEnvironmentValidation(
+  validateServerEnvironment(process.env),
+  { component: 'server' }
+);
 const crypto = require('crypto');
 const express = require('express');
+const { createCorsMiddleware } = require('./lib/cors');
 const { requireAuth } = require('./lib/auth');
 const { rateLimit } = require('./lib/rateLimit');
 const { ipRateLimit, ipBlockGuard } = require('./lib/ipGuard');
 const { validateChatBody, validatePromptBody } = require('./lib/inputValidation');
-const { gatekeeperMiddleware, reserveCredits, refundCredits, settleCredits, logCreditEvent, reportRefundFailure } = require('./gatekeeper');
+const { loadRoxUserMiddleware, gatekeeperMiddleware, reserveCredits, refundCredits, settleCredits, logCreditEvent, reportRefundFailure } = require('./gatekeeper');
 const { routeRequest } = require('./aiRouter');
 const { imageQueue, videoQueue, defaultJobOptions, connection: queueConnection } = require('./lib/queue');
 const {
@@ -56,40 +66,8 @@ const diskMaintenanceModule = require('./src/modules/diskMonitor/maintenance');
 
 const app = express();
 
-// ROX CORS START
-const allowedOrigins = new Set([
-  'http://localhost:5500',
-  'http://127.0.0.1:5500',
-  'https://rox-ai-sepia.vercel.app',
-  ...String(process.env.ALLOWED_ORIGINS || '')
-    .split(',')
-    .map(origin => origin.trim())
-    .filter(Boolean),
-]);
-
-app.use((req, res, next) => {
-  const origin = req.headers.origin;
-
-  if (origin && allowedOrigins.has(origin)) {
-    res.setHeader('Access-Control-Allow-Origin', origin);
-    res.setHeader('Vary', 'Origin');
-    res.setHeader(
-      'Access-Control-Allow-Headers',
-      'Authorization, Content-Type'
-    );
-    res.setHeader(
-      'Access-Control-Allow-Methods',
-      'GET, POST, PUT, PATCH, DELETE, OPTIONS'
-    );
-  }
-
-  if (req.method === 'OPTIONS') {
-    return res.sendStatus(204);
-  }
-
-  next();
-});
-// ROX CORS END
+// Single CORS policy for browser clients.
+app.use(createCorsMiddleware());
 
 // Stripe webhook needs the raw body, so it's mounted BEFORE express.json()
 // ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â and deliberately BEFORE the IP guard below. Stripe sends from a
@@ -161,23 +139,6 @@ app.get('/healthz', async (req, res) => {
   });
 });
 
-// Nothing previously set CORS headers at all, which in practice just
-// means the browser blocks the frontend unless it's same-origin ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â but
-// it's implicit and fragile. Make it explicit and restrictive: only the
-// configured frontend origin(s) can call this API from a browser.
-// ALLOWED_ORIGINS is comma-separated, e.g. "https://rox.ai,https://app.rox.ai".
-const ALLOWED_ORIGINS = (process.env.ALLOWED_ORIGINS || '').split(',').map(o => o.trim()).filter(Boolean);
-app.use((req, res, next) => {
-  const origin = req.headers.origin;
-  if (origin && ALLOWED_ORIGINS.includes(origin)) {
-    res.setHeader('Access-Control-Allow-Origin', origin);
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-    res.setHeader('Vary', 'Origin');
-  }
-  if (req.method === 'OPTIONS') return res.sendStatus(204);
-  next();
-});
 
 // Global per-IP flood guard, ahead of auth ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â see lib/ipGuard.js. A
 // blocked/flooding IP never reaches Supabase's token verification or
@@ -282,7 +243,7 @@ app.get('/internal/margin-summary', async (req, res) => {
   const { data, error } = await supabaseAdmin.from('rox_margin_last_24h').select('*');
   if (error) {
     console.error('[margin-summary] query failed:', error.message);
-    return res.status(500).json({ status: 'error', message: 'Erreur interne.' });
+    return res.status(500).json({ status: 'error', message: 'Margin summary could not be loaded.' });
   }
 
   const totalMarginUsd = data.reduce((sum, row) => sum + Number(row.margin_usd || 0), 0);
@@ -392,7 +353,7 @@ app.get('/api/usage-status', requireAuth, async (req, res) => {
 });
 
 // --- Chat / Code: synchronous, routed through aiRouter's fallback chain ---
-app.post('/api/chat', requireAuth, rateLimit('chat'), validateChatBody, gatekeeperMiddleware, async (req, res) => {
+app.post('/api/chat', requireAuth, rateLimit('chat'), validateChatBody, loadRoxUserMiddleware, async (req, res) => {
   const { messages, feature, aiPreferences = {} } = req.body; // feature: 'chat' | 'code'
   const userId = req.userId;
   const requestId = crypto.randomUUID();
@@ -401,6 +362,14 @@ app.post('/api/chat', requireAuth, rateLimit('chat'), validateChatBody, gatekeep
   // Chat is free with a daily limit for every user.
   // Code is paid and consumes credits for every user.
   const isCode = feature === 'code';
+
+  if (isCode && !isPro) {
+    return res.status(403).json({
+      status: 'error',
+      message: 'Code Studio requires a Pro subscription.',
+      code: 'code_requires_pro',
+    });
+  }
 
   let dailyStatus = null;
   let reservation = null;
@@ -532,6 +501,32 @@ app.post('/api/chat', requireAuth, rateLimit('chat'), validateChatBody, gatekeep
       },
     });
 
+    // Save a private conversation snapshot without blocking the chat response.
+    try {
+      const { error: historyError } = await supabaseAdmin
+        .from('shared_conversations')
+        .insert({
+          owner_id: userId,
+          is_public: false,
+          content: {
+            feature: feature || 'chat',
+            messages: messages.filter(message => message.role !== 'system'),
+            assistant: {
+              role: 'assistant',
+              content: result.text,
+              model: result.model,
+              responseId: requestId
+            }
+          }
+        });
+
+      if (historyError) {
+        console.error('[chat-history] save failed:', historyError.message);
+      }
+    } catch (historyError) {
+      console.error('[chat-history] save failed:', historyError.message);
+    }
+
     res.json({
       status: 'success',
       text: result.text,
@@ -563,7 +558,7 @@ app.post('/api/chat', requireAuth, rateLimit('chat'), validateChatBody, gatekeep
       metadata: { attempts: err.attempts || [] },
     });
 
-    res.status(502).json({ status: 'error', message: 'Tous les modÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¨les disponibles ont ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â©chouÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â©.' });
+    res.status(502).json({ status: 'error', message: 'All available AI models failed. Please try again.' });
   }
 });
 
@@ -605,10 +600,10 @@ async function handleGenerationRequest(req, res, { feature, queue }) {
     reservation = await reserveCredits({ userId, requestId, feature, creditsConsumed });
   } catch (err) {
     if (err.code === 'insufficient_credits') {
-      return res.status(402).json({ status: 'error', message: 'CrÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â©dit insuffisant.' });
+      return res.status(402).json({ status: 'error', message: 'Insufficient credits.' });
     }
     console.error(`[${feature}] reserveCredits failed:`, err.message);
-    return res.status(500).json({ status: 'error', message: 'Erreur interne.' });
+    return res.status(500).json({ status: 'error', message: 'Internal server error.' });
   }
 
   const { error: insertError } = await supabaseAdmin
@@ -620,7 +615,7 @@ async function handleGenerationRequest(req, res, { feature, queue }) {
     await refundCredits(requestId).catch(refundErr =>
       reportRefundFailure({ requestId, userId, feature, error: refundErr })
     );
-    return res.status(500).json({ status: 'error', message: 'ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â°chec de la crÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â©ation du job.' });
+    return res.status(500).json({ status: 'error', message: 'The generation job could not be created.' });
   }
 
   try {
@@ -643,7 +638,7 @@ async function handleGenerationRequest(req, res, { feature, queue }) {
     await refundCredits(requestId).catch(refundErr =>
       reportRefundFailure({ requestId, userId, feature, error: refundErr })
     );
-    return res.status(503).json({ status: 'error', message: 'File d\'attente indisponible ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â rÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â©essayez.' });
+    return res.status(503).json({ status: 'error', message: 'The generation queue is unavailable. Please try again.' });
   }
 
   res.status(202).json({
@@ -806,11 +801,11 @@ app.post('/api/chat-feedback', requireAuth, async (req, res) => {
   });
 });
 // ROX CHAT FEEDBACK API END
-app.post('/api/generate-image', requireAuth, rateLimit('image'), validatePromptBody, gatekeeperMiddleware, (req, res) =>
+app.post('/api/generate-image', requireAuth, rateLimit('image'), validatePromptBody, gatekeeperMiddleware, requireProSubscription('image'), (req, res) =>
   handleGenerationRequest(req, res, { feature: 'image', queue: imageQueue })
 );
 
-app.post('/api/generate-video', requireAuth, rateLimit('video'), validatePromptBody, gatekeeperMiddleware, (req, res) =>
+app.post('/api/generate-video', requireAuth, rateLimit('video'), validatePromptBody, gatekeeperMiddleware, requireProSubscription('video'), (req, res) =>
   handleGenerationRequest(req, res, { feature: 'video', queue: videoQueue })
 );
 
@@ -822,8 +817,8 @@ app.get('/api/job-status/:jobId', requireAuth, async (req, res) => {
     .eq('id', req.params.jobId)
     .single();
 
-  if (error || !data) return res.status(404).json({ status: 'error', message: 'Job introuvable.' });
-  if (data.user_id !== req.userId) return res.status(403).json({ status: 'error', message: 'AccÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¨s refusÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â©.' });
+  if (error || !data) return res.status(404).json({ status: 'error', message: 'Generation job not found.' });
+  if (data.user_id !== req.userId) return res.status(403).json({ status: 'error', message: 'Access denied.' });
 
   res.json(data);
 });

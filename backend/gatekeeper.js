@@ -15,12 +15,35 @@
 
 const { supabaseAdmin } = require('./lib/supabaseAdmin');
 
-async function checkAccess(userId) {
+async function getRoxUser(userId) {
   const { data: user, error } = await supabaseAdmin
     .from('profiles')
     .select('subscription_status, credits_total, credits_used')
     .eq('id', userId)
     .single();
+
+  return { user, error };
+}
+
+// Loads the authenticated user's profile without requiring a positive
+// credit balance. Free chat is governed by its daily limit, not credits.
+async function loadRoxUserMiddleware(req, res, next) {
+  const { user, error } = await getRoxUser(req.userId);
+
+  if (error || !user) {
+    return res.status(403).json({
+      status: 'error',
+      message: 'User profile was not found.',
+      code: 'user_not_found',
+    });
+  }
+
+  req.roxUser = user;
+  next();
+}
+
+async function checkAccess(userId) {
+  const { user, error } = await getRoxUser(userId);
 
   if (error || !user) return { allowed: false, reason: 'user_not_found' };
 
@@ -49,8 +72,8 @@ async function gatekeeperMiddleware(req, res, next) {
     return res.status(403).json({
       status: 'error',
       message: isPro
-        ? 'Ø§Ø³ØªÙ‡Ù„ÙƒØªÙŠ Ø§Ù„Ø±ØµÙŠØ¯ Ø§Ù„Ø´Ù‡Ø±ÙŠ Ø¯ÙŠØ§Ù„ Pro. Ø§Ø´Ø­Ù† Ø±ØµÙŠØ¯ Ø¥Ø¶Ø§ÙÙŠ Ù„Ù„Ù…ØªØ§Ø¨Ø¹Ø©.'
-        : 'CrÃ©dit insuffisant. Passez au plan Pro pour continuer.',
+        ? 'Your monthly Pro credit balance is exhausted. Add credits to continue.'
+        : 'Insufficient credits. Upgrade to Pro or add credits to continue.',
       code: isPro ? 'pro_out_of_credits' : 'out_of_credits',
     });
   }
@@ -181,6 +204,7 @@ async function reportRefundFailure({ requestId, userId, feature, error }) {
 
 module.exports = {
   checkAccess,
+  loadRoxUserMiddleware,
   gatekeeperMiddleware,
   reserveCredits,
   refundCredits,

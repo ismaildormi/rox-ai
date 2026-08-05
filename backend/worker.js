@@ -11,8 +11,18 @@
 // Run as its own process, separate from server.js:
 //   node worker.js
 
-require('dotenv').config();
+require('dotenv').config({ path: __dirname + '/.env' });
+const {
+  validateWorkerEnvironment,
+  reportEnvironmentValidation,
+} = require('./lib/envValidation');
+
+reportEnvironmentValidation(
+  validateWorkerEnvironment(process.env),
+  { component: 'worker' }
+);
 const { Worker } = require('bullmq');
+const Replicate = require('replicate');
 const { generateImage } = require('./src/modules/ai/providers/imageProviders');
 const { connection } = require('./lib/queue');
 const { supabaseAdmin } = require('./lib/supabaseAdmin');
@@ -35,7 +45,7 @@ async function markJob(jobId, patch) {
 // anything long-running. If you need a pinned version for reproducible
 // output, verify the exact hash on the model's Replicate page first.
 const IMAGE_MODEL = 'black-forest-labs/flux-schnell';
-const VIDEO_MODEL = 'wan-video/wan-2.2-t2v-fast'; // real text-to-video model ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â takes { prompt }, not an image
+const VIDEO_MODEL = process.env.REPLICATE_VIDEO_MODEL || 'wan-video/wan-2.2-t2v-fast'; // real text-to-video model ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â takes { prompt }, not an image
 
 async function processImageJob(job) {
   const { jobRowId, prompt } = job.data;
@@ -61,6 +71,14 @@ async function processVideoJob(job) {
   // Since the frontend only ever collects a text prompt for this
   // feature (see rox-ai-mobile.html), the correct fix is a real
   // text-to-video model that accepts { prompt } directly.
+  if (!process.env.REPLICATE_API_TOKEN) {
+    throw new Error('replicate_video_provider_not_configured');
+  }
+
+  const replicate = new Replicate({
+    auth: process.env.REPLICATE_API_TOKEN,
+  });
+
   const output = await replicate.run(VIDEO_MODEL, { input: { prompt } });
 
   await markJob(jobRowId, {

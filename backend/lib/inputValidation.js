@@ -19,7 +19,7 @@ const MAX_PROMPT_CHARS = Number(process.env.MAX_PROMPT_CHARS || 2000);
 const ALLOWED_FEATURES = new Set(['chat', 'code']);
 const ALLOWED_ROLES = new Set(['user', 'assistant', 'system']);
 const ALLOWED_AI_LANGUAGES =
-  new Set(['auto', 'ar', 'fr', 'en', 'es']);
+  new Set(['auto', 'ar', 'fr', 'en', 'es', 'zh']);
 
 const ALLOWED_AI_LENGTHS =
   new Set(['concise', 'balanced', 'detailed']);

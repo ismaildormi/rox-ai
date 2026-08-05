@@ -1,21 +1,50 @@
 {
   "_comment": "Provider pricing per model, USD per 1M tokens. Starting-point rates — keep in sync with real Anthropic/OpenRouter/Replicate billing dashboards manually. Wrong numbers here never affect real billing (credits already handle that), only the accuracy of margin metrics. Adding a new model or provider is a config edit here plus one entry in src/modules/ai/providers/ — see ARCHITECTURE.md.",
-
   "rates": {
-    "claude-sonnet-5": { "input": 3.0, "output": 15.0 },
-    "qwen/qwen3-coder-480b:free": { "input": 0, "output": 0 },
-    "deepseek/deepseek-r1:free": { "input": 0, "output": 0 }
+    "claude-sonnet-5": {
+      "input": 3.0,
+      "output": 15.0
+    },
+    "qwen/qwen3-coder-480b:free": {
+      "input": 0,
+      "output": 0
+    },
+    "deepseek/deepseek-r1:free": {
+      "input": 0,
+      "output": 0
+    },
+    "nvidia/nemotron-3-super-120b-a12b:free": {
+      "input": 0,
+      "output": 0
+    },
+    "openrouter/free": {
+      "input": 0,
+      "output": 0
+    }
   },
-
-  "defaultRate": { "input": 3.0, "output": 15.0 },
-
+  "defaultRate": {
+    "input": 3.0,
+    "output": 15.0
+  },
   "_not_yet_routed": "These providers are registered and callable (src/modules/ai/providers/index.js) but not yet in aiRouter.js's ROUTES chains — add a rate here (real pricing, not this placeholder) before putting any of them in a route, so margin metrics stay meaningful. gpt-4o-mini/gemini-1.5-flash/llama-3.3-70b-versatile below are examples, not commitments to those specific models.",
   "ratesUnrouted": {
-    "gpt-4o-mini": { "input": 0.15, "output": 0.6 },
-    "gemini-1.5-flash": { "input": 0.075, "output": 0.3 },
-    "llama-3.3-70b-versatile": { "input": 0, "output": 0 },
-    "local-self-hosted": { "input": 0, "output": 0, "note": "no per-token API cost, real cost is the hosting infra itself" }
+    "gpt-4o-mini": {
+      "input": 0.15,
+      "output": 0.6
+    },
+    "gemini-1.5-flash": {
+      "input": 0.075,
+      "output": 0.3
+    },
+    "llama-3.3-70b-versatile": {
+      "input": 0,
+      "output": 0
+    },
+    "local-self-hosted": {
+      "input": 0,
+      "output": 0,
+      "note": "no per-token API cost, real cost is the hosting infra itself"
+    }
   },
-
   "_extension_point": "custom_ai_models feature flag: when enabled, a user- or org-supplied model config (their own API key + endpoint) is validated against this same {input, output} shape and merged at runtime by src/modules/ai/providers/index.js — no schema change needed here."
 }

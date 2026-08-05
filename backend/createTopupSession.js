@@ -1,7 +1,11 @@
 const express = require('express');
-const Stripe = require('stripe');
+const {
+  getStripeClient,
+  missingEnvironmentVariables,
+  sendBillingUnavailable,
+  normalizeAppUrl,
+} = require('./lib/stripeClient');
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 const router = express.Router();
 
 const PRICE_PER_CREDIT_USD = Number(
@@ -13,7 +17,6 @@ const MIN_TOPUP_CREDITS = Math.ceil(
   MIN_TOPUP_USD / PRICE_PER_CREDIT_USD
 );
 
-// High safety ceiling per purchase. It can be raised later by env variable.
 const MAX_TOPUP_CREDITS = Number(
   process.env.MAX_TOPUP_CREDITS || 10000
 );
@@ -26,6 +29,16 @@ function calculateTopupAmountCents(credits) {
 }
 
 router.post('/', async (req, res) => {
+  const missing = missingEnvironmentVariables([
+    'STRIPE_SECRET_KEY',
+    'APP_URL',
+  ]);
+
+  const stripe = getStripeClient();
+  if (missing.length > 0 || !stripe) {
+    return sendBillingUnavailable(res, missing);
+  }
+
   const userId = req.userId;
   const userEmail = req.userEmail;
   const credits = Number(req.body?.credits);
@@ -45,37 +58,47 @@ router.post('/', async (req, res) => {
   }
 
   const amountCents = calculateTopupAmountCents(credits);
+  const appUrl = normalizeAppUrl();
 
-  const session = await stripe.checkout.sessions.create({
-    mode: 'payment',
-    payment_method_types: ['card'],
-    customer_email: userEmail,
-    line_items: [{
-      price_data: {
-        currency: 'usd',
-        product_data: {
-          name: `ROX AI - ${credits} credits`,
+  try {
+    const session = await stripe.checkout.sessions.create({
+      mode: 'payment',
+      payment_method_types: ['card'],
+      customer_email: userEmail,
+      line_items: [{
+        price_data: {
+          currency: 'usd',
+          product_data: {
+            name: `ROX AI - ${credits} credits`,
+          },
+          unit_amount: amountCents,
         },
-        unit_amount: amountCents,
+        quantity: 1,
+      }],
+      success_url: `${appUrl}/?topup=true`,
+      cancel_url: `${appUrl}/`,
+      metadata: {
+        userId,
+        type: 'topup',
+        credits: String(credits),
+        priceUsd: String(amountCents / 100),
       },
-      quantity: 1,
-    }],
-    success_url: `${process.env.APP_URL}/?topup=true`,
-    cancel_url: `${process.env.APP_URL}/`,
-    metadata: {
-      userId,
-      type: 'topup',
-      credits: String(credits),
-      priceUsd: String(amountCents / 100),
-    },
-  });
+    });
 
-  return res.json({
-    url: session.url,
-    credits,
-    priceUsd: amountCents / 100,
-    pricePerCreditUsd: amountCents / 100 / credits,
-  });
+    return res.json({
+      url: session.url,
+      credits,
+      priceUsd: amountCents / 100,
+      pricePerCreditUsd: amountCents / 100 / credits,
+    });
+  } catch (error) {
+    console.error('[billing/topup] checkout failed:', error.message);
+    return res.status(502).json({
+      status: 'error',
+      code: 'billing_provider_error',
+      message: 'The payment provider could not create a checkout session.',
+    });
+  }
 });
 
 module.exports = router;

@@ -1,13 +1,13 @@
 {
   "name": "rox-ai",
-  "version": "1.0.0",
+  "version": "0.64.0",
   "private": true,
-  "description": "ROX AI — single-CLI managed platform (see cli/rox.js and docs/CLI.md).",
+  "description": "ROX AI — Safe Bridge release with isolated profiles, read-only live verification, smoke tests, and guarded staging/production deployment.",
   "bin": {
     "rox": "./cli/rox.js"
   },
   "engines": {
-    "node": ">=18.15.0"
+    "node": ">=22"
   },
   "scripts": {
     "setup": "node ./cli/rox.js setup",
@@ -22,7 +22,13 @@
     "queue": "node ./cli/rox.js queue",
     "cron": "node ./cli/rox.js cron",
     "test:cli": "node cli/tests/test-group-dispatch.js && node cli/tests/test-ai-backend.js && node cli/tests/test-ops-commands.js && node cli/tests/test-cross-platform.js && node cli/tests/test-setup-redis-check.js",
-    "test:deploy": "node cli/tests/test-production-deploy-config.js"
+    "test:deploy": "node cli/tests/test-production-deploy-config.js",
+    "validate:release": "node tools/validate-release.js",
+    "manager": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File ./ROX-MANAGER.ps1",
+    "setup:windows": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File ./ROX-SETUP.ps1",
+    "test:windows-automation": "node tools/test-windows-automation.js",
+    "test:safe-bridge": "node tools/test-safe-bridge.js",
+    "smoke": "node tools/live-smoke.js"
   },
   "dependencies": {
     "cross-spawn": "^7.0.5",

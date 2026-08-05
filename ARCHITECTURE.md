@@ -168,7 +168,7 @@ mechanism going forward.
 
 ## 6. Frontend (mobile-first)
 
-`frontend/rox-ai-mobile_pro.html` is a working, deployed single-file
+`frontend/index.html` is a working, deployed single-file
 client. It is **not** being restructured in this pass — a live mobile UI
 is not worth destabilizing to satisfy an architecture diagram. The
 forward-compatible steps that don't require touching it today:
@@ -736,7 +736,7 @@ Backend is fully built (like §11, not a stub) — `disk_monitor` is
   reading its row in §4 first — some (agents, plugins) explicitly still
   need a design decision (sandboxing, execution model) that this pass
   deliberately left open rather than guessing at.
-- Don't rewrite `rox-ai-mobile_pro.html` just to "match" this
+- Don't rewrite `index.html` just to "match" this
   architecture — see §6.
 - Don't add a second registry/plugin mechanism for a new feature; extend
   `src/core/registry.js`'s existing bucket pattern instead.
