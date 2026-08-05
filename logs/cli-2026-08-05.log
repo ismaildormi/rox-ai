@@ -1,0 +1,28 @@
+{"ts":"2026-08-05T03:37:17.317Z","command":"doctor","level":"step","msg":"ROX AI — doctor"}
+{"ts":"2026-08-05T03:37:17.319Z","command":"doctor","level":"step","msg":"ROX AI — health check"}
+{"ts":"2026-08-05T03:37:18.279Z","command":"doctor","level":"err","msg":"rox-api: waiting restart"}
+{"ts":"2026-08-05T03:37:18.280Z","command":"doctor","level":"ok","msg":"rox-worker: online (restarts: 0)"}
+{"ts":"2026-08-05T03:37:18.337Z","command":"doctor","level":"err","msg":"API not responding on http://localhost:3001/healthz (fetch failed)"}
+{"ts":"2026-08-05T03:37:19.224Z","command":"doctor","level":"err","msg":"Disk space: 🟡 WARNING — 82.9% used"}
+{"ts":"2026-08-05T03:37:19.225Z","command":"doctor","level":"info","msg":"Run `rox doctor --fix` or `rox optimize` for cleanup, `rox monitor` for the full breakdown."}
+{"ts":"2026-08-05T03:37:19.226Z","command":"doctor","level":"err","msg":"One or more checks failed. Re-run with `rox health --fix` to attempt automatic recovery."}
+{"ts":"2026-08-05T03:39:39.476Z","command":"health","level":"step","msg":"ROX AI — health check (auto-fix enabled)"}
+{"ts":"2026-08-05T03:39:40.415Z","command":"health","level":"err","msg":"rox-api: waiting restart"}
+{"ts":"2026-08-05T03:39:40.416Z","command":"health","level":"info","msg":"Attempting to restart rox-api…"}
+{"ts":"2026-08-05T03:39:42.444Z","command":"health","level":"ok","msg":"rox-worker: online (restarts: 0)"}
+{"ts":"2026-08-05T03:39:42.576Z","command":"health","level":"err","msg":"API not responding on http://localhost:3001/healthz (fetch failed)"}
+{"ts":"2026-08-05T03:39:44.238Z","command":"health","level":"err","msg":"Disk space: 🟡 WARNING — 82.9% used"}
+{"ts":"2026-08-05T04:20:55.737Z","command":"health","level":"step","msg":"ROX AI — health check"}
+{"ts":"2026-08-05T04:20:56.459Z","command":"health","level":"err","msg":"rox-api: waiting restart"}
+{"ts":"2026-08-05T04:20:56.460Z","command":"health","level":"ok","msg":"rox-worker: online (restarts: 1)"}
+{"ts":"2026-08-05T04:20:56.513Z","command":"health","level":"err","msg":"API not responding on http://localhost:3001/healthz (fetch failed)"}
+{"ts":"2026-08-05T04:20:57.067Z","command":"health","level":"err","msg":"Disk space: 🟡 WARNING — 82.9% used"}
+{"ts":"2026-08-05T04:33:34.871Z","command":"health","level":"step","msg":"ROX AI — health check"}
+{"ts":"2026-08-05T04:33:35.938Z","command":"health","level":"err","msg":"Could not read pm2 process list: Unexpected token '>', \">>>> In-me\"... is not valid JSON"}
+{"ts":"2026-08-05T04:33:37.834Z","command":"health","level":"ok","msg":"API /healthz: ok (redis=ok, supabase=ok, uptime=97s)"}
+{"ts":"2026-08-05T04:33:38.218Z","command":"health","level":"err","msg":"Disk space: 🟡 WARNING — 82.9% used"}
+{"ts":"2026-08-05T04:38:09.439Z","command":"health","level":"step","msg":"ROX AI — health check"}
+{"ts":"2026-08-05T04:38:10.273Z","command":"health","level":"ok","msg":"rox-api: online (restarts: 0)"}
+{"ts":"2026-08-05T04:38:10.274Z","command":"health","level":"ok","msg":"rox-worker: online (restarts: 0)"}
+{"ts":"2026-08-05T04:38:10.914Z","command":"health","level":"ok","msg":"API /healthz: ok (redis=ok, supabase=ok, uptime=370s)"}
+{"ts":"2026-08-05T04:38:11.281Z","command":"health","level":"err","msg":"Disk space: 🟡 WARNING — 82.9% used"}

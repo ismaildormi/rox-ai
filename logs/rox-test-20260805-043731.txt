@@ -1,0 +1,15 @@
+﻿ROX AI validation - 2026-08-05T04:37:31.8020593+01:00
+Version: 0.64.0
+Active profile: local
+Passed: 5
+Failed: 1
+Skipped: 0
+Core configured: 3/4
+READY SCORE: 82%
+
+FAIL | Required project files | Exit code 1
+PASS | Node.js version
+PASS | Frontend and backend JavaScript syntax
+PASS | Windows automation static tests
+PASS | Safe Bridge and deployment gates
+PASS | Backend launch blockers
