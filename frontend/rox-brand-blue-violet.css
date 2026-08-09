@@ -1,0 +1,3435 @@
+﻿/* =========================================================
+   ROX AI — BLUE / VIOLET IDENTITY V2
+   Visual target: official reference board
+   ========================================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Tajawal:wght@400;500;600;700;800&display=swap');
+
+:root,
+html[data-rox-theme="dark"],
+html[data-rox-theme="light"]{
+  color-scheme:dark;
+
+  --sidebar-w:214px !important;
+
+  --bg:#0B0F1A !important;
+  --bg-2:#070A12 !important;
+
+  --panel:#0F172A !important;
+  --panel-2:#121B2D !important;
+  --panel-3:#162138 !important;
+
+  --border:#23304A !important;
+  --border-soft:rgba(99,102,241,.28) !important;
+
+  --text:#E6ECFF !important;
+  --text-dim:#98A4BE !important;
+  --text-faint:#66718F !important;
+
+  --ember-1:#2563EB !important;
+  --ember-2:#7C3AED !important;
+
+  --ember-grad:
+    linear-gradient(
+      105deg,
+      #315BDC 0%,
+      #4F46D8 48%,
+      #6D35C5 100%
+    ) !important;
+
+  --blue-1:#2563EB !important;
+  --blue-2:#6366F1 !important;
+
+  --blue-grad:
+    linear-gradient(
+      135deg,
+      #2563EB,
+      #6366F1
+    ) !important;
+
+  --crimson-1:#6366F1 !important;
+  --crimson-2:#8B5CF6 !important;
+
+  --crimson-grad:
+    linear-gradient(
+      135deg,
+      #6366F1,
+      #8B5CF6
+    ) !important;
+
+  --danger:#FB7185 !important;
+
+  --shadow-ember:
+    0 8px 24px -10px rgba(79,70,229,.42) !important;
+}
+
+
+/* ---------- GLOBAL ---------- */
+
+html,
+body{
+  background:#0B0F1A !important;
+}
+
+body{
+  color:#E6ECFF !important;
+
+  font-family:
+    "Plus Jakarta Sans",
+    "Tajawal",
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    sans-serif !important;
+
+  background:
+    radial-gradient(
+      circle at 76% -10%,
+      rgba(37,99,235,.065),
+      transparent 31%
+    ),
+    #0B0F1A !important;
+}
+
+.ambient{
+  display:none !important;
+}
+
+.app,
+.main,
+.content{
+  background:transparent !important;
+}
+
+
+/* ---------- SIDEBAR ---------- */
+
+.sidebar{
+  width:214px !important;
+  min-width:214px !important;
+
+  background:
+    linear-gradient(
+      180deg,
+      #0D1424 0%,
+      #0A101D 100%
+    ) !important;
+
+  border-right:
+    1px solid rgba(148,163,184,.105) !important;
+
+  box-shadow:
+    none !important;
+
+  backdrop-filter:none !important;
+}
+
+.sidebar .brand,
+.brand{
+  color:#F4F7FF !important;
+
+  font-weight:700 !important;
+  letter-spacing:-.3px !important;
+}
+
+.sidebar .brand{
+  padding-left:1px !important;
+}
+
+.brand .logo{
+  width:34px !important;
+  height:34px !important;
+  border-radius:9px !important;
+
+  color:#FFFFFF !important;
+
+  background:
+    radial-gradient(
+      circle at 20% 12%,
+      rgba(37,99,235,.55),
+      transparent 36%
+    ),
+    radial-gradient(
+      circle at 86% 84%,
+      rgba(139,92,246,.38),
+      transparent 43%
+    ),
+    #0B1120 !important;
+
+  border:
+    1px solid rgba(99,102,241,.55) !important;
+
+  box-shadow:
+    0 0 13px rgba(37,99,235,.20),
+    0 0 16px rgba(139,92,246,.12),
+    inset 0 1px 0 rgba(255,255,255,.12) !important;
+}
+
+
+/* ---------- NAVIGATION ---------- */
+
+.nav-item{
+  min-height:40px !important;
+
+  padding:
+    0 12px !important;
+
+  border-radius:
+    9px !important;
+
+  color:#9AA6BF !important;
+
+  border:
+    1px solid transparent !important;
+
+  font-size:
+    13px !important;
+
+  font-weight:
+    500 !important;
+
+  box-shadow:
+    none !important;
+
+  transition:
+    background .16s ease,
+    color .16s ease,
+    border-color .16s ease !important;
+}
+
+.nav-item:hover{
+  color:#E8EDFF !important;
+
+  background:
+    rgba(99,102,241,.055) !important;
+
+  border-color:
+    rgba(129,140,248,.07) !important;
+}
+
+.nav-item.active,
+.nav-item.active:hover{
+  color:#FFFFFF !important;
+
+  background:
+    linear-gradient(
+      100deg,
+      rgba(49,91,220,.92) 0%,
+      rgba(79,70,216,.90) 54%,
+      rgba(109,53,197,.88) 100%
+    ) !important;
+
+  border:
+    1px solid rgba(129,140,248,.25) !important;
+
+  box-shadow:
+    0 7px 20px rgba(49,70,190,.18),
+    inset 0 1px 0 rgba(255,255,255,.12) !important;
+}
+
+.nav-item .ic{
+  width:18px !important;
+  font-size:14px !important;
+
+  filter:
+    saturate(.72)
+    brightness(.94);
+}
+
+
+/* ---------- TOPBAR ---------- */
+
+.topbar{
+  min-height:68px !important;
+
+  padding:
+    0 28px !important;
+
+  background:
+    rgba(11,15,26,.96) !important;
+
+  border-bottom:
+    1px solid rgba(148,163,184,.09) !important;
+
+  box-shadow:none !important;
+
+  backdrop-filter:
+    blur(14px) !important;
+}
+
+.top-ic{
+  width:38px !important;
+  height:38px !important;
+
+  border-radius:
+    10px !important;
+
+  color:#CDD6EE !important;
+
+  background:
+    #10192B !important;
+
+  border:
+    1px solid rgba(148,163,184,.14) !important;
+
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.035) !important;
+}
+
+.top-ic:hover{
+  background:#131E33 !important;
+
+  color:white !important;
+
+  border-color:
+    rgba(99,102,241,.25) !important;
+}
+
+
+/* ---------- SEARCH ---------- */
+
+.search{
+  width:340px !important;
+  max-width:42vw !important;
+
+  min-height:42px !important;
+
+  border-radius:
+    10px !important;
+
+  color:#C8D2EA !important;
+
+  background:
+    #0F1728 !important;
+
+  border:
+    1px solid rgba(148,163,184,.14) !important;
+
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.025) !important;
+}
+
+.search:hover,
+.search:focus,
+.search:focus-within{
+  background:#101A2C !important;
+
+  border-color:
+    rgba(99,102,241,.30) !important;
+
+  box-shadow:
+    0 0 0 3px rgba(99,102,241,.045) !important;
+}
+
+
+/* ---------- MAIN CONTENT ---------- */
+
+.content{
+  padding:
+    24px 28px 46px !important;
+}
+
+
+/* ---------- HERO ---------- */
+
+.hero{
+  min-height:205px !important;
+
+  padding:
+    28px 30px !important;
+
+  border-radius:
+    15px !important;
+
+  color:#EAF0FF !important;
+
+  background:
+    radial-gradient(
+      circle at 84% 48%,
+      rgba(99,102,241,.095) 0%,
+      rgba(99,102,241,.035) 24%,
+      transparent 44%
+    ),
+    linear-gradient(
+      145deg,
+      #111A2D 0%,
+      #0E1728 52%,
+      #0C1423 100%
+    ) !important;
+
+  border:
+    1px solid rgba(148,163,184,.14) !important;
+
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.025),
+    0 10px 30px rgba(0,0,0,.11) !important;
+
+  overflow:hidden !important;
+}
+
+.hero::before{
+  content:"" !important;
+
+  position:absolute !important;
+
+  width:310px !important;
+  height:310px !important;
+
+  top:50% !important;
+  right:-45px !important;
+  left:auto !important;
+  bottom:auto !important;
+
+  transform:
+    translateY(-50%) !important;
+
+  border-radius:
+    50% !important;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(99,102,241,.095),
+      rgba(139,92,246,.025) 44%,
+      transparent 70%
+    ) !important;
+
+  filter:none !important;
+  opacity:1 !important;
+}
+
+.hero-text{
+  position:relative !important;
+  z-index:2 !important;
+}
+
+.hero h1{
+  margin:
+    0 0 7px !important;
+
+  color:#F0F4FF !important;
+
+  font-size:
+    27px !important;
+
+  line-height:
+    1.15 !important;
+
+  font-weight:
+    700 !important;
+
+  letter-spacing:
+    -.75px !important;
+}
+
+.hero p{
+  margin:
+    0 0 15px !important;
+
+  color:#A4AFC7 !important;
+
+  font-size:
+    13.5px !important;
+}
+
+
+/* ---------- HERO BADGES ---------- */
+
+.hero .badge,
+.hero [class*="badge"],
+.hero .chip,
+.hero [class*="chip"]{
+  background:
+    rgba(15,23,42,.70) !important;
+
+  border:
+    1px solid rgba(148,163,184,.12) !important;
+
+  color:#C8D2E8 !important;
+
+  box-shadow:none !important;
+}
+
+
+/* ---------- ORBIT ---------- */
+
+@media (min-width:900px){
+
+  .hero-orbit{
+    display:block !important;
+
+    width:170px !important;
+    height:170px !important;
+
+    margin-right:4px !important;
+  }
+}
+
+.hero-orbit .ring{
+  border:
+    1px dashed rgba(129,140,248,.22) !important;
+
+  box-shadow:none !important;
+}
+
+.hero-orbit .ring.r2{
+  border-color:
+    rgba(139,92,246,.19) !important;
+}
+
+.hero-orbit .core-lg{
+  color:#FFFFFF !important;
+
+  background:
+    radial-gradient(
+      circle at 32% 24%,
+      #818CF8 0%,
+      #6366F1 43%,
+      #533CC3 72%,
+      #36206F 100%
+    ) !important;
+
+  border:
+    1px solid rgba(196,181,253,.32) !important;
+
+  box-shadow:
+    0 0 18px rgba(99,102,241,.32),
+    0 0 34px rgba(139,92,246,.13),
+    inset 0 1px 0 rgba(255,255,255,.18) !important;
+}
+
+.orbit-ic{
+  background:
+    #10192B !important;
+
+  border:
+    1px solid rgba(148,163,184,.13) !important;
+
+  box-shadow:
+    0 7px 18px rgba(0,0,0,.18),
+    inset 0 1px 0 rgba(255,255,255,.035) !important;
+}
+
+
+/* ---------- FEATURE GRID ---------- */
+
+.feature-grid{
+  grid-template-columns:
+    repeat(3,minmax(0,1fr)) !important;
+
+  gap:
+    18px !important;
+}
+
+
+/* ---------- FEATURE CARDS ---------- */
+
+.fcard{
+  padding:
+    15px !important;
+
+  border-radius:
+    13px !important;
+
+  background:
+    linear-gradient(
+      150deg,
+      #111A2D,
+      #0E1727
+    ) !important;
+
+  border:
+    1px solid rgba(148,163,184,.13) !important;
+
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.025),
+    0 8px 24px rgba(0,0,0,.085) !important;
+}
+
+.fcard:hover{
+  transform:
+    translateY(-2px) !important;
+
+  border-color:
+    rgba(99,102,241,.25) !important;
+
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.035),
+    0 12px 28px rgba(0,0,0,.13) !important;
+}
+
+.fcard h3{
+  color:#E7ECFA !important;
+
+  font-size:
+    14px !important;
+
+  font-weight:
+    600 !important;
+}
+
+.fcard p{
+  color:#98A4BC !important;
+
+  font-size:
+    11.5px !important;
+}
+
+.fcard-ic{
+  width:32px !important;
+  height:32px !important;
+
+  border-radius:
+    8px !important;
+
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.055) !important;
+}
+
+.fcard-thumb{
+  height:
+    92px !important;
+
+  border-radius:
+    9px !important;
+
+  border:
+    1px solid rgba(255,255,255,.045) !important;
+
+  box-shadow:none !important;
+}
+
+.fcard.rox-ip{
+  border-color:
+    rgba(34,197,94,.21) !important;
+}
+
+
+/* ---------- BUTTONS ---------- */
+
+.fcard-btn{
+  border-radius:
+    9px !important;
+
+  color:#FFFFFF !important;
+
+  background:
+    linear-gradient(
+      100deg,
+      #315BDC,
+      #4F46D8 52%,
+      #7138C5
+    ) !important;
+
+  border:
+    1px solid rgba(129,140,248,.20) !important;
+
+  box-shadow:
+    0 6px 17px rgba(79,70,229,.13) !important;
+}
+
+
+/* ---------- FEATURE SCREENS ---------- */
+
+.feature-screen{
+  background:
+    #0B0F1A !important;
+}
+
+.feature-screen::before,
+.feature-screen::after{
+  opacity:.18 !important;
+}
+
+.feature-topbar{
+  background:
+    rgba(11,15,26,.96) !important;
+
+  border-bottom:
+    1px solid rgba(148,163,184,.09) !important;
+
+  box-shadow:none !important;
+}
+
+
+/* ---------- FORCE OLD LIGHT THEME OUT ---------- */
+
+html[data-rox-theme="light"] body{
+  color:#E6ECFF !important;
+  background:#0B0F1A !important;
+}
+
+html[data-rox-theme="light"] .rox-settings-nav,
+html[data-rox-theme="light"] .rox-settings-section,
+html[data-rox-theme="light"] .rox-settings-hero .placeholder-view{
+  color:#E6ECFF !important;
+
+  background:
+    #0F172A !important;
+
+  border-color:
+    rgba(148,163,184,.13) !important;
+
+  box-shadow:
+    0 10px 28px rgba(0,0,0,.12) !important;
+}
+
+html[data-rox-theme="light"] .rox-settings-row,
+html[data-rox-theme="light"] .rox-settings-toggle-row{
+  color:#E6ECFF !important;
+
+  background:
+    #111B2E !important;
+
+  border-color:
+    rgba(148,163,184,.11) !important;
+}
+
+html[data-rox-theme="light"] .rox-settings-row select,
+html[data-rox-theme="light"] .rox-settings-row select option{
+  color:#E6ECFF !important;
+  background:#111B2E !important;
+}
+
+
+/* ---------- RESPONSIVE ---------- */
+
+@media (max-width:1100px){
+
+  :root{
+    --sidebar-w:205px !important;
+  }
+
+  .sidebar{
+    width:205px !important;
+    min-width:205px !important;
+  }
+
+  .content{
+    padding:
+      22px !important;
+  }
+
+  .hero{
+    padding:
+      25px !important;
+  }
+}
+
+@media (max-width:899px){
+
+  .topbar{
+    min-height:62px !important;
+    padding:0 16px !important;
+  }
+
+  .content{
+    padding:
+      16px !important;
+  }
+
+  .search{
+    width:100% !important;
+    max-width:none !important;
+  }
+
+  .hero{
+    min-height:auto !important;
+
+    padding:
+      22px !important;
+
+    border-radius:
+      14px !important;
+  }
+
+  .hero h1{
+    font-size:
+      22px !important;
+  }
+
+  .feature-grid{
+    grid-template-columns:
+      1fr !important;
+
+    gap:
+      14px !important;
+  }
+}
+
+/* ROX BLUE / VIOLET V2 END */
+/* =========================================================
+   ROX BLUE-VIOLET V2.1 REFERENCE MATCH
+   Darker shell / restrained glow / premium contrast
+   ========================================================= */
+
+/* SIDEBAR */
+.sidebar{
+  background:
+    linear-gradient(
+      180deg,
+      #0B1220 0%,
+      #090F1B 100%
+    ) !important;
+
+  border-right:
+    1px solid rgba(148,163,184,.075) !important;
+}
+
+/* TOPBAR */
+.topbar{
+  background:#0B111E !important;
+
+  border-bottom:
+    1px solid rgba(148,163,184,.075) !important;
+}
+
+/* SEARCH */
+.search{
+  background:#0D1524 !important;
+
+  border:
+    1px solid rgba(148,163,184,.11) !important;
+
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.018) !important;
+}
+
+.search:hover,
+.search:focus,
+.search:focus-within{
+  background:#0F1828 !important;
+
+  border-color:
+    rgba(99,102,241,.22) !important;
+
+  box-shadow:
+    0 0 0 2px rgba(99,102,241,.035) !important;
+}
+
+/* ACTIVE NAV — reference has restrained indigo, not neon cyan */
+.nav-item.active,
+.nav-item.active:hover{
+  background:
+    linear-gradient(
+      100deg,
+      #3349B7 0%,
+      #443CBF 54%,
+      #5131A8 100%
+    ) !important;
+
+  border:
+    1px solid rgba(129,140,248,.18) !important;
+
+  box-shadow:
+    0 5px 15px rgba(49,46,129,.18),
+    inset 0 1px 0 rgba(255,255,255,.09) !important;
+}
+
+/* HERO — main correction */
+.hero,
+html[data-rox-theme="light"] .hero{
+  background:
+    linear-gradient(
+      145deg,
+      #101827 0%,
+      #0D1523 50%,
+      #0B1320 100%
+    ) !important;
+
+  border:
+    1px solid rgba(148,163,184,.105) !important;
+
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.018),
+    0 8px 26px rgba(0,0,0,.12) !important;
+}
+
+.hero::before{
+  content:"" !important;
+
+  position:absolute !important;
+
+  width:290px !important;
+  height:290px !important;
+
+  top:50% !important;
+  right:-54px !important;
+  bottom:auto !important;
+  left:auto !important;
+
+  transform:
+    translateY(-50%) !important;
+
+  border-radius:50% !important;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(99,102,241,.055) 0%,
+      rgba(124,58,237,.025) 34%,
+      transparent 69%
+    ) !important;
+
+  opacity:1 !important;
+  filter:none !important;
+}
+
+/* HERO TEXT */
+.hero h1{
+  color:#EDF2FF !important;
+
+  text-shadow:none !important;
+}
+
+.hero p{
+  color:#9CA8C0 !important;
+}
+
+/* PILLS / BADGES */
+.pill-row > *{
+  color:#C1CAE0 !important;
+
+  background:
+    rgba(12,20,34,.82) !important;
+
+  border:
+    1px solid rgba(148,163,184,.12) !important;
+
+  box-shadow:none !important;
+}
+
+/* ORBIT */
+.hero-orbit .ring{
+  border-color:
+    rgba(129,140,248,.15) !important;
+}
+
+.hero-orbit .ring.r2{
+  border-color:
+    rgba(139,92,246,.13) !important;
+}
+
+.hero-orbit .core-lg{
+  background:
+    radial-gradient(
+      circle at 35% 25%,
+      #777FE9 0%,
+      #5855D2 43%,
+      #4533A5 70%,
+      #271B63 100%
+    ) !important;
+
+  box-shadow:
+    0 0 13px rgba(99,102,241,.25),
+    0 0 25px rgba(124,58,237,.09),
+    inset 0 1px 0 rgba(255,255,255,.15) !important;
+}
+
+/* CARDS */
+.fcard{
+  background:
+    linear-gradient(
+      150deg,
+      #101827 0%,
+      #0D1523 100%
+    ) !important;
+
+  border:
+    1px solid rgba(148,163,184,.10) !important;
+
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.018),
+    0 6px 18px rgba(0,0,0,.08) !important;
+}
+
+.fcard:hover{
+  border-color:
+    rgba(99,102,241,.20) !important;
+
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.025),
+    0 9px 22px rgba(0,0,0,.11) !important;
+}
+
+.fcard.rox-ip{
+  border-color:
+    rgba(34,197,94,.16) !important;
+}
+
+/* FEATURE THUMBNAILS — reduce neon dominance */
+.fcard-thumb{
+  opacity:.88 !important;
+
+  filter:
+    saturate(.88)
+    brightness(.91) !important;
+}
+
+/* TOP ICONS */
+.top-ic{
+  background:#0F1727 !important;
+
+  border-color:
+    rgba(148,163,184,.10) !important;
+
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.025) !important;
+}
+
+/* MAIN BACKGROUND */
+body,
+html[data-rox-theme="light"] body{
+  background:
+    radial-gradient(
+      circle at 82% -12%,
+      rgba(79,70,229,.035),
+      transparent 31%
+    ),
+    #0B0F1A !important;
+}
+
+/* ROX BLUE-VIOLET V2.1 REFERENCE MATCH END */
+/* ==========================================================
+   ROX BLUE-VIOLET V3 LOCKED REFERENCE
+   Premium Midnight / Cobalt / Indigo / Violet
+   ========================================================== */
+
+@media (min-width:900px){
+
+  html,
+  body{
+    background:#080F1A !important;
+    color:#E6ECFF !important;
+  }
+
+  body{
+    background:
+      radial-gradient(circle at 82% 4%,rgba(99,102,241,.055),transparent 28%),
+      radial-gradient(circle at 45% 110%,rgba(37,99,235,.035),transparent 34%),
+      #080F1A !important;
+  }
+
+  .app{
+    background:transparent !important;
+  }
+
+  /* ===== SIDEBAR ===== */
+
+  .sidebar{
+    width:190px !important;
+    flex:0 0 190px !important;
+
+    padding:
+      18px 13px 14px !important;
+
+    background:
+      linear-gradient(
+        180deg,
+        #0A111D 0%,
+        #080E18 100%
+      ) !important;
+
+    border-right:
+      1px solid rgba(148,163,184,.075) !important;
+
+    box-shadow:
+      8px 0 28px rgba(0,0,0,.10) !important;
+  }
+
+  .brand{
+    gap:9px !important;
+    font-size:16px !important;
+    font-weight:700 !important;
+    letter-spacing:-.02em !important;
+  }
+
+  .brand .logo{
+    width:32px !important;
+    height:32px !important;
+
+    border-radius:10px !important;
+
+    background:
+      radial-gradient(circle at 28% 18%,rgba(37,99,235,.85),transparent 34%),
+      linear-gradient(145deg,#101B42,#171346 58%,#301663) !important;
+
+    border:
+      1px solid rgba(129,140,248,.34) !important;
+
+    box-shadow:
+      0 0 0 1px rgba(37,99,235,.08),
+      0 0 18px rgba(79,70,229,.17),
+      inset 0 1px 0 rgba(255,255,255,.12) !important;
+  }
+
+  .nav-item{
+    min-height:38px !important;
+    padding:9px 10px !important;
+
+    margin:
+      2px 0 !important;
+
+    gap:9px !important;
+
+    border-radius:
+      9px !important;
+
+    color:
+      #9AA7BE !important;
+
+    font-size:
+      12.5px !important;
+
+    font-weight:
+      550 !important;
+
+    border:
+      1px solid transparent !important;
+  }
+
+  .nav-item:hover{
+    background:
+      rgba(255,255,255,.025) !important;
+
+    color:#DDE5F7 !important;
+  }
+
+  .nav-item.active,
+  .nav-item.active:hover{
+    color:#FFFFFF !important;
+
+    background:
+      linear-gradient(
+        100deg,
+        #3157CC 0%,
+        #4F46E5 52%,
+        #6D39D9 100%
+      ) !important;
+
+    border:
+      1px solid rgba(129,140,248,.23) !important;
+
+    box-shadow:
+      0 5px 15px rgba(49,46,129,.20),
+      inset 0 1px 0 rgba(255,255,255,.13) !important;
+  }
+
+  .sidebar hr,
+  .sidebar .divider{
+    border-color:
+      rgba(148,163,184,.08) !important;
+  }
+
+  /* ===== MAIN SHELL ===== */
+
+  .main{
+    background:
+      #080F1A !important;
+  }
+
+  .content{
+    padding:
+      22px 24px 34px !important;
+  }
+
+  /* ===== TOPBAR ===== */
+
+  .topbar{
+    min-height:64px !important;
+
+    padding:
+      12px 24px !important;
+
+    background:
+      rgba(8,15,26,.96) !important;
+
+    border-bottom:
+      1px solid rgba(148,163,184,.075) !important;
+
+    box-shadow:
+      none !important;
+  }
+
+  .search{
+    width:
+      min(360px,40vw) !important;
+
+    min-height:
+      38px !important;
+
+    background:
+      #0B1422 !important;
+
+    border:
+      1px solid rgba(148,163,184,.105) !important;
+
+    border-radius:
+      9px !important;
+
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,.018) !important;
+
+    color:
+      #DCE5F7 !important;
+  }
+
+  .search:hover,
+  .search:focus-within{
+    border-color:
+      rgba(99,102,241,.23) !important;
+
+    background:
+      #0D1727 !important;
+  }
+
+  .top-ic{
+    width:36px !important;
+    height:36px !important;
+
+    border-radius:
+      9px !important;
+
+    background:
+      #0D1625 !important;
+
+    border:
+      1px solid rgba(148,163,184,.105) !important;
+
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,.025) !important;
+  }
+
+  /* ===== HERO ===== */
+
+  .hero{
+    min-height:
+      176px !important;
+
+    padding:
+      27px 30px !important;
+
+    margin-bottom:
+      18px !important;
+
+    border-radius:
+      14px !important;
+
+    background:
+      linear-gradient(
+        145deg,
+        #0D1625 0%,
+        #0B1421 52%,
+        #09111D 100%
+      ) !important;
+
+    border:
+      1px solid rgba(148,163,184,.095) !important;
+
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,.018),
+      0 8px 28px rgba(0,0,0,.13) !important;
+  }
+
+  .hero::before{
+    width:
+      330px !important;
+
+    height:
+      330px !important;
+
+    top:
+      50% !important;
+
+    right:
+      -72px !important;
+
+    left:
+      auto !important;
+
+    bottom:
+      auto !important;
+
+    transform:
+      translateY(-50%) !important;
+
+    border-radius:
+      50% !important;
+
+    background:
+      radial-gradient(
+        circle,
+        rgba(99,102,241,.065) 0%,
+        rgba(79,70,229,.026) 36%,
+        transparent 69%
+      ) !important;
+
+    filter:none !important;
+  }
+
+  .hero h1{
+    margin:
+      0 0 7px !important;
+
+    font-size:
+      26px !important;
+
+    line-height:
+      1.13 !important;
+
+    font-weight:
+      750 !important;
+
+    letter-spacing:
+      -.035em !important;
+
+    color:
+      #F1F5FF !important;
+
+    text-shadow:
+      none !important;
+  }
+
+  .hero p{
+    margin-bottom:
+      14px !important;
+
+    font-size:
+      13px !important;
+
+    color:
+      #8F9DB5 !important;
+  }
+
+  .pill-row{
+    gap:
+      7px !important;
+  }
+
+  .pill-row > *{
+    min-height:
+      25px !important;
+
+    padding:
+      5px 9px !important;
+
+    border-radius:
+      999px !important;
+
+    font-size:
+      10.5px !important;
+
+    background:
+      rgba(8,15,26,.82) !important;
+
+    color:
+      #B9C5DA !important;
+
+    border:
+      1px solid rgba(148,163,184,.115) !important;
+
+    box-shadow:
+      none !important;
+  }
+
+  /* ===== ORBIT ===== */
+
+  .hero-orbit{
+    width:
+      174px !important;
+
+    height:
+      174px !important;
+  }
+
+  .hero-orbit .ring{
+    border-color:
+      rgba(99,102,241,.15) !important;
+  }
+
+  .hero-orbit .ring.r2{
+    border-color:
+      rgba(139,92,246,.12) !important;
+  }
+
+  .hero-orbit .core-lg{
+    background:
+      radial-gradient(
+        circle at 35% 25%,
+        #7784EF 0%,
+        #5E5CE2 38%,
+        #5140BC 65%,
+        #26195E 100%
+      ) !important;
+
+    box-shadow:
+      0 0 12px rgba(99,102,241,.25),
+      0 0 25px rgba(124,58,237,.09),
+      inset 0 1px 0 rgba(255,255,255,.17) !important;
+  }
+
+  .orbit-ic{
+    width:
+      34px !important;
+
+    height:
+      34px !important;
+
+    border-radius:
+      9px !important;
+
+    background:
+      #0E1726 !important;
+
+    border:
+      1px solid rgba(148,163,184,.10) !important;
+
+    box-shadow:
+      0 7px 18px rgba(0,0,0,.13) !important;
+  }
+
+  /* ===== FEATURE GRID ===== */
+
+  .feature-grid{
+    grid-template-columns:
+      repeat(3,minmax(0,1fr)) !important;
+
+    gap:
+      14px !important;
+
+    margin-bottom:
+      20px !important;
+  }
+
+  .fcard{
+    padding:
+      14px !important;
+
+    border-radius:
+      13px !important;
+
+    background:
+      linear-gradient(
+        150deg,
+        #0D1625 0%,
+        #0A1320 100%
+      ) !important;
+
+    border:
+      1px solid rgba(148,163,184,.09) !important;
+
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,.016),
+      0 7px 20px rgba(0,0,0,.09) !important;
+
+    transition:
+      transform .18s ease,
+      border-color .18s ease,
+      background .18s ease !important;
+  }
+
+  .fcard:hover{
+    transform:
+      translateY(-2px) !important;
+
+    border-color:
+      rgba(99,102,241,.20) !important;
+
+    background:
+      linear-gradient(
+        150deg,
+        #101A2A 0%,
+        #0B1422 100%
+      ) !important;
+
+    box-shadow:
+      0 10px 24px rgba(0,0,0,.12) !important;
+  }
+
+  .fcard.rox-ip{
+    border-color:
+      rgba(34,197,94,.14) !important;
+  }
+
+  .fcard-head{
+    margin-bottom:
+      8px !important;
+  }
+
+  .fcard-ic{
+    width:
+      31px !important;
+
+    height:
+      31px !important;
+
+    border-radius:
+      8px !important;
+  }
+
+  .fcard h3{
+    font-size:
+      13px !important;
+
+    font-weight:
+      650 !important;
+
+    color:
+      #E8EEFA !important;
+  }
+
+  .fcard p{
+    min-height:
+      32px !important;
+
+    margin-bottom:
+      10px !important;
+
+    font-size:
+      10.8px !important;
+
+    line-height:
+      1.45 !important;
+
+    color:
+      #8796AE !important;
+  }
+
+  .fcard-thumb{
+    height:
+      93px !important;
+
+    margin-bottom:
+      10px !important;
+
+    border-radius:
+      10px !important;
+
+    opacity:
+      .83 !important;
+
+    filter:
+      saturate(.82)
+      brightness(.88)
+      contrast(.98) !important;
+
+    box-shadow:
+      inset 0 0 0 1px rgba(255,255,255,.035) !important;
+  }
+
+  .fcard-form input,
+  .fcard-form select{
+    min-height:
+      35px !important;
+
+    background:
+      #09121F !important;
+
+    border:
+      1px solid rgba(148,163,184,.10) !important;
+
+    border-radius:
+      8px !important;
+
+    color:
+      #DCE5F5 !important;
+
+    box-shadow:
+      none !important;
+  }
+
+  /* ===== TEXT / GLOBAL DETAIL ===== */
+
+  .content,
+  .sidebar,
+  .topbar{
+    font-family:
+      Inter,
+      "Plus Jakarta Sans",
+      ui-sans-serif,
+      system-ui,
+      -apple-system,
+      BlinkMacSystemFont,
+      "Segoe UI",
+      sans-serif !important;
+  }
+
+}
+
+/* ROX BLUE-VIOLET V3 LOCKED REFERENCE END */
+/* =========================================================
+   ROX SIDEBAR V4 REFERENCE LOCK
+   ========================================================= */
+
+@media (min-width:900px){
+
+  .sidebar{
+    width:182px !important;
+    flex:0 0 182px !important;
+    padding:17px 12px 14px !important;
+
+    background:
+      linear-gradient(
+        180deg,
+        #080F1A 0%,
+        #07101B 55%,
+        #060D17 100%
+      ) !important;
+
+    border-right:
+      1px solid rgba(148,163,184,.075) !important;
+
+    box-shadow:
+      10px 0 32px rgba(0,0,0,.12) !important;
+  }
+
+  .sidebar .brand{
+    min-height:42px !important;
+    padding:0 7px 13px !important;
+    margin-bottom:10px !important;
+
+    color:#F4F7FF !important;
+
+    font-size:15.5px !important;
+    font-weight:750 !important;
+    letter-spacing:-.025em !important;
+  }
+
+  .sidebar .brand .logo{
+    width:31px !important;
+    height:31px !important;
+
+    border-radius:9px !important;
+
+    color:#FFFFFF !important;
+
+    background:
+      radial-gradient(circle at 25% 20%,rgba(37,99,235,.88),transparent 34%),
+      radial-gradient(circle at 86% 84%,rgba(139,92,246,.62),transparent 36%),
+      #0C1530 !important;
+
+    border:
+      1px solid rgba(129,140,248,.34) !important;
+
+    box-shadow:
+      0 0 0 1px rgba(37,99,235,.08),
+      0 0 16px rgba(59,130,246,.18),
+      0 0 24px rgba(124,58,237,.08),
+      inset 0 1px 0 rgba(255,255,255,.16) !important;
+  }
+
+  .nav-item{
+    width:100% !important;
+    min-height:35px !important;
+
+    margin:1px 0 !important;
+    padding:8px 9px !important;
+
+    gap:9px !important;
+
+    border-radius:8px !important;
+
+    color:#8F9CB1 !important;
+
+    font-size:12px !important;
+    font-weight:560 !important;
+    letter-spacing:-.01em !important;
+
+    background:transparent !important;
+    border:1px solid transparent !important;
+
+    box-shadow:none !important;
+  }
+
+  .nav-item .ic{
+    width:17px !important;
+
+    font-size:14px !important;
+
+    opacity:.72 !important;
+
+    filter:
+      grayscale(1)
+      saturate(0)
+      brightness(1.35) !important;
+  }
+
+  .nav-item:hover{
+    color:#DCE4F3 !important;
+
+    background:
+      rgba(255,255,255,.027) !important;
+
+    border-color:
+      rgba(148,163,184,.045) !important;
+  }
+
+  .nav-item:hover .ic{
+    opacity:.92 !important;
+  }
+
+  .nav-item.active,
+  .nav-item.active:hover{
+    color:#FFFFFF !important;
+
+    background:
+      linear-gradient(
+        100deg,
+        #365BCB 0%,
+        #4A50DB 48%,
+        #6538C7 100%
+      ) !important;
+
+    border:
+      1px solid rgba(129,140,248,.24) !important;
+
+    box-shadow:
+      0 5px 15px rgba(49,46,129,.19),
+      inset 0 1px 0 rgba(255,255,255,.14) !important;
+  }
+
+  .nav-item.active .ic{
+    opacity:1 !important;
+
+    filter:
+      grayscale(1)
+      saturate(0)
+      brightness(2.25) !important;
+  }
+
+  .sidebar-bottom{
+    padding-top:10px !important;
+  }
+
+  .sidebar hr{
+    margin:10px 7px !important;
+
+    border:0 !important;
+    border-top:
+      1px solid rgba(148,163,184,.08) !important;
+  }
+
+}
+
+/* ROX SIDEBAR V4 REFERENCE LOCK END */
+/* =========================================================
+   ROX SIDEBAR SEAM FIX V4.1
+   Seamless sidebar like visual reference
+   ========================================================= */
+
+@media (min-width:900px){
+
+  .sidebar{
+    border-right:
+      1px solid rgba(148,163,184,.025) !important;
+
+    box-shadow:
+      none !important;
+
+    scrollbar-width:
+      none !important;
+
+    -ms-overflow-style:
+      none !important;
+  }
+
+  .sidebar::-webkit-scrollbar{
+    width:0 !important;
+    height:0 !important;
+    display:none !important;
+  }
+
+  .sidebar::-webkit-scrollbar-track,
+  .sidebar::-webkit-scrollbar-thumb{
+    background:transparent !important;
+    border:0 !important;
+  }
+
+  .app{
+    gap:0 !important;
+  }
+
+}
+
+/* ROX SIDEBAR SEAM FIX V4.1 END */
+/* =========================================================
+   ROX SIDEBAR DIM V4.2
+   Lower luminance + restrained premium glow
+   ========================================================= */
+
+@media (min-width:900px){
+
+  .sidebar{
+    background:
+      linear-gradient(
+        180deg,
+        #070D17 0%,
+        #070C15 52%,
+        #060B13 100%
+      ) !important;
+  }
+
+  .sidebar .brand{
+    color:#E9EEF8 !important;
+  }
+
+  .sidebar .brand .logo{
+    background:
+      radial-gradient(
+        circle at 24% 20%,
+        rgba(37,99,235,.38),
+        transparent 38%
+      ),
+      radial-gradient(
+        circle at 82% 82%,
+        rgba(124,58,237,.30),
+        transparent 40%
+      ),
+      #0A1225 !important;
+
+    border-color:
+      rgba(129,140,248,.20) !important;
+
+    box-shadow:
+      0 0 10px rgba(59,130,246,.10),
+      0 0 15px rgba(124,58,237,.07),
+      inset 0 1px 0 rgba(255,255,255,.08) !important;
+  }
+
+  .nav-item{
+    color:#8793A6 !important;
+  }
+
+  .nav-item .ic{
+    opacity:.62 !important;
+
+    filter:
+      grayscale(1)
+      saturate(0)
+      brightness(1.15) !important;
+  }
+
+  .nav-item:hover{
+    color:#CED6E4 !important;
+
+    background:
+      rgba(255,255,255,.018) !important;
+  }
+
+  .nav-item.active,
+  .nav-item.active:hover{
+    color:#F7F9FD !important;
+
+    background:
+      linear-gradient(
+        100deg,
+        #294CAC 0%,
+        #3D45BC 48%,
+        #522FA8 100%
+      ) !important;
+
+    border-color:
+      rgba(129,140,248,.17) !important;
+
+    box-shadow:
+      0 4px 11px rgba(37,45,120,.13),
+      inset 0 1px 0 rgba(255,255,255,.08) !important;
+  }
+
+  .nav-item.active .ic{
+    opacity:.88 !important;
+
+    filter:
+      grayscale(1)
+      saturate(0)
+      brightness(1.72) !important;
+  }
+
+}
+
+/* ROX SIDEBAR DIM V4.2 END */
+/* =========================================================
+   ROX SIDEBAR FINAL V5 START
+   ========================================================= */
+
+@media (min-width:900px){
+
+  :root{
+    --sidebar-w:218px !important;
+  }
+
+  .sidebar.rox-sidebar-v5{
+    width:218px !important;
+    min-width:218px !important;
+    flex:0 0 218px !important;
+
+    padding:17px 13px 13px !important;
+
+    background:
+      linear-gradient(
+        180deg,
+        #080E18 0%,
+        #070D17 52%,
+        #060B14 100%
+      ) !important;
+
+    border-right:
+      1px solid rgba(110,126,160,.10) !important;
+
+    box-shadow:
+      inset -1px 0 0 rgba(255,255,255,.012) !important;
+
+    overflow-y:auto !important;
+    overflow-x:hidden !important;
+
+    scrollbar-width:none !important;
+  }
+
+  .sidebar.rox-sidebar-v5::-webkit-scrollbar{
+    display:none !important;
+  }
+
+  .sidebar.rox-sidebar-v5::before,
+  .sidebar.rox-sidebar-v5::after{
+    display:none !important;
+    content:none !important;
+  }
+
+  /* BRAND */
+
+  .rox-sidebar-v5 .rox-sidebar-brand{
+    display:flex !important;
+    align-items:center !important;
+    gap:9px !important;
+
+    min-height:32px !important;
+
+    margin:0 3px 21px !important;
+    padding:0 !important;
+
+    color:#EAF0FA !important;
+
+    font-family:
+      'Plus Jakarta Sans',
+      Inter,
+      system-ui,
+      sans-serif !important;
+
+    font-size:13.5px !important;
+    font-weight:700 !important;
+    letter-spacing:-.02em !important;
+
+    text-shadow:none !important;
+  }
+
+  .rox-sidebar-v5 .rox-sidebar-logo{
+    width:30px !important;
+    height:30px !important;
+
+    flex:0 0 30px !important;
+
+    display:flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+
+    padding:4px !important;
+
+    border-radius:9px !important;
+
+    background:
+      radial-gradient(
+        circle at 15% 10%,
+        rgba(37,99,235,.34),
+        transparent 38%
+      ),
+      radial-gradient(
+        circle at 90% 88%,
+        rgba(139,92,246,.25),
+        transparent 43%
+      ),
+      linear-gradient(
+        145deg,
+        #0A1730,
+        #080F20 57%,
+        #130A27
+      ) !important;
+
+    border:
+      1px solid rgba(99,102,241,.27) !important;
+
+    box-shadow:
+      0 3px 10px rgba(0,0,0,.32),
+      0 0 9px rgba(37,99,235,.08),
+      inset 0 1px 0 rgba(255,255,255,.09) !important;
+  }
+
+  .rox-sidebar-v5 .rox-sidebar-logo svg{
+    width:100% !important;
+    height:100% !important;
+    display:block !important;
+  }
+
+  .rox-sidebar-v5 .brand-name{
+  font-size: 31px !important;
+  font-weight: 800 !important;
+  letter-spacing: .01em !important;
+  line-height: 1 !important;
+  color: #f4f7fb !important;
+  background: linear-gradient(
+    180deg,
+    #ffffff 0%,
+    #f5f7fb 18%,
+    #cfd6e4 48%,
+    #ffffff 74%,
+    #b8c2d8 100%
+  ) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  text-shadow:
+    0 1px 0 rgba(255,255,255,.55),
+    0 2px 10px rgba(148,163,184,.22),
+    0 0 22px rgba(255,255,255,.12) !important;
+  filter: drop-shadow(0 1px 1px rgba(15,23,42,.28)) !important;
+}
+
+  /* NAV */
+
+  .rox-sidebar-v5 .nav-list{
+    display:flex !important;
+    flex-direction:column !important;
+
+    gap:2px !important;
+
+    margin:0 !important;
+    padding:0 !important;
+  }
+
+  .rox-sidebar-v5 .nav-item{
+    position:relative !important;
+
+    width:100% !important;
+    height:36px !important;
+    min-height:36px !important;
+
+    display:flex !important;
+    align-items:center !important;
+
+    gap:10px !important;
+
+    padding:0 10px !important;
+
+    border-radius:8px !important;
+
+    border:
+      1px solid transparent !important;
+
+    background:
+      transparent !important;
+
+    color:#7A8698 !important;
+
+    font-family:
+      'Plus Jakarta Sans',
+      Inter,
+      system-ui,
+      sans-serif !important;
+
+    font-size:11.5px !important;
+    font-weight:500 !important;
+    letter-spacing:-.01em !important;
+
+    box-shadow:none !important;
+    text-shadow:none !important;
+    transform:none !important;
+
+    transition:
+      background .15s ease,
+      color .15s ease,
+      border-color .15s ease !important;
+  }
+
+  .rox-sidebar-v5 .nav-item::before,
+  .rox-sidebar-v5 .nav-item::after{
+    display:none !important;
+    content:none !important;
+  }
+
+  .rox-sidebar-v5 .nav-item .ic{
+    width:16px !important;
+    min-width:16px !important;
+    height:16px !important;
+
+    display:flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+
+    color:#697589 !important;
+    opacity:.92 !important;
+
+    filter:none !important;
+    text-shadow:none !important;
+  }
+
+  .rox-sidebar-v5 .nav-item .ic svg{
+    width:15px !important;
+    height:15px !important;
+
+    display:block !important;
+
+    fill:none !important;
+    stroke:currentColor !important;
+
+    stroke-width:1.7 !important;
+    stroke-linecap:round !important;
+    stroke-linejoin:round !important;
+  }
+
+  .rox-sidebar-v5 .nav-item:hover{
+    color:#B8C2D2 !important;
+
+    background:
+      rgba(255,255,255,.022) !important;
+
+    border-color:
+      rgba(148,163,184,.045) !important;
+
+    box-shadow:none !important;
+  }
+
+  /* ACTIVE */
+
+  .rox-sidebar-v5 .nav-item.active,
+  .rox-sidebar-v5 .nav-item.active:hover{
+    color:#F7F9FF !important;
+
+    background:
+      linear-gradient(
+        100deg,
+        #2563EB 0%,
+        #4F55D7 52%,
+        #6D3EC8 100%
+      ) !important;
+
+    border:
+      1px solid rgba(129,140,248,.18) !important;
+
+    box-shadow:
+      0 4px 12px rgba(20,27,76,.25),
+      0 0 10px rgba(99,102,241,.045),
+      inset 0 1px 0 rgba(255,255,255,.095) !important;
+
+    text-shadow:none !important;
+  }
+
+  .rox-sidebar-v5 .nav-item.active .ic{
+    color:#F4F7FF !important;
+    opacity:1 !important;
+  }
+
+  /* STATUS */
+
+  .rox-sidebar-v5 .nav-dot{
+    width:5px !important;
+    height:5px !important;
+
+    margin-left:auto !important;
+
+    background:#4ADE80 !important;
+
+    opacity:.7 !important;
+
+    box-shadow:
+      0 0 4px rgba(74,222,128,.28) !important;
+  }
+
+  /* DIVIDER */
+
+  .rox-sidebar-v5 .nav-sep{
+    height:1px !important;
+
+    margin:8px 8px !important;
+
+    background:
+      rgba(112,129,158,.10) !important;
+
+    box-shadow:none !important;
+  }
+
+  /* BOTTOM */
+
+  .rox-sidebar-v5 .sidebar-bottom{
+    margin-top:auto !important;
+    padding-top:15px !important;
+
+    background:transparent !important;
+  }
+
+  /* PROFILE */
+
+  .rox-sidebar-v5 .sidebar-profile-card{
+    appearance:none !important;
+
+    width:100% !important;
+    min-height:56px !important;
+
+    display:grid !important;
+
+    grid-template-columns:
+      30px minmax(0,1fr) 14px !important;
+
+    align-items:center !important;
+
+    column-gap:9px !important;
+
+    padding:8px 9px !important;
+
+    border-radius:10px !important;
+
+    border:
+      1px solid rgba(110,127,159,.15) !important;
+
+    background:
+      linear-gradient(
+        150deg,
+        rgba(12,21,37,.96),
+        rgba(7,13,24,.99)
+      ) !important;
+
+    color:#E8EDF8 !important;
+
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,.025) !important;
+
+    text-align:left !important;
+    cursor:pointer !important;
+  }
+
+  .rox-sidebar-v5 .sidebar-profile-card:hover{
+    background:
+      linear-gradient(
+        150deg,
+        rgba(15,25,43,.98),
+        rgba(8,15,27,.99)
+      ) !important;
+
+    border-color:
+      rgba(129,140,248,.22) !important;
+  }
+
+  .rox-sidebar-v5 .sidebar-profile-avatar{
+    width:30px !important;
+    height:30px !important;
+
+    display:flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+
+    border-radius:50% !important;
+
+    color:#FFFFFF !important;
+
+    background:
+      linear-gradient(
+        145deg,
+        #6366F1,
+        #7C3AED
+      ) !important;
+
+    font-family:
+      'Plus Jakarta Sans',
+      Inter,
+      system-ui,
+      sans-serif !important;
+
+    font-size:10.5px !important;
+    font-weight:700 !important;
+
+    box-shadow:
+      0 3px 10px rgba(76,55,190,.20),
+      inset 0 1px 0 rgba(255,255,255,.14) !important;
+  }
+
+  .rox-sidebar-v5 .sidebar-profile-copy{
+    min-width:0 !important;
+
+    display:flex !important;
+    flex-direction:column !important;
+
+    gap:3px !important;
+  }
+
+  .rox-sidebar-v5 .sidebar-profile-copy strong{
+    overflow:hidden !important;
+    text-overflow:ellipsis !important;
+    white-space:nowrap !important;
+
+    color:#E8EDF8 !important;
+
+    font-family:
+      'Plus Jakarta Sans',
+      Inter,
+      system-ui,
+      sans-serif !important;
+
+    font-size:10px !important;
+    line-height:1.15 !important;
+    font-weight:650 !important;
+  }
+
+  .rox-sidebar-v5 .sidebar-profile-copy small{
+    color:#8B7AF4 !important;
+
+    font-family:
+      'Plus Jakarta Sans',
+      Inter,
+      system-ui,
+      sans-serif !important;
+
+    font-size:8.5px !important;
+    line-height:1 !important;
+    font-weight:600 !important;
+  }
+
+  .rox-sidebar-v5 .sidebar-profile-chevron{
+    width:14px !important;
+    height:14px !important;
+
+    display:flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+
+    color:#737F92 !important;
+  }
+
+  .rox-sidebar-v5 .sidebar-profile-chevron svg{
+    width:13px !important;
+    height:13px !important;
+
+    fill:none !important;
+    stroke:currentColor !important;
+
+    stroke-width:1.8 !important;
+    stroke-linecap:round !important;
+    stroke-linejoin:round !important;
+  }
+
+  /* Preserve existing usage/payment JS invisibly */
+
+  .rox-sidebar-v5 .sidebar-runtime-telemetry{
+    position:absolute !important;
+
+    width:1px !important;
+    height:1px !important;
+
+    padding:0 !important;
+    margin:-1px !important;
+
+    overflow:hidden !important;
+
+    clip:rect(0,0,0,0) !important;
+    clip-path:inset(50%) !important;
+
+    white-space:nowrap !important;
+
+    opacity:0 !important;
+    pointer-events:none !important;
+
+    border:0 !important;
+  }
+
+}
+
+/* =========================================================
+   ROX SIDEBAR FINAL V5 END
+   ========================================================= */
+/* =========================================================
+   ROX TOPUP DESKTOP SIZE V5.3 START
+   Restore original desktop Buy Credits dimensions
+   ========================================================= */
+
+@media (min-width:900px){
+
+  .topup-modal{
+    padding:18px !important;
+    align-items:center !important;
+    justify-content:center !important;
+  }
+
+  .topup-panel{
+    width:420px !important;
+    max-width:calc(100vw - 36px) !important;
+
+    height:auto !important;
+    min-height:0 !important;
+    max-height:90vh !important;
+
+    padding:20px !important;
+
+    border-radius:22px !important;
+
+    overflow-x:hidden !important;
+    overflow-y:auto !important;
+
+    transform:none !important;
+    zoom:1 !important;
+  }
+
+}
+
+/* ROX TOPUP DESKTOP SIZE V5.3 END */
+/* ROX TOPUP DESKTOP WIDE V5.4 START */
+
+@media (min-width:900px){
+
+  .topup-panel{
+    width:560px !important;
+    max-width:calc(100vw - 48px) !important;
+
+    height:auto !important;
+    max-height:90vh !important;
+
+    padding:20px !important;
+
+    transform:none !important;
+    zoom:1 !important;
+  }
+
+}
+
+/* ROX TOPUP DESKTOP WIDE V5.4 END */
+/* =========================================================
+   ROX REAL LOGO V6 START
+   ========================================================= */
+
+@media (min-width:900px){
+
+  .sidebar .rox-sidebar-logo,
+  .sidebar .rox-sidebar-brand > :first-child,
+  .sidebar .brand > .logo{
+    background:
+      url("./rox-logo-transparent-v7.png?v=7")
+      center / cover
+      no-repeat !important;
+
+    color:transparent !important;
+    font-size:0 !important;
+    text-shadow:none !important;
+
+    border:0 !important;
+    box-shadow:none !important;
+  }
+
+  .sidebar .rox-sidebar-logo *,
+  .sidebar .rox-sidebar-brand > :first-child *,
+  .sidebar .brand > .logo *{
+    opacity:0 !important;
+  }
+
+  .sidebar .rox-sidebar-logo::before,
+  .sidebar .rox-sidebar-logo::after,
+  .sidebar .rox-sidebar-brand > :first-child::before,
+  .sidebar .rox-sidebar-brand > :first-child::after,
+  .sidebar .brand > .logo::before,
+  .sidebar .brand > .logo::after{
+    display:none !important;
+    content:none !important;
+  }
+
+}
+
+/* ROX REAL LOGO V6 END */
+/* ROX GLOBAL BACK CHEVRON V1 START */
+
+/* Unified professional back control — visual only, functionality untouched */
+.topup-close,
+.rox-recovery-close,
+.rox-forgot-close,
+.rox-password-close,
+.artifact-close,
+.back[data-close]{
+  position:relative !important;
+  width:38px !important;
+  height:38px !important;
+  min-width:38px !important;
+  min-height:38px !important;
+  padding:0 !important;
+  display:inline-grid !important;
+  place-items:center !important;
+
+  font-size:0 !important;
+  line-height:0 !important;
+  color:transparent !important;
+
+  background:rgba(15,23,42,.56) !important;
+  border:1px solid rgba(148,163,184,.20) !important;
+  border-radius:12px !important;
+  box-shadow:none !important;
+
+  cursor:pointer !important;
+  transition:
+    background .16s ease,
+    border-color .16s ease,
+    transform .16s ease !important;
+}
+
+.topup-close::before,
+.rox-recovery-close::before,
+.rox-forgot-close::before,
+.rox-password-close::before,
+.artifact-close::before,
+.back[data-close]::before{
+  content:"" !important;
+  display:block !important;
+
+  width:9px !important;
+  height:9px !important;
+
+  border-style:solid !important;
+  border-color:rgba(248,250,252,.96) !important;
+  border-width:0 2.2px 2.2px 0 !important;
+
+  transform:translateX(2px) rotate(135deg) !important;
+}
+
+.topup-close:hover,
+.rox-recovery-close:hover,
+.rox-forgot-close:hover,
+.rox-password-close:hover,
+.artifact-close:hover,
+.back[data-close]:hover{
+  background:rgba(99,102,241,.14) !important;
+  border-color:rgba(139,92,246,.48) !important;
+}
+
+.topup-close:active,
+.rox-recovery-close:active,
+.rox-forgot-close:active,
+.rox-password-close:active,
+.artifact-close:active,
+.back[data-close]:active{
+  transform:scale(.94) !important;
+}
+
+/* ROX GLOBAL BACK CHEVRON V1 END */
+
+
+/* ROX GLOBAL BACK V2 START */
+/* Professional app-style: chevron + Back text, no boxed X look */
+
+.topup-close,
+.rox-recovery-close,
+.rox-forgot-close,
+.rox-password-close,
+.artifact-close,
+.back[data-close]{
+  width:auto !important;
+  min-width:72px !important;
+  height:36px !important;
+  min-height:36px !important;
+
+  padding:0 8px 0 4px !important;
+
+  display:inline-flex !important;
+  align-items:center !important;
+  justify-content:flex-start !important;
+  gap:7px !important;
+
+  border:0 !important;
+  border-radius:9px !important;
+  background:transparent !important;
+  box-shadow:none !important;
+
+  color:rgba(248,250,252,.96) !important;
+  font-size:0 !important;
+  line-height:1 !important;
+
+  cursor:pointer !important;
+  transition:background .15s ease, opacity .15s ease !important;
+}
+
+/* slim native-style chevron */
+.topup-close::before,
+.rox-recovery-close::before,
+.rox-forgot-close::before,
+.rox-password-close::before,
+.artifact-close::before,
+.back[data-close]::before{
+  content:"" !important;
+
+  width:9px !important;
+  height:9px !important;
+  flex:0 0 9px !important;
+
+  border-style:solid !important;
+  border-color:currentColor !important;
+  border-width:0 2px 2px 0 !important;
+
+  transform:rotate(135deg) !important;
+}
+
+/* Back label */
+.topup-close::after,
+.rox-recovery-close::after,
+.rox-forgot-close::after,
+.rox-password-close::after,
+.artifact-close::after,
+.back[data-close]::after{
+  content:"Back" !important;
+
+  display:block !important;
+  color:rgba(248,250,252,.96) !important;
+
+  font-family:inherit !important;
+  font-size:14px !important;
+  font-weight:600 !important;
+  line-height:1 !important;
+  letter-spacing:-.01em !important;
+}
+
+/* Modern hover — button appears only when needed */
+.topup-close:hover,
+.rox-recovery-close:hover,
+.rox-forgot-close:hover,
+.rox-password-close:hover,
+.artifact-close:hover,
+.back[data-close]:hover{
+  background:rgba(148,163,184,.10) !important;
+}
+
+/* Move absolute close controls to the natural Back position */
+.rox-recovery-close,
+.rox-forgot-close,
+.rox-password-close{
+  left:16px !important;
+  right:auto !important;
+}
+
+/* keep the Top Up header Back control natural, not a centered square */
+.topup-close{
+  margin-right:auto !important;
+}
+
+/* ROX GLOBAL BACK V2 END */
+
+
+/* ROX BACK POSITION V3 START */
+
+/* Top-up modal: push Back fully to the right */
+.topup-close{
+  margin-left:auto !important;
+  margin-right:0 !important;
+  flex:0 0 auto !important;
+}
+
+/* Feature/modal headers: Back always on the far right */
+.feature-topbar .back[data-close],
+.modal-topbar .back[data-close]{
+  margin-left:auto !important;
+  margin-right:0 !important;
+  order:999 !important;
+  flex:0 0 auto !important;
+}
+
+/* Other modal Back controls that use absolute positioning */
+.rox-recovery-close,
+.rox-forgot-close,
+.rox-password-close{
+  left:auto !important;
+  right:16px !important;
+}
+
+/* Artifact viewer Back */
+.artifact-close{
+  margin-left:auto !important;
+  margin-right:0 !important;
+}
+
+/* ROX BACK POSITION V3 END */
+
+
+
+
+/* ROX CHROME BRAND V2 START */
+
+/* Realistic silver / chrome 3D Rox AI wordmark */
+.rox-sidebar-v5 .brand-name{
+  display:inline-block !important;
+
+  font-family:Inter,Arial,sans-serif !important;
+  font-size:30px !important;
+  font-weight:900 !important;
+  line-height:1 !important;
+  letter-spacing:-.035em !important;
+
+  background:
+    linear-gradient(
+      180deg,
+      #ffffff 0%,
+      #ffffff 10%,
+      #dfe5ec 18%,
+      #8c96a6 31%,
+      #f9fbff 43%,
+      #ffffff 48%,
+      #737d8d 57%,
+      #424b5a 64%,
+      #cdd4de 76%,
+      #f8fafc 86%,
+      #8d97a6 100%
+    ) !important;
+
+  -webkit-background-clip:text !important;
+  background-clip:text !important;
+  -webkit-text-fill-color:transparent !important;
+
+  -webkit-text-stroke:.45px rgba(255,255,255,.58) !important;
+
+  text-shadow:
+    0 1px 0 rgba(255,255,255,.90),
+    0 2px 0 rgba(190,199,211,.88),
+    0 3px 0 rgba(118,128,143,.82),
+    0 4px 1px rgba(45,53,66,.78),
+    0 6px 5px rgba(3,7,18,.48),
+    0 10px 14px rgba(3,7,18,.34),
+    0 0 8px rgba(226,232,240,.20) !important;
+
+  filter:
+    drop-shadow(0 1px 1px rgba(255,255,255,.20))
+    drop-shadow(0 3px 3px rgba(0,0,0,.32)) !important;
+}
+
+/* ROX CHROME BRAND V2 END */
+
+
+/* ROX TRUE METAL BRAND V3 START */
+
+.rox-sidebar-v5 .brand-name{
+  position:relative !important;
+  display:inline-block !important;
+  isolation:isolate !important;
+
+  font-family:Inter,Arial,sans-serif !important;
+  font-size:29px !important;
+  font-weight:900 !important;
+  line-height:1 !important;
+  letter-spacing:-1.1px !important;
+
+  color:transparent !important;
+  -webkit-text-fill-color:transparent !important;
+  background:none !important;
+
+  text-shadow:none !important;
+  filter:none !important;
+}
+
+/* 3D metallic depth */
+.rox-sidebar-v5 .brand-name::before{
+  content:"Rox AI" !important;
+  position:absolute !important;
+  left:0 !important;
+  top:0 !important;
+  z-index:-1 !important;
+
+  font:inherit !important;
+  letter-spacing:inherit !important;
+  white-space:nowrap !important;
+
+  color:#3f4858 !important;
+  -webkit-text-fill-color:#3f4858 !important;
+
+  transform:translate(1.7px,3px) !important;
+
+  -webkit-text-stroke:1.15px #222a36 !important;
+
+  text-shadow:
+    1px 1px 0 #737d8d,
+    2px 2px 0 #555f6e,
+    3px 3px 0 #343c49,
+    4px 4px 2px rgba(0,0,0,.50),
+    0 7px 10px rgba(0,0,0,.34) !important;
+}
+
+/* Chrome face */
+.rox-sidebar-v5 .brand-name::after{
+  content:"Rox AI" !important;
+  position:absolute !important;
+  left:0 !important;
+  top:0 !important;
+  z-index:2 !important;
+
+  font:inherit !important;
+  letter-spacing:inherit !important;
+  white-space:nowrap !important;
+
+  background:
+    linear-gradient(
+      to bottom,
+
+      #ffffff 0%,
+      #ffffff 7%,
+
+      #aeb8c7 15%,
+      #596474 23%,
+
+      #eef3f8 31%,
+      #ffffff 38%,
+
+      #7d8796 46%,
+      #303946 52%,
+
+      #d9e0e8 59%,
+      #ffffff 67%,
+
+      #9da7b5 76%,
+      #4e5968 84%,
+
+      #e8edf3 93%,
+      #8e99a8 100%
+    ) !important;
+
+  -webkit-background-clip:text !important;
+  background-clip:text !important;
+  color:transparent !important;
+  -webkit-text-fill-color:transparent !important;
+
+  -webkit-text-stroke:.65px rgba(245,248,252,.86) !important;
+
+  text-shadow:
+    0 -1px 0 rgba(255,255,255,.88),
+    0 1px 0 rgba(22,30,42,.70),
+    0 2px 2px rgba(0,0,0,.32),
+    0 0 4px rgba(255,255,255,.18) !important;
+
+  filter:
+    drop-shadow(0 1px 0 rgba(255,255,255,.28))
+    drop-shadow(0 3px 2px rgba(0,0,0,.26)) !important;
+}
+
+/* ROX TRUE METAL BRAND V3 END */
+
+
+/* ROX LOGO 3D V1 START */
+
+.rox-sidebar-v5 .rox-sidebar-logo{
+  width:36px !important;
+  height:36px !important;
+  min-width:36px !important;
+
+  background-size:contain !important;
+  background-position:center !important;
+  background-repeat:no-repeat !important;
+
+  border-radius:11px !important;
+
+  transform:
+    perspective(220px)
+    rotateX(5deg)
+    rotateY(-7deg)
+    translateY(-1px) !important;
+
+  transform-origin:center !important;
+
+  filter:
+    drop-shadow(1px 1px 0 rgba(236,240,246,.65))
+    drop-shadow(2px 2px 0 rgba(132,143,160,.60))
+    drop-shadow(3px 3px 0 rgba(65,74,88,.72))
+    drop-shadow(5px 6px 4px rgba(0,0,0,.42))
+    drop-shadow(0 0 8px rgba(96,165,250,.28))
+    drop-shadow(0 0 12px rgba(139,92,246,.18)) !important;
+
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.28),
+    inset -1px -2px 3px rgba(0,0,0,.24) !important;
+
+  transition:
+    transform .18s ease,
+    filter .18s ease !important;
+}
+
+.rox-sidebar-v5 .rox-sidebar-brand:hover .rox-sidebar-logo{
+  transform:
+    perspective(220px)
+    rotateX(2deg)
+    rotateY(-3deg)
+    translateY(-2px)
+    scale(1.035) !important;
+}
+
+/* ROX LOGO 3D V1 END */
+
+
+  /* ROX BRAND CENTER ALIGN */
+  .rox-sidebar-v5 .rox-sidebar-brand{
+    width:100% !important;
+    display:flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+    text-align:center !important;
+    gap:12px !important;
+    padding-left:0 !important;
+    padding-right:0 !important;
+    margin-left:0 !important;
+    margin-right:0 !important;
+  }
+
+  .rox-sidebar-v5 .brand-name{
+    margin:0 !important;
+  }
+  /* ROX BRAND CENTER ALIGN END */
+
+
+/* ROX TRUE BRAND CENTER V2 START */
+
+.rox-sidebar-v5{
+  position:relative !important;
+}
+
+.rox-sidebar-v5 .rox-sidebar-brand{
+  position:relative !important;
+
+  width:max-content !important;
+  max-width:calc(100% - 24px) !important;
+
+  left:50% !important;
+  transform:translateX(-50%) !important;
+
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  gap:12px !important;
+
+  margin-left:0 !important;
+  margin-right:0 !important;
+  padding-left:0 !important;
+  padding-right:0 !important;
+}
+
+/* ROX TRUE BRAND CENTER V2 END */
+
+
+/* ROX BRAND TRUE CENTER V3 START */
+
+.rox-sidebar-v5 .rox-sidebar-brand{
+  position:relative !important;
+
+  width:max-content !important;
+  max-width:100% !important;
+
+  left:auto !important;
+  right:auto !important;
+  transform:none !important;
+
+  align-self:center !important;
+
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+
+  gap:12px !important;
+
+  margin-top:0 !important;
+  margin-left:auto !important;
+  margin-right:auto !important;
+  margin-bottom:21px !important;
+
+  padding-left:0 !important;
+  padding-right:0 !important;
+}
+
+/* ROX BRAND TRUE CENTER V3 END */
+
+
+/* ROX BRAND CENTER FINAL START */
+
+.rox-sidebar-v5 .rox-sidebar-brand{
+  position:relative !important;
+
+  /* full usable sidebar width */
+  width:100% !important;
+  max-width:none !important;
+
+  left:auto !important;
+  right:auto !important;
+
+  /* cancel old centering experiments */
+  transform:translateX(-4px) !important;
+
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+
+  gap:12px !important;
+
+  box-sizing:border-box !important;
+
+  margin:
+    0
+    0
+    21px
+    0 !important;
+
+  padding:
+    0
+    0 !important;
+
+  text-align:center !important;
+}
+
+.rox-sidebar-v5 .rox-sidebar-logo{
+  flex:0 0 36px !important;
+}
+
+.rox-sidebar-v5 .brand-name{
+  flex:0 0 auto !important;
+  margin:0 !important;
+}
+
+/* ROX BRAND CENTER FINAL END */
+
+
+/* ROX BRAND FINAL NUDGE START */
+
+.rox-sidebar-v5 .rox-sidebar-brand{
+  transform:translate(-7px, 3px) !important;
+}
+
+/* ROX BRAND FINAL NUDGE END */
+
+
+
+/* =====================================================
+   ROX SHOWCASE HERO V1 START
+   ===================================================== */
+
+@media (min-width:900px){
+  .rox-showcase-hero{position:relative!important;isolation:isolate!important;display:block!important;height:270px!important;min-height:270px!important;padding:0!important;overflow:hidden!important;border-radius:17px!important;background:radial-gradient(circle at 82% 25%,rgba(99,102,241,.17),transparent 32%),radial-gradient(circle at 10% 120%,rgba(14,165,233,.10),transparent 36%),linear-gradient(135deg,#091321,#0c1726 52%,#08111d)!important;border:1px solid rgba(148,163,184,.13)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.025),0 18px 46px rgba(0,0,0,.18)!important}
+  .rox-showcase-hero::before{content:""!important;position:absolute!important;inset:0!important;pointer-events:none!important;background:repeating-linear-gradient(90deg,transparent 0 45px,rgba(99,102,241,.025) 46px,transparent 47px)!important}
+  .rox-show-bg{position:absolute;inset:-30%;opacity:.35;background:radial-gradient(circle at center,rgba(59,130,246,.15),transparent 34%);animation:roxShowGlow 6s ease-in-out infinite}
+  .rox-show-scenes{position:absolute;left:0;top:0;right:195px;bottom:32px;overflow:hidden}
+  .rox-show-scene{position:absolute;inset:0;opacity:0;transform:translateY(10px) scale(.99);padding:33px 22px 20px 30px;animation:roxSceneSwitch 20s cubic-bezier(.2,.7,.2,1) infinite}
+  .scene-video{animation-delay:0s}.scene-code{animation-delay:5s}.scene-ip{animation-delay:10s}.scene-creator{animation-delay:15s}
+  .rox-show-copy{position:relative;z-index:5;width:45%}
+  .rox-show-copy>span{display:block;margin-bottom:9px;color:#818CF8;font-size:10px;font-weight:850;letter-spacing:.18em}
+  .rox-show-copy h2{margin:0!important;color:#F8FAFC;font-family:Inter,Arial,sans-serif!important;font-size:26px!important;line-height:1.08!important;letter-spacing:-.035em!important;font-weight:800!important;text-shadow:0 5px 18px rgba(0,0,0,.3)}
+  .rox-show-copy p{margin:10px 0 0!important;max-width:360px;color:#8996AA!important;font-size:11px!important;line-height:1.45!important}
+  .rox-video-gallery,.rox-game-gallery,.rox-thumb-gallery,.rox-pc{position:absolute;right:12px;top:21px;width:49%;height:179px;transform:perspective(800px) rotateY(-5deg)}
+  .rox-video-gallery{display:grid;grid-template-columns:1.25fr .85fr;grid-template-rows:1fr 1fr;gap:7px}
+  .rox-preview{position:relative;overflow:hidden;border-radius:11px;border:1px solid rgba(255,255,255,.10);box-shadow:0 12px 28px rgba(0,0,0,.24),inset 0 1px rgba(255,255,255,.05)}
+  .pv1{grid-row:1/span 2;background:radial-gradient(circle at 50% 38%,#FDE68A 0 7%,transparent 8%),linear-gradient(145deg,#172554,#7C3AED 50%,#EC4899)}
+  .pv2{background:linear-gradient(145deg,#071827,#0F766E,#22D3EE)}.pv3{background:linear-gradient(145deg,#111827,#7C2D12,#F59E0B)}
+  .rox-preview b{position:absolute;left:50%;top:50%;width:31px;height:31px;display:flex;align-items:center;justify-content:center;transform:translate(-50%,-50%);border-radius:50%;color:#fff;font-size:10px;background:rgba(2,6,23,.68);border:1px solid rgba(255,255,255,.18)}
+  .rox-preview small{position:absolute;left:8px;bottom:7px;color:rgba(255,255,255,.76);font-size:7px;font-weight:800;letter-spacing:.13em}
+  .rox-game-gallery{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 52px;gap:7px}
+  .rox-game{position:relative;overflow:hidden;border-radius:11px;border:1px solid rgba(255,255,255,.10);box-shadow:0 12px 26px rgba(0,0,0,.23)}
+  .game-one{background:linear-gradient(180deg,#312E81 0 52%,#111827 53%)}.game-two{background:linear-gradient(180deg,#052438,#0F766E)}
+  .game-one::after{content:"";position:absolute;left:30%;bottom:-28%;width:40%;height:85%;background:#090F1A;clip-path:polygon(38% 0,62% 0,100% 100%,0 100%)}
+  .game-one i{position:absolute;right:18px;top:15px;width:24px;height:24px;border-radius:50%;background:#FB7185;box-shadow:0 0 20px rgba(251,113,133,.48)}
+  .game-two i{position:absolute;left:28%;bottom:25%;width:11px;height:19px;border-radius:4px;background:#FDE68A;box-shadow:0 0 12px rgba(253,230,138,.5)}
+  .rox-game strong{position:absolute;z-index:4;left:8px;bottom:7px;color:#fff;font-size:7px;letter-spacing:.13em}
+  .rox-code-preview{grid-column:1/span 2;border-radius:9px;padding:9px 12px;color:#CBD5E1;font-family:monospace;font-size:8px;line-height:1.7;background:#080F1A;border:1px solid rgba(148,163,184,.10)}
+  .rox-code-preview em{color:#C084FC;font-style:normal}.rox-code-preview b{color:#67E8F9}
+  .rox-pc{overflow:hidden;border-radius:11px;background:#0A1321;border:1px solid rgba(148,163,184,.14);box-shadow:0 14px 30px rgba(0,0,0,.25)}
+  .rox-pc-top{height:27px;display:flex;align-items:center;gap:5px;padding:0 9px;background:#101B2B;border-bottom:1px solid rgba(148,163,184,.09)}
+  .rox-pc-top i{width:5px;height:5px;border-radius:50%;background:#64748B}.rox-pc-top small{margin-left:5px;color:#64748B;font-size:7px}
+  .rox-pc-side{position:absolute;top:27px;bottom:0;left:0;width:31%;padding:14px 9px;display:flex;flex-direction:column;gap:10px;background:#0D1726;border-right:1px solid rgba(148,163,184,.08)}
+  .rox-pc-side span{color:#94A3B8;font-size:7px}
+  .rox-pc-work{position:absolute;left:37%;right:8%;top:46px;display:grid;gap:8px}
+  .rox-pc-work b{display:block;height:22px;border-radius:5px;background:linear-gradient(90deg,rgba(59,130,246,.24),rgba(139,92,246,.12))}
+  .rox-pc-work b:nth-child(2){width:79%}.rox-pc-work b:nth-child(3){width:58%}
+  .rox-cursor{position:absolute;left:51%;top:61%;color:#fff;font-size:18px;filter:drop-shadow(0 2px 3px #000);animation:roxPcCursor 4s ease-in-out infinite}
+  .rox-thumb-gallery{display:grid;grid-template-columns:1.25fr .85fr;grid-template-rows:1fr 1fr;gap:7px}
+  .rox-thumb{position:relative;overflow:hidden;border-radius:11px;border:1px solid rgba(255,255,255,.10);box-shadow:0 12px 26px rgba(0,0,0,.24)}
+  .th1{grid-row:1/span 2;background:radial-gradient(circle at 50% 40%,#FDE68A 0 8%,transparent 9%),linear-gradient(135deg,#2563EB,#7C3AED,#FB7185)}
+  .th2{background:linear-gradient(135deg,#111827,#EF4444,#F59E0B)}.th3{background:linear-gradient(135deg,#052E16,#16A34A,#22D3EE)}
+  .rox-thumb strong{position:absolute;left:8px;bottom:7px;color:#fff;font-size:17px;font-weight:950;text-shadow:0 3px 10px rgba(0,0,0,.55)}
+  .rox-thumb i{position:absolute;top:7px;right:7px;width:22px;height:15px;display:flex;align-items:center;justify-content:center;border-radius:4px;background:#EF4444;color:#fff;font-size:7px;font-style:normal}
+  .rox-bot-area{position:absolute;z-index:8;right:0;top:0;bottom:32px;width:195px;border-left:1px solid rgba(148,163,184,.07);background:linear-gradient(90deg,transparent,rgba(9,18,31,.55))}
+  .rox-bot-message{position:absolute;top:20px;left:15px;right:15px;padding:9px 10px;border-radius:11px 11px 4px 11px;background:rgba(13,23,39,.78);border:1px solid rgba(129,140,248,.17);backdrop-filter:blur(10px)}
+  .rox-bot-message #heroGreeting{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#F8FAFC;font-size:10px;line-height:1.2;font-weight:800}
+  .rox-bot-message small{display:block;margin-top:3px;color:#818CF8;font-size:7.5px;font-weight:700}
+  .rox-home-bot{position:absolute;left:50%;bottom:10px;width:90px;height:116px;transform:translateX(-50%);animation:roxBotFloat 3s ease-in-out infinite}
+  .rox-ant{position:absolute;left:50%;top:0;width:2px;height:14px;transform:translateX(-50%);background:linear-gradient(#94A3B8,#E2E8F0)}
+  .rox-ant::before{content:"";position:absolute;left:50%;top:-5px;width:8px;height:8px;transform:translateX(-50%);border-radius:50%;background:#60A5FA;box-shadow:0 0 13px rgba(96,165,250,.85)}
+  .rox-head{position:absolute;left:50%;top:14px;width:68px;height:49px;transform:translateX(-50%);border-radius:18px 18px 14px 14px;background:linear-gradient(145deg,#E2E8F0,#77869A 28%,#263548 58%,#111A28);border:1px solid rgba(255,255,255,.22);box-shadow:inset 0 2px 4px rgba(255,255,255,.25),inset 0 -8px 15px rgba(0,0,0,.27),0 10px 22px rgba(0,0,0,.32)}
+  .rox-head::after{content:"";position:absolute;inset:7px;border-radius:11px;background:linear-gradient(#050D18,#0B1726);border:1px solid rgba(96,165,250,.18)}
+  .rox-head .eye{position:absolute;z-index:3;top:22px;width:8px;height:5px;border-radius:5px;background:#67E8F9;box-shadow:0 0 9px rgba(103,232,249,.9);animation:roxBlink 4.5s infinite}
+  .rox-head .e1{left:20px}.rox-head .e2{right:20px}
+  .rox-head .mouth{position:absolute;z-index:3;left:50%;top:36px;width:14px;height:2px;transform:translateX(-50%);border-radius:5px;background:#818CF8}
+  .rox-body{position:absolute;left:50%;top:66px;width:58px;height:43px;transform:translateX(-50%);border-radius:12px 12px 18px 18px;background:linear-gradient(145deg,#AEB9C9,#435269 38%,#172235);border:1px solid rgba(255,255,255,.16);box-shadow:inset 0 1px 2px rgba(255,255,255,.22),0 9px 20px rgba(0,0,0,.28)}
+  .rox-body .core{position:absolute;left:50%;top:11px;width:18px;height:18px;transform:translateX(-50%);border-radius:50%;background:radial-gradient(circle at 35% 30%,#E0F2FE,#60A5FA 34%,#6366F1 72%);box-shadow:0 0 16px rgba(99,102,241,.75)}
+  .rox-home-bot .arm{position:absolute;top:73px;width:10px;height:38px;border-radius:8px;background:linear-gradient(#718096,#27364A);transform-origin:top center}
+  .arm-left{left:4px;transform:rotate(13deg)}.arm-right{right:2px;transform:rotate(-42deg);animation:roxWave 1.4s ease-in-out infinite}
+  .arm-right .hand{position:absolute;left:50%;bottom:-7px;width:17px;height:17px;display:flex;align-items:center;justify-content:center;transform:translateX(-50%);border-radius:50%;background:#475569;color:#E0F2FE;font-size:8px;font-style:normal;border:1px solid rgba(255,255,255,.16)}
+  .rox-show-labels{position:absolute;z-index:10;left:30px;right:210px;bottom:10px;display:flex;gap:20px}
+  .rox-show-labels span{color:#526075;font-size:7px;font-weight:850;letter-spacing:.14em}
+  @keyframes roxSceneSwitch{0%{opacity:0;transform:translateY(10px) scale(.99)}4%{opacity:1;transform:translateY(0) scale(1)}21%{opacity:1;transform:translateY(0) scale(1)}25%{opacity:0;transform:translateY(-8px) scale(1.01)}100%{opacity:0}}
+  @keyframes roxBotFloat{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(-5px)}}
+  @keyframes roxWave{0%,100%{transform:rotate(-42deg)}50%{transform:rotate(-70deg)}}
+  @keyframes roxBlink{0%,45%,49%,100%{transform:scaleY(1)}47%{transform:scaleY(.12)}}
+  @keyframes roxPcCursor{0%,100%{left:48%;top:58%}35%{left:72%;top:43%}68%{left:63%;top:70%}}
+  @keyframes roxShowGlow{0%,100%{transform:scale(1)}50%{transform:scale(1.12)}}
+}
+
+/* ROX SHOWCASE HERO V1 END */
+
+/* ROX REAL SHOWCASE ASSETS V1 START */
+
+.rox-showcase-hero .rox-game img,
+.rox-showcase-hero .rox-pc img,
+.rox-showcase-hero .rox-thumb img{
+  width:100% !important;
+  height:100% !important;
+  display:block !important;
+  object-fit:cover !important;
+}
+
+.rox-showcase-hero .rox-game{
+  background:#07111e !important;
+}
+
+.rox-showcase-hero .rox-pc{
+  padding:0 !important;
+  background:#07111f !important;
+}
+
+.rox-real-showcase-media{
+  position:absolute !important;
+}
+
+.rox-live-cursor{
+  position:absolute;
+  z-index:8;
+  left:48%;
+  top:56%;
+  width:17px;
+  height:22px;
+  background:white;
+  clip-path:polygon(0 0,0 100%,28% 70%,46% 100%,60% 92%,43% 63%,78% 63%);
+  filter:drop-shadow(0 2px 4px rgba(0,0,0,.7));
+  animation:roxRealCursorMove 4s ease-in-out infinite;
+}
+
+.rox-real-creator-gallery .rox-thumb{
+  background:#08111d !important;
+}
+
+.rox-real-creator-gallery .rox-thumb img{
+  transition:transform .7s ease;
+}
+
+.rox-real-creator-gallery .rox-thumb:hover img{
+  transform:scale(1.045);
+}
+
+.rox-youtube-badge{
+  position:absolute;
+  z-index:5;
+  left:7px;
+  bottom:7px;
+  display:flex;
+  align-items:center;
+  gap:5px;
+  padding:4px 7px;
+  border-radius:7px;
+  color:#fff;
+  background:rgba(4,8,18,.78);
+  border:1px solid rgba(255,255,255,.16);
+  backdrop-filter:blur(7px);
+  font:700 7px/1 Inter,Arial,sans-serif;
+}
+
+.rox-youtube-badge b{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:17px;
+  height:12px;
+  border-radius:3px;
+  background:#ff0033;
+  color:#fff;
+  font-size:6px;
+}
+
+@keyframes roxRealCursorMove{
+  0%,100%{left:48%;top:56%}
+  32%{left:72%;top:38%}
+  65%{left:60%;top:72%}
+  82%{left:35%;top:46%}
+}
+
+/* ROX REAL SHOWCASE ASSETS V1 END */
+
+/* ROX REAL MEDIA SHOWCASE V2 START */
+
+.rox-preview video,
+.rox-game img,
+.rox-thumb img{
+  width:100% !important;
+  height:100% !important;
+  display:block !important;
+  object-fit:cover !important;
+}
+
+.rox-preview video{
+  position:absolute !important;
+  inset:0 !important;
+}
+
+.rox-preview small{
+  z-index:4 !important;
+  padding:3px 5px !important;
+  border-radius:5px !important;
+  background:rgba(2,6,23,.62) !important;
+  backdrop-filter:blur(5px) !important;
+}
+
+.rox-game::after{
+  display:none !important;
+  content:none !important;
+}
+
+.rox-game img{
+  position:absolute !important;
+  inset:0 !important;
+}
+
+.rox-thumb img{
+  position:absolute !important;
+  inset:0 !important;
+}
+
+.rox-thumb strong,
+.rox-thumb > i{
+  display:none !important;
+}
+
+/* ROX REAL MEDIA SHOWCASE V2 END */
+
+/* ROX REAL MEDIA FIT V3 */
+.rox-preview video,
+.rox-game img,
+.rox-thumb img{
+  width:100% !important;
+  height:100% !important;
+  display:block !important;
+  object-fit:cover !important;
+  object-position:center !important;
+}
+
+.rox-preview{
+  background:#050914 !important;
+}
+
+.rox-game img,
+.rox-thumb img{
+  border-radius:inherit !important;
+}
+/* ROX REAL MEDIA FIT V3 END */
+
+
+/* ROX REAL MEDIA ORIGINAL RATIO V4 */
+.rox-preview video,
+.rox-game img,
+.rox-thumb img{
+  width:100% !important;
+  height:100% !important;
+  display:block !important;
+  object-fit:contain !important;
+  object-position:center center !important;
+  max-width:100% !important;
+  max-height:100% !important;
+}
+
+.rox-preview,
+.rox-game,
+.rox-thumb{
+  overflow:hidden !important;
+  background:#050914 !important;
+}
+
+.rox-preview video{
+  aspect-ratio:16 / 9 !important;
+}
+
+.rox-thumb img{
+  aspect-ratio:16 / 9 !important;
+}
+
+.rox-game img{
+  aspect-ratio:16 / 9 !important;
+}
+
+/* ROX REAL MEDIA ORIGINAL RATIO V4 END */
+
+/* ROX SHOWCASE SHARP MEDIA V5 */
+@media (min-width:900px){
+
+  .rox-showcase-hero{
+    width:100% !important;
+    height:360px !important;
+    min-height:360px !important;
+  }
+
+  .rox-show-scenes{
+    top:0 !important;
+    left:0 !important;
+    right:195px !important;
+    bottom:32px !important;
+  }
+
+  .rox-show-scene{
+    padding:46px 28px 28px 34px !important;
+  }
+
+  /* Remove GPU perspective blur */
+  .rox-video-gallery,
+  .rox-game-gallery,
+  .rox-thumb-gallery{
+    transform:none !important;
+    right:24px !important;
+    top:42px !important;
+    width:48% !important;
+    height:210px !important;
+  }
+
+  /* VIDEO */
+  .rox-video-gallery{
+    grid-template-columns:1.22fr .78fr !important;
+    grid-template-rows:1fr 1fr !important;
+    gap:10px !important;
+  }
+
+  .rox-preview{
+    background:#050914 !important;
+    border-radius:12px !important;
+  }
+
+  .rox-preview video{
+    width:100% !important;
+    height:100% !important;
+    object-fit:cover !important;
+    object-position:center !important;
+    transform:none !important;
+    image-rendering:auto !important;
+  }
+
+  /* GAME + CODE */
+  .rox-game-gallery{
+    gap:10px !important;
+  }
+
+  .rox-game img{
+    width:100% !important;
+    height:100% !important;
+    object-fit:cover !important;
+    object-position:center !important;
+    transform:none !important;
+    image-rendering:auto !important;
+  }
+
+  /* YOUTUBE / CREATOR THUMBNAILS */
+  .rox-thumb-gallery{
+    grid-template-columns:1.22fr .78fr !important;
+    grid-template-rows:1fr 1fr !important;
+    gap:10px !important;
+  }
+
+  .rox-thumb img{
+    width:100% !important;
+    height:100% !important;
+    object-fit:cover !important;
+    object-position:center !important;
+    transform:none !important;
+    image-rendering:auto !important;
+  }
+}
+
+/* ROX SHOWCASE SHARP MEDIA V5 END */
+
+/* ROX SHOWCASE UI CLEAN V6 */
+
+/* Hide corrupted emoji/text inside feature icon boxes */
+.fcard[data-open="images"] .fcard-ic,
+.fcard[data-open="videos"] .fcard-ic,
+.fcard[data-open="roxip"] .fcard-ic{
+  font-size:0 !important;
+  line-height:1 !important;
+  overflow:hidden !important;
+}
+
+.fcard[data-open="images"] .fcard-ic::before{
+  content:"\25A3";
+  font-size:18px !important;
+  color:#A78BFA !important;
+}
+
+.fcard[data-open="videos"] .fcard-ic::before{
+  content:"\25B6";
+  font-size:16px !important;
+  color:#F9A8D4 !important;
+}
+
+.fcard[data-open="roxip"] .fcard-ic::before{
+  content:"\25A1";
+  font-size:18px !important;
+  color:#4ADE80 !important;
+}
+
+/* Realistic desktop mouse pointer for Rox IP */
+.rox-cursor{
+  width:19px !important;
+  height:27px !important;
+  font-size:0 !important;
+  color:transparent !important;
+  background:#ffffff !important;
+  clip-path:polygon(
+    0 0,
+    0 86%,
+    22% 66%,
+    37% 100%,
+    51% 94%,
+    36% 62%,
+    68% 62%
+  ) !important;
+  filter:
+    drop-shadow(0 1px 0 #0B1220)
+    drop-shadow(1px 0 0 #0B1220)
+    drop-shadow(-1px 0 0 #0B1220)
+    drop-shadow(0 -1px 0 #0B1220)
+    drop-shadow(0 3px 4px rgba(0,0,0,.55)) !important;
+  transform:none !important;
+  animation:roxPcCursorReal 5s ease-in-out infinite !important;
+  z-index:20 !important;
+}
+
+/* More natural mouse movement inside the IP workspace */
+@keyframes roxPcCursorReal{
+  0%{
+    left:44%;
+    top:62%;
+    transform:rotate(-4deg);
+  }
+  24%{
+    left:69%;
+    top:43%;
+    transform:rotate(-4deg);
+  }
+  48%{
+    left:62%;
+    top:68%;
+    transform:rotate(-4deg) scale(.96);
+  }
+  72%{
+    left:78%;
+    top:55%;
+    transform:rotate(-4deg);
+  }
+  100%{
+    left:44%;
+    top:62%;
+    transform:rotate(-4deg);
+  }
+}
+
+/* ROX SHOWCASE UI CLEAN V6 END */
+
