@@ -1,0 +1,3673 @@
+   ROX SHOWCASE HERO V1 START
+   ===================================================== */
+
+@media (min-width:900px){
+  .rox-showcase-hero{position:relative!important;isolation:isolate!important;display:block!important;height:270px!important;min-height:270px!important;padding:0!important;overflow:hidden!important;border-radius:17px!important;background:radial-gradient(circle at 82% 25%,rgba(99,102,241,.17),transparent 32%),radial-gradient(circle at 10% 120%,rgba(14,165,233,.10),transparent 36%),linear-gradient(135deg,#091321,#0c1726 52%,#08111d)!important;border:1px solid rgba(148,163,184,.13)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.025),0 18px 46px rgba(0,0,0,.18)!important}
+  .rox-showcase-hero::before{content:""!important;position:absolute!important;inset:0!important;pointer-events:none!important;background:repeating-linear-gradient(90deg,transparent 0 45px,rgba(99,102,241,.025) 46px,transparent 47px)!important}
+  .rox-show-bg{position:absolute;inset:-30%;opacity:.35;background:radial-gradient(circle at center,rgba(59,130,246,.15),transparent 34%);animation:roxShowGlow 6s ease-in-out infinite}
+  .rox-show-scenes{position:absolute;left:0;top:0;right:195px;bottom:32px;overflow:hidden}
+  .rox-show-scene{position:absolute;inset:0;opacity:0;transform:translateY(10px) scale(.99);padding:33px 22px 20px 30px;animation:roxSceneSwitch 20s cubic-bezier(.2,.7,.2,1) infinite}
+  .scene-video{animation-delay:0s}.scene-code{animation-delay:5s}.scene-ip{animation-delay:10s}.scene-creator{animation-delay:15s}
+  .rox-show-copy{position:relative;z-index:5;width:45%}
+  .rox-show-copy>span{display:block;margin-bottom:9px;color:#818CF8;font-size:10px;font-weight:850;letter-spacing:.18em}
+  .rox-show-copy h2{margin:0!important;color:#F8FAFC;font-family:Inter,Arial,sans-serif!important;font-size:26px!important;line-height:1.08!important;letter-spacing:-.035em!important;font-weight:800!important;text-shadow:0 5px 18px rgba(0,0,0,.3)}
+  .rox-show-copy p{margin:10px 0 0!important;max-width:360px;color:#8996AA!important;font-size:11px!important;line-height:1.45!important}
+  .rox-video-gallery,.rox-game-gallery,.rox-thumb-gallery,.rox-pc{position:absolute;right:12px;top:21px;width:49%;height:179px;transform:perspective(800px) rotateY(-5deg)}
+  .rox-video-gallery{display:grid;grid-template-columns:1.25fr .85fr;grid-template-rows:1fr 1fr;gap:7px}
+  .rox-preview{position:relative;overflow:hidden;border-radius:11px;border:1px solid rgba(255,255,255,.10);box-shadow:0 12px 28px rgba(0,0,0,.24),inset 0 1px rgba(255,255,255,.05)}
+  .pv1{grid-row:1/span 2;background:radial-gradient(circle at 50% 38%,#FDE68A 0 7%,transparent 8%),linear-gradient(145deg,#172554,#7C3AED 50%,#EC4899)}
+  .pv2{background:linear-gradient(145deg,#071827,#0F766E,#22D3EE)}.pv3{background:linear-gradient(145deg,#111827,#7C2D12,#F59E0B)}
+  .rox-preview b{position:absolute;left:50%;top:50%;width:31px;height:31px;display:flex;align-items:center;justify-content:center;transform:translate(-50%,-50%);border-radius:50%;color:#fff;font-size:10px;background:rgba(2,6,23,.68);border:1px solid rgba(255,255,255,.18)}
+  .rox-preview small{position:absolute;left:8px;bottom:7px;color:rgba(255,255,255,.76);font-size:7px;font-weight:800;letter-spacing:.13em}
+  .rox-game-gallery{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 52px;gap:7px}
+  .rox-game{position:relative;overflow:hidden;border-radius:11px;border:1px solid rgba(255,255,255,.10);box-shadow:0 12px 26px rgba(0,0,0,.23)}
+  .game-one{background:linear-gradient(180deg,#312E81 0 52%,#111827 53%)}.game-two{background:linear-gradient(180deg,#052438,#0F766E)}
+  .game-one::after{content:"";position:absolute;left:30%;bottom:-28%;width:40%;height:85%;background:#090F1A;clip-path:polygon(38% 0,62% 0,100% 100%,0 100%)}
+  .game-one i{position:absolute;right:18px;top:15px;width:24px;height:24px;border-radius:50%;background:#FB7185;box-shadow:0 0 20px rgba(251,113,133,.48)}
+  .game-two i{position:absolute;left:28%;bottom:25%;width:11px;height:19px;border-radius:4px;background:#FDE68A;box-shadow:0 0 12px rgba(253,230,138,.5)}
+  .rox-game strong{position:absolute;z-index:4;left:8px;bottom:7px;color:#fff;font-size:7px;letter-spacing:.13em}
+  .rox-code-preview{grid-column:1/span 2;border-radius:9px;padding:9px 12px;color:#CBD5E1;font-family:monospace;font-size:8px;line-height:1.7;background:#080F1A;border:1px solid rgba(148,163,184,.10)}
+  .rox-code-preview em{color:#C084FC;font-style:normal}.rox-code-preview b{color:#67E8F9}
+  .rox-pc{overflow:hidden;border-radius:11px;background:#0A1321;border:1px solid rgba(148,163,184,.14);box-shadow:0 14px 30px rgba(0,0,0,.25)}
+  .rox-pc-top{height:27px;display:flex;align-items:center;gap:5px;padding:0 9px;background:#101B2B;border-bottom:1px solid rgba(148,163,184,.09)}
+  .rox-pc-top i{width:5px;height:5px;border-radius:50%;background:#64748B}.rox-pc-top small{margin-left:5px;color:#64748B;font-size:7px}
+  .rox-pc-side{position:absolute;top:27px;bottom:0;left:0;width:31%;padding:14px 9px;display:flex;flex-direction:column;gap:10px;background:#0D1726;border-right:1px solid rgba(148,163,184,.08)}
+  .rox-pc-side span{color:#94A3B8;font-size:7px}
+  .rox-pc-work{position:absolute;left:37%;right:8%;top:46px;display:grid;gap:8px}
+  .rox-pc-work b{display:block;height:22px;border-radius:5px;background:linear-gradient(90deg,rgba(59,130,246,.24),rgba(139,92,246,.12))}
+  .rox-pc-work b:nth-child(2){width:79%}.rox-pc-work b:nth-child(3){width:58%}
+  .rox-cursor{position:absolute;left:51%;top:61%;color:#fff;font-size:18px;filter:drop-shadow(0 2px 3px #000);animation:roxPcCursor 4s ease-in-out infinite}
+  .rox-thumb-gallery{display:grid;grid-template-columns:1.25fr .85fr;grid-template-rows:1fr 1fr;gap:7px}
+  .rox-thumb{position:relative;overflow:hidden;border-radius:11px;border:1px solid rgba(255,255,255,.10);box-shadow:0 12px 26px rgba(0,0,0,.24)}
+  .th1{grid-row:1/span 2;background:radial-gradient(circle at 50% 40%,#FDE68A 0 8%,transparent 9%),linear-gradient(135deg,#2563EB,#7C3AED,#FB7185)}
+  .th2{background:linear-gradient(135deg,#111827,#EF4444,#F59E0B)}.th3{background:linear-gradient(135deg,#052E16,#16A34A,#22D3EE)}
+  .rox-thumb strong{position:absolute;left:8px;bottom:7px;color:#fff;font-size:17px;font-weight:950;text-shadow:0 3px 10px rgba(0,0,0,.55)}
+  .rox-thumb i{position:absolute;top:7px;right:7px;width:22px;height:15px;display:flex;align-items:center;justify-content:center;border-radius:4px;background:#EF4444;color:#fff;font-size:7px;font-style:normal}
+  .rox-bot-area{position:absolute;z-index:8;right:0;top:0;bottom:32px;width:195px;border-left:1px solid rgba(148,163,184,.07);background:linear-gradient(90deg,transparent,rgba(9,18,31,.55))}
+  .rox-bot-message{position:absolute;top:20px;left:15px;right:15px;padding:9px 10px;border-radius:11px 11px 4px 11px;background:rgba(13,23,39,.78);border:1px solid rgba(129,140,248,.17);backdrop-filter:blur(10px)}
+  .rox-bot-message #heroGreeting{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#F8FAFC;font-size:10px;line-height:1.2;font-weight:800}
+  .rox-bot-message small{display:block;margin-top:3px;color:#818CF8;font-size:7.5px;font-weight:700}
+  .rox-home-bot{position:absolute;left:50%;bottom:10px;width:90px;height:116px;transform:translateX(-50%);animation:roxBotFloat 3s ease-in-out infinite}
+  .rox-ant{position:absolute;left:50%;top:0;width:2px;height:14px;transform:translateX(-50%);background:linear-gradient(#94A3B8,#E2E8F0)}
+  .rox-ant::before{content:"";position:absolute;left:50%;top:-5px;width:8px;height:8px;transform:translateX(-50%);border-radius:50%;background:#60A5FA;box-shadow:0 0 13px rgba(96,165,250,.85)}
+  .rox-head{position:absolute;left:50%;top:14px;width:68px;height:49px;transform:translateX(-50%);border-radius:18px 18px 14px 14px;background:linear-gradient(145deg,#E2E8F0,#77869A 28%,#263548 58%,#111A28);border:1px solid rgba(255,255,255,.22);box-shadow:inset 0 2px 4px rgba(255,255,255,.25),inset 0 -8px 15px rgba(0,0,0,.27),0 10px 22px rgba(0,0,0,.32)}
+  .rox-head::after{content:"";position:absolute;inset:7px;border-radius:11px;background:linear-gradient(#050D18,#0B1726);border:1px solid rgba(96,165,250,.18)}
+  .rox-head .eye{position:absolute;z-index:3;top:22px;width:8px;height:5px;border-radius:5px;background:#67E8F9;box-shadow:0 0 9px rgba(103,232,249,.9);animation:roxBlink 4.5s infinite}
+  .rox-head .e1{left:20px}.rox-head .e2{right:20px}
+  .rox-head .mouth{position:absolute;z-index:3;left:50%;top:36px;width:14px;height:2px;transform:translateX(-50%);border-radius:5px;background:#818CF8}
+  .rox-body{position:absolute;left:50%;top:66px;width:58px;height:43px;transform:translateX(-50%);border-radius:12px 12px 18px 18px;background:linear-gradient(145deg,#AEB9C9,#435269 38%,#172235);border:1px solid rgba(255,255,255,.16);box-shadow:inset 0 1px 2px rgba(255,255,255,.22),0 9px 20px rgba(0,0,0,.28)}
+  .rox-body .core{position:absolute;left:50%;top:11px;width:18px;height:18px;transform:translateX(-50%);border-radius:50%;background:radial-gradient(circle at 35% 30%,#E0F2FE,#60A5FA 34%,#6366F1 72%);box-shadow:0 0 16px rgba(99,102,241,.75)}
+  .rox-home-bot .arm{position:absolute;top:73px;width:10px;height:38px;border-radius:8px;background:linear-gradient(#718096,#27364A);transform-origin:top center}
+  .arm-left{left:4px;transform:rotate(13deg)}.arm-right{right:2px;transform:rotate(-42deg);animation:roxWave 1.4s ease-in-out infinite}
+  .arm-right .hand{position:absolute;left:50%;bottom:-7px;width:17px;height:17px;display:flex;align-items:center;justify-content:center;transform:translateX(-50%);border-radius:50%;background:#475569;color:#E0F2FE;font-size:8px;font-style:normal;border:1px solid rgba(255,255,255,.16)}
+  .rox-show-labels{position:absolute;z-index:10;left:30px;right:210px;bottom:10px;display:flex;gap:20px}
+  .rox-show-labels span{color:#526075;font-size:7px;font-weight:850;letter-spacing:.14em}
+  @keyframes roxSceneSwitch{0%{opacity:0;transform:translateY(10px) scale(.99)}4%{opacity:1;transform:translateY(0) scale(1)}21%{opacity:1;transform:translateY(0) scale(1)}25%{opacity:0;transform:translateY(-8px) scale(1.01)}100%{opacity:0}}
+  @keyframes roxBotFloat{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(-5px)}}
+  @keyframes roxWave{0%,100%{transform:rotate(-42deg)}50%{transform:rotate(-70deg)}}
+  @keyframes roxBlink{0%,45%,49%,100%{transform:scaleY(1)}47%{transform:scaleY(.12)}}
+  @keyframes roxPcCursor{0%,100%{left:48%;top:58%}35%{left:72%;top:43%}68%{left:63%;top:70%}}
+  @keyframes roxShowGlow{0%,100%{transform:scale(1)}50%{transform:scale(1.12)}}
+}
+
+/* ROX SHOWCASE HERO V1 END */
+
+/* =====================================================
+   ROX SHOWCASE V3.1 ï¿½ PREMIUM 3D POLISH
+   Same V1 philosophy, upgraded execution
+   ===================================================== */
+
+@media (min-width:900px){
+
+  /* ---------- MASTER DEPTH ---------- */
+
+  .rox-showcase-hero{
+    perspective:1400px;
+    transform-style:preserve-3d;
+  }
+
+  .rox-showcase-hero::after{
+    z-index:0;
+    background:
+      linear-gradient(118deg,rgba(255,255,255,.035),transparent 22%),
+      radial-gradient(circle at 68% 42%,rgba(96,165,250,.10),transparent 31%),
+      linear-gradient(to bottom,transparent 72%,rgba(2,6,23,.22));
+  }
+
+  .rox-show-scenes{
+    z-index:3;
+    perspective:1300px;
+    transform-style:preserve-3d;
+  }
+
+  .rox-show-scene{
+    transform-style:preserve-3d;
+  }
+
+
+  /* ---------- EACH SCENE GETS ITS OWN ATMOSPHERE ---------- */
+
+  .scene-video::before,
+  .scene-code::before,
+  .scene-ip::before,
+  .scene-creator::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    z-index:-1;
+    pointer-events:none;
+    opacity:.52;
+  }
+
+  .scene-video::before{
+    background:
+      radial-gradient(circle at 72% 45%,rgba(124,58,237,.18),transparent 35%),
+      radial-gradient(circle at 82% 20%,rgba(236,72,153,.09),transparent 28%);
+  }
+
+  .scene-code::before{
+    background:
+      radial-gradient(circle at 72% 45%,rgba(34,211,238,.13),transparent 34%),
+      radial-gradient(circle at 88% 18%,rgba(16,185,129,.08),transparent 27%);
+  }
+
+  .scene-ip::before{
+    background:
+      radial-gradient(circle at 73% 45%,rgba(59,130,246,.15),transparent 35%),
+      radial-gradient(circle at 89% 20%,rgba(96,165,250,.09),transparent 25%);
+  }
+
+  .scene-creator::before{
+    background:
+      radial-gradient(circle at 74% 45%,rgba(244,63,94,.10),transparent 35%),
+      radial-gradient(circle at 86% 20%,rgba(168,85,247,.11),transparent 27%);
+  }
+
+
+  /* ---------- COPY / TYPOGRAPHY ---------- */
+
+  .rox-show-copy{
+    transform:translateZ(38px);
+  }
+
+  .rox-show-copy>span{
+    position:relative;
+    width:max-content;
+    padding-left:15px;
+    text-shadow:0 0 18px rgba(129,140,248,.28);
+  }
+
+  .rox-show-copy>span::before{
+    content:"";
+    position:absolute;
+    left:0;
+    top:50%;
+    width:6px;
+    height:6px;
+    transform:translateY(-50%);
+    border-radius:50%;
+    background:#818cf8;
+    box-shadow:0 0 13px rgba(129,140,248,.9);
+  }
+
+  .rox-show-copy h2{
+    background:
+      linear-gradient(105deg,#ffffff 4%,#e4ebff 60%,#b8c7ee 100%);
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent!important;
+  }
+
+
+  /* ---------- VISUAL STAGE ---------- */
+
+  .rox-video-gallery,
+  .rox-game-gallery,
+  .rox-thumb-gallery,
+  .rox-pc{
+    transform:
+      perspective(1200px)
+      rotateY(-8deg)
+      rotateX(3deg)
+      translateZ(32px);
+    transform-style:preserve-3d;
+    transition:
+      transform .6s cubic-bezier(.2,.75,.2,1),
+      filter .6s ease;
+  }
+
+  .rox-show-scene:hover .rox-video-gallery,
+  .rox-show-scene:hover .rox-game-gallery,
+  .rox-show-scene:hover .rox-thumb-gallery,
+  .rox-show-scene:hover .rox-pc{
+    transform:
+      perspective(1200px)
+      rotateY(-4deg)
+      rotateX(1deg)
+      translateZ(45px)
+      translateY(-2px);
+    filter:drop-shadow(0 32px 42px rgba(0,0,0,.34));
+  }
+
+
+  /* ---------- GLASS CARD DETAILS ---------- */
+
+  .rox-preview,
+  .rox-game,
+  .rox-thumb{
+    background-clip:padding-box;
+  }
+
+  .rox-preview::before,
+  .rox-game::before,
+  .rox-thumb::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    z-index:2;
+    pointer-events:none;
+    border-radius:inherit;
+    background:
+      linear-gradient(135deg,rgba(255,255,255,.095),transparent 28%),
+      linear-gradient(to bottom,transparent 58%,rgba(2,6,23,.20));
+  }
+
+  .rox-preview::after,
+  .rox-game::after,
+  .rox-thumb::after{
+    content:"";
+    position:absolute;
+    left:10%;
+    right:10%;
+    top:0;
+    height:1px;
+    z-index:4;
+    background:
+      linear-gradient(90deg,transparent,rgba(255,255,255,.26),transparent);
+  }
+
+
+  /* ---------- AI VIDEO ---------- */
+
+  .pv1{
+    background:
+      radial-gradient(circle at 52% 36%,#ffe8a3 0 6%,transparent 7%),
+      radial-gradient(circle at 70% 30%,rgba(244,114,182,.40),transparent 26%),
+      linear-gradient(145deg,#172554,#6d28d9 53%,#be185d);
+  }
+
+  .pv2{
+    background:
+      radial-gradient(circle at 65% 35%,rgba(103,232,249,.34),transparent 28%),
+      linear-gradient(145deg,#071827,#0f766e,#0891b2);
+  }
+
+  .pv3{
+    background:
+      radial-gradient(circle at 65% 35%,rgba(251,191,36,.30),transparent 28%),
+      linear-gradient(145deg,#111827,#7c2d12,#d97706);
+  }
+
+  .rox-preview b{
+    z-index:5;
+    width:35px;
+    height:35px;
+    background:rgba(3,7,18,.66);
+    backdrop-filter:blur(9px);
+    box-shadow:
+      inset 0 1px rgba(255,255,255,.16),
+      0 7px 20px rgba(0,0,0,.32);
+  }
+
+  .rox-preview small{
+    z-index:5;
+  }
+
+
+  /* ---------- CODE STUDIO ---------- */
+
+  .rox-game-gallery{
+    gap:9px;
+  }
+
+  .game-one{
+    background:
+      radial-gradient(circle at 73% 23%,rgba(251,113,133,.38),transparent 20%),
+      linear-gradient(180deg,#312e81 0 52%,#0b1120 53%);
+  }
+
+  .game-two{
+    background:
+      radial-gradient(circle at 32% 66%,rgba(253,230,138,.28),transparent 20%),
+      linear-gradient(180deg,#052438,#0f766e);
+  }
+
+  .rox-code-preview{
+    position:relative;
+    border:1px solid rgba(103,232,249,.10);
+    background:
+      linear-gradient(135deg,rgba(15,23,42,.98),rgba(5,12,22,.98));
+    box-shadow:
+      inset 0 1px rgba(255,255,255,.035),
+      0 12px 26px rgba(0,0,0,.22);
+  }
+
+  .rox-code-preview::before{
+    content:"";
+    position:absolute;
+    left:0;
+    top:0;
+    bottom:0;
+    width:2px;
+    border-radius:8px 0 0 8px;
+    background:linear-gradient(#818cf8,#22d3ee);
+    box-shadow:0 0 13px rgba(34,211,238,.28);
+  }
+
+
+  /* ---------- ROX IP COMPUTER ---------- */
+
+  .rox-pc{
+    background:
+      linear-gradient(145deg,#0b1728,#08111e);
+    box-shadow:
+      inset 0 1px rgba(255,255,255,.045),
+      inset 0 -30px 70px rgba(2,6,23,.22),
+      0 25px 50px rgba(0,0,0,.32);
+  }
+
+  .rox-pc-top{
+    height:30px;
+    background:
+      linear-gradient(180deg,#142238,#101b2b);
+  }
+
+  .rox-pc-top i:first-child{background:#fb7185}
+  .rox-pc-top i:nth-child(2){background:#fbbf24}
+  .rox-pc-top i:nth-child(3){background:#4ade80}
+
+  .rox-pc-side{
+    top:30px;
+    background:
+      linear-gradient(180deg,#0e1929,#0b1523);
+  }
+
+  .rox-pc-side span{
+    padding:5px 6px;
+    border-radius:5px;
+  }
+
+  .rox-pc-side span:first-child{
+    color:#c7d2fe;
+    background:rgba(99,102,241,.10);
+  }
+
+  .rox-pc-work{
+    top:51px;
+  }
+
+  .rox-pc-work b{
+    position:relative;
+    overflow:hidden;
+    height:25px;
+    border:1px solid rgba(96,165,250,.08);
+    background:
+      linear-gradient(90deg,rgba(59,130,246,.25),rgba(139,92,246,.10));
+  }
+
+  .rox-pc-work b::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    transform:translateX(-110%);
+    background:
+      linear-gradient(90deg,transparent,rgba(255,255,255,.09),transparent);
+    animation:roxV3Scan 4.2s ease-in-out infinite;
+  }
+
+
+  /* ---------- CREATOR MODE ---------- */
+
+  .th1{
+    background:
+      radial-gradient(circle at 50% 38%,#fde68a 0 7%,transparent 8%),
+      radial-gradient(circle at 67% 31%,rgba(251,113,133,.44),transparent 22%),
+      linear-gradient(135deg,#2563eb,#7c3aed,#db2777);
+  }
+
+  .th2{
+    background:
+      radial-gradient(circle at 65% 30%,rgba(251,191,36,.30),transparent 22%),
+      linear-gradient(135deg,#111827,#dc2626,#d97706);
+  }
+
+  .th3{
+    background:
+      radial-gradient(circle at 65% 32%,rgba(34,211,238,.30),transparent 22%),
+      linear-gradient(135deg,#052e16,#15803d,#0891b2);
+  }
+
+  .rox-thumb strong{
+    z-index:5;
+  }
+
+  .rox-thumb i{
+    z-index:5;
+    box-shadow:0 6px 16px rgba(0,0,0,.28);
+  }
+
+
+  /* ---------- ROX CHARACTER V3 ---------- */
+
+  .rox-bot-area{
+    z-index:9;
+  }
+
+  .rox-home-bot{
+    filter:drop-shadow(0 24px 22px rgba(0,0,0,.32));
+  }
+
+  .rox-home-bot::before{
+    content:"";
+    position:absolute;
+    z-index:-1;
+    left:50%;
+    top:44%;
+    width:126px;
+    height:126px;
+    transform:translate(-50%,-50%);
+    border-radius:50%;
+    background:
+      radial-gradient(circle,rgba(96,165,250,.13),transparent 67%);
+    animation:roxV3BotHalo 4s ease-in-out infinite;
+  }
+
+  .rox-ant{
+    height:17px;
+  }
+
+  .rox-ant::before{
+    width:9px;
+    height:9px;
+    box-shadow:
+      0 0 14px rgba(96,165,250,.92),
+      0 0 28px rgba(96,165,250,.25);
+  }
+
+  .rox-head{
+    top:17px;
+    width:78px;
+    height:57px;
+  }
+
+  .rox-head::before{
+    content:"";
+    position:absolute;
+    inset:1px 12px auto;
+    height:8px;
+    border-radius:50%;
+    background:
+      linear-gradient(to bottom,rgba(255,255,255,.25),transparent);
+    filter:blur(2px);
+  }
+
+  .rox-head .eye{
+    top:26px;
+    width:9px;
+    height:5px;
+  }
+
+  .rox-head .e1{left:23px}
+  .rox-head .e2{right:23px}
+
+  .rox-head .mouth{
+    top:42px;
+    width:16px;
+  }
+
+  .rox-body{
+    top:82px;
+    width:67px;
+    height:50px;
+  }
+
+  .rox-home-bot .arm{
+    top:89px;
+    width:11px;
+    height:42px;
+  }
+
+  .arm-left{
+    left:8px;
+  }
+
+  .arm-right{
+    right:6px;
+  }
+
+
+  /* ---------- ROX MESSAGE ---------- */
+
+  .rox-bot-message{
+    overflow:hidden;
+  }
+
+  .rox-bot-message::before{
+    content:"";
+    position:absolute;
+    left:0;
+    top:0;
+    bottom:0;
+    width:2px;
+    background:
+      linear-gradient(#60a5fa,#8b5cf6);
+    box-shadow:0 0 10px rgba(96,165,250,.38);
+  }
+
+  .rox-bot-message #heroGreeting{
+    font-size:12px;
+    letter-spacing:-.015em;
+  }
+
+  .rox-bot-message small{
+    font-size:8.5px;
+  }
+
+
+  /* ---------- ACTIVE SCENE LABELS ---------- */
+
+  .rox-show-labels span{
+    position:relative;
+    padding-bottom:5px;
+    animation:roxV3Label 20s linear infinite;
+  }
+
+  .rox-show-labels span:nth-child(1){animation-delay:0s}
+  .rox-show-labels span:nth-child(2){animation-delay:5s}
+  .rox-show-labels span:nth-child(3){animation-delay:10s}
+  .rox-show-labels span:nth-child(4){animation-delay:15s}
+
+  .rox-show-labels span::after{
+    content:"";
+    position:absolute;
+    left:0;
+    right:100%;
+    bottom:0;
+    height:1px;
+    border-radius:99px;
+    background:linear-gradient(90deg,#60a5fa,#8b5cf6);
+    box-shadow:0 0 9px rgba(99,102,241,.38);
+    animation:roxV3LabelLine 20s linear infinite;
+  }
+
+  .rox-show-labels span:nth-child(1)::after{animation-delay:0s}
+  .rox-show-labels span:nth-child(2)::after{animation-delay:5s}
+  .rox-show-labels span:nth-child(3)::after{animation-delay:10s}
+  .rox-show-labels span:nth-child(4)::after{animation-delay:15s}
+
+}
+
+
+/* ---------- V3 MOTION ---------- */
+
+@keyframes roxV3Scan{
+  0%,20%{transform:translateX(-110%)}
+  55%,100%{transform:translateX(120%)}
+}
+
+@keyframes roxV3BotHalo{
+  0%,100%{opacity:.55;transform:translate(-50%,-50%) scale(.94)}
+  50%{opacity:1;transform:translate(-50%,-50%) scale(1.08)}
+}
+
+@keyframes roxV3Label{
+  0%,3%{color:#a5b4fc}
+  4%,21%{color:#dbeafe}
+  25%,100%{color:#526075}
+}
+
+@keyframes roxV3LabelLine{
+  0%,3%{right:100%}
+  5%,21%{right:0}
+  25%,100%{right:100%}
+}
+
+/* ROX SHOWCASE V3.1 END */
+
+/* =====================================================
+   ROX SHOWCASE V4 ï¿½ CHARACTER FIRST
+   Bigger Rox + comic/game speech bubble
+   ===================================================== */
+
+@media (min-width:900px){
+
+  /* Give Rox more visual importance */
+  .rox-bot-area{
+    width:260px;
+    bottom:38px;
+    background:
+      linear-gradient(90deg,transparent 0%,rgba(7,15,27,.44) 32%,rgba(7,15,27,.82) 100%);
+    border-left:1px solid rgba(148,163,184,.10);
+  }
+
+  .rox-show-scenes{
+    right:260px;
+  }
+
+  /* Big Rox character */
+  .rox-home-bot{
+    left:50%;
+    bottom:8px;
+    width:156px;
+    height:196px;
+    transform:translateX(-50%);
+    filter:
+      drop-shadow(0 30px 26px rgba(0,0,0,.40))
+      drop-shadow(0 0 30px rgba(96,165,250,.09));
+    animation:roxV4BotFloat 4.5s ease-in-out infinite;
+  }
+
+  .rox-home-bot::before{
+    width:190px;
+    height:190px;
+    top:50%;
+    background:
+      radial-gradient(circle,rgba(96,165,250,.18) 0%,rgba(99,102,241,.08) 38%,transparent 70%);
+    filter:blur(5px);
+  }
+
+  .rox-ant{
+    top:2px;
+    height:22px;
+    width:3px;
+  }
+
+  .rox-ant::before{
+    top:-6px;
+    width:12px;
+    height:12px;
+  }
+
+  .rox-head{
+    top:24px;
+    width:108px;
+    height:77px;
+    border-radius:27px 27px 21px 21px;
+    background:
+      linear-gradient(145deg,#eef5ff 0%,#9ba9bb 22%,#43546b 48%,#18263a 72%,#0c1524 100%);
+    border:1px solid rgba(255,255,255,.28);
+    box-shadow:
+      inset 0 3px 7px rgba(255,255,255,.30),
+      inset 0 -13px 23px rgba(0,0,0,.32),
+      0 22px 44px rgba(0,0,0,.42),
+      0 0 34px rgba(96,165,250,.10);
+  }
+
+  .rox-head::after{
+    inset:10px;
+    border-radius:15px;
+    background:
+      radial-gradient(circle at 50% 35%,rgba(96,165,250,.10),transparent 44%),
+      linear-gradient(#040b14,#091525);
+    border-color:rgba(96,165,250,.24);
+  }
+
+  .rox-head .eye{
+    top:36px;
+    width:12px;
+    height:7px;
+    border-radius:7px;
+    box-shadow:
+      0 0 11px rgba(103,232,249,.95),
+      0 0 20px rgba(103,232,249,.28);
+  }
+
+  .rox-head .e1{left:31px}
+  .rox-head .e2{right:31px}
+
+  .rox-head .mouth{
+    top:56px;
+    width:22px;
+    height:3px;
+  }
+
+  .rox-body{
+    top:112px;
+    width:92px;
+    height:67px;
+    border-radius:19px 19px 28px 28px;
+    background:
+      linear-gradient(145deg,#c4cfdd,#596a80 34%,#26364c 62%,#111b2c);
+    box-shadow:
+      inset 0 2px 4px rgba(255,255,255,.22),
+      inset 0 -12px 20px rgba(0,0,0,.18),
+      0 18px 34px rgba(0,0,0,.34);
+  }
+
+  .rox-body .core{
+    top:18px;
+    width:29px;
+    height:29px;
+    background:
+      radial-gradient(circle at 32% 28%,#ecfeff,#67e8f9 24%,#60a5fa 45%,#6366f1 72%,#312e81);
+    box-shadow:
+      0 0 22px rgba(99,102,241,.92),
+      0 0 48px rgba(96,165,250,.28);
+  }
+
+  .rox-home-bot .arm{
+    top:123px;
+    width:14px;
+    height:56px;
+    border-radius:10px;
+    background:
+      linear-gradient(#8796aa,#3c4c62 52%,#223146);
+  }
+
+  .arm-left{
+    left:17px;
+    transform:rotate(10deg);
+  }
+
+  .arm-right{
+    right:14px;
+    transform:rotate(-34deg);
+    animation:roxV4Wave 1.8s ease-in-out infinite;
+  }
+
+  .arm-right .hand{
+    bottom:-9px;
+    width:22px;
+    height:22px;
+    font-size:10px;
+  }
+
+
+  /* Comic / game speech bubble */
+  .rox-bot-message{
+    top:23px;
+    left:-34px;
+    right:38px;
+    min-height:58px;
+    padding:14px 18px;
+    overflow:visible;
+    border:0;
+    border-radius:19px 19px 7px 19px;
+    background:#ffffff;
+    color:#111827;
+    box-shadow:
+      0 18px 38px rgba(0,0,0,.32),
+      inset 0 1px 0 rgba(255,255,255,.96);
+    backdrop-filter:none;
+  }
+
+  .rox-bot-message::before{
+    content:"";
+    position:absolute;
+    left:auto;
+    right:16px;
+    top:auto;
+    bottom:-13px;
+    width:25px;
+    height:22px;
+    background:#fff;
+    box-shadow:none;
+    clip-path:polygon(0 0,100% 0,100% 100%);
+    transform:rotate(5deg);
+  }
+
+  .rox-bot-message::after{
+    content:"";
+    position:absolute;
+    inset:4px;
+    pointer-events:none;
+    border-radius:15px 15px 5px 15px;
+    border:1px solid rgba(15,23,42,.05);
+  }
+
+  .rox-bot-message #heroGreeting{
+    position:relative;
+    z-index:2;
+    overflow:visible;
+    text-overflow:clip;
+    white-space:normal;
+    color:#111827;
+    font-size:15px;
+    line-height:1.15;
+    font-weight:900;
+    letter-spacing:-.025em;
+  }
+
+  /* Hide old secondary sentence: bubble should feel clean */
+  .rox-bot-message small{
+    display:none;
+  }
+
+}
+
+@keyframes roxV4BotFloat{
+  0%,100%{
+    transform:translateX(-50%) translateY(0) rotate(-.5deg);
+  }
+  50%{
+    transform:translateX(-50%) translateY(-8px) rotate(.8deg);
+  }
+}
+
+@keyframes roxV4Wave{
+  0%,100%{transform:rotate(-34deg)}
+  50%{transform:rotate(-58deg)}
+}
+
+/* ROX SHOWCASE V4 CHARACTER FIRST END */
+
+/* =====================================================
+   ROX SHOWCASE V4.1 ï¿½ IMMERSIVE ENVIRONMENT
+   Keeps V1/V4 philosophy, upgrades space + character
+   ===================================================== */
+
+@media (min-width:900px){
+
+  /* ----- HERO WORLD ----- */
+
+  .rox-showcase-hero{
+    overflow:hidden!important;
+    background:
+      radial-gradient(circle at 78% 44%,rgba(96,165,250,.17),transparent 25%),
+      radial-gradient(circle at 63% 20%,rgba(139,92,246,.12),transparent 24%),
+      radial-gradient(circle at 18% 115%,rgba(34,211,238,.07),transparent 30%),
+      linear-gradient(135deg,#07111f 0%,#0a1628 48%,#07101d 100%)!important;
+  }
+
+  .rox-showcase-hero::before{
+    background:
+      repeating-linear-gradient(
+        90deg,
+        transparent 0 54px,
+        rgba(129,140,248,.018) 55px,
+        transparent 56px
+      )!important;
+    opacity:.85;
+  }
+
+  /* Ambient moving layer */
+  .rox-show-bg{
+    inset:-22%;
+    opacity:.78;
+    filter:blur(2px);
+    background:
+      radial-gradient(circle at 72% 46%,rgba(96,165,250,.17),transparent 18%),
+      radial-gradient(circle at 60% 38%,rgba(139,92,246,.10),transparent 28%),
+      conic-gradient(
+        from 210deg at 70% 50%,
+        transparent,
+        rgba(96,165,250,.035),
+        transparent 22%,
+        rgba(139,92,246,.035),
+        transparent 50%
+      );
+    animation:roxV41WorldBreath 10s ease-in-out infinite;
+  }
+
+  /* Deep decorative rings behind visual content */
+  .rox-show-scenes::before{
+    content:"";
+    position:absolute;
+    z-index:0;
+    right:5%;
+    top:50%;
+    width:430px;
+    height:430px;
+    transform:translateY(-50%) rotateX(66deg);
+    border-radius:50%;
+    border:1px solid rgba(96,165,250,.08);
+    box-shadow:
+      0 0 70px rgba(59,130,246,.035),
+      inset 0 0 60px rgba(99,102,241,.025);
+    pointer-events:none;
+    animation:roxV41RingDrift 12s ease-in-out infinite;
+  }
+
+  .rox-show-scenes::after{
+    content:"";
+    position:absolute;
+    z-index:0;
+    right:13%;
+    top:50%;
+    width:280px;
+    height:280px;
+    transform:translateY(-50%) rotateX(66deg);
+    border-radius:50%;
+    border:1px solid rgba(139,92,246,.07);
+    pointer-events:none;
+    animation:roxV41RingDriftSmall 9s ease-in-out infinite;
+  }
+
+  .rox-show-scene{
+    z-index:2;
+  }
+
+
+  /* ----- STRONGER VISUAL STAGE ----- */
+
+  .rox-video-gallery,
+  .rox-game-gallery,
+  .rox-thumb-gallery,
+  .rox-pc{
+    z-index:3;
+    transform:
+      perspective(1350px)
+      rotateY(-9deg)
+      rotateX(3deg)
+      translateZ(42px);
+    filter:
+      drop-shadow(0 30px 40px rgba(0,0,0,.34))
+      drop-shadow(0 0 24px rgba(96,165,250,.05));
+  }
+
+  .rox-preview,
+  .rox-game,
+  .rox-thumb,
+  .rox-pc{
+    backdrop-filter:blur(8px);
+  }
+
+
+  /* ----- BIGGER ROX, BETTER BALANCE ----- */
+
+  .rox-bot-area{
+    width:278px;
+    background:
+      linear-gradient(
+        90deg,
+        transparent 0%,
+        rgba(6,14,26,.38) 27%,
+        rgba(6,14,26,.84) 100%
+      );
+  }
+
+  .rox-show-scenes{
+    right:278px;
+  }
+
+  .rox-home-bot{
+    width:174px;
+    height:214px;
+    bottom:-1px;
+    filter:
+      drop-shadow(0 34px 30px rgba(0,0,0,.43))
+      drop-shadow(0 0 38px rgba(96,165,250,.13));
+  }
+
+  .rox-home-bot::before{
+    width:220px;
+    height:220px;
+    opacity:.9;
+    background:
+      radial-gradient(
+        circle,
+        rgba(96,165,250,.20) 0%,
+        rgba(99,102,241,.09) 33%,
+        transparent 68%
+      );
+  }
+
+  .rox-head{
+    width:118px;
+    height:83px;
+    top:25px;
+    border-radius:30px 30px 22px 22px;
+  }
+
+  .rox-head::after{
+    inset:11px;
+    border-radius:17px;
+  }
+
+  .rox-head .eye{
+    top:39px;
+    width:13px;
+    height:7px;
+  }
+
+  .rox-head .e1{left:34px}
+  .rox-head .e2{right:34px}
+
+  .rox-head .mouth{
+    top:61px;
+    width:24px;
+  }
+
+  .rox-body{
+    top:120px;
+    width:100px;
+    height:73px;
+  }
+
+  .rox-body .core{
+    top:20px;
+    width:32px;
+    height:32px;
+  }
+
+  .rox-home-bot .arm{
+    top:133px;
+    width:15px;
+    height:60px;
+  }
+
+  .arm-left{left:18px}
+  .arm-right{right:14px}
+
+
+  /* ----- SPEECH BUBBLE: ATTACHED TO ROX ----- */
+
+  .rox-bot-message{
+    top:18px;
+    left:-48px;
+    right:28px;
+    min-height:64px;
+    padding:16px 19px;
+    border-radius:21px 21px 8px 21px;
+    background:
+      linear-gradient(180deg,#ffffff,#f6f8ff);
+    box-shadow:
+      0 22px 44px rgba(0,0,0,.35),
+      0 0 26px rgba(255,255,255,.05);
+  }
+
+  .rox-bot-message::before{
+    right:22px;
+    bottom:-15px;
+    width:29px;
+    height:25px;
+    background:#f7f9ff;
+    clip-path:polygon(0 0,100% 0,100% 100%);
+    transform:rotate(7deg);
+  }
+
+  .rox-bot-message #heroGreeting{
+    font-size:16px;
+    line-height:1.12;
+    color:#0f172a;
+  }
+
+
+  /* ----- ACTIVE TAB AREA CLEANER ----- */
+
+  .rox-show-labels{
+    z-index:12;
+    bottom:13px;
+  }
+
+  .rox-show-labels span{
+    opacity:.72;
+    transition:opacity .25s ease;
+  }
+
+}
+
+
+/* ----- AMBIENT MOTION ----- */
+
+@keyframes roxV41WorldBreath{
+  0%,100%{
+    transform:translate3d(0,0,0) scale(1);
+  }
+  50%{
+    transform:translate3d(-1.5%,1%,0) scale(1.045);
+  }
+}
+
+@keyframes roxV41RingDrift{
+  0%,100%{
+    transform:translateY(-50%) rotateX(66deg) rotateZ(0deg) scale(1);
+    opacity:.72;
+  }
+  50%{
+    transform:translateY(-52%) rotateX(66deg) rotateZ(8deg) scale(1.05);
+    opacity:1;
+  }
+}
+
+@keyframes roxV41RingDriftSmall{
+  0%,100%{
+    transform:translateY(-50%) rotateX(66deg) rotateZ(0deg);
+    opacity:.55;
+  }
+  50%{
+    transform:translateY(-47%) rotateX(66deg) rotateZ(-10deg);
+    opacity:.9;
+  }
+}
+
+/* ROX SHOWCASE V4.1 END */
+
+/* =====================================================
+   ROX SHOWCASE V4.2 ï¿½ ROX SCALE + UI CLARITY
+   ===================================================== */
+
+@media (min-width:900px){
+
+  /* ==========================================
+     ROX CHARACTER ï¿½ ~1.8X VISUAL PRESENCE
+     ========================================== */
+
+  .rox-home-bot{
+    width:260px!important;
+    height:285px!important;
+    bottom:-35px!important;
+    transform:translateX(-50%) scale(1)!important;
+    animation:roxV42BotFloat 3.4s ease-in-out infinite!important;
+    filter:
+      drop-shadow(0 38px 34px rgba(0,0,0,.46))
+      drop-shadow(0 0 45px rgba(96,165,250,.16))!important;
+  }
+
+  .rox-home-bot::before{
+    width:300px!important;
+    height:300px!important;
+  }
+
+  .rox-ant{
+    height:22px!important;
+  }
+
+  .rox-ant::before{
+    width:14px!important;
+    height:14px!important;
+  }
+
+  .rox-head{
+    top:30px!important;
+    width:165px!important;
+    height:116px!important;
+    border-radius:38px 38px 29px 29px!important;
+  }
+
+  .rox-head::after{
+    inset:15px!important;
+    border-radius:23px!important;
+  }
+
+  .rox-head .eye{
+    top:55px!important;
+    width:18px!important;
+    height:10px!important;
+  }
+
+  .rox-head .e1{left:47px!important}
+  .rox-head .e2{right:47px!important}
+
+  .rox-head .mouth{
+    top:85px!important;
+    width:33px!important;
+    height:4px!important;
+  }
+
+  .rox-body{
+    top:161px!important;
+    width:140px!important;
+    height:102px!important;
+    border-radius:27px 27px 38px 38px!important;
+  }
+
+  .rox-body .core{
+    top:28px!important;
+    width:45px!important;
+    height:45px!important;
+    box-shadow:
+      0 0 28px rgba(99,102,241,.96),
+      0 0 58px rgba(96,165,250,.32)!important;
+  }
+
+  .rox-home-bot .arm{
+    top:178px!important;
+    width:20px!important;
+    height:83px!important;
+  }
+
+  .arm-left{
+    left:30px!important;
+  }
+
+  .arm-right{
+    right:25px!important;
+  }
+
+
+  /* ==========================================
+     PREVIEW UI ï¿½ SHARPER / MORE LEGIBLE
+     ========================================== */
+
+  .rox-video-gallery,
+  .rox-game-gallery,
+  .rox-thumb-gallery,
+  .rox-pc{
+    transform:
+      perspective(1600px)
+      rotateY(-3deg)
+      rotateX(1deg)
+      translateZ(0)!important;
+
+    filter:
+      drop-shadow(0 25px 34px rgba(0,0,0,.30))!important;
+
+    -webkit-font-smoothing:antialiased;
+    text-rendering:geometricPrecision;
+  }
+
+  .rox-preview,
+  .rox-game,
+  .rox-thumb,
+  .rox-pc{
+    backdrop-filter:none!important;
+  }
+
+
+  /* ROX IP mini workspace */
+
+  .rox-pc-top{
+    height:32px!important;
+  }
+
+  .rox-pc-top small{
+    font-size:9px!important;
+    color:#aebbd0!important;
+    font-weight:700!important;
+  }
+
+  .rox-pc-side{
+    top:32px!important;
+    padding:17px 11px!important;
+    gap:15px!important;
+  }
+
+  .rox-pc-side span{
+    color:#d3dbea!important;
+    font-size:9px!important;
+    line-height:1.2!important;
+    font-weight:750!important;
+    letter-spacing:.01em!important;
+    text-shadow:0 1px 2px rgba(0,0,0,.5);
+  }
+
+  .rox-pc-work{
+    top:53px!important;
+    gap:10px!important;
+  }
+
+  .rox-pc-work b{
+    height:27px!important;
+    border:1px solid rgba(96,165,250,.11);
+    box-shadow:inset 0 1px rgba(255,255,255,.04);
+  }
+
+
+  /* CODE preview */
+
+  .rox-code-preview{
+    padding:11px 14px!important;
+    font-size:10px!important;
+    line-height:1.65!important;
+    font-weight:650!important;
+    color:#e2e8f0!important;
+    text-rendering:geometricPrecision;
+  }
+
+  .rox-code-preview em{
+    color:#d8b4fe!important;
+  }
+
+  .rox-code-preview b{
+    color:#67e8f9!important;
+  }
+
+
+  /* Labels inside visual cards */
+
+  .rox-game strong,
+  .rox-preview small{
+    font-size:8.5px!important;
+    color:#f8fafc!important;
+    font-weight:900!important;
+    text-shadow:0 2px 5px rgba(0,0,0,.75);
+  }
+
+}
+
+
+/* Bigger Rox keeps subtle movement */
+@keyframes roxV42BotFloat{
+  0%,100%{
+    transform:translateX(-50%) translateY(0) rotate(-.35deg);
+  }
+
+  50%{
+    transform:translateX(-50%) translateY(-7px) rotate(.45deg);
+  }
+}
+
+/* ROX SHOWCASE V4.2 END */
+
+/* =====================================================
+   ROX SHOWCASE V4.3 ï¿½ ROBOT FIT
+   Smaller than V4.2 so full character stays visible
+   ===================================================== */
+
+@media (min-width:900px){
+
+  .rox-home-bot{
+    width:218px!important;
+    height:245px!important;
+    bottom:4px!important;
+  }
+
+  .rox-home-bot::before{
+    width:255px!important;
+    height:255px!important;
+  }
+
+  .rox-head{
+    top:27px!important;
+    width:140px!important;
+    height:98px!important;
+    border-radius:34px 34px 26px 26px!important;
+  }
+
+  .rox-head::after{
+    inset:13px!important;
+    border-radius:20px!important;
+  }
+
+  .rox-head .eye{
+    top:47px!important;
+    width:15px!important;
+    height:8px!important;
+  }
+
+  .rox-head .e1{left:40px!important}
+  .rox-head .e2{right:40px!important}
+
+  .rox-head .mouth{
+    top:72px!important;
+    width:28px!important;
+    height:3px!important;
+  }
+
+  .rox-body{
+    top:137px!important;
+    width:118px!important;
+    height:86px!important;
+    border-radius:24px 24px 33px 33px!important;
+  }
+
+  .rox-body .core{
+    top:23px!important;
+    width:38px!important;
+    height:38px!important;
+  }
+
+  .rox-home-bot .arm{
+    top:151px!important;
+    width:17px!important;
+    height:70px!important;
+  }
+
+  .arm-left{
+    left:25px!important;
+  }
+
+  .arm-right{
+    right:21px!important;
+  }
+
+}
+
+/* ROX SHOWCASE V4.3 ROBOT FIT END */
+
+/* =====================================================
+   ROX SHOWCASE V4.4 ï¿½ COMPACT FULL ROBOT
+   Smaller overall character + full waving hand visible
+   ===================================================== */
+
+@media (min-width:900px){
+
+  .rox-home-bot{
+    width:150px!important;
+    height:185px!important;
+    left:47%!important;
+    bottom:18px!important;
+    transform:translateX(-50%)!important;
+    animation:roxV44BotFloat 3.6s ease-in-out infinite!important;
+  }
+
+  .rox-home-bot::before{
+    width:185px!important;
+    height:185px!important;
+  }
+
+  .rox-ant{
+    top:1px!important;
+    height:16px!important;
+    width:2px!important;
+  }
+
+  .rox-ant::before{
+    width:9px!important;
+    height:9px!important;
+    top:-5px!important;
+  }
+
+  .rox-head{
+    top:18px!important;
+    width:96px!important;
+    height:68px!important;
+    border-radius:25px 25px 18px 18px!important;
+  }
+
+  .rox-head::after{
+    inset:9px!important;
+    border-radius:14px!important;
+  }
+
+  .rox-head .eye{
+    top:32px!important;
+    width:10px!important;
+    height:6px!important;
+  }
+
+  .rox-head .e1{left:28px!important}
+  .rox-head .e2{right:28px!important}
+
+  .rox-head .mouth{
+    top:50px!important;
+    width:18px!important;
+    height:2px!important;
+  }
+
+  .rox-body{
+    top:96px!important;
+    width:80px!important;
+    height:58px!important;
+    border-radius:17px 17px 24px 24px!important;
+  }
+
+  .rox-body .core{
+    top:15px!important;
+    width:26px!important;
+    height:26px!important;
+  }
+
+  .rox-home-bot .arm{
+    top:106px!important;
+    width:11px!important;
+    height:48px!important;
+  }
+
+  .arm-left{
+    left:19px!important;
+    transform:rotate(10deg)!important;
+  }
+
+  .arm-right{
+    right:10px!important;
+    transform:rotate(-28deg);
+    animation:roxV44Wave 1.8s ease-in-out infinite!important;
+  }
+
+  .arm-right .hand{
+    width:19px!important;
+    height:19px!important;
+    bottom:-8px!important;
+    font-size:9px!important;
+  }
+
+  /* Keep bubble separated from the smaller Rox */
+  .rox-bot-message{
+    top:18px!important;
+    left:-22px!important;
+    right:22px!important;
+  }
+
+}
+
+@keyframes roxV44BotFloat{
+  0%,100%{
+    transform:translateX(-50%) translateY(0);
+  }
+  50%{
+    transform:translateX(-50%) translateY(-5px);
+  }
+}
+
+@keyframes roxV44Wave{
+  0%,100%{transform:rotate(-28deg)}
+  50%{transform:rotate(-48deg)}
+}
+
+/* ROX SHOWCASE V4.4 END */
+
+/* ROX SHOWCASE V4.5 ï¿½ WAVE FIX */
+
+@media (min-width:900px){
+  .rox-home-bot .arm-right{
+    right:10px!important;
+    animation:roxV45Wave 1.55s ease-in-out infinite!important;
+  }
+}
+
+@keyframes roxV45Wave{
+  0%,100%{
+    transform:rotate(-28deg);
+  }
+  50%{
+    transform:rotate(-55deg);
+  }
+}
+
+/* ROX SHOWCASE V4.5 END */
+
+/* ROX SHOWCASE V4.5 ï¿½ WAVE FIX */
+
+@media (min-width:900px){
+  .rox-home-bot .arm-right{
+    right:10px!important;
+    animation:roxV45Wave 1.55s ease-in-out infinite!important;
+  }
+}
+
+@keyframes roxV45Wave{
+  0%,100%{
+    transform:rotate(-28deg);
+  }
+  50%{
+    transform:rotate(-55deg);
+  }
+}
+
+/* ROX SHOWCASE V4.5 END */
+
+/* =====================================================
+   ROX SHOWCASE V4.6 ï¿½ REAL ARM WAVE
+   Full arm moves up/down from shoulder
+   ===================================================== */
+
+@media (min-width:900px){
+
+  .rox-home-bot .arm-right{
+    right:10px!important;
+    top:106px!important;
+    transform-origin:50% 0%!important;
+    animation:roxV46RealWave 1.25s ease-in-out infinite!important;
+    will-change:transform;
+  }
+
+  .rox-home-bot .arm-right .hand{
+    transform:translateX(-50%)!important;
+  }
+
+}
+
+@keyframes roxV46RealWave{
+  0%,100%{
+    transform:rotate(-24deg) translateY(0);
+  }
+
+  25%{
+    transform:rotate(-55deg) translateY(-4px);
+  }
+
+  50%{
+    transform:rotate(-72deg) translateY(-8px);
+  }
+
+  75%{
+    transform:rotate(-48deg) translateY(-3px);
+  }
+}
+
+/* ROX SHOWCASE V4.6 END */
+
+/* =====================================================
+   ROX SHOWCASE V4.8 — ULTRA SMOOTH WAVE
+   ===================================================== */
+
+@media (min-width:900px){
+  .rox-home-bot .arm-right{
+    animation:roxV48SmoothWave 1.8s cubic-bezier(.45,0,.55,1) infinite alternate!important;
+    transform-origin:50% 0%!important;
+    will-change:transform;
+  }
+}
+
+@keyframes roxV48SmoothWave{
+  from{
+    transform:rotate(-24deg) translateY(0);
+  }
+
+  to{
+    transform:rotate(-68deg) translateY(-7px);
+  }
+}
+
+/* ROX SHOWCASE V4.8 END */
+
+/* =====================================================
+   ROX SHOWCASE V4.9 — BIGGER WELCOME WAVE
+   ===================================================== */
+
+@media (min-width:900px){
+  .rox-home-bot .arm-right{
+    animation:roxV49BigWelcomeWave 2s cubic-bezier(.45,0,.55,1) infinite alternate!important;
+    transform-origin:50% 0%!important;
+  }
+}
+
+@keyframes roxV49BigWelcomeWave{
+  from{
+    transform:rotate(-24deg) translateY(0);
+  }
+
+  to{
+    transform:rotate(-92deg) translateY(-10px);
+  }
+}
+
+/* ROX SHOWCASE V4.9 END */
+
+/* ROX SHOWCASE V4.10 — SMALL LEFT SHIFT */
+
+@media (min-width:900px){
+  .rox-home-bot{
+    left:43%!important;
+  }
+}
+
+/* ROX SHOWCASE V4.10 END */
+
+/* =====================================================
+   ROX SHOWCASE V4.11 — TRUE 3D ROBOT LOOK
+   Same size / placement / motion, upgraded materials
+   ===================================================== */
+
+@media (min-width:900px){
+
+  /* ROBOT WORLD DEPTH */
+  .rox-home-bot{
+    transform-style:preserve-3d;
+    perspective:900px;
+    filter:
+      drop-shadow(0 22px 22px rgba(0,0,0,.34))
+      drop-shadow(0 0 24px rgba(96,165,250,.11))!important;
+  }
+
+  .rox-home-bot::after{
+    content:"";
+    position:absolute;
+    left:50%;
+    bottom:-4px;
+    width:92px;
+    height:18px;
+    transform:translateX(-50%);
+    border-radius:50%;
+    background:radial-gradient(ellipse,rgba(0,0,0,.34),transparent 68%);
+    filter:blur(5px);
+    z-index:-2;
+  }
+
+
+  /* ANTENNA — METAL CYLINDER */
+  .rox-ant{
+    border-radius:999px;
+    background:
+      linear-gradient(
+        90deg,
+        #57687d 0%,
+        #dce9f7 35%,
+        #ffffff 50%,
+        #91a4ba 70%,
+        #39495d 100%
+      )!important;
+    box-shadow:
+      inset 1px 0 rgba(255,255,255,.45),
+      0 2px 6px rgba(0,0,0,.34);
+  }
+
+  .rox-ant::before{
+    background:
+      radial-gradient(circle at 33% 28%,
+        #ffffff 0%,
+        #bff6ff 18%,
+        #67e8f9 42%,
+        #3b82f6 72%,
+        #1e3a8a 100%)!important;
+    box-shadow:
+      inset 1px 1px 3px rgba(255,255,255,.75),
+      0 0 13px rgba(103,232,249,.95),
+      0 0 28px rgba(59,130,246,.40)!important;
+  }
+
+
+  /* HEAD — 3D METALLIC SHELL */
+  .rox-head{
+    transform:translateX(-50%) rotateX(-2deg) rotateY(-3deg);
+    transform-style:preserve-3d;
+
+    background:
+      radial-gradient(circle at 28% 18%,rgba(255,255,255,.90),transparent 17%),
+      linear-gradient(
+        145deg,
+        #f8fbff 0%,
+        #d5dfeb 14%,
+        #9cabbc 32%,
+        #607187 50%,
+        #35465b 68%,
+        #18263a 86%,
+        #0b1423 100%
+      )!important;
+
+    border:1px solid rgba(255,255,255,.36)!important;
+
+    box-shadow:
+      inset 3px 4px 7px rgba(255,255,255,.45),
+      inset -4px -8px 13px rgba(2,6,23,.42),
+      inset 0 -18px 24px rgba(2,6,23,.18),
+      0 13px 18px rgba(0,0,0,.30),
+      0 25px 38px rgba(0,0,0,.22),
+      0 0 24px rgba(96,165,250,.08)!important;
+  }
+
+  /* shell highlight */
+  .rox-head::before{
+    content:"";
+    position:absolute;
+    z-index:4;
+    left:10%;
+    right:23%;
+    top:5%;
+    height:24%;
+    border-radius:50%;
+    background:
+      linear-gradient(
+        to bottom,
+        rgba(255,255,255,.70),
+        rgba(255,255,255,.18),
+        transparent
+      );
+    filter:blur(1.5px);
+    opacity:.72;
+    pointer-events:none;
+  }
+
+  /* FACE GLASS */
+  .rox-head::after{
+    background:
+      radial-gradient(circle at 50% 28%,rgba(103,232,249,.09),transparent 34%),
+      linear-gradient(
+        155deg,
+        #07111e 0%,
+        #091827 42%,
+        #020812 100%
+      )!important;
+
+    border:1px solid rgba(125,211,252,.22)!important;
+
+    box-shadow:
+      inset 2px 2px 5px rgba(255,255,255,.05),
+      inset -3px -6px 10px rgba(0,0,0,.50),
+      0 1px 0 rgba(255,255,255,.11),
+      0 0 12px rgba(56,189,248,.06);
+  }
+
+
+  /* EYES — LENSES, NOT FLAT DOTS */
+  .rox-head .eye{
+    background:
+      radial-gradient(circle at 35% 32%,
+        #ffffff 0%,
+        #d8ffff 16%,
+        #67e8f9 42%,
+        #22d3ee 70%,
+        #0891b2 100%)!important;
+
+    box-shadow:
+      inset 1px 1px 2px rgba(255,255,255,.80),
+      inset -1px -2px 3px rgba(8,145,178,.35),
+      0 0 9px rgba(103,232,249,.95),
+      0 0 18px rgba(34,211,238,.40)!important;
+  }
+
+  .rox-head .mouth{
+    background:
+      linear-gradient(90deg,#818cf8,#c4b5fd,#818cf8)!important;
+    box-shadow:
+      0 0 7px rgba(129,140,248,.55),
+      inset 0 1px rgba(255,255,255,.35);
+  }
+
+
+  /* BODY — THICK 3D METAL */
+  .rox-body{
+    transform:translateX(-50%) rotateX(2deg) rotateY(-3deg);
+    transform-style:preserve-3d;
+
+    background:
+      radial-gradient(circle at 30% 15%,rgba(255,255,255,.70),transparent 16%),
+      linear-gradient(
+        145deg,
+        #f0f5fb 0%,
+        #c2cedb 17%,
+        #8d9db0 35%,
+        #56687e 53%,
+        #304157 70%,
+        #18263a 86%,
+        #0d1726 100%
+      )!important;
+
+    border:1px solid rgba(255,255,255,.30)!important;
+
+    box-shadow:
+      inset 3px 3px 6px rgba(255,255,255,.36),
+      inset -5px -9px 15px rgba(0,0,0,.32),
+      0 14px 22px rgba(0,0,0,.30),
+      0 24px 34px rgba(0,0,0,.20)!important;
+  }
+
+  .rox-body::before{
+    content:"";
+    position:absolute;
+    left:13%;
+    right:25%;
+    top:6%;
+    height:21%;
+    border-radius:50%;
+    background:
+      linear-gradient(
+        to bottom,
+        rgba(255,255,255,.55),
+        transparent
+      );
+    filter:blur(1px);
+    pointer-events:none;
+  }
+
+
+  /* CORE — CRYSTAL / ENERGY ORB */
+  .rox-body .core{
+    overflow:visible;
+
+    background:
+      radial-gradient(circle at 31% 25%,
+        #ffffff 0%,
+        #dffcff 12%,
+        #67e8f9 29%,
+        #60a5fa 50%,
+        #6366f1 71%,
+        #312e81 100%)!important;
+
+    border:1px solid rgba(255,255,255,.28);
+
+    box-shadow:
+      inset 3px 3px 5px rgba(255,255,255,.72),
+      inset -4px -5px 7px rgba(49,46,129,.42),
+      0 0 14px rgba(103,232,249,.70),
+      0 0 28px rgba(96,165,250,.42),
+      0 0 48px rgba(99,102,241,.18)!important;
+  }
+
+  .rox-body .core::after{
+    content:"";
+    position:absolute;
+    left:18%;
+    top:13%;
+    width:35%;
+    height:24%;
+    border-radius:50%;
+    background:rgba(255,255,255,.70);
+    filter:blur(1.4px);
+  }
+
+
+  /* ARMS — CYLINDRICAL METAL */
+  .rox-home-bot .arm{
+    background:
+      linear-gradient(
+        90deg,
+        #34465c 0%,
+        #7e8fa4 17%,
+        #e5edf6 42%,
+        #b3c0cf 58%,
+        #596b81 78%,
+        #27384d 100%
+      )!important;
+
+    border:1px solid rgba(255,255,255,.17);
+
+    box-shadow:
+      inset 2px 0 3px rgba(255,255,255,.40),
+      inset -2px 0 3px rgba(0,0,0,.28),
+      0 7px 11px rgba(0,0,0,.24);
+  }
+
+
+  /* HAND — SMALL 3D JOINT */
+  .arm-right .hand{
+    background:
+      radial-gradient(circle at 32% 25%,
+        #f8fbff,
+        #a8b7c9 40%,
+        #506177 73%,
+        #24344a 100%)!important;
+
+    border:1px solid rgba(255,255,255,.30)!important;
+
+    box-shadow:
+      inset 2px 2px 3px rgba(255,255,255,.42),
+      inset -2px -3px 4px rgba(0,0,0,.30),
+      0 5px 9px rgba(0,0,0,.26)!important;
+  }
+
+}
+
+/* ROX SHOWCASE V4.11 TRUE 3D ROBOT END */
+
+/* =====================================================
+   ROX SHOWCASE V4.12 — RED ENERGY GEM
+   Replace blue orb with inset faceted red jewel
+   ===================================================== */
+
+@media (min-width:900px){
+
+  .rox-body .core{
+    top:19px!important;
+    width:34px!important;
+    height:34px!important;
+    border-radius:7px 11px 8px 11px!important;
+    transform:translateX(-50%) rotate(45deg)!important;
+
+    background:
+      linear-gradient(135deg,
+        rgba(255,255,255,.85) 0 8%,
+        transparent 9% 23%,
+        rgba(255,255,255,.16) 24% 31%,
+        transparent 32% 100%
+      ),
+      radial-gradient(circle at 32% 24%,
+        #fff1f2 0%,
+        #fecdd3 8%,
+        #fb7185 18%,
+        #ef4444 34%,
+        #dc2626 52%,
+        #991b1b 72%,
+        #450a0a 100%
+      )!important;
+
+    border:
+      1px solid rgba(255,210,215,.72)!important;
+
+    box-shadow:
+      inset 3px 3px 4px rgba(255,255,255,.58),
+      inset -4px -5px 7px rgba(69,10,10,.62),
+      inset 0 0 10px rgba(220,38,38,.34),
+      0 0 8px rgba(239,68,68,.95),
+      0 0 18px rgba(220,38,38,.62),
+      0 0 34px rgba(153,27,27,.30)!important;
+
+    clip-path:polygon(
+      50% 0%,
+      88% 16%,
+      100% 52%,
+      78% 88%,
+      50% 100%,
+      20% 86%,
+      0% 50%,
+      16% 16%
+    )!important;
+  }
+
+  /* Inner gemstone facets */
+  .rox-body .core::before{
+    content:"";
+    position:absolute;
+    inset:6px;
+    border-radius:3px;
+    background:
+      conic-gradient(
+        from 22deg,
+        rgba(255,255,255,.34),
+        rgba(255,255,255,.03) 14%,
+        rgba(127,29,29,.30) 28%,
+        rgba(255,180,190,.20) 42%,
+        rgba(127,29,29,.28) 58%,
+        rgba(255,255,255,.18) 74%,
+        rgba(69,10,10,.34) 88%,
+        rgba(255,255,255,.34)
+      );
+    clip-path:polygon(
+      50% 0%,
+      100% 50%,
+      50% 100%,
+      0% 50%
+    );
+    box-shadow:inset 0 0 6px rgba(255,255,255,.20);
+  }
+
+  .rox-body .core::after{
+    content:"";
+    position:absolute;
+    left:20%;
+    top:14%;
+    width:34%;
+    height:22%;
+    border-radius:50%;
+    background:rgba(255,255,255,.82);
+    filter:blur(1.2px);
+    transform:rotate(-18deg);
+  }
+
+}
+
+/* ROX SHOWCASE V4.12 RED ENERGY GEM END */
+
+/* =====================================================
+   ROX SHOWCASE V4.13 — GLASS ENERGY CHAMBER
+   Red + blue living particles inside Rox
+   ===================================================== */
+
+@media (min-width:900px){
+
+  /* =========================================
+     MAIN GLASS REACTOR WINDOW
+     ========================================= */
+
+  .rox-body .core{
+    top:13px!important;
+    width:45px!important;
+    height:45px!important;
+
+    transform:translateX(-50%) rotate(0deg)!important;
+
+    border-radius:50%!important;
+    clip-path:none!important;
+
+    overflow:hidden!important;
+
+    background:
+      radial-gradient(
+        circle at 37% 30%,
+        rgba(255,255,255,.18),
+        rgba(147,197,253,.07) 25%,
+        rgba(15,23,42,.40) 55%,
+        rgba(2,6,23,.78) 100%
+      )!important;
+
+    border:1px solid rgba(191,219,254,.40)!important;
+
+    box-shadow:
+      inset 3px 3px 7px rgba(255,255,255,.16),
+      inset -4px -5px 10px rgba(0,0,0,.48),
+      inset 0 0 14px rgba(96,165,250,.15),
+      0 0 0 3px rgba(15,23,42,.24),
+      0 0 13px rgba(96,165,250,.18)!important;
+
+    backdrop-filter:blur(3px);
+  }
+
+
+  /* Glass reflection */
+  .rox-body .core::after{
+    content:""!important;
+    position:absolute!important;
+
+    left:8%!important;
+    top:7%!important;
+
+    width:50%!important;
+    height:26%!important;
+
+    border-radius:50%!important;
+
+    background:
+      linear-gradient(
+        150deg,
+        rgba(255,255,255,.58),
+        rgba(255,255,255,.10) 55%,
+        transparent 75%
+      )!important;
+
+    filter:blur(.7px)!important;
+
+    transform:rotate(-18deg)!important;
+
+    pointer-events:none!important;
+
+    z-index:8!important;
+  }
+
+
+  /* =========================================
+     LIVING PARTICLES
+     ::before = particle universe
+     ========================================= */
+
+  .rox-body .core::before{
+    content:""!important;
+
+    position:absolute!important;
+
+    left:50%!important;
+    top:50%!important;
+
+    width:3px!important;
+    height:3px!important;
+
+    margin:-1.5px 0 0 -1.5px!important;
+
+    border-radius:50%!important;
+
+    background:#60a5fa!important;
+
+    /*
+      Each shadow acts like another energy particle.
+      Blue and red are deliberately mixed.
+    */
+    box-shadow:
+
+      /* BLUE */
+      -13px -11px 0 0 #60a5fa,
+       10px -14px 0 0 #38bdf8,
+       15px  -4px 0 0 #818cf8,
+       -5px  14px 0 0 #22d3ee,
+       11px  11px 0 0 #3b82f6,
+      -16px   5px 0 0 #67e8f9,
+
+      /* RED */
+       -8px -15px 0 0 #fb7185,
+       15px   6px 0 0 #ef4444,
+       -14px 11px 0 0 #f43f5e,
+        5px  15px 0 0 #dc2626,
+        3px -10px 0 0 #ff6b6b,
+       -2px   8px 0 0 #e11d48,
+
+      /* GLOW */
+       0 0 5px 1px rgba(96,165,250,.75)!important;
+
+    animation:
+      roxEnergyUniverse 5.8s
+      cubic-bezier(.45,0,.55,1)
+      infinite!important;
+
+    transform-origin:center!important;
+
+    z-index:4!important;
+  }
+
+
+  /* Soft internal aura */
+  .rox-body .core{
+    animation:
+      roxEnergyChamberPulse 3.2s
+      ease-in-out
+      infinite!important;
+  }
+
+}
+
+
+/* =========================================
+   PARTICLES:
+   order ? chaos ? color separation ? reunion
+   ========================================= */
+
+@keyframes roxEnergyUniverse{
+
+  /* Harmonized orbit */
+  0%{
+    transform:
+      rotate(0deg)
+      scale(.82);
+
+    filter:
+      drop-shadow(0 0 2px rgba(96,165,250,.7))
+      drop-shadow(0 0 2px rgba(239,68,68,.55));
+  }
+
+  /* Begin mixing */
+  22%{
+    transform:
+      rotate(95deg)
+      scale(1.05)
+      translate(1px,-1px);
+  }
+
+  /* Controlled chaos */
+  42%{
+    transform:
+      rotate(185deg)
+      scale(.90)
+      translate(-2px,2px);
+
+    filter:
+      drop-shadow(0 0 4px rgba(239,68,68,.75))
+      drop-shadow(0 0 3px rgba(59,130,246,.75));
+  }
+
+  /* Temporary separation */
+  63%{
+    transform:
+      rotate(265deg)
+      scale(1.16)
+      translate(2px,0);
+  }
+
+  /* Start reunion */
+  82%{
+    transform:
+      rotate(320deg)
+      scale(.94)
+      translate(-1px,-1px);
+  }
+
+  /* Back to harmony */
+  100%{
+    transform:
+      rotate(360deg)
+      scale(.82);
+  }
+
+}
+
+
+/* Chamber breathing softly */
+@keyframes roxEnergyChamberPulse{
+
+  0%,100%{
+    box-shadow:
+      inset 3px 3px 7px rgba(255,255,255,.16),
+      inset -4px -5px 10px rgba(0,0,0,.48),
+      inset 0 0 14px rgba(96,165,250,.13),
+      0 0 0 3px rgba(15,23,42,.24),
+      0 0 10px rgba(96,165,250,.13);
+  }
+
+  50%{
+    box-shadow:
+      inset 3px 3px 7px rgba(255,255,255,.20),
+      inset -4px -5px 10px rgba(0,0,0,.44),
+      inset 0 0 18px rgba(239,68,68,.13),
+      0 0 0 3px rgba(15,23,42,.22),
+      0 0 17px rgba(99,102,241,.20);
+  }
+
+}
+
+/* ROX SHOWCASE V4.13 ENERGY CHAMBER END */
+
+/* =====================================================
+   ROX SHOWCASE V4.14 — MINI ENERGY REACTOR
+   Small glass core + tiny red/blue particles
+   ===================================================== */
+
+@media (min-width:900px){
+
+  .rox-body .core{
+    top:15px!important;
+    width:27px!important;
+    height:27px!important;
+
+    transform:translateX(-50%)!important;
+
+    border-radius:50%!important;
+    clip-path:none!important;
+    overflow:hidden!important;
+
+    background:
+      radial-gradient(circle at 34% 28%,
+        rgba(255,255,255,.26),
+        rgba(125,211,252,.08) 30%,
+        rgba(15,23,42,.48) 62%,
+        rgba(2,6,23,.88) 100%)!important;
+
+    border:1px solid rgba(191,219,254,.48)!important;
+
+    box-shadow:
+      inset 2px 2px 4px rgba(255,255,255,.20),
+      inset -2px -3px 5px rgba(0,0,0,.50),
+      0 0 7px rgba(96,165,250,.20)!important;
+
+    animation:none!important;
+  }
+
+  /* tiny red + blue energy particles */
+  .rox-body .core::before{
+    content:""!important;
+    position:absolute!important;
+    left:50%!important;
+    top:50%!important;
+
+    width:2px!important;
+    height:2px!important;
+    margin:-1px 0 0 -1px!important;
+
+    border-radius:50%!important;
+    background:#60a5fa!important;
+
+    box-shadow:
+      -7px -5px 0 #60a5fa,
+       5px -7px 0 #ef4444,
+       7px  2px 0 #38bdf8,
+      -6px  6px 0 #f43f5e,
+       2px  7px 0 #3b82f6,
+      -2px -8px 0 #fb7185,
+       6px  6px 0 #ef4444,
+      -8px  1px 0 #22d3ee!important;
+
+    transform-origin:center!important;
+
+    animation:
+      roxMiniEnergyFly 2.8s linear infinite!important;
+
+    z-index:3!important;
+  }
+
+  /* small glass shine */
+  .rox-body .core::after{
+    content:""!important;
+    position:absolute!important;
+
+    left:18%!important;
+    top:12%!important;
+
+    width:42%!important;
+    height:25%!important;
+
+    border-radius:50%!important;
+
+    background:rgba(255,255,255,.46)!important;
+    filter:blur(.6px)!important;
+
+    transform:rotate(-20deg)!important;
+
+    z-index:5!important;
+  }
+}
+
+@keyframes roxMiniEnergyFly{
+  0%{
+    transform:rotate(0deg) scale(.78);
+  }
+
+  35%{
+    transform:rotate(130deg) scale(1.08) translate(1px,-1px);
+  }
+
+  68%{
+    transform:rotate(245deg) scale(.88) translate(-1px,1px);
+  }
+
+  100%{
+    transform:rotate(360deg) scale(.78);
+  }
+}
+
+/* ROX SHOWCASE V4.14 MINI REACTOR END */
+
+/* =====================================================
+   ROX SHOWCASE V4.15 — TRANSPARENT DIGITAL UNIVERSE CORE
+   Small glass portal + dense red/blue particle universe
+   ===================================================== */
+
+@media (min-width:900px){
+
+  /* ==========================================
+     SMALL TRANSPARENT GLASS PORTAL
+     ========================================== */
+
+  .rox-body .core{
+    top:15px!important;
+    width:29px!important;
+    height:29px!important;
+
+    transform:translateX(-50%)!important;
+
+    border-radius:50%!important;
+    clip-path:none!important;
+    overflow:hidden!important;
+
+    /* transparent window into a tiny digital universe */
+    background:
+      radial-gradient(circle at 48% 52%,
+        rgba(7,15,35,.18) 0%,
+        rgba(7,14,34,.42) 43%,
+        rgba(2,6,23,.72) 100%
+      )!important;
+
+    border:1px solid rgba(180,220,255,.52)!important;
+
+    box-shadow:
+      inset 2px 2px 4px rgba(255,255,255,.14),
+      inset -2px -3px 6px rgba(0,0,0,.52),
+      inset 0 0 8px rgba(59,130,246,.18),
+      0 0 0 2px rgba(10,20,38,.26),
+      0 0 8px rgba(59,130,246,.15)!important;
+
+    backdrop-filter:blur(.4px)!important;
+
+    animation:none!important;
+  }
+
+
+  /* ==========================================
+     DIGITAL SPACE BACKGROUND
+     many tiny stars / pixels at different depths
+     ========================================== */
+
+  .rox-body .core::after{
+    content:""!important;
+
+    position:absolute!important;
+    inset:-45%!important;
+
+    width:auto!important;
+    height:auto!important;
+
+    border-radius:50%!important;
+
+    background:
+      /* bright micro stars */
+      radial-gradient(circle at 12% 18%,rgba(96,165,250,.95) 0 1px,transparent 1.4px),
+      radial-gradient(circle at 31% 72%,rgba(239,68,68,.95) 0 1px,transparent 1.4px),
+      radial-gradient(circle at 72% 24%,rgba(56,189,248,.90) 0 1px,transparent 1.3px),
+      radial-gradient(circle at 83% 61%,rgba(244,63,94,.92) 0 1px,transparent 1.3px),
+      radial-gradient(circle at 48% 42%,rgba(129,140,248,.90) 0 .8px,transparent 1.2px),
+      radial-gradient(circle at 22% 51%,rgba(251,113,133,.86) 0 .8px,transparent 1.2px),
+
+      /* dense far-away star field */
+      repeating-radial-gradient(
+        circle at 45% 48%,
+        rgba(96,165,250,.20) 0 1px,
+        transparent 1px 4px
+      ),
+
+      /* digital-space nebula */
+      radial-gradient(circle at 35% 38%,
+        rgba(37,99,235,.32),
+        transparent 25%
+      ),
+      radial-gradient(circle at 68% 62%,
+        rgba(220,38,38,.24),
+        transparent 24%
+      ),
+      radial-gradient(circle at 54% 50%,
+        rgba(79,70,229,.22),
+        transparent 42%
+      ),
+      linear-gradient(
+        145deg,
+        rgba(2,6,23,.92),
+        rgba(7,20,48,.88) 47%,
+        rgba(18,8,35,.92)
+      )!important;
+
+    opacity:1!important;
+
+    filter:none!important;
+
+    transform:none!important;
+
+    z-index:1!important;
+
+    animation:
+      roxV415DeepUniverse 8s linear infinite!important;
+  }
+
+
+  /* ==========================================
+     FOREGROUND ENERGY PARTICLES
+     Red + Blue swarm
+     ========================================== */
+
+  .rox-body .core::before{
+    content:""!important;
+
+    position:absolute!important;
+
+    left:50%!important;
+    top:50%!important;
+
+    width:1.6px!important;
+    height:1.6px!important;
+
+    margin:-.8px 0 0 -.8px!important;
+
+    border-radius:50%!important;
+
+    background:#60a5fa!important;
+
+    box-shadow:
+
+      /* BLUE ENERGY */
+      -10px -8px 0 #60a5fa,
+       -7px -3px 0 #38bdf8,
+       -9px  5px 0 #2563eb,
+       -4px  9px 0 #67e8f9,
+        1px -10px 0 #3b82f6,
+        5px -8px 0 #818cf8,
+        9px -4px 0 #22d3ee,
+       10px  3px 0 #60a5fa,
+        6px  8px 0 #2563eb,
+        1px 10px 0 #38bdf8,
+
+      /* RED ENERGY */
+       -8px -6px 0 #ef4444,
+       -4px -9px 0 #fb7185,
+       -10px 2px 0 #dc2626,
+       -7px  8px 0 #f43f5e,
+       -2px  6px 0 #ef4444,
+        3px -7px 0 #fb7185,
+        8px -7px 0 #dc2626,
+        7px  1px 0 #ff5a67,
+        9px  7px 0 #e11d48,
+        3px  9px 0 #ef4444,
+
+      /* micro particles / depth */
+       -6px  1px 0 rgba(96,165,250,.60),
+        5px  4px 0 rgba(239,68,68,.65),
+       -1px -5px 0 rgba(56,189,248,.60),
+        2px  3px 0 rgba(251,113,133,.60),
+
+      0 0 4px rgba(96,165,250,.65)!important;
+
+    z-index:4!important;
+
+    transform-origin:center!important;
+
+    animation:
+      roxV415EnergySwarm 3.6s
+      cubic-bezier(.45,0,.55,1)
+      infinite!important;
+  }
+
+}
+
+
+/* ==========================================
+   FAR DIGITAL WORLD ROTATION
+   ========================================== */
+
+@keyframes roxV415DeepUniverse{
+  0%{
+    transform:rotate(0deg) scale(1.05)!important;
+  }
+
+  50%{
+    transform:rotate(180deg) scale(1.18)!important;
+  }
+
+  100%{
+    transform:rotate(360deg) scale(1.05)!important;
+  }
+}
+
+
+/* ==========================================
+   ENERGY BEHAVIOUR:
+   harmony ? chaos ? separation ? reunion
+   ========================================== */
+
+@keyframes roxV415EnergySwarm{
+
+  0%{
+    transform:
+      rotate(0deg)
+      scale(.72);
+  }
+
+  24%{
+    transform:
+      rotate(105deg)
+      scale(1.05)
+      translate(1px,-1px);
+  }
+
+  48%{
+    transform:
+      rotate(195deg)
+      scale(.82)
+      translate(-2px,1px);
+  }
+
+  70%{
+    transform:
+      rotate(280deg)
+      scale(1.15)
+      translate(2px,1px);
+  }
+
+  86%{
+    transform:
+      rotate(325deg)
+      scale(.92)
+      translate(-1px,-1px);
+  }
+
+  100%{
+    transform:
+      rotate(360deg)
+      scale(.72);
+  }
+
+}
+
+/* ROX SHOWCASE V4.15 DIGITAL UNIVERSE CORE END */
+
+/* =====================================================
+   ROX SHOWCASE V4.16 — DEEP GLASS DIGITAL CORE
+   Small transparent portal + dense red/blue swarm
+   ===================================================== */
+
+@media (min-width:900px){
+
+  .rox-body .core{
+    top:15px!important;
+    width:29px!important;
+    height:29px!important;
+    transform:translateX(-50%)!important;
+    border-radius:50%!important;
+    clip-path:none!important;
+    overflow:hidden!important;
+
+    /* Transparent glass portal, not a lens */
+    background:
+      radial-gradient(circle at 50% 50%,
+        rgba(2,6,23,.10) 0%,
+        rgba(6,12,28,.22) 45%,
+        rgba(2,6,23,.52) 100%
+      )!important;
+
+    border:1px solid rgba(210,235,255,.48)!important;
+
+    box-shadow:
+      inset 1px 1px 2px rgba(255,255,255,.16),
+      inset -2px -3px 5px rgba(0,0,0,.42),
+      inset 0 0 7px rgba(59,130,246,.10),
+      0 0 0 1px rgba(10,20,38,.32),
+      0 0 7px rgba(96,165,250,.10)!important;
+
+    backdrop-filter:blur(.2px)!important;
+    animation:none!important;
+  }
+
+  /* ==========================================
+     DEEP DIGITAL UNIVERSE
+     ========================================== */
+
+  .rox-body .core::after{
+    content:""!important;
+    position:absolute!important;
+    inset:-70%!important;
+    width:auto!important;
+    height:auto!important;
+    border-radius:50%!important;
+
+    background:
+      radial-gradient(circle at 18% 22%,rgba(96,165,250,.95) 0 .8px,transparent 1.2px),
+      radial-gradient(circle at 34% 68%,rgba(239,68,68,.95) 0 .8px,transparent 1.2px),
+      radial-gradient(circle at 74% 20%,rgba(56,189,248,.90) 0 .7px,transparent 1.1px),
+      radial-gradient(circle at 80% 72%,rgba(244,63,94,.90) 0 .7px,transparent 1.1px),
+      radial-gradient(circle at 49% 35%,rgba(129,140,248,.80) 0 .6px,transparent 1px),
+      radial-gradient(circle at 62% 57%,rgba(251,113,133,.82) 0 .6px,transparent 1px),
+
+      repeating-radial-gradient(
+        circle at 50% 50%,
+        rgba(255,255,255,.08) 0 .5px,
+        transparent .7px 3px
+      ),
+
+      radial-gradient(circle at 32% 38%,rgba(37,99,235,.26),transparent 26%),
+      radial-gradient(circle at 70% 62%,rgba(185,28,28,.20),transparent 25%),
+      radial-gradient(circle at 50% 50%,rgba(67,56,202,.14),transparent 46%),
+
+      linear-gradient(
+        145deg,
+        rgba(1,5,16,.96),
+        rgba(4,13,34,.95) 50%,
+        rgba(13,5,27,.96)
+      )!important;
+
+    opacity:1!important;
+    filter:none!important;
+    z-index:1!important;
+
+    animation:roxV416DeepSpace 10s linear infinite!important;
+  }
+
+  /* ==========================================
+     DENSE FOREGROUND PARTICLES
+     ========================================== */
+
+  .rox-body .core::before{
+    content:""!important;
+    position:absolute!important;
+    left:50%!important;
+    top:50%!important;
+    width:1.2px!important;
+    height:1.2px!important;
+    margin:-.6px 0 0 -.6px!important;
+    border-radius:50%!important;
+    background:#60a5fa!important;
+
+    box-shadow:
+
+      /* BLUE */
+      -10px -9px 0 #60a5fa,
+       -8px -5px 0 #38bdf8,
+       -6px -1px 0 #2563eb,
+       -9px  4px 0 #22d3ee,
+       -6px  8px 0 #3b82f6,
+       -2px 10px 0 #67e8f9,
+        2px -10px 0 #818cf8,
+        5px -8px 0 #60a5fa,
+        8px -5px 0 #38bdf8,
+       10px -1px 0 #2563eb,
+        9px  4px 0 #22d3ee,
+        6px  8px 0 #3b82f6,
+        2px 10px 0 #67e8f9,
+
+      /* RED */
+      -9px -7px 0 #ef4444,
+      -5px -10px 0 #fb7185,
+      -2px -7px 0 #dc2626,
+      -10px  1px 0 #f43f5e,
+      -8px  7px 0 #ef4444,
+      -4px  9px 0 #fb7185,
+       1px -8px 0 #e11d48,
+       4px -10px 0 #ef4444,
+       7px -7px 0 #fb7185,
+       9px  1px 0 #dc2626,
+       8px  7px 0 #f43f5e,
+       4px  9px 0 #ef4444,
+
+      /* MICRO DEPTH */
+      -3px -3px 0 rgba(96,165,250,.60),
+       3px  3px 0 rgba(239,68,68,.62),
+       0px  5px 0 rgba(56,189,248,.55),
+       5px  0px 0 rgba(251,113,133,.55),
+      -5px  2px 0 rgba(59,130,246,.52),
+       2px -4px 0 rgba(244,63,94,.52),
+
+      0 0 3px rgba(96,165,250,.55)!important;
+
+    z-index:4!important;
+    transform-origin:center!important;
+
+    animation:
+      roxV416Swarm 4.2s
+      cubic-bezier(.45,0,.55,1)
+      infinite!important;
+  }
+
+}
+
+
+/* FAR SPACE — slow depth rotation */
+@keyframes roxV416DeepSpace{
+  0%{
+    transform:rotate(0deg) scale(1.05);
+  }
+  50%{
+    transform:rotate(180deg) scale(1.13);
+  }
+  100%{
+    transform:rotate(360deg) scale(1.05);
+  }
+}
+
+
+/* PARTICLES — harmony, chaos, regroup */
+@keyframes roxV416Swarm{
+  0%{
+    transform:rotate(0deg) scale(.76);
+  }
+
+  22%{
+    transform:rotate(95deg) scale(1.06) translate(1px,-1px);
+  }
+
+  46%{
+    transform:rotate(185deg) scale(.86) translate(-1px,2px);
+  }
+
+  68%{
+    transform:rotate(270deg) scale(1.15) translate(2px,0);
+  }
+
+  84%{
+    transform:rotate(325deg) scale(.92) translate(-1px,-1px);
+  }
+
+  100%{
+    transform:rotate(360deg) scale(.76);
+  }
+}
+
+/* ROX SHOWCASE V4.16 DEEP GLASS DIGITAL CORE END */
+
+/* =====================================================
+   ROX SHOWCASE V4.17 — DENSE LIVING ENERGY
+   ~100 RED + ~80 BLUE visual particles
+   ===================================================== */
+
+@media (min-width:900px){
+
+  .rox-body .core{
+    top:15px!important;
+    width:29px!important;
+    height:29px!important;
+    transform:translateX(-50%)!important;
+    overflow:hidden!important;
+    border-radius:50%!important;
+
+    /* deep transparent digital space */
+    background:
+      radial-gradient(circle at 47% 48%,
+        rgba(20,30,58,.18) 0%,
+        rgba(5,12,30,.55) 58%,
+        rgba(1,4,14,.90) 100%)!important;
+
+    border:1px solid rgba(170,215,255,.40)!important;
+
+    box-shadow:
+      inset 1px 1px 2px rgba(255,255,255,.15),
+      inset -2px -2px 5px rgba(0,0,0,.55),
+      inset 0 0 7px rgba(59,130,246,.13),
+      0 0 5px rgba(59,130,246,.10)!important;
+
+    animation:none!important;
+  }
+
+
+  /* =================================================
+     RED PARTICLE FIELD — visually dominant (~100)
+     ================================================= */
+
+  .rox-body .core::before{
+    content:""!important;
+    position:absolute!important;
+    inset:-35%!important;
+    width:auto!important;
+    height:auto!important;
+    margin:0!important;
+    border-radius:50%!important;
+
+    background:
+
+      radial-gradient(circle,rgba(255,80,92,.95) 0 .55px,transparent .75px)
+      0 0 / 3px 3px,
+
+      radial-gradient(circle,rgba(239,68,68,.86) 0 .48px,transparent .7px)
+      1px 2px / 4px 4px,
+
+      radial-gradient(circle,rgba(251,113,133,.78) 0 .42px,transparent .65px)
+      2px 1px / 5px 5px,
+
+      radial-gradient(circle,rgba(220,38,38,.72) 0 .40px,transparent .62px)
+      3px 4px / 6px 6px!important;
+
+    box-shadow:none!important;
+    filter:
+      drop-shadow(0 0 1px rgba(239,68,68,.65))!important;
+
+    opacity:.94!important;
+    transform-origin:center!important;
+    z-index:4!important;
+
+    animation:
+      roxV417RedCloud 7.2s
+      cubic-bezier(.42,0,.58,1)
+      infinite!important;
+  }
+
+
+  /* =================================================
+     BLUE PARTICLE FIELD — slightly fewer (~80)
+     + distant digital space
+     ================================================= */
+
+  .rox-body .core::after{
+    content:""!important;
+    position:absolute!important;
+    inset:-32%!important;
+    width:auto!important;
+    height:auto!important;
+    border-radius:50%!important;
+
+    background:
+
+      radial-gradient(circle,rgba(96,165,250,.94) 0 .52px,transparent .74px)
+      0 0 / 4px 4px,
+
+      radial-gradient(circle,rgba(56,189,248,.82) 0 .44px,transparent .66px)
+      2px 1px / 5px 5px,
+
+      radial-gradient(circle,rgba(99,102,241,.72) 0 .40px,transparent .62px)
+      1px 3px / 6px 6px,
+
+      radial-gradient(circle at 32% 42%,
+        rgba(37,99,235,.30),
+        transparent 24%),
+
+      radial-gradient(circle at 70% 58%,
+        rgba(185,28,28,.24),
+        transparent 22%)!important;
+
+    filter:
+      drop-shadow(0 0 1px rgba(56,189,248,.55))!important;
+
+    opacity:.90!important;
+    transform-origin:center!important;
+    z-index:3!important;
+
+    animation:
+      roxV417BlueCloud 8.6s
+      cubic-bezier(.42,0,.58,1)
+      infinite!important;
+  }
+
+}
+
+
+/* RED swarm:
+   drift + expand + briefly regroup */
+@keyframes roxV417RedCloud{
+
+  0%,100%{
+    transform:
+      rotate(0deg)
+      scale(.78)
+      translate3d(0,0,0);
+    background-position:
+      0 0,
+      1px 2px,
+      2px 1px,
+      3px 4px;
+  }
+
+  28%{
+    transform:
+      rotate(82deg)
+      scale(1.06)
+      translate3d(1px,-1px,0);
+  }
+
+  52%{
+    transform:
+      rotate(174deg)
+      scale(.90)
+      translate3d(-2px,1px,0);
+    background-position:
+      4px -3px,
+      -2px 5px,
+      5px 2px,
+      -3px -4px;
+  }
+
+  76%{
+    transform:
+      rotate(282deg)
+      scale(1.12)
+      translate3d(2px,1px,0);
+  }
+
+}
+
+
+/* BLUE swarm moves differently so the
+   two energies sometimes mix and separate */
+@keyframes roxV417BlueCloud{
+
+  0%,100%{
+    transform:
+      rotate(360deg)
+      scale(.86)
+      translate3d(0,0,0);
+  }
+
+  30%{
+    transform:
+      rotate(258deg)
+      scale(1.10)
+      translate3d(-1px,1px,0);
+    background-position:
+      -4px 3px,
+      3px -4px,
+      -2px 5px,
+      center,
+      center;
+  }
+
+  58%{
+    transform:
+      rotate(164deg)
+      scale(.82)
+      translate3d(2px,-1px,0);
+  }
+
+  82%{
+    transform:
+      rotate(72deg)
+      scale(1.04)
+      translate3d(-1px,-1px,0);
+  }
+
+}
+
+/* ROX SHOWCASE V4.17 DENSE LIVING ENERGY END */
+
+/* =====================================================
+   ROX SHOWCASE V4.18 — ORGANIC CHASING ENERGY SWARMS
+   Red swarm follows blue swarm
+   No grids / no repeated rows
+   ===================================================== */
+
+@media (min-width:900px){
+
+  .rox-body .core{
+    overflow:hidden!important;
+    background:
+      radial-gradient(circle at 50% 48%,
+        rgba(15,28,58,.12) 0%,
+        rgba(4,11,29,.58) 58%,
+        rgba(1,4,14,.94) 100%)!important;
+
+    border:1px solid rgba(175,220,255,.38)!important;
+
+    box-shadow:
+      inset 1px 1px 2px rgba(255,255,255,.13),
+      inset -2px -2px 5px rgba(0,0,0,.58),
+      inset 0 0 9px rgba(59,130,246,.11),
+      0 0 5px rgba(59,130,246,.08)!important;
+  }
+
+
+  /* =================================================
+     RED SWARM
+     Organic scattered micro-particles
+     ================================================= */
+
+  .rox-body .core::before{
+    content:""!important;
+    position:absolute!important;
+
+    left:50%!important;
+    top:50%!important;
+
+    width:24px!important;
+    height:24px!important;
+
+    margin:-12px 0 0 -12px!important;
+
+    border-radius:50%!important;
+
+    background:
+      radial-gradient(circle at 12% 26%,#ff5b67 0 .65px,transparent .9px),
+      radial-gradient(circle at 23% 61%,#ef4444 0 .55px,transparent .82px),
+      radial-gradient(circle at 31% 17%,#fb7185 0 .48px,transparent .76px),
+      radial-gradient(circle at 39% 78%,#dc2626 0 .58px,transparent .84px),
+      radial-gradient(circle at 47% 42%,#ff6673 0 .50px,transparent .77px),
+      radial-gradient(circle at 54% 12%,#f43f5e 0 .55px,transparent .82px),
+      radial-gradient(circle at 61% 69%,#ef4444 0 .65px,transparent .9px),
+      radial-gradient(circle at 72% 31%,#fb7185 0 .46px,transparent .74px),
+      radial-gradient(circle at 83% 74%,#dc2626 0 .55px,transparent .82px),
+      radial-gradient(circle at 91% 46%,#ff5967 0 .58px,transparent .84px),
+
+      radial-gradient(circle at 17% 85%,rgba(239,68,68,.95) 0 .42px,transparent .7px),
+      radial-gradient(circle at 28% 37%,rgba(251,113,133,.95) 0 .40px,transparent .68px),
+      radial-gradient(circle at 35% 54%,rgba(220,38,38,.92) 0 .42px,transparent .7px),
+      radial-gradient(circle at 43% 24%,rgba(239,68,68,.92) 0 .38px,transparent .66px),
+      radial-gradient(circle at 51% 88%,rgba(251,113,133,.90) 0 .42px,transparent .7px),
+      radial-gradient(circle at 58% 51%,rgba(220,38,38,.94) 0 .40px,transparent .68px),
+      radial-gradient(circle at 67% 18%,rgba(239,68,68,.90) 0 .38px,transparent .66px),
+      radial-gradient(circle at 75% 57%,rgba(251,113,133,.92) 0 .43px,transparent .71px),
+      radial-gradient(circle at 86% 22%,rgba(220,38,38,.90) 0 .39px,transparent .67px),
+      radial-gradient(circle at 94% 86%,rgba(239,68,68,.88) 0 .42px,transparent .7px)!important;
+
+    box-shadow:none!important;
+
+    filter:
+      drop-shadow(0 0 1.4px rgba(239,68,68,.72))!important;
+
+    transform-origin:50% 50%!important;
+    z-index:5!important;
+
+    animation:
+      roxV418RedChase 5.4s
+      cubic-bezier(.45,0,.55,1)
+      infinite!important;
+  }
+
+
+  /* =================================================
+     BLUE SWARM
+     Leader swarm
+     ================================================= */
+
+  .rox-body .core::after{
+    content:""!important;
+    position:absolute!important;
+
+    left:50%!important;
+    top:50%!important;
+
+    width:23px!important;
+    height:23px!important;
+
+    margin:-11.5px 0 0 -11.5px!important;
+
+    border-radius:50%!important;
+
+    background:
+      radial-gradient(circle at 9% 53%,#60a5fa 0 .62px,transparent .88px),
+      radial-gradient(circle at 19% 21%,#38bdf8 0 .52px,transparent .80px),
+      radial-gradient(circle at 27% 76%,#2563eb 0 .56px,transparent .82px),
+      radial-gradient(circle at 36% 43%,#67e8f9 0 .47px,transparent .74px),
+      radial-gradient(circle at 45% 13%,#3b82f6 0 .55px,transparent .82px),
+      radial-gradient(circle at 55% 66%,#60a5fa 0 .60px,transparent .87px),
+      radial-gradient(circle at 64% 32%,#22d3ee 0 .48px,transparent .75px),
+      radial-gradient(circle at 73% 83%,#2563eb 0 .54px,transparent .81px),
+      radial-gradient(circle at 82% 48%,#38bdf8 0 .58px,transparent .84px),
+      radial-gradient(circle at 93% 17%,#818cf8 0 .47px,transparent .74px),
+
+      radial-gradient(circle at 14% 88%,rgba(96,165,250,.90) 0 .40px,transparent .68px),
+      radial-gradient(circle at 24% 44%,rgba(56,189,248,.92) 0 .38px,transparent .66px),
+      radial-gradient(circle at 33% 27%,rgba(37,99,235,.90) 0 .42px,transparent .7px),
+      radial-gradient(circle at 42% 91%,rgba(103,232,249,.88) 0 .39px,transparent .67px),
+      radial-gradient(circle at 51% 39%,rgba(59,130,246,.92) 0 .42px,transparent .7px),
+      radial-gradient(circle at 61% 73%,rgba(96,165,250,.90) 0 .38px,transparent .66px),
+      radial-gradient(circle at 69% 12%,rgba(34,211,238,.90) 0 .40px,transparent .68px),
+      radial-gradient(circle at 78% 58%,rgba(37,99,235,.88) 0 .41px,transparent .69px),
+      radial-gradient(circle at 88% 34%,rgba(56,189,248,.90) 0 .38px,transparent .66px),
+      radial-gradient(circle at 95% 79%,rgba(129,140,248,.86) 0 .40px,transparent .68px)!important;
+
+    filter:
+      drop-shadow(0 0 1.4px rgba(56,189,248,.72))!important;
+
+    transform-origin:50% 50%!important;
+    z-index:4!important;
+
+    animation:
+      roxV418BlueLead 5.4s
+      cubic-bezier(.45,0,.55,1)
+      infinite!important;
+  }
+
+}
+
+
+/* =====================================================
+   BLUE = LEADER
+   Makes a smooth elliptical orbit
+   ===================================================== */
+
+@keyframes roxV418BlueLead{
+
+  0%,100%{
+    transform:
+      translate3d(5px,-1px,0)
+      rotate(0deg)
+      scale(.72);
+  }
+
+  18%{
+    transform:
+      translate3d(2px,-6px,0)
+      rotate(55deg)
+      scale(.88);
+  }
+
+  34%{
+    transform:
+      translate3d(-5px,-3px,0)
+      rotate(115deg)
+      scale(1.04);
+  }
+
+  50%{
+    transform:
+      translate3d(-6px,3px,0)
+      rotate(180deg)
+      scale(.82);
+  }
+
+  66%{
+    transform:
+      translate3d(-1px,6px,0)
+      rotate(238deg)
+      scale(1.02);
+  }
+
+  82%{
+    transform:
+      translate3d(5px,3px,0)
+      rotate(305deg)
+      scale(.88);
+  }
+}
+
+
+/* =====================================================
+   RED = CHASER
+   Follows same universe but with delayed trajectory.
+   At some points it catches blue; at others it separates.
+   ===================================================== */
+
+@keyframes roxV418RedChase{
+
+  0%,100%{
+    transform:
+      translate3d(-2px,5px,0)
+      rotate(-18deg)
+      scale(.88);
+  }
+
+  /* red starts chasing upward */
+  16%{
+    transform:
+      translate3d(4px,3px,0)
+      rotate(40deg)
+      scale(1.04);
+  }
+
+  /* almost meets blue */
+  31%{
+    transform:
+      translate3d(3px,-5px,0)
+      rotate(102deg)
+      scale(.80);
+  }
+
+  /* both swarms briefly merge near center */
+  47%{
+    transform:
+      translate3d(-3px,-3px,0)
+      rotate(165deg)
+      scale(1.10);
+  }
+
+  /* separation */
+  63%{
+    transform:
+      translate3d(-6px,4px,0)
+      rotate(225deg)
+      scale(.83);
+  }
+
+  /* red catches blue again */
+  79%{
+    transform:
+      translate3d(1px,6px,0)
+      rotate(288deg)
+      scale(1.06);
+  }
+
+  91%{
+    transform:
+      translate3d(5px,1px,0)
+      rotate(338deg)
+      scale(.90);
+  }
+}
+
+/* ROX SHOWCASE V4.18 ORGANIC CHASING SWARMS END */
+
+/* =====================================================
+   ROX SHOWCASE V4.19 — CLEAN COMIC WELCOME BUBBLE
+   ===================================================== */
+
+@media (min-width:900px){
+
+  .rox-bot-message{
+    top:15px!important;
+    left:-42px!important;
+    right:18px!important;
+
+    min-height:72px!important;
+
+    display:flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+
+    padding:16px 22px!important;
+
+    overflow:visible!important;
+
+    background:#ffffff!important;
+
+    border:3px solid #0b0d12!important;
+
+    border-radius:
+      48% 52% 48% 52% /
+      45% 47% 53% 55%!important;
+
+    box-shadow:
+      0 7px 0 rgba(0,0,0,.08),
+      0 15px 28px rgba(0,0,0,.20)!important;
+
+    backdrop-filter:none!important;
+  }
+
+
+  /* Comic speech tail toward Rox */
+  .rox-bot-message::before{
+    content:""!important;
+
+    position:absolute!important;
+
+    right:23px!important;
+    left:auto!important;
+
+    bottom:-20px!important;
+    top:auto!important;
+
+    width:34px!important;
+    height:31px!important;
+
+    background:#ffffff!important;
+
+    clip-path:polygon(
+      0 0,
+      100% 8%,
+      72% 100%
+    )!important;
+
+    transform:rotate(7deg)!important;
+
+    z-index:2!important;
+  }
+
+
+  /* black contour around tail */
+  .rox-bot-message::after{
+    content:""!important;
+
+    position:absolute!important;
+
+    right:19px!important;
+    left:auto!important;
+
+    bottom:-25px!important;
+    top:auto!important;
+
+    width:42px!important;
+    height:38px!important;
+
+    background:#0b0d12!important;
+
+    clip-path:polygon(
+      0 0,
+      100% 8%,
+      72% 100%
+    )!important;
+
+    transform:rotate(7deg)!important;
+
+    border:0!important;
+    border-radius:0!important;
+
+    z-index:1!important;
+  }
+
+
+  .rox-bot-message #heroGreeting{
+    position:relative!important;
+    z-index:5!important;
+
+    width:100%!important;
+
+    color:#111318!important;
+
+    text-align:center!important;
+
+    font-family:Inter,Arial,sans-serif!important;
+
+    font-size:15px!important;
+    line-height:1.15!important;
+
+    font-weight:900!important;
+
+    letter-spacing:-.025em!important;
+
+    white-space:normal!important;
+    overflow:visible!important;
+    text-overflow:clip!important;
+
+    text-shadow:none!important;
+  }
+
+
+  /* Only Welcome + account name */
+  .rox-bot-message small{
+    display:none!important;
+  }
+
+}
+
+/* ROX SHOWCASE V4.19 COMIC WELCOME BUBBLE END */
+
+/* =====================================================
+   ROX SHOWCASE V4.20 — SMALLER STAR WELCOME BUBBLE
+   ===================================================== */
+
+@media (min-width:900px){
+
+  .rox-bot-message{
+    top:54px!important;
+    left:2px!important;
+    right:24px!important;
+
+    min-height:40px!important;
+    padding:8px 12px!important;
+
+    border:2px solid #0b0d12!important;
+
+    border-radius:
+      48% 52% 48% 52% /
+      45% 47% 53% 55%!important;
+
+    box-shadow:
+      0 4px 0 rgba(0,0,0,.07),
+      0 9px 18px rgba(0,0,0,.16)!important;
+  }
+
+  .rox-bot-message #heroGreeting{
+    font-size:10px!important;
+    line-height:1.1!important;
+    font-weight:900!important;
+    white-space:nowrap!important;
+  }
+
+  .rox-bot-message #heroGreeting::after{
+    content:" ??";
+  }
+
+  .rox-bot-message::before{
+    right:17px!important;
+    bottom:-13px!important;
+    width:23px!important;
+    height:21px!important;
+    transform:rotate(6deg)!important;
+  }
+
+  .rox-bot-message::after{
+    right:14px!important;
+    bottom:-17px!important;
+    width:29px!important;
+    height:27px!important;
+    transform:rotate(6deg)!important;
+  }
+}
+
+/* ROX SHOWCASE V4.20 END */
+
+/* =====================================================
+   ROX SHOWCASE V4.21 — CSS STAR, NO EMOJI
+   ===================================================== */
+
+@media (min-width:900px){
+
+  /* remove broken emoji output */
+  .rox-bot-message #heroGreeting::after{
+    content:""!important;
+  }
+
+  /* small reliable CSS star */
+  .rox-bot-message #heroGreeting::before{
+    content:""!important;
+    position:absolute!important;
+
+    right:6px!important;
+    top:50%!important;
+
+    width:9px!important;
+    height:9px!important;
+
+    transform:translateY(-50%) rotate(45deg)!important;
+
+    background:#facc15!important;
+
+    clip-path:polygon(
+      50% 0%,
+      61% 36%,
+      100% 50%,
+      61% 64%,
+      50% 100%,
+      39% 64%,
+      0% 50%,
+      39% 36%
+    )!important;
+
+    filter:drop-shadow(0 0 3px rgba(250,204,21,.55))!important;
+  }
+
+  .rox-bot-message #heroGreeting{
+    padding-right:18px!important;
+  }
+
+}
+
+/* ROX SHOWCASE V4.21 END */
+
+/* =====================================================
+   ROX SHOWCASE V4.22 — REACTIVE RED 3D GRID BACKGROUND
+   BACKGROUND ONLY
+   ===================================================== */
+
+@media (min-width:900px){
+
+  .rox-showcase-hero{
+    --rox-grid-x:0deg;
+    --rox-grid-y:0deg;
+    --rox-pointer-x:50%;
+    --rox-pointer-y:50%;
+
+    background:#000!important;
+    isolation:isolate!important;
+  }
+
+  /* Red 3D wireframe — BEHIND EVERYTHING */
+  .rox-showcase-hero::before{
+    content:""!important;
+    position:absolute!important;
+    z-index:0!important;
+
+    left:-18%!important;
+    right:-18%!important;
+    top:-38%!important;
+    bottom:-46%!important;
+
+    pointer-events:none!important;
+
+    background:
+      linear-gradient(rgba(255,32,32,.22) 1px,transparent 1px),
+      linear-gradient(90deg,rgba(255,32,32,.22) 1px,transparent 1px)!important;
+
+    background-size:34px 34px!important;
+
+    transform-origin:50% 65%!important;
+
+    transform:
+      perspective(650px)
+      rotateX(calc(64deg + var(--rox-grid-y)))
+      rotateZ(var(--rox-grid-x))
+      scale(1.28)!important;
+
+    opacity:.72!important;
+
+    filter:
+      drop-shadow(0 0 3px rgba(255,0,0,.40))
+      drop-shadow(0 0 8px rgba(190,0,0,.12))!important;
+
+    mask-image:
+      radial-gradient(
+        ellipse at center,
+        #000 0%,
+        rgba(0,0,0,.96) 54%,
+        rgba(0,0,0,.46) 76%,
+        transparent 100%
+      )!important;
+
+    transition:
+      transform .16s cubic-bezier(.22,.61,.36,1)!important;
+
+    animation:roxV422GridFlow 8s linear infinite!important;
+  }
+
+  /* Cursor-reactive red energy underneath the grid */
+  .rox-showcase-hero::after{
+    content:""!important;
+    position:absolute!important;
+    inset:0!important;
+    z-index:0!important;
+
+    pointer-events:none!important;
+
+    background:
+      radial-gradient(
+        circle at var(--rox-pointer-x) var(--rox-pointer-y),
+        rgba(255,32,32,.18) 0%,
+        rgba(180,0,0,.08) 13%,
+        transparent 34%
+      ),
+      radial-gradient(
+        ellipse at 50% 115%,
+        rgba(120,0,0,.16),
+        transparent 53%
+      )!important;
+
+    opacity:1!important;
+  }
+
+  /* Existing background layer becomes a subtle deep-space haze */
+  .rox-show-bg{
+    z-index:0!important;
+    inset:0!important;
+    opacity:1!important;
+    filter:none!important;
+
+    background:
+      radial-gradient(
+        circle at var(--rox-pointer-x) var(--rox-pointer-y),
+        rgba(255,0,0,.075),
+        transparent 23%
+      ),
+      radial-gradient(
+        circle at 70% 50%,
+        rgba(90,0,0,.08),
+        transparent 30%
+      )!important;
+
+    animation:roxV422VoidBreath 7s ease-in-out infinite!important;
+    pointer-events:none!important;
+  }
+
+  /* EVERYTHING IMPORTANT STAYS ABOVE THE BACKGROUND */
+  .rox-show-scenes{
+    z-index:4!important;
+  }
+
+  .rox-show-scene{
+    z-index:4!important;
+  }
+
+  .rox-bot-area{
+    z-index:8!important;
+  }
+
+  .rox-show-labels{
+    z-index:10!important;
+  }
+
+}
+
+@keyframes roxV422GridFlow{
+  0%{
+    background-position:0 0,0 0;
+  }
+
+  100%{
+    background-position:0 34px,34px 0;
+  }
+}
+
+@keyframes roxV422VoidBreath{
+  0%,100%{
+    opacity:.78;
+  }
+
+  50%{
+    opacity:1;
+  }
+}
+
+/* ROX SHOWCASE V4.22 RED 3D GRID END */

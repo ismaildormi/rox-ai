@@ -1,2 +1,4 @@
 2026-08-05T05:27:03: [env:worker] No image provider is configured. Image jobs will exhaust retries and be refunded.
 2026-08-05T05:27:03: [env:worker] REPLICATE_API_TOKEN is not set. Video jobs will exhaust retries and be refunded.
+2026-08-07T02:38:10: [env:worker] No image provider is configured. Image jobs will exhaust retries and be refunded.
+2026-08-07T02:38:10: [env:worker] REPLICATE_API_TOKEN is not set. Video jobs will exhaust retries and be refunded.

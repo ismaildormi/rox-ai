@@ -1,0 +1,6 @@
+{
+  "version": "0.64.0",
+  "channel": "safe-bridge",
+  "releasedAt": "2026-08-05",
+  "description": "Local/staging/production profiles, safe import into existing Git project, live provider verifier, smoke tests, coming-soon gates, and guarded deployment"
+}

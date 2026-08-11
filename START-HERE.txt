@@ -1,0 +1,18 @@
+ROX AI v0.64 SAFE BRIDGE
+
+DO NOT replace the live project manually.
+
+1) Extract this ZIP into a separate folder.
+2) Double-click ROX-BRIDGE.cmd.
+3) Select the existing ROX AI Git project folder.
+4) The bridge makes a rollback backup, preserves Git/secrets/hosting links, imports v0.64, and activates LOCAL.
+5) Nothing is pushed or deployed.
+6) Open ROX-MANAGER.cmd and use:
+   19 Profiles
+   21 Live verifier
+   22 Smoke tests
+   23 Staging branch
+7) Production is the final guarded step only after staging passes.
+
+Next product phase: persistent conversations + History + Projects.
+Rox IP stays last.

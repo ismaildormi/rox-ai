@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="520" viewBox="0 0 900 520">
+<defs>
+  <linearGradient id="sky" x2="0" y2="1"><stop stop-color="#172554"/><stop offset="1" stop-color="#0f172a"/></linearGradient>
+  <linearGradient id="road" x2="0" y2="1"><stop stop-color="#374151"/><stop offset="1" stop-color="#080b12"/></linearGradient>
+  <linearGradient id="car" x2="1"><stop stop-color="#2563eb"/><stop offset=".55" stop-color="#7c3aed"/><stop offset="1" stop-color="#ec4899"/></linearGradient>
+</defs>
+<rect width="900" height="520" rx="34" fill="url(#sky)"/>
+<circle cx="720" cy="105" r="54" fill="#fb7185"/>
+<path d="M0 300L280 180 450 300 650 150 900 300V520H0Z" fill="#111827"/>
+<path d="M300 520L410 285H500L625 520Z" fill="url(#road)"/>
+<path d="M450 300L456 350M469 375L482 445" stroke="#f8fafc" stroke-width="8" stroke-linecap="round"/>
+<g transform="translate(365 340)">
+ <path d="M35 90L62 28Q70 10 90 10H180Q200 10 210 28L240 90Z" fill="url(#car)"/>
+ <rect x="73" y="27" width="125" height="38" rx="18" fill="#0b1020"/>
+ <circle cx="70" cy="94" r="27" fill="#020617"/><circle cx="205" cy="94" r="27" fill="#020617"/>
+ <circle cx="70" cy="94" r="12" fill="#94a3b8"/><circle cx="205" cy="94" r="12" fill="#94a3b8"/>
+ <rect x="112" y="70" width="55" height="11" rx="5" fill="#67e8f9"/>
+</g>
+<rect x="28" y="28" width="168" height="45" rx="14" fill="#050b18" fill-opacity=".78"/>
+<text x="48" y="58" fill="#fff" font-family="Arial" font-size="22" font-weight="800">ROX RACING</text>
+<text x="710" y="476" fill="#94a3b8" font-family="Arial" font-size="20">120 KM/H</text>
+</svg>

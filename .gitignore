@@ -16,3 +16,6 @@ frontend/rox-config.local.js
 /.vercel/
 /.railway/
 logs/*.json
+
+.vercel
+.env*

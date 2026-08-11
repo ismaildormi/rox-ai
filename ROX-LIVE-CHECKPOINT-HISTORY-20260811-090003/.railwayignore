@@ -1,0 +1,29 @@
+﻿# ROX AI - Railway upload exclusions
+# Keep local backups/assets safe on disk; do not upload them to backend deployment.
+
+.rox/
+backups/
+logs/
+
+ROX-FRONTEND-EMERGENCY-BACKUP-*/
+ROX-FRONTEND-*.zip
+
+frontend/*.bak
+frontend/*.backup-*
+frontend/*before-*
+frontend/*broken*
+frontend/*corrupted*
+frontend/*encoding-test*
+frontend/*previous-production*
+frontend/*published-reference*
+frontend/*.ROX-IP-*-LIVE-SUCCESS-*.html
+frontend/*.ROX-IP-*-LIVE-SUCCESS-*.css
+
+frontend/showcase-assets/
+frontend/videos-carousel/
+frontend/images-carousel/
+frontend/images-carousel-backup-*/
+frontend/showcase-assets/
+frontend/*preview*.html
+
+*.zip

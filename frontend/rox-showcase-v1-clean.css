@@ -1,0 +1,73 @@
+   ROX SHOWCASE HERO V1 START
+   ===================================================== */
+
+@media (min-width:900px){
+  .rox-showcase-hero{position:relative!important;isolation:isolate!important;display:block!important;height:270px!important;min-height:270px!important;padding:0!important;overflow:hidden!important;border-radius:17px!important;background:radial-gradient(circle at 82% 25%,rgba(99,102,241,.17),transparent 32%),radial-gradient(circle at 10% 120%,rgba(14,165,233,.10),transparent 36%),linear-gradient(135deg,#091321,#0c1726 52%,#08111d)!important;border:1px solid rgba(148,163,184,.13)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.025),0 18px 46px rgba(0,0,0,.18)!important}
+  .rox-showcase-hero::before{content:""!important;position:absolute!important;inset:0!important;pointer-events:none!important;background:repeating-linear-gradient(90deg,transparent 0 45px,rgba(99,102,241,.025) 46px,transparent 47px)!important}
+  .rox-show-bg{position:absolute;inset:-30%;opacity:.35;background:radial-gradient(circle at center,rgba(59,130,246,.15),transparent 34%);animation:roxShowGlow 6s ease-in-out infinite}
+  .rox-show-scenes{position:absolute;left:0;top:0;right:195px;bottom:32px;overflow:hidden}
+  .rox-show-scene{position:absolute;inset:0;opacity:0;transform:translateY(10px) scale(.99);padding:33px 22px 20px 30px;animation:roxSceneSwitch 20s cubic-bezier(.2,.7,.2,1) infinite}
+  .scene-video{animation-delay:0s}.scene-code{animation-delay:5s}.scene-ip{animation-delay:10s}.scene-creator{animation-delay:15s}
+  .rox-show-copy{position:relative;z-index:5;width:45%}
+  .rox-show-copy>span{display:block;margin-bottom:9px;color:#818CF8;font-size:10px;font-weight:850;letter-spacing:.18em}
+  .rox-show-copy h2{margin:0!important;color:#F8FAFC;font-family:Inter,Arial,sans-serif!important;font-size:26px!important;line-height:1.08!important;letter-spacing:-.035em!important;font-weight:800!important;text-shadow:0 5px 18px rgba(0,0,0,.3)}
+  .rox-show-copy p{margin:10px 0 0!important;max-width:360px;color:#8996AA!important;font-size:11px!important;line-height:1.45!important}
+  .rox-video-gallery,.rox-game-gallery,.rox-thumb-gallery,.rox-pc{position:absolute;right:12px;top:21px;width:49%;height:179px;transform:perspective(800px) rotateY(-5deg)}
+  .rox-video-gallery{display:grid;grid-template-columns:1.25fr .85fr;grid-template-rows:1fr 1fr;gap:7px}
+  .rox-preview{position:relative;overflow:hidden;border-radius:11px;border:1px solid rgba(255,255,255,.10);box-shadow:0 12px 28px rgba(0,0,0,.24),inset 0 1px rgba(255,255,255,.05)}
+  .pv1{grid-row:1/span 2;background:radial-gradient(circle at 50% 38%,#FDE68A 0 7%,transparent 8%),linear-gradient(145deg,#172554,#7C3AED 50%,#EC4899)}
+  .pv2{background:linear-gradient(145deg,#071827,#0F766E,#22D3EE)}.pv3{background:linear-gradient(145deg,#111827,#7C2D12,#F59E0B)}
+  .rox-preview b{position:absolute;left:50%;top:50%;width:31px;height:31px;display:flex;align-items:center;justify-content:center;transform:translate(-50%,-50%);border-radius:50%;color:#fff;font-size:10px;background:rgba(2,6,23,.68);border:1px solid rgba(255,255,255,.18)}
+  .rox-preview small{position:absolute;left:8px;bottom:7px;color:rgba(255,255,255,.76);font-size:7px;font-weight:800;letter-spacing:.13em}
+  .rox-game-gallery{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 52px;gap:7px}
+  .rox-game{position:relative;overflow:hidden;border-radius:11px;border:1px solid rgba(255,255,255,.10);box-shadow:0 12px 26px rgba(0,0,0,.23)}
+  .game-one{background:linear-gradient(180deg,#312E81 0 52%,#111827 53%)}.game-two{background:linear-gradient(180deg,#052438,#0F766E)}
+  .game-one::after{content:"";position:absolute;left:30%;bottom:-28%;width:40%;height:85%;background:#090F1A;clip-path:polygon(38% 0,62% 0,100% 100%,0 100%)}
+  .game-one i{position:absolute;right:18px;top:15px;width:24px;height:24px;border-radius:50%;background:#FB7185;box-shadow:0 0 20px rgba(251,113,133,.48)}
+  .game-two i{position:absolute;left:28%;bottom:25%;width:11px;height:19px;border-radius:4px;background:#FDE68A;box-shadow:0 0 12px rgba(253,230,138,.5)}
+  .rox-game strong{position:absolute;z-index:4;left:8px;bottom:7px;color:#fff;font-size:7px;letter-spacing:.13em}
+  .rox-code-preview{grid-column:1/span 2;border-radius:9px;padding:9px 12px;color:#CBD5E1;font-family:monospace;font-size:8px;line-height:1.7;background:#080F1A;border:1px solid rgba(148,163,184,.10)}
+  .rox-code-preview em{color:#C084FC;font-style:normal}.rox-code-preview b{color:#67E8F9}
+  .rox-pc{overflow:hidden;border-radius:11px;background:#0A1321;border:1px solid rgba(148,163,184,.14);box-shadow:0 14px 30px rgba(0,0,0,.25)}
+  .rox-pc-top{height:27px;display:flex;align-items:center;gap:5px;padding:0 9px;background:#101B2B;border-bottom:1px solid rgba(148,163,184,.09)}
+  .rox-pc-top i{width:5px;height:5px;border-radius:50%;background:#64748B}.rox-pc-top small{margin-left:5px;color:#64748B;font-size:7px}
+  .rox-pc-side{position:absolute;top:27px;bottom:0;left:0;width:31%;padding:14px 9px;display:flex;flex-direction:column;gap:10px;background:#0D1726;border-right:1px solid rgba(148,163,184,.08)}
+  .rox-pc-side span{color:#94A3B8;font-size:7px}
+  .rox-pc-work{position:absolute;left:37%;right:8%;top:46px;display:grid;gap:8px}
+  .rox-pc-work b{display:block;height:22px;border-radius:5px;background:linear-gradient(90deg,rgba(59,130,246,.24),rgba(139,92,246,.12))}
+  .rox-pc-work b:nth-child(2){width:79%}.rox-pc-work b:nth-child(3){width:58%}
+  .rox-cursor{position:absolute;left:51%;top:61%;color:#fff;font-size:18px;filter:drop-shadow(0 2px 3px #000);animation:roxPcCursor 4s ease-in-out infinite}
+  .rox-thumb-gallery{display:grid;grid-template-columns:1.25fr .85fr;grid-template-rows:1fr 1fr;gap:7px}
+  .rox-thumb{position:relative;overflow:hidden;border-radius:11px;border:1px solid rgba(255,255,255,.10);box-shadow:0 12px 26px rgba(0,0,0,.24)}
+  .th1{grid-row:1/span 2;background:radial-gradient(circle at 50% 40%,#FDE68A 0 8%,transparent 9%),linear-gradient(135deg,#2563EB,#7C3AED,#FB7185)}
+  .th2{background:linear-gradient(135deg,#111827,#EF4444,#F59E0B)}.th3{background:linear-gradient(135deg,#052E16,#16A34A,#22D3EE)}
+  .rox-thumb strong{position:absolute;left:8px;bottom:7px;color:#fff;font-size:17px;font-weight:950;text-shadow:0 3px 10px rgba(0,0,0,.55)}
+  .rox-thumb i{position:absolute;top:7px;right:7px;width:22px;height:15px;display:flex;align-items:center;justify-content:center;border-radius:4px;background:#EF4444;color:#fff;font-size:7px;font-style:normal}
+  .rox-bot-area{position:absolute;z-index:8;right:0;top:0;bottom:32px;width:195px;border-left:1px solid rgba(148,163,184,.07);background:linear-gradient(90deg,transparent,rgba(9,18,31,.55))}
+  .rox-bot-message{position:absolute;top:20px;left:15px;right:15px;padding:9px 10px;border-radius:11px 11px 4px 11px;background:rgba(13,23,39,.78);border:1px solid rgba(129,140,248,.17);backdrop-filter:blur(10px)}
+  .rox-bot-message #heroGreeting{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#F8FAFC;font-size:10px;line-height:1.2;font-weight:800}
+  .rox-bot-message small{display:block;margin-top:3px;color:#818CF8;font-size:7.5px;font-weight:700}
+  .rox-home-bot{position:absolute;left:50%;bottom:10px;width:90px;height:116px;transform:translateX(-50%);animation:roxBotFloat 3s ease-in-out infinite}
+  .rox-ant{position:absolute;left:50%;top:0;width:2px;height:14px;transform:translateX(-50%);background:linear-gradient(#94A3B8,#E2E8F0)}
+  .rox-ant::before{content:"";position:absolute;left:50%;top:-5px;width:8px;height:8px;transform:translateX(-50%);border-radius:50%;background:#60A5FA;box-shadow:0 0 13px rgba(96,165,250,.85)}
+  .rox-head{position:absolute;left:50%;top:14px;width:68px;height:49px;transform:translateX(-50%);border-radius:18px 18px 14px 14px;background:linear-gradient(145deg,#E2E8F0,#77869A 28%,#263548 58%,#111A28);border:1px solid rgba(255,255,255,.22);box-shadow:inset 0 2px 4px rgba(255,255,255,.25),inset 0 -8px 15px rgba(0,0,0,.27),0 10px 22px rgba(0,0,0,.32)}
+  .rox-head::after{content:"";position:absolute;inset:7px;border-radius:11px;background:linear-gradient(#050D18,#0B1726);border:1px solid rgba(96,165,250,.18)}
+  .rox-head .eye{position:absolute;z-index:3;top:22px;width:8px;height:5px;border-radius:5px;background:#67E8F9;box-shadow:0 0 9px rgba(103,232,249,.9);animation:roxBlink 4.5s infinite}
+  .rox-head .e1{left:20px}.rox-head .e2{right:20px}
+  .rox-head .mouth{position:absolute;z-index:3;left:50%;top:36px;width:14px;height:2px;transform:translateX(-50%);border-radius:5px;background:#818CF8}
+  .rox-body{position:absolute;left:50%;top:66px;width:58px;height:43px;transform:translateX(-50%);border-radius:12px 12px 18px 18px;background:linear-gradient(145deg,#AEB9C9,#435269 38%,#172235);border:1px solid rgba(255,255,255,.16);box-shadow:inset 0 1px 2px rgba(255,255,255,.22),0 9px 20px rgba(0,0,0,.28)}
+  .rox-body .core{position:absolute;left:50%;top:11px;width:18px;height:18px;transform:translateX(-50%);border-radius:50%;background:radial-gradient(circle at 35% 30%,#E0F2FE,#60A5FA 34%,#6366F1 72%);box-shadow:0 0 16px rgba(99,102,241,.75)}
+  .rox-home-bot .arm{position:absolute;top:73px;width:10px;height:38px;border-radius:8px;background:linear-gradient(#718096,#27364A);transform-origin:top center}
+  .arm-left{left:4px;transform:rotate(13deg)}.arm-right{right:2px;transform:rotate(-42deg);animation:roxWave 1.4s ease-in-out infinite}
+  .arm-right .hand{position:absolute;left:50%;bottom:-7px;width:17px;height:17px;display:flex;align-items:center;justify-content:center;transform:translateX(-50%);border-radius:50%;background:#475569;color:#E0F2FE;font-size:8px;font-style:normal;border:1px solid rgba(255,255,255,.16)}
+  .rox-show-labels{position:absolute;z-index:10;left:30px;right:210px;bottom:10px;display:flex;gap:20px}
+  .rox-show-labels span{color:#526075;font-size:7px;font-weight:850;letter-spacing:.14em}
+  @keyframes roxSceneSwitch{0%{opacity:0;transform:translateY(10px) scale(.99)}4%{opacity:1;transform:translateY(0) scale(1)}21%{opacity:1;transform:translateY(0) scale(1)}25%{opacity:0;transform:translateY(-8px) scale(1.01)}100%{opacity:0}}
+  @keyframes roxBotFloat{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(-5px)}}
+  @keyframes roxWave{0%,100%{transform:rotate(-42deg)}50%{transform:rotate(-70deg)}}
+  @keyframes roxBlink{0%,45%,49%,100%{transform:scaleY(1)}47%{transform:scaleY(.12)}}
+  @keyframes roxPcCursor{0%,100%{left:48%;top:58%}35%{left:72%;top:43%}68%{left:63%;top:70%}}
+  @keyframes roxShowGlow{0%,100%{transform:scale(1)}50%{transform:scale(1.12)}}
+}
+
+/* ROX SHOWCASE HERO V1 END */

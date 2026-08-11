@@ -1626,6 +1626,11 @@ html[data-rox-density="compact"] .chat-input-row{
   .artifact-shell{height:100%;border-radius:0;}
 }
 
+
+/* ROX AI Videos carousel */
+.rox-videos-carousel{position:relative;overflow:hidden;background:#080b12;}
+.rox-videos-carousel .rox-video-slide{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:none;}
+.rox-videos-carousel .rox-video-slide.is-active{display:block;}
 </style>
 <link rel="stylesheet" href="./rox-brand-blue-violet.css" data-rox-brand="blue-violet-v1">
 </head>
@@ -2249,7 +2254,7 @@ html[data-rox-density="compact"] .chat-input-row{
       <div class="fic" style="background:var(--panel-2);">🕘</div>
       <div class="meta"><div class="t" data-i18n="common.history">History</div><div class="s" data-i18n="common.recentActivity">Recent activity</div></div>
     </div>
-    <div class="placeholder-view" style="margin:20px 16px;" data-i18n="history.placeholder">Image generated · Video created · IP connection · Code executed</div>
+    <div id="roxHistoryList" class="project-list" data-rox-history-list style="margin:20px 16px;"><div class="placeholder-view" data-i18n="history.placeholder">Image generated · Video created · IP connection · Code executed</div></div>
   </div>
   <div class="feature-screen" id="feature-settings">
     <div class="feature-topbar">
@@ -4121,7 +4126,7 @@ function logout() {
   }
   supa.auth.signOut();
 }
-document.getElementById('logoutBtn').addEventListener('click', logout);
+document.getElementById('logoutBtn').addEventListener('click', openRoxAccountCenter);
 document.getElementById('settingsLogoutBtn').addEventListener('click', logout);
 
 function ensureRoxPasswordModal() {
@@ -5181,6 +5186,974 @@ function renderProfile() {
   document.getElementById('settingsUpgradeBtn').style.display = isPro ? 'none' : 'block';
 }
 
+/* ROX ACCOUNT CENTER V1 START */
+function getRoxAccountDisplayName(){
+  if(!profile) return 'Rox user';
+  return (
+    profile.full_name ||
+    (profile.email ? profile.email.split('@')[0] : '') ||
+    'Rox user'
+  );
+}
+
+function getRoxAccountInitial(){
+  return getRoxAccountDisplayName().charAt(0).toUpperCase() || 'R';
+}
+
+function getRoxAccountUsageText(){
+  if(lastRoxUsage?.type === 'pro'){
+    return `${lastRoxUsage.remaining} credits remaining`;
+  }
+
+  if(lastRoxUsage?.type === 'daily'){
+    return `${lastRoxUsage.used} / ${lastRoxUsage.limit} messages today`;
+  }
+
+  if(profile){
+    const total = Number(profile.credits_total) || 0;
+    const used = Number(profile.credits_used) || 0;
+
+    if(total > 0){
+      return `${Math.max(0,total-used)} credits remaining`;
+    }
+  }
+
+  return roxT('settings.common.loading');
+}
+
+function renderRoxAccountAvatar(element){
+  if(!element || !profile) return;
+
+  const avatarUrl = String(profile.avatar_url || '').trim();
+
+  element.innerHTML = '';
+
+  if(avatarUrl){
+    const img = document.createElement('img');
+    img.src = avatarUrl;
+    img.alt = getRoxAccountDisplayName();
+    img.loading = 'lazy';
+    img.referrerPolicy = 'no-referrer';
+    img.style.cssText =
+      'width:100%;height:100%;display:block;object-fit:cover;border-radius:inherit;';
+
+    img.addEventListener('error',()=>{
+      element.innerHTML = '';
+      element.textContent = getRoxAccountInitial();
+    });
+
+    element.appendChild(img);
+  }else{
+    element.textContent = getRoxAccountInitial();
+  }
+}
+
+function syncRoxAccountAvatars(){
+  renderRoxAccountAvatar(document.getElementById('userAvatar'));
+
+  const sidebarAvatar =
+    document.getElementById('sidebarProfileAvatar');
+
+  if(sidebarAvatar){
+    renderRoxAccountAvatar(sidebarAvatar);
+  }
+
+  renderRoxAccountAvatar(
+    document.getElementById('roxAccountMenuAvatar')
+  );
+
+  renderRoxAccountAvatar(
+    document.getElementById('roxAccountEditorAvatar')
+  );
+}
+
+function ensureRoxAccountCenterStyles(){
+  if(document.getElementById('roxAccountCenterStyles')) return;
+
+  const style=document.createElement('style');
+  style.id='roxAccountCenterStyles';
+
+  style.textContent=`
+    #logoutBtn,
+    #userAvatar{
+      cursor:pointer;
+    }
+
+    .rox-account-menu{
+      position:fixed;
+      z-index:2147483000;
+      width:min(360px,calc(100vw - 24px));
+      padding:12px;
+      border-radius:22px;
+      background:
+        linear-gradient(
+          155deg,
+          rgba(28,25,40,.98),
+          rgba(10,12,22,.985)
+        );
+      border:1px solid rgba(167,139,250,.25);
+      box-shadow:
+        0 28px 80px rgba(0,0,0,.55),
+        inset 0 1px rgba(255,255,255,.04);
+      backdrop-filter:blur(22px);
+      color:#f8fafc;
+    }
+
+    .rox-account-menu[hidden]{
+      display:none!important;
+    }
+
+    .rox-account-head{
+      display:flex;
+      gap:12px;
+      align-items:center;
+      padding:8px 8px 14px;
+      border-bottom:1px solid rgba(255,255,255,.08);
+    }
+
+    .rox-account-avatar{
+      width:48px;
+      height:48px;
+      flex:0 0 48px;
+      border-radius:50%;
+      display:grid;
+      place-items:center;
+      overflow:hidden;
+      font-weight:800;
+      font-size:18px;
+      color:white;
+      background:
+        linear-gradient(135deg,#7c3aed,#2563eb);
+      border:1px solid rgba(255,255,255,.14);
+    }
+
+    .rox-account-identity{
+      min-width:0;
+      flex:1;
+    }
+
+    .rox-account-name{
+      font-size:14px;
+      line-height:1.3;
+      font-weight:800;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      white-space:nowrap;
+    }
+
+    .rox-account-email{
+      margin-top:2px;
+      font-size:11px;
+      opacity:.64;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      white-space:nowrap;
+    }
+
+    .rox-account-planrow{
+      display:flex;
+      gap:7px;
+      align-items:center;
+      flex-wrap:wrap;
+      margin-top:7px;
+    }
+
+    .rox-account-pill{
+      border-radius:999px;
+      padding:4px 8px;
+      font-size:10px;
+      font-weight:800;
+      background:rgba(124,58,237,.16);
+      border:1px solid rgba(167,139,250,.22);
+      color:#c4b5fd;
+    }
+
+    .rox-account-usage{
+      font-size:10px;
+      opacity:.7;
+    }
+
+    .rox-account-actions{
+      display:grid;
+      gap:5px;
+      padding-top:9px;
+    }
+
+    .rox-account-action{
+      appearance:none;
+      border:0;
+      width:100%;
+      min-height:42px;
+      border-radius:13px;
+      padding:9px 11px;
+      display:flex;
+      align-items:center;
+      gap:10px;
+      background:transparent;
+      color:inherit;
+      font:600 12px Inter,Arial,sans-serif;
+      text-align:left;
+      cursor:pointer;
+    }
+
+    .rox-account-action:hover{
+      background:rgba(255,255,255,.065);
+    }
+
+    .rox-account-action-icon{
+      width:29px;
+      height:29px;
+      flex:0 0 29px;
+      display:grid;
+      place-items:center;
+      border-radius:9px;
+      background:rgba(124,58,237,.13);
+      border:1px solid rgba(167,139,250,.15);
+      font-size:13px;
+    }
+
+    .rox-account-action-copy{
+      min-width:0;
+      flex:1;
+    }
+
+    .rox-account-action-copy strong{
+      display:block;
+      font-size:12px;
+      font-weight:750;
+    }
+
+    .rox-account-action-copy small{
+      display:block;
+      margin-top:1px;
+      font-size:9px;
+      font-weight:500;
+      opacity:.55;
+    }
+
+    .rox-account-action.danger{
+      color:#fca5a5;
+      margin-top:3px;
+      border-top:1px solid rgba(255,255,255,.07);
+      border-radius:0 0 13px 13px;
+    }
+
+    .rox-account-editor-backdrop{
+      position:fixed;
+      inset:0;
+      z-index:2147483100;
+      display:grid;
+      place-items:center;
+      padding:18px;
+      background:rgba(0,0,0,.64);
+      backdrop-filter:blur(8px);
+    }
+
+    .rox-account-editor-backdrop[hidden]{
+      display:none!important;
+    }
+
+    .rox-account-editor{
+      width:min(440px,100%);
+      border-radius:22px;
+      padding:18px;
+      background:
+        linear-gradient(
+          155deg,
+          rgba(28,25,40,.99),
+          rgba(10,12,22,.995)
+        );
+      border:1px solid rgba(167,139,250,.25);
+      box-shadow:0 32px 100px rgba(0,0,0,.65);
+      color:#f8fafc;
+    }
+
+    .rox-account-editor-top{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      margin-bottom:17px;
+    }
+
+    .rox-account-editor-top h3{
+      margin:0;
+      font-size:17px;
+    }
+
+    .rox-account-close{
+      width:34px;
+      height:34px;
+      border:0;
+      border-radius:10px;
+      background:rgba(255,255,255,.07);
+      color:white;
+      cursor:pointer;
+    }
+
+    .rox-account-photo-row{
+      display:flex;
+      align-items:center;
+      gap:14px;
+      margin-bottom:17px;
+    }
+
+    .rox-account-editor-avatar{
+      width:72px;
+      height:72px;
+      flex:0 0 72px;
+    }
+
+    .rox-account-photo-actions{
+      display:grid;
+      gap:6px;
+    }
+
+    .rox-account-photo-btn{
+      border:1px solid rgba(167,139,250,.22);
+      background:rgba(124,58,237,.13);
+      color:#ddd6fe;
+      border-radius:11px;
+      padding:9px 12px;
+      font:700 11px Inter,Arial,sans-serif;
+      cursor:pointer;
+    }
+
+    .rox-account-field{
+      display:grid;
+      gap:6px;
+      margin-top:12px;
+    }
+
+    .rox-account-field span{
+      font-size:10px;
+      font-weight:700;
+      opacity:.66;
+    }
+
+    .rox-account-field input{
+      width:100%;
+      box-sizing:border-box;
+      border-radius:12px;
+      padding:11px 12px;
+      border:1px solid rgba(255,255,255,.11);
+      background:rgba(255,255,255,.05);
+      color:white;
+      outline:none;
+      font:600 12px Inter,Arial,sans-serif;
+    }
+
+    .rox-account-field input:focus{
+      border-color:rgba(167,139,250,.65);
+      box-shadow:0 0 0 3px rgba(124,58,237,.12);
+    }
+
+    .rox-account-editor-status{
+      min-height:17px;
+      margin-top:12px;
+      font-size:10px;
+      opacity:.75;
+    }
+
+    .rox-account-editor-save{
+      width:100%;
+      margin-top:8px;
+      border:0;
+      border-radius:12px;
+      padding:11px 14px;
+      background:linear-gradient(135deg,#7c3aed,#2563eb);
+      color:white;
+      font-weight:800;
+      cursor:pointer;
+    }
+
+    @media(max-width:640px){
+      .rox-account-menu{
+        left:12px!important;
+        right:12px!important;
+        bottom:12px!important;
+        top:auto!important;
+        width:auto;
+      }
+    }
+  `;
+
+  document.head.appendChild(style);
+}
+
+function ensureRoxAccountCenter(){
+  ensureRoxAccountCenterStyles();
+
+  let menu=document.getElementById('roxAccountMenu');
+
+  if(!menu){
+    menu=document.createElement('div');
+    menu.id='roxAccountMenu';
+    menu.className='rox-account-menu';
+    menu.hidden=true;
+
+    menu.innerHTML=`
+      <div class="rox-account-head">
+        <div
+          class="rox-account-avatar"
+          id="roxAccountMenuAvatar"
+        ></div>
+
+        <div class="rox-account-identity">
+          <div
+            class="rox-account-name"
+            id="roxAccountMenuName"
+          ></div>
+
+          <div
+            class="rox-account-email"
+            id="roxAccountMenuEmail"
+          ></div>
+
+          <div class="rox-account-planrow">
+            <span
+              class="rox-account-pill"
+              id="roxAccountMenuPlan"
+            ></span>
+
+            <span
+              class="rox-account-usage"
+              id="roxAccountMenuUsage"
+            ></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="rox-account-actions">
+        <button
+          class="rox-account-action"
+          type="button"
+          data-rox-account-action="profile"
+        >
+          <span class="rox-account-action-icon">👤</span>
+          <span class="rox-account-action-copy">
+            <strong>Profile & Account</strong>
+            <small>Photo, display name and account details</small>
+          </span>
+        </button>
+
+        <button
+          class="rox-account-action"
+          type="button"
+          data-rox-account-action="billing"
+        >
+          <span class="rox-account-action-icon">💳</span>
+          <span class="rox-account-action-copy">
+            <strong>Plan & Billing</strong>
+            <small>Subscription, plan and payments</small>
+          </span>
+        </button>
+
+        <button
+          class="rox-account-action"
+          type="button"
+          data-rox-account-action="usage"
+        >
+          <span class="rox-account-action-icon">◔</span>
+          <span class="rox-account-action-copy">
+            <strong>Usage & Credits</strong>
+            <small>Your current Rox usage</small>
+          </span>
+        </button>
+
+        <button
+          class="rox-account-action"
+          type="button"
+          data-rox-account-action="settings"
+        >
+          <span class="rox-account-action-icon">⚙</span>
+          <span class="rox-account-action-copy">
+            <strong>Settings</strong>
+            <small>Customize Rox AI</small>
+          </span>
+        </button>
+
+        <button
+          class="rox-account-action"
+          type="button"
+          data-rox-account-action="privacy"
+        >
+          <span class="rox-account-action-icon">🛡</span>
+          <span class="rox-account-action-copy">
+            <strong>Privacy & Security</strong>
+            <small>Password, devices and privacy</small>
+          </span>
+        </button>
+
+        <button
+          class="rox-account-action danger"
+          type="button"
+          data-rox-account-action="logout"
+        >
+          <span class="rox-account-action-icon">↪</span>
+          <span class="rox-account-action-copy">
+            <strong>${roxT('common.logout')}</strong>
+          </span>
+        </button>
+      </div>
+    `;
+
+    document.body.appendChild(menu);
+
+    menu.addEventListener('click',event=>{
+      const button=event.target.closest(
+        '[data-rox-account-action]'
+      );
+
+      if(!button) return;
+
+      const action=button.dataset.roxAccountAction;
+
+      closeRoxAccountCenter();
+
+      if(action==='profile'){
+        openRoxAccountEditor();
+        return;
+      }
+
+      if(action==='settings'){
+        openRoxSettingsSection();
+        return;
+      }
+
+      if(action==='privacy'){
+        openRoxSettingsSection('privacy');
+        return;
+      }
+
+      if(action==='billing' || action==='usage'){
+        openRoxSettingsSection('account');
+        return;
+      }
+
+      if(action==='logout'){
+        logout();
+      }
+    });
+  }
+
+  let editor=document.getElementById('roxAccountEditor');
+
+  if(!editor){
+    editor=document.createElement('div');
+    editor.id='roxAccountEditor';
+    editor.className='rox-account-editor-backdrop';
+    editor.hidden=true;
+
+    editor.innerHTML=`
+      <div
+        class="rox-account-editor"
+        role="dialog"
+        aria-modal="true"
+        aria-label="Profile & Account"
+      >
+        <div class="rox-account-editor-top">
+          <h3>Profile & Account</h3>
+          <button
+            type="button"
+            class="rox-account-close"
+            id="roxAccountEditorClose"
+            aria-label="Close"
+          >×</button>
+        </div>
+
+        <div class="rox-account-photo-row">
+          <div
+            class="rox-account-avatar rox-account-editor-avatar"
+            id="roxAccountEditorAvatar"
+          ></div>
+
+          <div class="rox-account-photo-actions">
+            <button
+              type="button"
+              class="rox-account-photo-btn"
+              id="roxAccountChoosePhoto"
+            >Change photo</button>
+
+            <small style="opacity:.5;font-size:9px;">
+              JPG, PNG or WebP · max 5 MB
+            </small>
+          </div>
+        </div>
+
+        <input
+          type="file"
+          id="roxAccountPhotoInput"
+          accept="image/jpeg,image/png,image/webp"
+          hidden
+        >
+
+        <label class="rox-account-field">
+          <span>Display name</span>
+          <input
+            id="roxAccountNameInput"
+            type="text"
+            maxlength="80"
+            autocomplete="name"
+          >
+        </label>
+
+        <label class="rox-account-field">
+          <span>Email</span>
+          <input
+            id="roxAccountEmailInput"
+            type="email"
+            readonly
+          >
+        </label>
+
+        <div
+          class="rox-account-editor-status"
+          id="roxAccountEditorStatus"
+        ></div>
+
+        <button
+          type="button"
+          class="rox-account-editor-save"
+          id="roxAccountSave"
+        >Save changes</button>
+      </div>
+    `;
+
+    document.body.appendChild(editor);
+
+    editor.addEventListener('click',event=>{
+      if(event.target===editor){
+        closeRoxAccountEditor();
+      }
+    });
+
+    document
+      .getElementById('roxAccountEditorClose')
+      .addEventListener('click',closeRoxAccountEditor);
+
+    document
+      .getElementById('roxAccountChoosePhoto')
+      .addEventListener('click',()=>{
+        document
+          .getElementById('roxAccountPhotoInput')
+          .click();
+      });
+
+    document
+      .getElementById('roxAccountPhotoInput')
+      .addEventListener('change',handleRoxAccountPhoto);
+
+    document
+      .getElementById('roxAccountSave')
+      .addEventListener('click',saveRoxAccountProfile);
+  }
+
+  return menu;
+}
+
+function refreshRoxAccountCenter(){
+  if(!profile) return;
+
+  ensureRoxAccountCenter();
+
+  const isPro=
+    String(profile.subscription_status || '').toLowerCase()
+      === 'pro';
+
+  const name=document.getElementById('roxAccountMenuName');
+  const email=document.getElementById('roxAccountMenuEmail');
+  const plan=document.getElementById('roxAccountMenuPlan');
+  const usage=document.getElementById('roxAccountMenuUsage');
+
+  if(name) name.textContent=getRoxAccountDisplayName();
+  if(email) email.textContent=profile.email || '';
+  if(plan){
+    plan.textContent=isPro
+      ? roxT('settings.account.planPro')
+      : roxT('settings.account.planFree');
+  }
+  if(usage) usage.textContent=getRoxAccountUsageText();
+
+  syncRoxAccountAvatars();
+}
+
+function openRoxAccountCenter(event){
+  if(event){
+    event.preventDefault();
+    event.stopPropagation();
+  }
+
+  if(!profile) return;
+
+  const menu=ensureRoxAccountCenter();
+
+  refreshRoxAccountCenter();
+
+  if(!menu.hidden){
+    menu.hidden=true;
+    return;
+  }
+
+  menu.hidden=false;
+
+  const trigger=
+    document.getElementById('logoutBtn') ||
+    document.getElementById('userAvatar');
+
+  if(window.innerWidth>640 && trigger){
+    const rect=trigger.getBoundingClientRect();
+
+    menu.style.top=`${Math.min(
+      window.innerHeight-menu.offsetHeight-12,
+      rect.bottom+10
+    )}px`;
+
+    menu.style.left=`${Math.max(
+      12,
+      Math.min(
+        window.innerWidth-menu.offsetWidth-12,
+        rect.right-menu.offsetWidth
+      )
+    )}px`;
+  }
+}
+
+function closeRoxAccountCenter(){
+  const menu=document.getElementById('roxAccountMenu');
+  if(menu) menu.hidden=true;
+}
+
+function openRoxSettingsSection(section){
+  const settingsTrigger=document.querySelector(
+    '[data-open="settings"]'
+  );
+
+  if(settingsTrigger){
+    settingsTrigger.click();
+  }
+
+  if(section){
+    setTimeout(()=>{
+      const tab=document.querySelector(
+        `[data-settings-target="${section}"]`
+      );
+
+      if(tab) tab.click();
+    },0);
+  }
+}
+
+function openRoxAccountEditor(){
+  if(!profile) return;
+
+  ensureRoxAccountCenter();
+
+  const editor=document.getElementById('roxAccountEditor');
+  const name=document.getElementById('roxAccountNameInput');
+  const email=document.getElementById('roxAccountEmailInput');
+  const status=document.getElementById('roxAccountEditorStatus');
+
+  if(name) name.value=getRoxAccountDisplayName();
+  if(email) email.value=profile.email || '';
+  if(status) status.textContent='';
+
+  syncRoxAccountAvatars();
+
+  editor.hidden=false;
+
+  setTimeout(()=>{
+    if(name){
+      name.focus();
+      name.select();
+    }
+  },0);
+}
+
+function closeRoxAccountEditor(){
+  const editor=document.getElementById('roxAccountEditor');
+  if(editor) editor.hidden=true;
+}
+
+async function saveRoxAccountProfile(){
+  if(!profile || !session) return;
+
+  const input=document.getElementById('roxAccountNameInput');
+  const status=document.getElementById('roxAccountEditorStatus');
+  const save=document.getElementById('roxAccountSave');
+
+  const fullName=String(input?.value || '').trim();
+
+  if(!fullName){
+    if(status) status.textContent='Enter a display name.';
+    return;
+  }
+
+  if(save) save.disabled=true;
+  if(status) status.textContent='Saving…';
+
+  try{
+    const {data,error}=await supa
+      .from('profiles')
+      .update({full_name:fullName})
+      .eq('id',session.user.id)
+      .select()
+      .single();
+
+    if(error) throw error;
+
+    profile={
+      ...profile,
+      ...data,
+      full_name:fullName
+    };
+
+    renderProfile();
+    refreshRoxAccountCenter();
+
+    if(typeof syncRoxSettingsAccount==='function'){
+      syncRoxSettingsAccount();
+    }
+
+    if(status) status.textContent='✓ Profile updated';
+  }catch(error){
+    console.error('[account] profile update failed:',error);
+    if(status){
+      status.textContent=
+        error?.message || 'Could not update profile.';
+    }
+  }finally{
+    if(save) save.disabled=false;
+  }
+}
+
+async function handleRoxAccountPhoto(event){
+  if(!profile || !session) return;
+
+  const file=event.target.files?.[0];
+
+  if(!file) return;
+
+  const status=document.getElementById('roxAccountEditorStatus');
+
+  if(file.size>5*1024*1024){
+    if(status) status.textContent='Image must be 5 MB or smaller.';
+    event.target.value='';
+    return;
+  }
+
+  if(!/^image\/(jpeg|png|webp)$/i.test(file.type)){
+    if(status) status.textContent='Use JPG, PNG or WebP.';
+    event.target.value='';
+    return;
+  }
+
+  if(status) status.textContent='Uploading photo…';
+
+  try{
+    const ext=
+      file.type==='image/png'
+        ? 'png'
+        : file.type==='image/webp'
+          ? 'webp'
+          : 'jpg';
+
+    const path=
+      `${session.user.id}/avatar-${Date.now()}.${ext}`;
+
+    const {error:uploadError}=await supa
+      .storage
+      .from('avatars')
+      .upload(path,file,{
+        cacheControl:'3600',
+        upsert:false,
+        contentType:file.type
+      });
+
+    if(uploadError) throw uploadError;
+
+    const {
+      data:publicData
+    }=supa
+      .storage
+      .from('avatars')
+      .getPublicUrl(path);
+
+    const avatarUrl=
+      publicData?.publicUrl || '';
+
+    if(!avatarUrl){
+      throw new Error('Avatar URL was not returned.');
+    }
+
+    const {data,error:updateError}=await supa
+      .from('profiles')
+      .update({avatar_url:avatarUrl})
+      .eq('id',session.user.id)
+      .select()
+      .single();
+
+    if(updateError) throw updateError;
+
+    profile={
+      ...profile,
+      ...data,
+      avatar_url:avatarUrl
+    };
+
+    renderProfile();
+    refreshRoxAccountCenter();
+
+    if(status) status.textContent='✓ Profile photo updated';
+  }catch(error){
+    console.error('[account] avatar upload failed:',error);
+
+    if(status){
+      status.textContent=
+        error?.message ||
+        'Could not upload profile photo.';
+    }
+  }finally{
+    event.target.value='';
+  }
+}
+
+document.addEventListener('click',event=>{
+  const menu=document.getElementById('roxAccountMenu');
+
+  if(
+    menu &&
+    !menu.hidden &&
+    !menu.contains(event.target) &&
+    !event.target.closest('#logoutBtn') &&
+    !event.target.closest('#userAvatar')
+  ){
+    closeRoxAccountCenter();
+  }
+});
+
+document.addEventListener('keydown',event=>{
+  if(event.key==='Escape'){
+    closeRoxAccountCenter();
+    closeRoxAccountEditor();
+  }
+});
+
+setTimeout(()=>{
+  const avatar=document.getElementById('userAvatar');
+
+  if(avatar && !avatar.dataset.roxAccountBound){
+    avatar.dataset.roxAccountBound='true';
+    avatar.addEventListener(
+      'click',
+      openRoxAccountCenter
+    );
+  }
+
+  refreshRoxAccountCenter();
+},0);
+/* ROX ACCOUNT CENTER V1 END */
+
 async function handleUpgrade() {
   if (!session) { showLogin(); return; }
   try {
@@ -5524,6 +6497,13 @@ const ROX_I18N = {
     'voice.auto': 'Auto',
     'demo.chatExampleUser': 'Explain gravity...',
     'demo.chatExampleBot': 'Gravity is a force...',
+    'demo.chatProject1': 'What are you working on today?',
+    'demo.chatProject2': 'I am building an online project.',
+    'demo.chatProject3': 'What do you want to automate?',
+    'demo.chatProject4': 'Content creation and some coding.',
+    'demo.chatProject5': 'I can help you build that workflow.',
+    'demo.chatProject6': 'Can it track which content performs best?',
+    'demo.chatProject7': 'Yes. We can analyze results and improve the next posts.',
     'usage.finalCost': 'Final cost: {{credits}} credits',
     'features.roxip.demoOnly': 'Demo only — “{{text}}” does not control a real device yet.',
     'settings.ai.resetSuccess': '✓ Preferences restored',
@@ -5807,6 +6787,13 @@ const ROX_I18N = {
     'voice.auto': 'Auto',
     'demo.chatExampleUser': 'Explique-moi la gravité…',
     'demo.chatExampleBot': 'La gravité est une force…',
+    'demo.chatProject1': 'Sur quoi travailles-tu aujourd’hui ?',
+    'demo.chatProject2': 'Je construis un projet en ligne.',
+    'demo.chatProject3': 'Que veux-tu automatiser ?',
+    'demo.chatProject4': 'La création de contenu et un peu de code.',
+    'demo.chatProject5': 'Je peux t’aider à construire ce workflow.',
+    'demo.chatProject6': 'Peut-il suivre les contenus qui fonctionnent le mieux ?',
+    'demo.chatProject7': 'Oui. On peut analyser les résultats et améliorer les prochains posts.',
     'usage.finalCost': 'Coût final : {{credits}} crédits',
     'features.roxip.demoOnly': 'Démo uniquement — « {{text}} » ne contrôle pas encore un appareil réel.',
     'settings.ai.resetSuccess': '✓ Préférences restaurées',
@@ -6090,6 +7077,13 @@ const ROX_I18N = {
     'voice.auto': 'تلقائي',
     'demo.chatExampleUser': 'اشرح لي الجاذبية...',
     'demo.chatExampleBot': 'الجاذبية قوة...',
+    'demo.chatProject1': 'على ماذا تعمل اليوم؟',
+    'demo.chatProject2': 'أبني مشروعاً على الإنترنت.',
+    'demo.chatProject3': 'ما الذي تريد أتمتته؟',
+    'demo.chatProject4': 'إنشاء المحتوى وبعض البرمجة.',
+    'demo.chatProject5': 'يمكنني مساعدتك في بناء سير العمل هذا.',
+    'demo.chatProject6': 'هل يمكنه تتبع المحتوى الأفضل أداءً؟',
+    'demo.chatProject7': 'نعم. يمكننا تحليل النتائج وتحسين المنشورات القادمة.',
     'usage.finalCost': 'التكلفة النهائية: {{credits}} رصيد',
     'features.roxip.demoOnly': 'للتجربة فقط — «{{text}}» لا يتحكم في جهاز حقيقي بعد.',
     'settings.ai.resetSuccess': '✓ تمت استعادة التفضيلات',
@@ -6373,6 +7367,13 @@ const ROX_I18N = {
     'voice.auto': 'Auto',
     'demo.chatExampleUser': 'Explícame la gravedad...',
     'demo.chatExampleBot': 'La gravedad es una fuerza...',
+    'demo.chatProject1': '¿En qué estás trabajando hoy?',
+    'demo.chatProject2': 'Estoy creando un proyecto online.',
+    'demo.chatProject3': '¿Qué quieres automatizar?',
+    'demo.chatProject4': 'Creación de contenido y algo de código.',
+    'demo.chatProject5': 'Puedo ayudarte a construir ese flujo de trabajo.',
+    'demo.chatProject6': '¿Puede seguir qué contenido funciona mejor?',
+    'demo.chatProject7': 'Sí. Podemos analizar los resultados y mejorar las próximas publicaciones.',
     'usage.finalCost': 'Coste final: {{credits}} créditos',
     'features.roxip.demoOnly': 'Solo demo — «{{text}}» todavía no controla un dispositivo real.',
     'settings.ai.resetSuccess': '✓ Preferencias restauradas',
@@ -6656,6 +7657,13 @@ const ROX_I18N = {
     'voice.auto': '自动',
     'demo.chatExampleUser': '解释一下重力...',
     'demo.chatExampleBot': '重力是一种力...',
+    'demo.chatProject1': '你今天在做什么？',
+    'demo.chatProject2': '我正在做一个在线项目。',
+    'demo.chatProject3': '你想自动化什么？',
+    'demo.chatProject4': '内容创作和一些编程。',
+    'demo.chatProject5': '我可以帮你搭建这个工作流程。',
+    'demo.chatProject6': '它能追踪哪些内容表现最好吗？',
+    'demo.chatProject7': '可以。我们可以分析结果并优化下一批内容。',
     'usage.finalCost': '最终费用：{{credits}} 点数',
     'features.roxip.demoOnly': '仅演示 — “{{text}}” 尚不能控制真实设备。',
     'settings.ai.resetSuccess': '✓ 偏好设置已恢复',
@@ -7889,6 +8897,203 @@ document.querySelectorAll('[data-close]').forEach(el=>{
   });
 });
 
+function openRoxHistoryItem(item){
+  if(!item || !item.content || typeof item.content !== 'object') return;
+
+  const content = item.content;
+  const feature = String(content.feature || 'chat').toLowerCase() === 'code'
+    ? 'code'
+    : 'chat';
+
+  const savedMessages = Array.isArray(content.messages)
+    ? content.messages
+    : [];
+
+  const assistant =
+    content.assistant && typeof content.assistant === 'object'
+      ? content.assistant
+      : null;
+
+  const transcript = savedMessages
+    .filter(message =>
+      message &&
+      (message.role === 'user' || message.role === 'assistant') &&
+      typeof message.content === 'string' &&
+      message.content.trim()
+    )
+    .map(message => ({
+      role: message.role,
+      content: message.content
+    }));
+
+  if(
+    assistant &&
+    typeof assistant.content === 'string' &&
+    assistant.content.trim()
+  ){
+    transcript.push({
+      role: 'assistant',
+      content: assistant.content,
+      responseId: assistant.responseId || null,
+      model: assistant.model || null
+    });
+  }
+
+  conversations[feature] = transcript
+    .slice(-CHAT_HISTORY_LIMIT)
+    .map(message => ({
+      role: message.role,
+      content: message.content
+    }));
+
+  const msgBox = document.getElementById('msgs-' + feature);
+  const featureView = document.getElementById('feature-' + feature);
+  const historyView = document.getElementById('feature-history');
+
+  if(!msgBox || !featureView) return;
+
+  msgBox.innerHTML = '';
+
+  transcript.forEach(message => {
+    const isAssistant = message.role === 'assistant';
+
+    appendMsg(
+      msgBox,
+      isAssistant ? 'bot' : 'user',
+      message.content,
+      false,
+      isAssistant
+        ? {
+            responseId: message.responseId || null,
+            model: message.model || null,
+            feature
+          }
+        : {}
+    );
+  });
+
+  if(historyView){
+    historyView.classList.remove('active');
+  }
+
+  featureView.classList.add('active');
+  msgBox.scrollTop = msgBox.scrollHeight;
+
+  const input = document.querySelector(
+    'input[data-feature="' + feature + '"]'
+  );
+
+  if(input){
+    setTimeout(() => input.focus(), 0);
+  }
+}
+
+function bindRoxHistoryRows(target, items){
+  target.querySelectorAll('[data-rox-history-id]').forEach(row => {
+    row.style.cursor = 'pointer';
+
+    row.addEventListener('click', () => {
+      const id = String(row.dataset.roxHistoryId || '');
+
+      const item = items.find(
+        candidate => String(candidate?.id || '') === id
+      );
+
+      if(item){
+        openRoxHistoryItem(item);
+      }
+    });
+  });
+}
+
+async function loadRoxHistory(){
+  const targets=[...document.querySelectorAll('[data-rox-history-list]')];
+  if(!targets.length)return;
+
+  targets.forEach(target=>{
+    target.innerHTML='<div class="placeholder-view">Loading history...</div>';
+  });
+
+  try{
+    const response=await authFetch('/api/history',{method:'GET'});
+    const data=await response.json().catch(()=>({}));
+
+    if(!response.ok||data.status!=='success'){
+      throw new Error(data.message||('HTTP '+response.status));
+    }
+
+    const items=Array.isArray(data.items)?data.items:[];
+
+    if(!items.length){
+      targets.forEach(target=>{
+        target.innerHTML='<div class="placeholder-view">No saved history yet.</div>';
+      });
+      return;
+    }
+
+    const html=items.map(item=>{
+      const content=item&&item.content&&typeof item.content==='object'
+        ? item.content
+        : {};
+
+      const feature=String(content.feature||'chat').toLowerCase();
+      const messages=Array.isArray(content.messages)?content.messages:[];
+      const assistant=content.assistant&&typeof content.assistant==='object'
+        ? content.assistant
+        : {};
+
+      const firstUser=messages.find(message=>message&&message.role==='user'&&message.content);
+      const title=String(firstUser?.content||assistant.content||'Saved conversation')
+        .replace(/\s+/g,' ')
+        .trim()
+        .slice(0,80);
+
+      const created=item.created_at
+        ? new Date(item.created_at).toLocaleString()
+        : '';
+
+      const icon=
+        feature==='code'?'⌨️':
+        feature==='images'||feature==='image'?'🖼️':
+        feature==='videos'||feature==='video'?'🎬':
+        '💬';
+
+      const safeTitle=title
+        .replace(/&/g,'&amp;')
+        .replace(/</g,'&lt;')
+        .replace(/>/g,'&gt;')
+        .replace(/"/g,'&quot;')
+        .replace(/'/g,'&#039;');
+
+      const safeDate=String(created)
+        .replace(/&/g,'&amp;')
+        .replace(/</g,'&lt;')
+        .replace(/>/g,'&gt;');
+
+      return '<div class="prow" data-rox-history-id="'+String(item.id||'')+'">'+
+        '<div class="thumb" style="background:var(--panel-2);display:flex;align-items:center;justify-content:center;">'+icon+'</div>'+
+        '<div><div class="t">'+safeTitle+'</div><div class="s">'+safeDate+'</div></div>'+
+        '<div class="chev">›</div></div>';
+    }).join('');
+
+    targets.forEach(target=>{
+      target.innerHTML=html;
+      bindRoxHistoryRows(target, items);
+    });
+
+  }catch(error){
+    console.error('[history-ui] load failed:',error);
+    targets.forEach(target=>{
+      target.innerHTML='<div class="placeholder-view">History could not be loaded.</div>';
+    });
+  }
+}
+
+document.querySelectorAll('[data-open="history"]').forEach(el=>{
+  el.addEventListener('click',()=>{
+    loadRoxHistory();
+  });
+});
 // ── conversation history (per feature: 'chat' / 'code') ─────────────
 // Previously each call to /api/chat sent only the current message
 // (`messages: [{role:'user', content:text}]`), so the model had no
@@ -9807,6 +11012,7 @@ initAuth();
   .fcard h3{margin:0;font-size:15px;font-weight:600;}
   .fcard p{color:var(--text-dim);font-size:12px;margin:0 0 12px;line-height:1.5;min-height:34px;}
   .fcard-thumb{height:96px;border-radius:12px;margin-bottom:12px;background-size:cover;background-position:center;position:relative;overflow:hidden;cursor:pointer;flex-shrink:0;}
+  .rox-videos-carousel{height:auto;aspect-ratio:2344/736;}
   .fcard-thumb .play{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:15px;color:#fff;background:rgba(0,0,0,.18);}
   .fcard-thumb .play span{width:32px;height:32px;border-radius:50%;background:rgba(0,0,0,.45);backdrop-filter:blur(3px);display:flex;align-items:center;justify-content:center;}
 
@@ -15202,46 +16408,26 @@ html[data-rox-density="compact"] .chat-input-row{
 
         <div class="feature-grid">
 
-          <div class="fcard" data-open="images">
-            <div class="fcard-head" data-open="images"><div class="fcard-ic" style="background:rgba(139,92,246,.15);color:#a78bfa;">🖼️</div><h3 data-i18n="features.images.title">AI Images</h3></div>
-            <p data-i18n="features.images.description">Generate amazing images from your ideas.</p>
-            <div class="fcard-thumb" data-open="images" style="background-image:linear-gradient(135deg,#2a1408,#6d28d9 55%,#ffd166);"></div>
-            <div class="fcard-form">
-              <input type="text" placeholder="Describe your image..." data-i18n-placeholder="features.images.placeholder" data-quickfeature="images">
-              <button class="fcard-btn shimmer-btn" style="background:var(--ember-grad);" data-quicksend="images" data-i18n="features.images.generate">✨ Generate image</button>
-            </div>
-          </div>
-
-          <div class="fcard" data-open="videos">
-            <div class="fcard-head" data-open="videos"><div class="fcard-ic" style="background:rgba(134,25,143,.15);color:#f9a8d4;">🎥</div><h3 data-i18n="features.videos.title">AI Videos</h3></div>
-            <p data-i18n="features.videos.description">Create stunning videos from text or images.</p>
-            <div class="fcard-thumb" data-open="videos" style="background-image:linear-gradient(135deg,#0a0f2a,#86198f 55%,#22d3ee);">
-              <div class="play"><span>▶</span></div>
-            </div>
-            <div class="fcard-form">
-              <input type="text" placeholder="Describe your video..." data-i18n-placeholder="features.videos.placeholder" data-quickfeature="videos">
-              <button class="fcard-btn shimmer-btn" style="background:var(--crimson-grad);" data-quicksend="videos" data-i18n="features.videos.generate">▶ Generate video</button>
-            </div>
-          </div>
-
-          <div class="fcard rox-ip" data-open="roxip">
-            <div class="fcard-head" data-open="roxip"><div class="fcard-ic" style="background:rgba(34,197,94,.15);color:#4ade80;">🖥️</div><h3 data-i18n="nav.roxip">Rox IP (PC Control)</h3></div>
-            <p data-i18n="features.roxip.description">Connect to a device by IP and control it remotely in real time.</p>
-            <div class="fcard-thumb map-thumb" data-open="roxip"></div>
-            <div class="fcard-form">
-              <input type="text" placeholder="Enter the IP address..." data-i18n-placeholder="features.roxip.placeholder" data-quickfeature="roxip">
-              <button class="fcard-btn shimmer-btn" style="background:linear-gradient(135deg,#16a34a,#22c55e);" data-quicksend="roxip" data-i18n="features.roxip.connect">⚡ Connect</button>
-            </div>
-          </div>
-
           <div class="fcard" data-open="chat">
             <div class="fcard-head" data-open="chat"><div class="fcard-ic" style="background:rgba(139,92,246,.15);color:#a78bfa;">💬</div><h3 data-i18n="nav.chat">AI Chat</h3></div>
             <p data-i18n="features.chat.description">Chat with AI and get instant answers.</p>
             <div class="fcard-thumb chat-thumb" data-open="chat">
-              <div class="b a" data-i18n="features.chat.helloUser">👋 Hello Rox AI!</div>
-              <div class="b a" data-i18n="features.chat.prompt">Hello! How can I help you today?</div>
-              <div class="b u" data-i18n="demo.chatExampleUser">Explain gravity...</div>
-              <div class="b a" data-i18n="demo.chatExampleBot">Gravity is a force...</div>
+              <div class="b u">I want to build an AI content business.</div>
+              <div class="b a">Great. What type of content do you want to create?</div>
+              <div class="b u">Short videos and YouTube content, but I need ideas that can actually grow.</div>
+              <div class="b a">Start with content that solves one clear problem. For example: “3 AI tools that save creators hours”, “I tested 5 AI video generators”, or “How to automate a YouTube workflow with AI.”</div>
+              <div class="b u">How do I know which idea has the best chance?</div>
+              <div class="b a">Compare search demand, competition, recent viral videos and audience comments. Then choose the idea with strong demand but a weak or outdated answer.</div>
+              <div class="b u">And after I publish?</div>
+              <div class="b a">Track click-through rate, retention and comments. If viewers leave early, improve the hook. If CTR is low, test a stronger title and thumbnail. Then use the winning pattern for the next video.</div>
+              <div class="b u">Can AI automate most of that?</div>
+              <div class="b a">Yes. Build a workflow that researches topics, scores ideas, drafts scripts, creates thumbnail concepts, repurposes videos into Shorts, and analyzes the results.</div>
+              <div class="b u">That still sounds like a lot to manage.</div>
+              <div class="b a">Then use Rox IP. Give it the workflow and the exact instructions you want it to follow. It can operate the tools on your computer, move through the steps, organize the outputs, and keep the process running while you focus on the decisions that matter.</div>
+              <div class="b u">So I don’t have to repeat the same work every day?</div>
+              <div class="b a">Exactly. You define the strategy once, review the results, and improve what works. Rox IP handles the repetitive execution.</div>
+              <div class="b u">And if one content format starts performing better?</div>
+              <div class="b a">I can detect the pattern, suggest the next ideas, and help you scale the winning format. Spend less time repeating tasks and more time growing the business.</div>
             </div>
             <div class="fcard-form">
               <input type="text" placeholder="Ask your question..." data-i18n-placeholder="features.chat.placeholder" data-quickfeature="chat">
@@ -15249,19 +16435,201 @@ html[data-rox-density="compact"] .chat-input-row{
             </div>
           </div>
 
+          <div class="fcard" data-open="images">
+            <div class="fcard-head" data-open="images"><div class="fcard-ic" style="background:rgba(139,92,246,.15);color:#a78bfa;">🖼️</div><h3 data-i18n="features.images.title">AI Images</h3></div>
+            <p data-i18n="features.images.description">Generate amazing images from your ideas.</p>
+            <div class="fcard-thumb rox-images-carousel" data-open="images">
+  <img class="rox-carousel-img is-active" src="images-carousel/IMG_3449.PNG" alt="">
+  <img class="rox-carousel-img" src="images-carousel/IMG_3452.PNG" alt="">
+  <img class="rox-carousel-img" src="images-carousel/IMG_3453.PNG" alt="">
+  <img class="rox-carousel-img" src="images-carousel/IMG_3454.PNG" alt="">
+  <img class="rox-carousel-img" src="images-carousel/IMG_3455.PNG" alt="">
+  <img class="rox-carousel-img" src="images-carousel/IMG_3457.PNG" alt="">
+  <img class="rox-carousel-img" src="images-carousel/IMG_3458.PNG" alt="">
+  <img class="rox-carousel-img" src="images-carousel/IMG_3460.PNG" alt="">
+  <img class="rox-carousel-img" src="images-carousel/IMG_3461.PNG" alt="">
+</div>
+
+<style>
+.rox-images-carousel {
+  position: relative;
+  overflow: hidden;
+  background: #111;
+}
+.rox-images-carousel .rox-carousel-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  opacity: 0;
+  transition: none;             
+  pointer-events: none;
+}
+.rox-images-carousel .rox-carousel-img.is-active {
+  opacity: 1;
+}
+</style>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const carousel = document.querySelector(".rox-images-carousel");
+  if (!carousel) return;
+
+  const images = carousel.querySelectorAll(".rox-carousel-img");
+  if (images.length < 2) return;
+
+  let current = 0;
+
+  setInterval(function () {
+    images[current].classList.remove("is-active");
+    current = (current + 1) % images.length;
+    images[current].classList.add("is-active");
+  }, 2500);
+});
+<\/script>
+            <div class="fcard-form">
+              <input type="text" placeholder="Describe your image..." data-i18n-placeholder="features.images.placeholder" data-quickfeature="images">
+              <button class="fcard-btn shimmer-btn" style="background:var(--ember-grad);" data-quicksend="images" data-i18n="features.images.generate">✨ Generate image</button>
+            </div>
+          </div>
+
+          <div class="fcard rox-ai-videos-card" data-open="videos">
+            <div class="fcard-head" data-open="videos"><div class="fcard-ic" style="background:rgba(134,25,143,.15);color:#f9a8d4;">🎥</div><h3 data-i18n="features.videos.title">AI Videos</h3></div>
+            <p data-i18n="features.videos.description">Create stunning videos from text or images.</p>
+            <div class="fcard-thumb rox-videos-carousel" data-open="videos"><video class="rox-video-slide is-active" muted playsinline preload="metadata" src="videos-carousel/hf_20260409_094426_5355bac3-67d4-4c59-812c-6ad6b9ce7956.mp4"></video><video class="rox-video-slide" muted playsinline preload="metadata" src="videos-carousel/hf_20260409_094501_61b9fb78-2e54-44d2-bcea-ed0aae4cc707.mp4"></video><video class="rox-video-slide" muted playsinline preload="metadata" src="videos-carousel/hf_20260409_094557_c0e3952b-1ecf-4621-9b06-eb86a7fe29e8.mp4"></video><video class="rox-video-slide" muted playsinline preload="metadata" src="videos-carousel/hf_20260409_094601_f698d8f7-c96a-42c6-ad0c-8e830417201e.mp4"></video><video class="rox-video-slide" muted playsinline preload="metadata" src="videos-carousel/hf_20260409_094615_1849e0bf-3c53-4790-80d7-d83d03968910.mp4"></video><video class="rox-video-slide" muted playsinline preload="metadata" src="videos-carousel/hf_20260409_094618_bd067d15-5a16-4ebe-986a-3c1d1a9d919d.mp4"></video>
+
+            </div>
+            <div class="fcard-form">
+              <input type="text" placeholder="Describe your video..." data-i18n-placeholder="features.videos.placeholder" data-quickfeature="videos">
+              <button class="fcard-btn shimmer-btn" style="background:var(--crimson-grad);" data-quicksend="videos" data-i18n="features.videos.generate">▶ Generate video</button>
+            </div>
+          </div>
+
           <div class="fcard" data-open="code">
             <div class="fcard-head" data-open="code"><div class="fcard-ic" style="background:rgba(167,139,250,.15);color:#c4b5fd;">⌨️</div><h3>Code Studio</h3></div>
             <p data-i18n="features.code.description">Build and deploy your ideas with AI assistance.</p>
-            <div class="fcard-thumb code-thumb" data-open="code">
-<div><span class="ln">1</span>  <span class="kw">function</span> <span class="fn">greet</span>(name) {</div>
-<div><span class="ln">2</span>    <span class="kw">return</span> <span class="str">`Hello, ${name}!`</span>;</div>
-<div><span class="ln">3</span>  }</div>
-<div><span class="ln">4</span></div>
-<div><span class="ln">5</span>  console.log(greet(<span class="str">"Rox AI"</span>));</div>
+            <div class="fcard-thumb code-thumb rox-code-demo" data-open="code">
+              <div class="rox-code-stage rox-code-stage-prompt">
+                <div class="rox-code-prompt">Build a premium e-commerce platform with authentication, payments, product search, cart, orders and an admin dashboard.</div>
+              </div>
+
+              <div class="rox-code-stage rox-code-stage-editor" hidden>
+                <div class="rox-code-file">app/products/page.tsx</div>
+                <div><span class="ln">1</span> <span class="kw">export default</span> <span class="kw">function</span> <span class="fn">Products</span>() {</div>
+                <div><span class="ln">2</span>   <span class="kw">const</span> products = <span class="fn">await</span> db.product.findMany();</div>
+                <div><span class="ln">3</span>   <span class="kw">return</span> &lt;<span class="fn">Storefront</span> products={products} /&gt;;</div>
+                <div><span class="ln">4</span> }</div>
+              </div>
+
+              <div class="rox-code-stage rox-code-stage-build" hidden>
+                <div>Creating storefront...</div>
+                <div>✓ Product catalog</div>
+                <div>✓ Search &amp; filters</div>
+                <div>✓ Authentication</div>
+                <div>✓ Shopping cart</div>
+                <div>✓ Secure checkout</div>
+                <div>✓ Orders database</div>
+                <div>✓ Admin dashboard</div>
+                <div class="rox-code-build-final">✓ Build successful</div>
+              </div>
+
+              <div class="rox-code-stage rox-code-stage-preview" hidden>
+                <div class="rox-store-top">
+                  <strong>NOVA</strong>
+                  <span>Shop</span>
+                  <span>New</span>
+                  <span>Cart · 2</span>
+                </div>
+
+                <div class="rox-store-hero">
+                  <div>
+                    <small>NEW COLLECTION</small>
+                    <b>Designed for everyday motion.</b>
+                  </div>
+                  <button type="button" tabindex="-1">Shop now</button>
+                </div>
+
+                <div class="rox-store-grid">
+                  <div class="rox-store-product rox-store-product-shoe">
+                    <i><span></span></i>
+                    <div class="rox-store-product-meta">
+                      <b>Orbit Sneakers</b>
+                      <span>$129</span>
+                    </div>
+                  </div>
+
+                  <div class="rox-store-product rox-store-product-audio">
+                    <i><span></span></i>
+                    <div class="rox-store-product-meta">
+                      <b>Studio Headphones</b>
+                      <span>$249</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="rox-store-footer">
+                  <span>Secure checkout</span>
+                  <strong>● Ready to deploy</strong>
+                </div>
+              </div>
             </div>
             <div class="fcard-form">
               <select id="codeLangSelect"><option>JavaScript</option><option>Python</option><option>TypeScript</option><option>Go</option></select>
               <button class="fcard-btn shimmer-btn" style="background:var(--blue-grad);" data-quicksend="code" data-i18n="features.code.execute">▶ Run</button>
+            </div>
+          </div>
+
+          <div class="fcard rox-ip" data-open="roxip">
+            <div class="fcard-head" data-open="roxip"><div class="fcard-ic" style="background:rgba(34,197,94,.15);color:#4ade80;">🖥️</div><h3 data-i18n="nav.roxip">Rox IP (PC Control)</h3></div>
+            <p data-i18n="features.roxip.description">Connect to a device by IP and control it remotely in real time.</p>
+            <div class="fcard-thumb map-thumb rox-ip-demo" data-open="roxip">
+  <div class="rox-ip-stage rox-ip-stage-connect">
+    <div class="rox-ip-scan-line"></div>
+    <div class="rox-ip-connect-title">Searching for device...</div>
+    <div class="rox-ip-device-row">
+      <span>ROX-DESKTOP</span>
+      <b>192.168.1.45</b>
+    </div>
+    <div class="rox-ip-device-status">● Device found</div>
+  </div>
+
+  <div class="rox-ip-stage rox-ip-stage-workspace" hidden>
+    <div class="rox-ip-window">
+      <div class="rox-ip-window-top">
+        <i></i><i></i><i></i>
+        <span>workspace.rox</span>
+      </div>
+
+      <div class="rox-ip-window-side">
+        <span>Browser</span>
+        <span>Files</span>
+        <span>Notes</span>
+      </div>
+
+      <div class="rox-ip-window-main">
+        <div class="rox-ip-task">Research 5 AI tools and organize the results.</div>
+        <div class="rox-ip-tabs">
+          <b></b><b></b><b></b>
+        </div>
+        <div class="rox-ip-results">
+          <span></span><span></span><span></span>
+        </div>
+      </div>
+
+      <div class="rox-ip-demo-cursor"></div>
+    </div>
+  </div>
+
+  <div class="rox-ip-stage rox-ip-stage-complete" hidden>
+    <div class="rox-ip-complete-icon">✓</div>
+    <strong>Workflow complete</strong>
+    <span>12 actions · results organized</span>
+  </div>
+</div>
+            <div class="fcard-form">
+              <input type="text" placeholder="Enter the IP address..." data-i18n-placeholder="features.roxip.placeholder" data-quickfeature="roxip">
+              <button class="fcard-btn shimmer-btn" style="background:linear-gradient(135deg,#16a34a,#22c55e);" data-quicksend="roxip" data-i18n="features.roxip.connect">⚡ Connect</button>
             </div>
           </div>
 
@@ -15789,7 +17157,7 @@ html[data-rox-density="compact"] .chat-input-row{
       <div class="fic" style="background:var(--panel-2);">🕘</div>
       <div class="meta"><div class="t" data-i18n="common.history">History</div><div class="s" data-i18n="common.recentActivity">Recent activity</div></div>
     </div>
-    <div class="placeholder-view" style="margin:20px;" data-i18n="history.placeholder">Image generated · Video created · IP connection · Code executed</div>
+    <div class="project-list" data-rox-history-list style="margin:20px;"><div class="placeholder-view" data-i18n="history.placeholder">Image generated · Video created · IP connection · Code executed</div></div>
   </div>
 </div>
 
@@ -17695,7 +19063,7 @@ function logout() {
   }
   supa.auth.signOut();
 }
-document.getElementById('logoutBtn').addEventListener('click', logout);
+document.getElementById('logoutBtn').addEventListener('click', openRoxAccountCenter);
 document.getElementById('settingsLogoutBtn').addEventListener('click', logout);
 
 function ensureRoxPasswordModal() {
@@ -18781,6 +20149,974 @@ function renderProfile() {
   document.getElementById('settingsUpgradeBtn').style.display = isPro ? 'none' : 'block';
 }
 
+/* ROX ACCOUNT CENTER V1 START */
+function getRoxAccountDisplayName(){
+  if(!profile) return 'Rox user';
+  return (
+    profile.full_name ||
+    (profile.email ? profile.email.split('@')[0] : '') ||
+    'Rox user'
+  );
+}
+
+function getRoxAccountInitial(){
+  return getRoxAccountDisplayName().charAt(0).toUpperCase() || 'R';
+}
+
+function getRoxAccountUsageText(){
+  if(lastRoxUsage?.type === 'pro'){
+    return `${lastRoxUsage.remaining} credits remaining`;
+  }
+
+  if(lastRoxUsage?.type === 'daily'){
+    return `${lastRoxUsage.used} / ${lastRoxUsage.limit} messages today`;
+  }
+
+  if(profile){
+    const total = Number(profile.credits_total) || 0;
+    const used = Number(profile.credits_used) || 0;
+
+    if(total > 0){
+      return `${Math.max(0,total-used)} credits remaining`;
+    }
+  }
+
+  return roxT('settings.common.loading');
+}
+
+function renderRoxAccountAvatar(element){
+  if(!element || !profile) return;
+
+  const avatarUrl = String(profile.avatar_url || '').trim();
+
+  element.innerHTML = '';
+
+  if(avatarUrl){
+    const img = document.createElement('img');
+    img.src = avatarUrl;
+    img.alt = getRoxAccountDisplayName();
+    img.loading = 'lazy';
+    img.referrerPolicy = 'no-referrer';
+    img.style.cssText =
+      'width:100%;height:100%;display:block;object-fit:cover;border-radius:inherit;';
+
+    img.addEventListener('error',()=>{
+      element.innerHTML = '';
+      element.textContent = getRoxAccountInitial();
+    });
+
+    element.appendChild(img);
+  }else{
+    element.textContent = getRoxAccountInitial();
+  }
+}
+
+function syncRoxAccountAvatars(){
+  renderRoxAccountAvatar(document.getElementById('userAvatar'));
+
+  const sidebarAvatar =
+    document.getElementById('sidebarProfileAvatar');
+
+  if(sidebarAvatar){
+    renderRoxAccountAvatar(sidebarAvatar);
+  }
+
+  renderRoxAccountAvatar(
+    document.getElementById('roxAccountMenuAvatar')
+  );
+
+  renderRoxAccountAvatar(
+    document.getElementById('roxAccountEditorAvatar')
+  );
+}
+
+function ensureRoxAccountCenterStyles(){
+  if(document.getElementById('roxAccountCenterStyles')) return;
+
+  const style=document.createElement('style');
+  style.id='roxAccountCenterStyles';
+
+  style.textContent=`
+    #logoutBtn,
+    #userAvatar{
+      cursor:pointer;
+    }
+
+    .rox-account-menu{
+      position:fixed;
+      z-index:2147483000;
+      width:min(360px,calc(100vw - 24px));
+      padding:12px;
+      border-radius:22px;
+      background:
+        linear-gradient(
+          155deg,
+          rgba(28,25,40,.98),
+          rgba(10,12,22,.985)
+        );
+      border:1px solid rgba(167,139,250,.25);
+      box-shadow:
+        0 28px 80px rgba(0,0,0,.55),
+        inset 0 1px rgba(255,255,255,.04);
+      backdrop-filter:blur(22px);
+      color:#f8fafc;
+    }
+
+    .rox-account-menu[hidden]{
+      display:none!important;
+    }
+
+    .rox-account-head{
+      display:flex;
+      gap:12px;
+      align-items:center;
+      padding:8px 8px 14px;
+      border-bottom:1px solid rgba(255,255,255,.08);
+    }
+
+    .rox-account-avatar{
+      width:48px;
+      height:48px;
+      flex:0 0 48px;
+      border-radius:50%;
+      display:grid;
+      place-items:center;
+      overflow:hidden;
+      font-weight:800;
+      font-size:18px;
+      color:white;
+      background:
+        linear-gradient(135deg,#7c3aed,#2563eb);
+      border:1px solid rgba(255,255,255,.14);
+    }
+
+    .rox-account-identity{
+      min-width:0;
+      flex:1;
+    }
+
+    .rox-account-name{
+      font-size:14px;
+      line-height:1.3;
+      font-weight:800;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      white-space:nowrap;
+    }
+
+    .rox-account-email{
+      margin-top:2px;
+      font-size:11px;
+      opacity:.64;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      white-space:nowrap;
+    }
+
+    .rox-account-planrow{
+      display:flex;
+      gap:7px;
+      align-items:center;
+      flex-wrap:wrap;
+      margin-top:7px;
+    }
+
+    .rox-account-pill{
+      border-radius:999px;
+      padding:4px 8px;
+      font-size:10px;
+      font-weight:800;
+      background:rgba(124,58,237,.16);
+      border:1px solid rgba(167,139,250,.22);
+      color:#c4b5fd;
+    }
+
+    .rox-account-usage{
+      font-size:10px;
+      opacity:.7;
+    }
+
+    .rox-account-actions{
+      display:grid;
+      gap:5px;
+      padding-top:9px;
+    }
+
+    .rox-account-action{
+      appearance:none;
+      border:0;
+      width:100%;
+      min-height:42px;
+      border-radius:13px;
+      padding:9px 11px;
+      display:flex;
+      align-items:center;
+      gap:10px;
+      background:transparent;
+      color:inherit;
+      font:600 12px Inter,Arial,sans-serif;
+      text-align:left;
+      cursor:pointer;
+    }
+
+    .rox-account-action:hover{
+      background:rgba(255,255,255,.065);
+    }
+
+    .rox-account-action-icon{
+      width:29px;
+      height:29px;
+      flex:0 0 29px;
+      display:grid;
+      place-items:center;
+      border-radius:9px;
+      background:rgba(124,58,237,.13);
+      border:1px solid rgba(167,139,250,.15);
+      font-size:13px;
+    }
+
+    .rox-account-action-copy{
+      min-width:0;
+      flex:1;
+    }
+
+    .rox-account-action-copy strong{
+      display:block;
+      font-size:12px;
+      font-weight:750;
+    }
+
+    .rox-account-action-copy small{
+      display:block;
+      margin-top:1px;
+      font-size:9px;
+      font-weight:500;
+      opacity:.55;
+    }
+
+    .rox-account-action.danger{
+      color:#fca5a5;
+      margin-top:3px;
+      border-top:1px solid rgba(255,255,255,.07);
+      border-radius:0 0 13px 13px;
+    }
+
+    .rox-account-editor-backdrop{
+      position:fixed;
+      inset:0;
+      z-index:2147483100;
+      display:grid;
+      place-items:center;
+      padding:18px;
+      background:rgba(0,0,0,.64);
+      backdrop-filter:blur(8px);
+    }
+
+    .rox-account-editor-backdrop[hidden]{
+      display:none!important;
+    }
+
+    .rox-account-editor{
+      width:min(440px,100%);
+      border-radius:22px;
+      padding:18px;
+      background:
+        linear-gradient(
+          155deg,
+          rgba(28,25,40,.99),
+          rgba(10,12,22,.995)
+        );
+      border:1px solid rgba(167,139,250,.25);
+      box-shadow:0 32px 100px rgba(0,0,0,.65);
+      color:#f8fafc;
+    }
+
+    .rox-account-editor-top{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      margin-bottom:17px;
+    }
+
+    .rox-account-editor-top h3{
+      margin:0;
+      font-size:17px;
+    }
+
+    .rox-account-close{
+      width:34px;
+      height:34px;
+      border:0;
+      border-radius:10px;
+      background:rgba(255,255,255,.07);
+      color:white;
+      cursor:pointer;
+    }
+
+    .rox-account-photo-row{
+      display:flex;
+      align-items:center;
+      gap:14px;
+      margin-bottom:17px;
+    }
+
+    .rox-account-editor-avatar{
+      width:72px;
+      height:72px;
+      flex:0 0 72px;
+    }
+
+    .rox-account-photo-actions{
+      display:grid;
+      gap:6px;
+    }
+
+    .rox-account-photo-btn{
+      border:1px solid rgba(167,139,250,.22);
+      background:rgba(124,58,237,.13);
+      color:#ddd6fe;
+      border-radius:11px;
+      padding:9px 12px;
+      font:700 11px Inter,Arial,sans-serif;
+      cursor:pointer;
+    }
+
+    .rox-account-field{
+      display:grid;
+      gap:6px;
+      margin-top:12px;
+    }
+
+    .rox-account-field span{
+      font-size:10px;
+      font-weight:700;
+      opacity:.66;
+    }
+
+    .rox-account-field input{
+      width:100%;
+      box-sizing:border-box;
+      border-radius:12px;
+      padding:11px 12px;
+      border:1px solid rgba(255,255,255,.11);
+      background:rgba(255,255,255,.05);
+      color:white;
+      outline:none;
+      font:600 12px Inter,Arial,sans-serif;
+    }
+
+    .rox-account-field input:focus{
+      border-color:rgba(167,139,250,.65);
+      box-shadow:0 0 0 3px rgba(124,58,237,.12);
+    }
+
+    .rox-account-editor-status{
+      min-height:17px;
+      margin-top:12px;
+      font-size:10px;
+      opacity:.75;
+    }
+
+    .rox-account-editor-save{
+      width:100%;
+      margin-top:8px;
+      border:0;
+      border-radius:12px;
+      padding:11px 14px;
+      background:linear-gradient(135deg,#7c3aed,#2563eb);
+      color:white;
+      font-weight:800;
+      cursor:pointer;
+    }
+
+    @media(max-width:640px){
+      .rox-account-menu{
+        left:12px!important;
+        right:12px!important;
+        bottom:12px!important;
+        top:auto!important;
+        width:auto;
+      }
+    }
+  `;
+
+  document.head.appendChild(style);
+}
+
+function ensureRoxAccountCenter(){
+  ensureRoxAccountCenterStyles();
+
+  let menu=document.getElementById('roxAccountMenu');
+
+  if(!menu){
+    menu=document.createElement('div');
+    menu.id='roxAccountMenu';
+    menu.className='rox-account-menu';
+    menu.hidden=true;
+
+    menu.innerHTML=`
+      <div class="rox-account-head">
+        <div
+          class="rox-account-avatar"
+          id="roxAccountMenuAvatar"
+        ></div>
+
+        <div class="rox-account-identity">
+          <div
+            class="rox-account-name"
+            id="roxAccountMenuName"
+          ></div>
+
+          <div
+            class="rox-account-email"
+            id="roxAccountMenuEmail"
+          ></div>
+
+          <div class="rox-account-planrow">
+            <span
+              class="rox-account-pill"
+              id="roxAccountMenuPlan"
+            ></span>
+
+            <span
+              class="rox-account-usage"
+              id="roxAccountMenuUsage"
+            ></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="rox-account-actions">
+        <button
+          class="rox-account-action"
+          type="button"
+          data-rox-account-action="profile"
+        >
+          <span class="rox-account-action-icon">👤</span>
+          <span class="rox-account-action-copy">
+            <strong>Profile & Account</strong>
+            <small>Photo, display name and account details</small>
+          </span>
+        </button>
+
+        <button
+          class="rox-account-action"
+          type="button"
+          data-rox-account-action="billing"
+        >
+          <span class="rox-account-action-icon">💳</span>
+          <span class="rox-account-action-copy">
+            <strong>Plan & Billing</strong>
+            <small>Subscription, plan and payments</small>
+          </span>
+        </button>
+
+        <button
+          class="rox-account-action"
+          type="button"
+          data-rox-account-action="usage"
+        >
+          <span class="rox-account-action-icon">◔</span>
+          <span class="rox-account-action-copy">
+            <strong>Usage & Credits</strong>
+            <small>Your current Rox usage</small>
+          </span>
+        </button>
+
+        <button
+          class="rox-account-action"
+          type="button"
+          data-rox-account-action="settings"
+        >
+          <span class="rox-account-action-icon">⚙</span>
+          <span class="rox-account-action-copy">
+            <strong>Settings</strong>
+            <small>Customize Rox AI</small>
+          </span>
+        </button>
+
+        <button
+          class="rox-account-action"
+          type="button"
+          data-rox-account-action="privacy"
+        >
+          <span class="rox-account-action-icon">🛡</span>
+          <span class="rox-account-action-copy">
+            <strong>Privacy & Security</strong>
+            <small>Password, devices and privacy</small>
+          </span>
+        </button>
+
+        <button
+          class="rox-account-action danger"
+          type="button"
+          data-rox-account-action="logout"
+        >
+          <span class="rox-account-action-icon">↪</span>
+          <span class="rox-account-action-copy">
+            <strong>${roxT('common.logout')}</strong>
+          </span>
+        </button>
+      </div>
+    `;
+
+    document.body.appendChild(menu);
+
+    menu.addEventListener('click',event=>{
+      const button=event.target.closest(
+        '[data-rox-account-action]'
+      );
+
+      if(!button) return;
+
+      const action=button.dataset.roxAccountAction;
+
+      closeRoxAccountCenter();
+
+      if(action==='profile'){
+        openRoxAccountEditor();
+        return;
+      }
+
+      if(action==='settings'){
+        openRoxSettingsSection();
+        return;
+      }
+
+      if(action==='privacy'){
+        openRoxSettingsSection('privacy');
+        return;
+      }
+
+      if(action==='billing' || action==='usage'){
+        openRoxSettingsSection('account');
+        return;
+      }
+
+      if(action==='logout'){
+        logout();
+      }
+    });
+  }
+
+  let editor=document.getElementById('roxAccountEditor');
+
+  if(!editor){
+    editor=document.createElement('div');
+    editor.id='roxAccountEditor';
+    editor.className='rox-account-editor-backdrop';
+    editor.hidden=true;
+
+    editor.innerHTML=`
+      <div
+        class="rox-account-editor"
+        role="dialog"
+        aria-modal="true"
+        aria-label="Profile & Account"
+      >
+        <div class="rox-account-editor-top">
+          <h3>Profile & Account</h3>
+          <button
+            type="button"
+            class="rox-account-close"
+            id="roxAccountEditorClose"
+            aria-label="Close"
+          >×</button>
+        </div>
+
+        <div class="rox-account-photo-row">
+          <div
+            class="rox-account-avatar rox-account-editor-avatar"
+            id="roxAccountEditorAvatar"
+          ></div>
+
+          <div class="rox-account-photo-actions">
+            <button
+              type="button"
+              class="rox-account-photo-btn"
+              id="roxAccountChoosePhoto"
+            >Change photo</button>
+
+            <small style="opacity:.5;font-size:9px;">
+              JPG, PNG or WebP · max 5 MB
+            </small>
+          </div>
+        </div>
+
+        <input
+          type="file"
+          id="roxAccountPhotoInput"
+          accept="image/jpeg,image/png,image/webp"
+          hidden
+        >
+
+        <label class="rox-account-field">
+          <span>Display name</span>
+          <input
+            id="roxAccountNameInput"
+            type="text"
+            maxlength="80"
+            autocomplete="name"
+          >
+        </label>
+
+        <label class="rox-account-field">
+          <span>Email</span>
+          <input
+            id="roxAccountEmailInput"
+            type="email"
+            readonly
+          >
+        </label>
+
+        <div
+          class="rox-account-editor-status"
+          id="roxAccountEditorStatus"
+        ></div>
+
+        <button
+          type="button"
+          class="rox-account-editor-save"
+          id="roxAccountSave"
+        >Save changes</button>
+      </div>
+    `;
+
+    document.body.appendChild(editor);
+
+    editor.addEventListener('click',event=>{
+      if(event.target===editor){
+        closeRoxAccountEditor();
+      }
+    });
+
+    document
+      .getElementById('roxAccountEditorClose')
+      .addEventListener('click',closeRoxAccountEditor);
+
+    document
+      .getElementById('roxAccountChoosePhoto')
+      .addEventListener('click',()=>{
+        document
+          .getElementById('roxAccountPhotoInput')
+          .click();
+      });
+
+    document
+      .getElementById('roxAccountPhotoInput')
+      .addEventListener('change',handleRoxAccountPhoto);
+
+    document
+      .getElementById('roxAccountSave')
+      .addEventListener('click',saveRoxAccountProfile);
+  }
+
+  return menu;
+}
+
+function refreshRoxAccountCenter(){
+  if(!profile) return;
+
+  ensureRoxAccountCenter();
+
+  const isPro=
+    String(profile.subscription_status || '').toLowerCase()
+      === 'pro';
+
+  const name=document.getElementById('roxAccountMenuName');
+  const email=document.getElementById('roxAccountMenuEmail');
+  const plan=document.getElementById('roxAccountMenuPlan');
+  const usage=document.getElementById('roxAccountMenuUsage');
+
+  if(name) name.textContent=getRoxAccountDisplayName();
+  if(email) email.textContent=profile.email || '';
+  if(plan){
+    plan.textContent=isPro
+      ? roxT('settings.account.planPro')
+      : roxT('settings.account.planFree');
+  }
+  if(usage) usage.textContent=getRoxAccountUsageText();
+
+  syncRoxAccountAvatars();
+}
+
+function openRoxAccountCenter(event){
+  if(event){
+    event.preventDefault();
+    event.stopPropagation();
+  }
+
+  if(!profile) return;
+
+  const menu=ensureRoxAccountCenter();
+
+  refreshRoxAccountCenter();
+
+  if(!menu.hidden){
+    menu.hidden=true;
+    return;
+  }
+
+  menu.hidden=false;
+
+  const trigger=
+    document.getElementById('logoutBtn') ||
+    document.getElementById('userAvatar');
+
+  if(window.innerWidth>640 && trigger){
+    const rect=trigger.getBoundingClientRect();
+
+    menu.style.top=`${Math.min(
+      window.innerHeight-menu.offsetHeight-12,
+      rect.bottom+10
+    )}px`;
+
+    menu.style.left=`${Math.max(
+      12,
+      Math.min(
+        window.innerWidth-menu.offsetWidth-12,
+        rect.right-menu.offsetWidth
+      )
+    )}px`;
+  }
+}
+
+function closeRoxAccountCenter(){
+  const menu=document.getElementById('roxAccountMenu');
+  if(menu) menu.hidden=true;
+}
+
+function openRoxSettingsSection(section){
+  const settingsTrigger=document.querySelector(
+    '[data-open="settings"]'
+  );
+
+  if(settingsTrigger){
+    settingsTrigger.click();
+  }
+
+  if(section){
+    setTimeout(()=>{
+      const tab=document.querySelector(
+        `[data-settings-target="${section}"]`
+      );
+
+      if(tab) tab.click();
+    },0);
+  }
+}
+
+function openRoxAccountEditor(){
+  if(!profile) return;
+
+  ensureRoxAccountCenter();
+
+  const editor=document.getElementById('roxAccountEditor');
+  const name=document.getElementById('roxAccountNameInput');
+  const email=document.getElementById('roxAccountEmailInput');
+  const status=document.getElementById('roxAccountEditorStatus');
+
+  if(name) name.value=getRoxAccountDisplayName();
+  if(email) email.value=profile.email || '';
+  if(status) status.textContent='';
+
+  syncRoxAccountAvatars();
+
+  editor.hidden=false;
+
+  setTimeout(()=>{
+    if(name){
+      name.focus();
+      name.select();
+    }
+  },0);
+}
+
+function closeRoxAccountEditor(){
+  const editor=document.getElementById('roxAccountEditor');
+  if(editor) editor.hidden=true;
+}
+
+async function saveRoxAccountProfile(){
+  if(!profile || !session) return;
+
+  const input=document.getElementById('roxAccountNameInput');
+  const status=document.getElementById('roxAccountEditorStatus');
+  const save=document.getElementById('roxAccountSave');
+
+  const fullName=String(input?.value || '').trim();
+
+  if(!fullName){
+    if(status) status.textContent='Enter a display name.';
+    return;
+  }
+
+  if(save) save.disabled=true;
+  if(status) status.textContent='Saving…';
+
+  try{
+    const {data,error}=await supa
+      .from('profiles')
+      .update({full_name:fullName})
+      .eq('id',session.user.id)
+      .select()
+      .single();
+
+    if(error) throw error;
+
+    profile={
+      ...profile,
+      ...data,
+      full_name:fullName
+    };
+
+    renderProfile();
+    refreshRoxAccountCenter();
+
+    if(typeof syncRoxSettingsAccount==='function'){
+      syncRoxSettingsAccount();
+    }
+
+    if(status) status.textContent='✓ Profile updated';
+  }catch(error){
+    console.error('[account] profile update failed:',error);
+    if(status){
+      status.textContent=
+        error?.message || 'Could not update profile.';
+    }
+  }finally{
+    if(save) save.disabled=false;
+  }
+}
+
+async function handleRoxAccountPhoto(event){
+  if(!profile || !session) return;
+
+  const file=event.target.files?.[0];
+
+  if(!file) return;
+
+  const status=document.getElementById('roxAccountEditorStatus');
+
+  if(file.size>5*1024*1024){
+    if(status) status.textContent='Image must be 5 MB or smaller.';
+    event.target.value='';
+    return;
+  }
+
+  if(!/^image\/(jpeg|png|webp)$/i.test(file.type)){
+    if(status) status.textContent='Use JPG, PNG or WebP.';
+    event.target.value='';
+    return;
+  }
+
+  if(status) status.textContent='Uploading photo…';
+
+  try{
+    const ext=
+      file.type==='image/png'
+        ? 'png'
+        : file.type==='image/webp'
+          ? 'webp'
+          : 'jpg';
+
+    const path=
+      `${session.user.id}/avatar-${Date.now()}.${ext}`;
+
+    const {error:uploadError}=await supa
+      .storage
+      .from('avatars')
+      .upload(path,file,{
+        cacheControl:'3600',
+        upsert:false,
+        contentType:file.type
+      });
+
+    if(uploadError) throw uploadError;
+
+    const {
+      data:publicData
+    }=supa
+      .storage
+      .from('avatars')
+      .getPublicUrl(path);
+
+    const avatarUrl=
+      publicData?.publicUrl || '';
+
+    if(!avatarUrl){
+      throw new Error('Avatar URL was not returned.');
+    }
+
+    const {data,error:updateError}=await supa
+      .from('profiles')
+      .update({avatar_url:avatarUrl})
+      .eq('id',session.user.id)
+      .select()
+      .single();
+
+    if(updateError) throw updateError;
+
+    profile={
+      ...profile,
+      ...data,
+      avatar_url:avatarUrl
+    };
+
+    renderProfile();
+    refreshRoxAccountCenter();
+
+    if(status) status.textContent='✓ Profile photo updated';
+  }catch(error){
+    console.error('[account] avatar upload failed:',error);
+
+    if(status){
+      status.textContent=
+        error?.message ||
+        'Could not upload profile photo.';
+    }
+  }finally{
+    event.target.value='';
+  }
+}
+
+document.addEventListener('click',event=>{
+  const menu=document.getElementById('roxAccountMenu');
+
+  if(
+    menu &&
+    !menu.hidden &&
+    !menu.contains(event.target) &&
+    !event.target.closest('#logoutBtn') &&
+    !event.target.closest('#userAvatar')
+  ){
+    closeRoxAccountCenter();
+  }
+});
+
+document.addEventListener('keydown',event=>{
+  if(event.key==='Escape'){
+    closeRoxAccountCenter();
+    closeRoxAccountEditor();
+  }
+});
+
+setTimeout(()=>{
+  const avatar=document.getElementById('userAvatar');
+
+  if(avatar && !avatar.dataset.roxAccountBound){
+    avatar.dataset.roxAccountBound='true';
+    avatar.addEventListener(
+      'click',
+      openRoxAccountCenter
+    );
+  }
+
+  refreshRoxAccountCenter();
+},0);
+/* ROX ACCOUNT CENTER V1 END */
+
 async function handleUpgrade() {
   if (!session) { showLogin(); return; }
   try {
@@ -19124,6 +21460,13 @@ const ROX_I18N = {
     'voice.auto': 'Auto',
     'demo.chatExampleUser': 'Explain gravity...',
     'demo.chatExampleBot': 'Gravity is a force...',
+    'demo.chatProject1': 'What are you working on today?',
+    'demo.chatProject2': 'I am building an online project.',
+    'demo.chatProject3': 'What do you want to automate?',
+    'demo.chatProject4': 'Content creation and some coding.',
+    'demo.chatProject5': 'I can help you build that workflow.',
+    'demo.chatProject6': 'Can it track which content performs best?',
+    'demo.chatProject7': 'Yes. We can analyze results and improve the next posts.',
     'usage.finalCost': 'Final cost: {{credits}} credits',
     'features.roxip.demoOnly': 'Demo only — “{{text}}” does not control a real device yet.',
     'settings.ai.resetSuccess': '✓ Preferences restored',
@@ -19407,6 +21750,13 @@ const ROX_I18N = {
     'voice.auto': 'Auto',
     'demo.chatExampleUser': 'Explique-moi la gravité…',
     'demo.chatExampleBot': 'La gravité est une force…',
+    'demo.chatProject1': 'Sur quoi travailles-tu aujourd’hui ?',
+    'demo.chatProject2': 'Je construis un projet en ligne.',
+    'demo.chatProject3': 'Que veux-tu automatiser ?',
+    'demo.chatProject4': 'La création de contenu et un peu de code.',
+    'demo.chatProject5': 'Je peux t’aider à construire ce workflow.',
+    'demo.chatProject6': 'Peut-il suivre les contenus qui fonctionnent le mieux ?',
+    'demo.chatProject7': 'Oui. On peut analyser les résultats et améliorer les prochains posts.',
     'usage.finalCost': 'Coût final : {{credits}} crédits',
     'features.roxip.demoOnly': 'Démo uniquement — « {{text}} » ne contrôle pas encore un appareil réel.',
     'settings.ai.resetSuccess': '✓ Préférences restaurées',
@@ -19690,6 +22040,13 @@ const ROX_I18N = {
     'voice.auto': 'تلقائي',
     'demo.chatExampleUser': 'اشرح لي الجاذبية...',
     'demo.chatExampleBot': 'الجاذبية قوة...',
+    'demo.chatProject1': 'على ماذا تعمل اليوم؟',
+    'demo.chatProject2': 'أبني مشروعاً على الإنترنت.',
+    'demo.chatProject3': 'ما الذي تريد أتمتته؟',
+    'demo.chatProject4': 'إنشاء المحتوى وبعض البرمجة.',
+    'demo.chatProject5': 'يمكنني مساعدتك في بناء سير العمل هذا.',
+    'demo.chatProject6': 'هل يمكنه تتبع المحتوى الأفضل أداءً؟',
+    'demo.chatProject7': 'نعم. يمكننا تحليل النتائج وتحسين المنشورات القادمة.',
     'usage.finalCost': 'التكلفة النهائية: {{credits}} رصيد',
     'features.roxip.demoOnly': 'للتجربة فقط — «{{text}}» لا يتحكم في جهاز حقيقي بعد.',
     'settings.ai.resetSuccess': '✓ تمت استعادة التفضيلات',
@@ -19973,6 +22330,13 @@ const ROX_I18N = {
     'voice.auto': 'Auto',
     'demo.chatExampleUser': 'Explícame la gravedad...',
     'demo.chatExampleBot': 'La gravedad es una fuerza...',
+    'demo.chatProject1': '¿En qué estás trabajando hoy?',
+    'demo.chatProject2': 'Estoy creando un proyecto online.',
+    'demo.chatProject3': '¿Qué quieres automatizar?',
+    'demo.chatProject4': 'Creación de contenido y algo de código.',
+    'demo.chatProject5': 'Puedo ayudarte a construir ese flujo de trabajo.',
+    'demo.chatProject6': '¿Puede seguir qué contenido funciona mejor?',
+    'demo.chatProject7': 'Sí. Podemos analizar los resultados y mejorar las próximas publicaciones.',
     'usage.finalCost': 'Coste final: {{credits}} créditos',
     'features.roxip.demoOnly': 'Solo demo — «{{text}}» todavía no controla un dispositivo real.',
     'settings.ai.resetSuccess': '✓ Preferencias restauradas',
@@ -20256,6 +22620,13 @@ const ROX_I18N = {
     'voice.auto': '自动',
     'demo.chatExampleUser': '解释一下重力...',
     'demo.chatExampleBot': '重力是一种力...',
+    'demo.chatProject1': '你今天在做什么？',
+    'demo.chatProject2': '我正在做一个在线项目。',
+    'demo.chatProject3': '你想自动化什么？',
+    'demo.chatProject4': '内容创作和一些编程。',
+    'demo.chatProject5': '我可以帮你搭建这个工作流程。',
+    'demo.chatProject6': '它能追踪哪些内容表现最好吗？',
+    'demo.chatProject7': '可以。我们可以分析结果并优化下一批内容。',
     'usage.finalCost': '最终费用：{{credits}} 点数',
     'features.roxip.demoOnly': '仅演示 — “{{text}}” 尚不能控制真实设备。',
     'settings.ai.resetSuccess': '✓ 偏好设置已恢复',
@@ -21516,6 +23887,203 @@ document.querySelectorAll('.modal-backdrop').forEach(el=>{
   el.addEventListener('click', (e)=>{ if (e.target === el) el.classList.remove('active'); });
 });
 
+function openRoxHistoryItem(item){
+  if(!item || !item.content || typeof item.content !== 'object') return;
+
+  const content = item.content;
+  const feature = String(content.feature || 'chat').toLowerCase() === 'code'
+    ? 'code'
+    : 'chat';
+
+  const savedMessages = Array.isArray(content.messages)
+    ? content.messages
+    : [];
+
+  const assistant =
+    content.assistant && typeof content.assistant === 'object'
+      ? content.assistant
+      : null;
+
+  const transcript = savedMessages
+    .filter(message =>
+      message &&
+      (message.role === 'user' || message.role === 'assistant') &&
+      typeof message.content === 'string' &&
+      message.content.trim()
+    )
+    .map(message => ({
+      role: message.role,
+      content: message.content
+    }));
+
+  if(
+    assistant &&
+    typeof assistant.content === 'string' &&
+    assistant.content.trim()
+  ){
+    transcript.push({
+      role: 'assistant',
+      content: assistant.content,
+      responseId: assistant.responseId || null,
+      model: assistant.model || null
+    });
+  }
+
+  conversations[feature] = transcript
+    .slice(-CHAT_HISTORY_LIMIT)
+    .map(message => ({
+      role: message.role,
+      content: message.content
+    }));
+
+  const msgBox = document.getElementById('msgs-' + feature);
+  const featureView = document.getElementById('feature-' + feature);
+  const historyView = document.getElementById('feature-history');
+
+  if(!msgBox || !featureView) return;
+
+  msgBox.innerHTML = '';
+
+  transcript.forEach(message => {
+    const isAssistant = message.role === 'assistant';
+
+    appendMsg(
+      msgBox,
+      isAssistant ? 'bot' : 'user',
+      message.content,
+      false,
+      isAssistant
+        ? {
+            responseId: message.responseId || null,
+            model: message.model || null,
+            feature
+          }
+        : {}
+    );
+  });
+
+  if(historyView){
+    historyView.classList.remove('active');
+  }
+
+  featureView.classList.add('active');
+  msgBox.scrollTop = msgBox.scrollHeight;
+
+  const input = document.querySelector(
+    'input[data-feature="' + feature + '"]'
+  );
+
+  if(input){
+    setTimeout(() => input.focus(), 0);
+  }
+}
+
+function bindRoxHistoryRows(target, items){
+  target.querySelectorAll('[data-rox-history-id]').forEach(row => {
+    row.style.cursor = 'pointer';
+
+    row.addEventListener('click', () => {
+      const id = String(row.dataset.roxHistoryId || '');
+
+      const item = items.find(
+        candidate => String(candidate?.id || '') === id
+      );
+
+      if(item){
+        openRoxHistoryItem(item);
+      }
+    });
+  });
+}
+
+async function loadRoxHistory(){
+  const targets=[...document.querySelectorAll('[data-rox-history-list]')];
+  if(!targets.length)return;
+
+  targets.forEach(target=>{
+    target.innerHTML='<div class="placeholder-view">Loading history...</div>';
+  });
+
+  try{
+    const response=await authFetch('/api/history',{method:'GET'});
+    const data=await response.json().catch(()=>({}));
+
+    if(!response.ok||data.status!=='success'){
+      throw new Error(data.message||('HTTP '+response.status));
+    }
+
+    const items=Array.isArray(data.items)?data.items:[];
+
+    if(!items.length){
+      targets.forEach(target=>{
+        target.innerHTML='<div class="placeholder-view">No saved history yet.</div>';
+      });
+      return;
+    }
+
+    const html=items.map(item=>{
+      const content=item&&item.content&&typeof item.content==='object'
+        ? item.content
+        : {};
+
+      const feature=String(content.feature||'chat').toLowerCase();
+      const messages=Array.isArray(content.messages)?content.messages:[];
+      const assistant=content.assistant&&typeof content.assistant==='object'
+        ? content.assistant
+        : {};
+
+      const firstUser=messages.find(message=>message&&message.role==='user'&&message.content);
+      const title=String(firstUser?.content||assistant.content||'Saved conversation')
+        .replace(/\s+/g,' ')
+        .trim()
+        .slice(0,80);
+
+      const created=item.created_at
+        ? new Date(item.created_at).toLocaleString()
+        : '';
+
+      const icon=
+        feature==='code'?'⌨️':
+        feature==='images'||feature==='image'?'🖼️':
+        feature==='videos'||feature==='video'?'🎬':
+        '💬';
+
+      const safeTitle=title
+        .replace(/&/g,'&amp;')
+        .replace(/</g,'&lt;')
+        .replace(/>/g,'&gt;')
+        .replace(/"/g,'&quot;')
+        .replace(/'/g,'&#039;');
+
+      const safeDate=String(created)
+        .replace(/&/g,'&amp;')
+        .replace(/</g,'&lt;')
+        .replace(/>/g,'&gt;');
+
+      return '<div class="prow" data-rox-history-id="'+String(item.id||'')+'">'+
+        '<div class="thumb" style="background:var(--panel-2);display:flex;align-items:center;justify-content:center;">'+icon+'</div>'+
+        '<div><div class="t">'+safeTitle+'</div><div class="s">'+safeDate+'</div></div>'+
+        '<div class="chev">›</div></div>';
+    }).join('');
+
+    targets.forEach(target=>{
+      target.innerHTML=html;
+      bindRoxHistoryRows(target, items);
+    });
+
+  }catch(error){
+    console.error('[history-ui] load failed:',error);
+    targets.forEach(target=>{
+      target.innerHTML='<div class="placeholder-view">History could not be loaded.</div>';
+    });
+  }
+}
+
+document.querySelectorAll('[data-open="history"]').forEach(el=>{
+  el.addEventListener('click',()=>{
+    loadRoxHistory();
+  });
+});
 // ── conversation history (per feature: 'chat' / 'code') ─────────────
 // Previously each call to /api/chat sent only the current message
 // (`messages: [{role:'user', content:text}]`), so the model had no
@@ -23183,6 +25751,437 @@ initAuth();
 })();
 
 <\/script>
+<script>
+document.addEventListener("DOMContentLoaded",function(){
+  const carousel=document.querySelector(".rox-videos-carousel");
+  if(!carousel)return;
+
+  const videos=Array.from(carousel.querySelectorAll(".rox-video-slide"));
+  if(!videos.length)return;
+
+  const STEP=2.5;
+  let current=0;
+  const offsets=videos.map(()=>0);
+  let timer=null;
+
+  function showVideo(index){
+    videos.forEach((video,i)=>{
+      if(i===index){
+        video.classList.add("is-active");
+      }else{
+        video.classList.remove("is-active");
+        video.pause();
+      }
+    });
+
+    const video=videos[index];
+
+    function start(){
+      const duration=Number.isFinite(video.duration)?video.duration:0;
+
+      if(duration>0 && offsets[index]>=Math.max(0,duration-0.15)){
+        offsets[index]=0;
+      }
+
+      try{video.currentTime=offsets[index];}catch(e){}
+
+      const p=video.play();
+      if(p&&typeof p.catch==="function"){p.catch(()=>{});}
+
+      clearTimeout(timer);
+      timer=setTimeout(function(){
+        video.pause();
+
+        const d=Number.isFinite(video.duration)?video.duration:0;
+        offsets[index]+=STEP;
+
+        if(d>0 && offsets[index]>=Math.max(0,d-0.15)){
+          offsets[index]=0;
+        }
+
+        current=(current+1)%videos.length;
+        showVideo(current);
+      },STEP*1000);
+    }
+
+    if(video.readyState>=1){
+      start();
+    }else{
+      video.addEventListener("loadedmetadata",start,{once:true});
+      video.load();
+    }
+  }
+
+  showVideo(current);
+});
+<\/script>
+<script>
+(function(){
+  function initRoxChatPreview(){
+    const chat=document.querySelector(".chat-thumb[data-open='chat']");
+    if(!chat)return;
+
+    const messages=Array.from(chat.querySelectorAll(".b"));
+    if(messages.length!==16){
+      console.warn("ROX Chat preview: expected 16 messages, found",messages.length);
+      return;
+    }
+
+    let index=0;
+    let timer=null;
+
+    function readingTime(message){
+      const text=(message.textContent||"").trim();
+      let ms=1700+(text.length*18);
+
+      if(/Rox IP/i.test(text)){
+        ms=Math.max(ms,6500);
+      }
+
+      if(index===messages.length){
+        ms=Math.max(ms,5200);
+      }
+
+      return Math.min(ms,7000);
+    }
+
+    function scrollConversation(duration){
+      const start=chat.scrollTop;
+      const end=Math.max(0,chat.scrollHeight-chat.clientHeight);
+
+      if(end<=start)return;
+
+      const started=performance.now();
+
+      function frame(now){
+        const progress=Math.min(1,(now-started)/duration);
+        const eased=1-Math.pow(1-progress,3);
+
+        chat.scrollTop=start+((end-start)*eased);
+
+        if(progress<1){
+          requestAnimationFrame(frame);
+        }
+      }
+
+      requestAnimationFrame(frame);
+    }
+
+    function resetConversation(){
+      clearTimeout(timer);
+
+      messages.forEach(message=>{
+        message.hidden=true;
+        message.classList.remove(
+          "rox-chat-visible",
+          "rox-chat-leaving"
+        );
+      });
+
+      chat.scrollTop=0;
+      index=0;
+
+      timer=setTimeout(showNext,700);
+    }
+
+    function showNext(){
+      if(index>=messages.length){
+        timer=setTimeout(resetConversation,4200);
+        return;
+      }
+
+      const message=messages[index];
+      index+=1;
+
+      message.hidden=false;
+
+      requestAnimationFrame(()=>{
+        requestAnimationFrame(()=>{
+          message.classList.add("rox-chat-visible");
+
+          const wait=readingTime(message);
+          const scrollDuration=Math.max(
+            650,
+            Math.min(2800,wait*.58)
+          );
+
+          scrollConversation(scrollDuration);
+
+          timer=setTimeout(showNext,wait);
+        });
+      });
+    }
+
+    resetConversation();
+  }
+
+  if(document.readyState==="loading"){
+    document.addEventListener(
+      "DOMContentLoaded",
+      initRoxChatPreview
+    );
+  }else{
+    initRoxChatPreview();
+  }
+})();
+<\/script>
+<script>
+(function(){
+  function initRoxCodeDemo(){
+    const demo=document.querySelector(".rox-code-demo");
+    if(!demo)return;
+
+    const promptStage=demo.querySelector(".rox-code-stage-prompt");
+    const editorStage=demo.querySelector(".rox-code-stage-editor");
+    const buildStage=demo.querySelector(".rox-code-stage-build");
+    const previewStage=demo.querySelector(".rox-code-stage-preview");
+    const prompt=demo.querySelector(".rox-code-prompt");
+
+    if(!promptStage||!editorStage||!buildStage||!previewStage||!prompt){
+      console.warn("ROX Code demo: required stage missing");
+      return;
+    }
+
+    const fullPrompt=prompt.textContent.trim();
+    const editorLines=Array.from(editorStage.children).slice(1);
+    const buildLines=Array.from(buildStage.children);
+    const timers=[];
+
+    function later(fn,ms){
+      const id=setTimeout(fn,ms);
+      timers.push(id);
+      return id;
+    }
+
+    function clearTimers(){
+      while(timers.length){
+        clearTimeout(timers.pop());
+      }
+    }
+
+    function hideAllStages(){
+      [promptStage,editorStage,buildStage,previewStage].forEach(stage=>{
+        stage.hidden=true;
+      });
+    }
+
+    function typePrompt(){
+      prompt.textContent="";
+      let i=0;
+
+      function typeNext(){
+        if(i>=fullPrompt.length){
+          later(showEditor,900);
+          return;
+        }
+
+        prompt.textContent+=fullPrompt.charAt(i);
+        i+=1;
+
+        const pause=/[,.]/.test(fullPrompt.charAt(i-1))?55:18;
+        later(typeNext,pause);
+      }
+
+      typeNext();
+    }
+
+    function showEditor(){
+      hideAllStages();
+      editorStage.hidden=false;
+
+      editorLines.forEach(line=>{
+        line.style.opacity="0";
+        line.style.transform="translateY(5px)";
+        line.style.transition="opacity .3s ease, transform .35s ease";
+      });
+
+      editorLines.forEach((line,i)=>{
+        later(()=>{
+          line.style.opacity="1";
+          line.style.transform="translateY(0)";
+        },350+(i*430));
+      });
+
+      later(showBuild,350+(editorLines.length*430)+950);
+    }
+
+    function showBuild(){
+      hideAllStages();
+      buildStage.hidden=false;
+
+      buildLines.forEach(line=>{
+        line.style.opacity="0";
+        line.style.transform="translateX(-6px)";
+        line.style.transition="opacity .28s ease, transform .32s ease";
+      });
+
+      buildLines.forEach((line,i)=>{
+        later(()=>{
+          line.style.opacity="1";
+          line.style.transform="translateX(0)";
+        },250+(i*360));
+      });
+
+      later(
+        showPreview,
+        250+(buildLines.length*360)+1100
+      );
+    }
+
+    function showPreview(){
+      hideAllStages();
+      previewStage.hidden=false;
+      previewStage.style.opacity="0";
+      previewStage.style.transform="scale(.975)";
+      previewStage.style.transition="opacity .4s ease, transform .45s cubic-bezier(.22,.8,.22,1)";
+
+      requestAnimationFrame(()=>{
+        requestAnimationFrame(()=>{
+          previewStage.style.opacity="1";
+          previewStage.style.transform="scale(1)";
+        });
+      });
+
+      later(resetDemo,4800);
+    }
+
+    function resetDemo(){
+      clearTimers();
+      hideAllStages();
+
+      promptStage.hidden=false;
+      prompt.textContent=fullPrompt;
+
+      editorLines.forEach(line=>{
+        line.removeAttribute("style");
+      });
+
+      buildLines.forEach(line=>{
+        line.removeAttribute("style");
+      });
+
+      previewStage.removeAttribute("style");
+
+      later(()=>{
+        prompt.textContent="";
+        typePrompt();
+      },700);
+    }
+
+    resetDemo();
+  }
+
+  if(document.readyState==="loading"){
+    document.addEventListener(
+      "DOMContentLoaded",
+      initRoxCodeDemo
+    );
+  }else{
+    initRoxCodeDemo();
+  }
+})();
+<\/script>
+<script>
+(function(){
+  function initRoxIpDemo(){
+    const demo=document.querySelector(".rox-ip-demo");
+    if(!demo)return;
+
+    const connectStage=demo.querySelector(".rox-ip-stage-connect");
+    const workspaceStage=demo.querySelector(".rox-ip-stage-workspace");
+    const completeStage=demo.querySelector(".rox-ip-stage-complete");
+    const cursor=demo.querySelector(".rox-ip-demo-cursor");
+
+    if(!connectStage||!workspaceStage||!completeStage||!cursor){
+      console.warn("ROX IP demo: required stage missing");
+      return;
+    }
+
+    const stages=[connectStage,workspaceStage,completeStage];
+    const timers=[];
+
+    function later(fn,ms){
+      const id=setTimeout(fn,ms);
+      timers.push(id);
+      return id;
+    }
+
+    function clearTimers(){
+      while(timers.length){
+        clearTimeout(timers.pop());
+      }
+    }
+
+    function showOnly(stage){
+      stages.forEach(item=>{
+        item.hidden=item!==stage;
+      });
+    }
+
+    function resetCursor(){
+      cursor.style.transition="none";
+      cursor.style.left="58%";
+      cursor.style.top="53%";
+      cursor.style.opacity="1";
+    }
+
+    function runWorkspaceMotion(){
+      resetCursor();
+
+      requestAnimationFrame(()=>{
+        requestAnimationFrame(()=>{
+          cursor.style.transition=
+            "left 1.05s cubic-bezier(.22,.8,.22,1), top 1.05s cubic-bezier(.22,.8,.22,1)";
+
+          cursor.style.left="73%";
+          cursor.style.top="30%";
+
+          later(()=>{
+            cursor.style.left="46%";
+            cursor.style.top="67%";
+          },1200);
+
+          later(()=>{
+            cursor.style.left="79%";
+            cursor.style.top="72%";
+          },2450);
+        });
+      });
+    }
+
+    function showConnect(){
+      clearTimers();
+      showOnly(connectStage);
+
+      later(showWorkspace,2800);
+    }
+
+    function showWorkspace(){
+      showOnly(workspaceStage);
+      runWorkspaceMotion();
+
+      later(showComplete,5200);
+    }
+
+    function showComplete(){
+      showOnly(completeStage);
+
+      later(showConnect,3500);
+    }
+
+    showConnect();
+  }
+
+  if(document.readyState==="loading"){
+    document.addEventListener(
+      "DOMContentLoaded",
+      initRoxIpDemo
+    );
+  }else{
+    initRoxIpDemo();
+  }
+})();
+<\/script>
 </body>
 </html>
 </script>
@@ -23253,7 +26252,7 @@ initAuth();
   document.close();
 })();
 </script>
+
 </body>
 </html>
-
 

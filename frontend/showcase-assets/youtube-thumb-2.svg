@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720">
+<defs>
+ <linearGradient id="g" x2="1"><stop stop-color="#07111e"/><stop offset=".5" stop-color="#0ea5e9"/><stop offset="1" stop-color="#8b5cf6"/></linearGradient>
+</defs>
+<rect width="1280" height="720" rx="38" fill="url(#g)"/>
+<rect x="650" y="105" width="470" height="390" rx="32" fill="#08111e" stroke="#67e8f9" stroke-width="6"/>
+<rect x="700" y="165" width="370" height="48" rx="14" fill="#2563eb"/>
+<rect x="700" y="245" width="290" height="40" rx="12" fill="#7c3aed"/>
+<rect x="700" y="320" width="330" height="40" rx="12" fill="#0ea5e9"/>
+<rect x="700" y="395" width="220" height="40" rx="12" fill="#22c55e"/>
+<text x="65" y="190" fill="#fff" font-family="Arial" font-size="80" font-weight="900">BUILD A</text>
+<text x="65" y="300" fill="#67e8f9" font-family="Arial" font-size="100" font-weight="900">GAME</text>
+<text x="65" y="405" fill="#fff" font-family="Arial" font-size="72" font-weight="900">WITH AI</text>
+<rect x="68" y="510" width="235" height="92" rx="25" fill="#ff0033"/>
+<polygon points="148,534 148,578 198,556" fill="#fff"/>
+<text x="330" y="571" fill="#e2e8f0" font-family="Arial" font-size="34" font-weight="800">MADE WITH ROX</text>
+</svg>

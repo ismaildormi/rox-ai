@@ -1,0 +1,595 @@
+   ROX SHOWCASE HERO V1 START
+   ===================================================== */
+
+@media (min-width:900px){
+  .rox-showcase-hero{position:relative!important;isolation:isolate!important;display:block!important;height:270px!important;min-height:270px!important;padding:0!important;overflow:hidden!important;border-radius:17px!important;background:radial-gradient(circle at 82% 25%,rgba(99,102,241,.17),transparent 32%),radial-gradient(circle at 10% 120%,rgba(14,165,233,.10),transparent 36%),linear-gradient(135deg,#091321,#0c1726 52%,#08111d)!important;border:1px solid rgba(148,163,184,.13)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.025),0 18px 46px rgba(0,0,0,.18)!important}
+  .rox-showcase-hero::before{content:""!important;position:absolute!important;inset:0!important;pointer-events:none!important;background:repeating-linear-gradient(90deg,transparent 0 45px,rgba(99,102,241,.025) 46px,transparent 47px)!important}
+  .rox-show-bg{position:absolute;inset:-30%;opacity:.35;background:radial-gradient(circle at center,rgba(59,130,246,.15),transparent 34%);animation:roxShowGlow 6s ease-in-out infinite}
+  .rox-show-scenes{position:absolute;left:0;top:0;right:195px;bottom:32px;overflow:hidden}
+  .rox-show-scene{position:absolute;inset:0;opacity:0;transform:translateY(10px) scale(.99);padding:33px 22px 20px 30px;animation:roxSceneSwitch 20s cubic-bezier(.2,.7,.2,1) infinite}
+  .scene-video{animation-delay:0s}.scene-code{animation-delay:5s}.scene-ip{animation-delay:10s}.scene-creator{animation-delay:15s}
+  .rox-show-copy{position:relative;z-index:5;width:45%}
+  .rox-show-copy>span{display:block;margin-bottom:9px;color:#818CF8;font-size:10px;font-weight:850;letter-spacing:.18em}
+  .rox-show-copy h2{margin:0!important;color:#F8FAFC;font-family:Inter,Arial,sans-serif!important;font-size:26px!important;line-height:1.08!important;letter-spacing:-.035em!important;font-weight:800!important;text-shadow:0 5px 18px rgba(0,0,0,.3)}
+  .rox-show-copy p{margin:10px 0 0!important;max-width:360px;color:#8996AA!important;font-size:11px!important;line-height:1.45!important}
+  .rox-video-gallery,.rox-game-gallery,.rox-thumb-gallery,.rox-pc{position:absolute;right:12px;top:21px;width:49%;height:179px;transform:perspective(800px) rotateY(-5deg)}
+  .rox-video-gallery{display:grid;grid-template-columns:1.25fr .85fr;grid-template-rows:1fr 1fr;gap:7px}
+  .rox-preview{position:relative;overflow:hidden;border-radius:11px;border:1px solid rgba(255,255,255,.10);box-shadow:0 12px 28px rgba(0,0,0,.24),inset 0 1px rgba(255,255,255,.05)}
+  .pv1{grid-row:1/span 2;background:radial-gradient(circle at 50% 38%,#FDE68A 0 7%,transparent 8%),linear-gradient(145deg,#172554,#7C3AED 50%,#EC4899)}
+  .pv2{background:linear-gradient(145deg,#071827,#0F766E,#22D3EE)}.pv3{background:linear-gradient(145deg,#111827,#7C2D12,#F59E0B)}
+  .rox-preview b{position:absolute;left:50%;top:50%;width:31px;height:31px;display:flex;align-items:center;justify-content:center;transform:translate(-50%,-50%);border-radius:50%;color:#fff;font-size:10px;background:rgba(2,6,23,.68);border:1px solid rgba(255,255,255,.18)}
+  .rox-preview small{position:absolute;left:8px;bottom:7px;color:rgba(255,255,255,.76);font-size:7px;font-weight:800;letter-spacing:.13em}
+  .rox-game-gallery{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 52px;gap:7px}
+  .rox-game{position:relative;overflow:hidden;border-radius:11px;border:1px solid rgba(255,255,255,.10);box-shadow:0 12px 26px rgba(0,0,0,.23)}
+  .game-one{background:linear-gradient(180deg,#312E81 0 52%,#111827 53%)}.game-two{background:linear-gradient(180deg,#052438,#0F766E)}
+  .game-one::after{content:"";position:absolute;left:30%;bottom:-28%;width:40%;height:85%;background:#090F1A;clip-path:polygon(38% 0,62% 0,100% 100%,0 100%)}
+  .game-one i{position:absolute;right:18px;top:15px;width:24px;height:24px;border-radius:50%;background:#FB7185;box-shadow:0 0 20px rgba(251,113,133,.48)}
+  .game-two i{position:absolute;left:28%;bottom:25%;width:11px;height:19px;border-radius:4px;background:#FDE68A;box-shadow:0 0 12px rgba(253,230,138,.5)}
+  .rox-game strong{position:absolute;z-index:4;left:8px;bottom:7px;color:#fff;font-size:7px;letter-spacing:.13em}
+  .rox-code-preview{grid-column:1/span 2;border-radius:9px;padding:9px 12px;color:#CBD5E1;font-family:monospace;font-size:8px;line-height:1.7;background:#080F1A;border:1px solid rgba(148,163,184,.10)}
+  .rox-code-preview em{color:#C084FC;font-style:normal}.rox-code-preview b{color:#67E8F9}
+  .rox-pc{overflow:hidden;border-radius:11px;background:#0A1321;border:1px solid rgba(148,163,184,.14);box-shadow:0 14px 30px rgba(0,0,0,.25)}
+  .rox-pc-top{height:27px;display:flex;align-items:center;gap:5px;padding:0 9px;background:#101B2B;border-bottom:1px solid rgba(148,163,184,.09)}
+  .rox-pc-top i{width:5px;height:5px;border-radius:50%;background:#64748B}.rox-pc-top small{margin-left:5px;color:#64748B;font-size:7px}
+  .rox-pc-side{position:absolute;top:27px;bottom:0;left:0;width:31%;padding:14px 9px;display:flex;flex-direction:column;gap:10px;background:#0D1726;border-right:1px solid rgba(148,163,184,.08)}
+  .rox-pc-side span{color:#94A3B8;font-size:7px}
+  .rox-pc-work{position:absolute;left:37%;right:8%;top:46px;display:grid;gap:8px}
+  .rox-pc-work b{display:block;height:22px;border-radius:5px;background:linear-gradient(90deg,rgba(59,130,246,.24),rgba(139,92,246,.12))}
+  .rox-pc-work b:nth-child(2){width:79%}.rox-pc-work b:nth-child(3){width:58%}
+  .rox-cursor{position:absolute;left:51%;top:61%;color:#fff;font-size:18px;filter:drop-shadow(0 2px 3px #000);animation:roxPcCursor 4s ease-in-out infinite}
+  .rox-thumb-gallery{display:grid;grid-template-columns:1.25fr .85fr;grid-template-rows:1fr 1fr;gap:7px}
+  .rox-thumb{position:relative;overflow:hidden;border-radius:11px;border:1px solid rgba(255,255,255,.10);box-shadow:0 12px 26px rgba(0,0,0,.24)}
+  .th1{grid-row:1/span 2;background:radial-gradient(circle at 50% 40%,#FDE68A 0 8%,transparent 9%),linear-gradient(135deg,#2563EB,#7C3AED,#FB7185)}
+  .th2{background:linear-gradient(135deg,#111827,#EF4444,#F59E0B)}.th3{background:linear-gradient(135deg,#052E16,#16A34A,#22D3EE)}
+  .rox-thumb strong{position:absolute;left:8px;bottom:7px;color:#fff;font-size:17px;font-weight:950;text-shadow:0 3px 10px rgba(0,0,0,.55)}
+  .rox-thumb i{position:absolute;top:7px;right:7px;width:22px;height:15px;display:flex;align-items:center;justify-content:center;border-radius:4px;background:#EF4444;color:#fff;font-size:7px;font-style:normal}
+  .rox-bot-area{position:absolute;z-index:8;right:0;top:0;bottom:32px;width:195px;border-left:1px solid rgba(148,163,184,.07);background:linear-gradient(90deg,transparent,rgba(9,18,31,.55))}
+  .rox-bot-message{position:absolute;top:20px;left:15px;right:15px;padding:9px 10px;border-radius:11px 11px 4px 11px;background:rgba(13,23,39,.78);border:1px solid rgba(129,140,248,.17);backdrop-filter:blur(10px)}
+  .rox-bot-message #heroGreeting{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#F8FAFC;font-size:10px;line-height:1.2;font-weight:800}
+  .rox-bot-message small{display:block;margin-top:3px;color:#818CF8;font-size:7.5px;font-weight:700}
+  .rox-home-bot{position:absolute;left:50%;bottom:10px;width:90px;height:116px;transform:translateX(-50%);animation:roxBotFloat 3s ease-in-out infinite}
+  .rox-ant{position:absolute;left:50%;top:0;width:2px;height:14px;transform:translateX(-50%);background:linear-gradient(#94A3B8,#E2E8F0)}
+  .rox-ant::before{content:"";position:absolute;left:50%;top:-5px;width:8px;height:8px;transform:translateX(-50%);border-radius:50%;background:#60A5FA;box-shadow:0 0 13px rgba(96,165,250,.85)}
+  .rox-head{position:absolute;left:50%;top:14px;width:68px;height:49px;transform:translateX(-50%);border-radius:18px 18px 14px 14px;background:linear-gradient(145deg,#E2E8F0,#77869A 28%,#263548 58%,#111A28);border:1px solid rgba(255,255,255,.22);box-shadow:inset 0 2px 4px rgba(255,255,255,.25),inset 0 -8px 15px rgba(0,0,0,.27),0 10px 22px rgba(0,0,0,.32)}
+  .rox-head::after{content:"";position:absolute;inset:7px;border-radius:11px;background:linear-gradient(#050D18,#0B1726);border:1px solid rgba(96,165,250,.18)}
+  .rox-head .eye{position:absolute;z-index:3;top:22px;width:8px;height:5px;border-radius:5px;background:#67E8F9;box-shadow:0 0 9px rgba(103,232,249,.9);animation:roxBlink 4.5s infinite}
+  .rox-head .e1{left:20px}.rox-head .e2{right:20px}
+  .rox-head .mouth{position:absolute;z-index:3;left:50%;top:36px;width:14px;height:2px;transform:translateX(-50%);border-radius:5px;background:#818CF8}
+  .rox-body{position:absolute;left:50%;top:66px;width:58px;height:43px;transform:translateX(-50%);border-radius:12px 12px 18px 18px;background:linear-gradient(145deg,#AEB9C9,#435269 38%,#172235);border:1px solid rgba(255,255,255,.16);box-shadow:inset 0 1px 2px rgba(255,255,255,.22),0 9px 20px rgba(0,0,0,.28)}
+  .rox-body .core{position:absolute;left:50%;top:11px;width:18px;height:18px;transform:translateX(-50%);border-radius:50%;background:radial-gradient(circle at 35% 30%,#E0F2FE,#60A5FA 34%,#6366F1 72%);box-shadow:0 0 16px rgba(99,102,241,.75)}
+  .rox-home-bot .arm{position:absolute;top:73px;width:10px;height:38px;border-radius:8px;background:linear-gradient(#718096,#27364A);transform-origin:top center}
+  .arm-left{left:4px;transform:rotate(13deg)}.arm-right{right:2px;transform:rotate(-42deg);animation:roxWave 1.4s ease-in-out infinite}
+  .arm-right .hand{position:absolute;left:50%;bottom:-7px;width:17px;height:17px;display:flex;align-items:center;justify-content:center;transform:translateX(-50%);border-radius:50%;background:#475569;color:#E0F2FE;font-size:8px;font-style:normal;border:1px solid rgba(255,255,255,.16)}
+  .rox-show-labels{position:absolute;z-index:10;left:30px;right:210px;bottom:10px;display:flex;gap:20px}
+  .rox-show-labels span{color:#526075;font-size:7px;font-weight:850;letter-spacing:.14em}
+  @keyframes roxSceneSwitch{0%{opacity:0;transform:translateY(10px) scale(.99)}4%{opacity:1;transform:translateY(0) scale(1)}21%{opacity:1;transform:translateY(0) scale(1)}25%{opacity:0;transform:translateY(-8px) scale(1.01)}100%{opacity:0}}
+  @keyframes roxBotFloat{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(-5px)}}
+  @keyframes roxWave{0%,100%{transform:rotate(-42deg)}50%{transform:rotate(-70deg)}}
+  @keyframes roxBlink{0%,45%,49%,100%{transform:scaleY(1)}47%{transform:scaleY(.12)}}
+  @keyframes roxPcCursor{0%,100%{left:48%;top:58%}35%{left:72%;top:43%}68%{left:63%;top:70%}}
+  @keyframes roxShowGlow{0%,100%{transform:scale(1)}50%{transform:scale(1.12)}}
+}
+
+/* ROX SHOWCASE HERO V1 END */
+
+/* =====================================================
+   ROX SHOWCASE V3.1 — PREMIUM 3D POLISH
+   Same V1 philosophy, upgraded execution
+   ===================================================== */
+
+@media (min-width:900px){
+
+  /* ---------- MASTER DEPTH ---------- */
+
+  .rox-showcase-hero{
+    perspective:1400px;
+    transform-style:preserve-3d;
+  }
+
+  .rox-showcase-hero::after{
+    z-index:0;
+    background:
+      linear-gradient(118deg,rgba(255,255,255,.035),transparent 22%),
+      radial-gradient(circle at 68% 42%,rgba(96,165,250,.10),transparent 31%),
+      linear-gradient(to bottom,transparent 72%,rgba(2,6,23,.22));
+  }
+
+  .rox-show-scenes{
+    z-index:3;
+    perspective:1300px;
+    transform-style:preserve-3d;
+  }
+
+  .rox-show-scene{
+    transform-style:preserve-3d;
+  }
+
+
+  /* ---------- EACH SCENE GETS ITS OWN ATMOSPHERE ---------- */
+
+  .scene-video::before,
+  .scene-code::before,
+  .scene-ip::before,
+  .scene-creator::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    z-index:-1;
+    pointer-events:none;
+    opacity:.52;
+  }
+
+  .scene-video::before{
+    background:
+      radial-gradient(circle at 72% 45%,rgba(124,58,237,.18),transparent 35%),
+      radial-gradient(circle at 82% 20%,rgba(236,72,153,.09),transparent 28%);
+  }
+
+  .scene-code::before{
+    background:
+      radial-gradient(circle at 72% 45%,rgba(34,211,238,.13),transparent 34%),
+      radial-gradient(circle at 88% 18%,rgba(16,185,129,.08),transparent 27%);
+  }
+
+  .scene-ip::before{
+    background:
+      radial-gradient(circle at 73% 45%,rgba(59,130,246,.15),transparent 35%),
+      radial-gradient(circle at 89% 20%,rgba(96,165,250,.09),transparent 25%);
+  }
+
+  .scene-creator::before{
+    background:
+      radial-gradient(circle at 74% 45%,rgba(244,63,94,.10),transparent 35%),
+      radial-gradient(circle at 86% 20%,rgba(168,85,247,.11),transparent 27%);
+  }
+
+
+  /* ---------- COPY / TYPOGRAPHY ---------- */
+
+  .rox-show-copy{
+    transform:translateZ(38px);
+  }
+
+  .rox-show-copy>span{
+    position:relative;
+    width:max-content;
+    padding-left:15px;
+    text-shadow:0 0 18px rgba(129,140,248,.28);
+  }
+
+  .rox-show-copy>span::before{
+    content:"";
+    position:absolute;
+    left:0;
+    top:50%;
+    width:6px;
+    height:6px;
+    transform:translateY(-50%);
+    border-radius:50%;
+    background:#818cf8;
+    box-shadow:0 0 13px rgba(129,140,248,.9);
+  }
+
+  .rox-show-copy h2{
+    background:
+      linear-gradient(105deg,#ffffff 4%,#e4ebff 60%,#b8c7ee 100%);
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent!important;
+  }
+
+
+  /* ---------- VISUAL STAGE ---------- */
+
+  .rox-video-gallery,
+  .rox-game-gallery,
+  .rox-thumb-gallery,
+  .rox-pc{
+    transform:
+      perspective(1200px)
+      rotateY(-8deg)
+      rotateX(3deg)
+      translateZ(32px);
+    transform-style:preserve-3d;
+    transition:
+      transform .6s cubic-bezier(.2,.75,.2,1),
+      filter .6s ease;
+  }
+
+  .rox-show-scene:hover .rox-video-gallery,
+  .rox-show-scene:hover .rox-game-gallery,
+  .rox-show-scene:hover .rox-thumb-gallery,
+  .rox-show-scene:hover .rox-pc{
+    transform:
+      perspective(1200px)
+      rotateY(-4deg)
+      rotateX(1deg)
+      translateZ(45px)
+      translateY(-2px);
+    filter:drop-shadow(0 32px 42px rgba(0,0,0,.34));
+  }
+
+
+  /* ---------- GLASS CARD DETAILS ---------- */
+
+  .rox-preview,
+  .rox-game,
+  .rox-thumb{
+    background-clip:padding-box;
+  }
+
+  .rox-preview::before,
+  .rox-game::before,
+  .rox-thumb::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    z-index:2;
+    pointer-events:none;
+    border-radius:inherit;
+    background:
+      linear-gradient(135deg,rgba(255,255,255,.095),transparent 28%),
+      linear-gradient(to bottom,transparent 58%,rgba(2,6,23,.20));
+  }
+
+  .rox-preview::after,
+  .rox-game::after,
+  .rox-thumb::after{
+    content:"";
+    position:absolute;
+    left:10%;
+    right:10%;
+    top:0;
+    height:1px;
+    z-index:4;
+    background:
+      linear-gradient(90deg,transparent,rgba(255,255,255,.26),transparent);
+  }
+
+
+  /* ---------- AI VIDEO ---------- */
+
+  .pv1{
+    background:
+      radial-gradient(circle at 52% 36%,#ffe8a3 0 6%,transparent 7%),
+      radial-gradient(circle at 70% 30%,rgba(244,114,182,.40),transparent 26%),
+      linear-gradient(145deg,#172554,#6d28d9 53%,#be185d);
+  }
+
+  .pv2{
+    background:
+      radial-gradient(circle at 65% 35%,rgba(103,232,249,.34),transparent 28%),
+      linear-gradient(145deg,#071827,#0f766e,#0891b2);
+  }
+
+  .pv3{
+    background:
+      radial-gradient(circle at 65% 35%,rgba(251,191,36,.30),transparent 28%),
+      linear-gradient(145deg,#111827,#7c2d12,#d97706);
+  }
+
+  .rox-preview b{
+    z-index:5;
+    width:35px;
+    height:35px;
+    background:rgba(3,7,18,.66);
+    backdrop-filter:blur(9px);
+    box-shadow:
+      inset 0 1px rgba(255,255,255,.16),
+      0 7px 20px rgba(0,0,0,.32);
+  }
+
+  .rox-preview small{
+    z-index:5;
+  }
+
+
+  /* ---------- CODE STUDIO ---------- */
+
+  .rox-game-gallery{
+    gap:9px;
+  }
+
+  .game-one{
+    background:
+      radial-gradient(circle at 73% 23%,rgba(251,113,133,.38),transparent 20%),
+      linear-gradient(180deg,#312e81 0 52%,#0b1120 53%);
+  }
+
+  .game-two{
+    background:
+      radial-gradient(circle at 32% 66%,rgba(253,230,138,.28),transparent 20%),
+      linear-gradient(180deg,#052438,#0f766e);
+  }
+
+  .rox-code-preview{
+    position:relative;
+    border:1px solid rgba(103,232,249,.10);
+    background:
+      linear-gradient(135deg,rgba(15,23,42,.98),rgba(5,12,22,.98));
+    box-shadow:
+      inset 0 1px rgba(255,255,255,.035),
+      0 12px 26px rgba(0,0,0,.22);
+  }
+
+  .rox-code-preview::before{
+    content:"";
+    position:absolute;
+    left:0;
+    top:0;
+    bottom:0;
+    width:2px;
+    border-radius:8px 0 0 8px;
+    background:linear-gradient(#818cf8,#22d3ee);
+    box-shadow:0 0 13px rgba(34,211,238,.28);
+  }
+
+
+  /* ---------- ROX IP COMPUTER ---------- */
+
+  .rox-pc{
+    background:
+      linear-gradient(145deg,#0b1728,#08111e);
+    box-shadow:
+      inset 0 1px rgba(255,255,255,.045),
+      inset 0 -30px 70px rgba(2,6,23,.22),
+      0 25px 50px rgba(0,0,0,.32);
+  }
+
+  .rox-pc-top{
+    height:30px;
+    background:
+      linear-gradient(180deg,#142238,#101b2b);
+  }
+
+  .rox-pc-top i:first-child{background:#fb7185}
+  .rox-pc-top i:nth-child(2){background:#fbbf24}
+  .rox-pc-top i:nth-child(3){background:#4ade80}
+
+  .rox-pc-side{
+    top:30px;
+    background:
+      linear-gradient(180deg,#0e1929,#0b1523);
+  }
+
+  .rox-pc-side span{
+    padding:5px 6px;
+    border-radius:5px;
+  }
+
+  .rox-pc-side span:first-child{
+    color:#c7d2fe;
+    background:rgba(99,102,241,.10);
+  }
+
+  .rox-pc-work{
+    top:51px;
+  }
+
+  .rox-pc-work b{
+    position:relative;
+    overflow:hidden;
+    height:25px;
+    border:1px solid rgba(96,165,250,.08);
+    background:
+      linear-gradient(90deg,rgba(59,130,246,.25),rgba(139,92,246,.10));
+  }
+
+  .rox-pc-work b::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    transform:translateX(-110%);
+    background:
+      linear-gradient(90deg,transparent,rgba(255,255,255,.09),transparent);
+    animation:roxV3Scan 4.2s ease-in-out infinite;
+  }
+
+
+  /* ---------- CREATOR MODE ---------- */
+
+  .th1{
+    background:
+      radial-gradient(circle at 50% 38%,#fde68a 0 7%,transparent 8%),
+      radial-gradient(circle at 67% 31%,rgba(251,113,133,.44),transparent 22%),
+      linear-gradient(135deg,#2563eb,#7c3aed,#db2777);
+  }
+
+  .th2{
+    background:
+      radial-gradient(circle at 65% 30%,rgba(251,191,36,.30),transparent 22%),
+      linear-gradient(135deg,#111827,#dc2626,#d97706);
+  }
+
+  .th3{
+    background:
+      radial-gradient(circle at 65% 32%,rgba(34,211,238,.30),transparent 22%),
+      linear-gradient(135deg,#052e16,#15803d,#0891b2);
+  }
+
+  .rox-thumb strong{
+    z-index:5;
+  }
+
+  .rox-thumb i{
+    z-index:5;
+    box-shadow:0 6px 16px rgba(0,0,0,.28);
+  }
+
+
+  /* ---------- ROX CHARACTER V3 ---------- */
+
+  .rox-bot-area{
+    z-index:9;
+  }
+
+  .rox-home-bot{
+    filter:drop-shadow(0 24px 22px rgba(0,0,0,.32));
+  }
+
+  .rox-home-bot::before{
+    content:"";
+    position:absolute;
+    z-index:-1;
+    left:50%;
+    top:44%;
+    width:126px;
+    height:126px;
+    transform:translate(-50%,-50%);
+    border-radius:50%;
+    background:
+      radial-gradient(circle,rgba(96,165,250,.13),transparent 67%);
+    animation:roxV3BotHalo 4s ease-in-out infinite;
+  }
+
+  .rox-ant{
+    height:17px;
+  }
+
+  .rox-ant::before{
+    width:9px;
+    height:9px;
+    box-shadow:
+      0 0 14px rgba(96,165,250,.92),
+      0 0 28px rgba(96,165,250,.25);
+  }
+
+  .rox-head{
+    top:17px;
+    width:78px;
+    height:57px;
+  }
+
+  .rox-head::before{
+    content:"";
+    position:absolute;
+    inset:1px 12px auto;
+    height:8px;
+    border-radius:50%;
+    background:
+      linear-gradient(to bottom,rgba(255,255,255,.25),transparent);
+    filter:blur(2px);
+  }
+
+  .rox-head .eye{
+    top:26px;
+    width:9px;
+    height:5px;
+  }
+
+  .rox-head .e1{left:23px}
+  .rox-head .e2{right:23px}
+
+  .rox-head .mouth{
+    top:42px;
+    width:16px;
+  }
+
+  .rox-body{
+    top:82px;
+    width:67px;
+    height:50px;
+  }
+
+  .rox-home-bot .arm{
+    top:89px;
+    width:11px;
+    height:42px;
+  }
+
+  .arm-left{
+    left:8px;
+  }
+
+  .arm-right{
+    right:6px;
+  }
+
+
+  /* ---------- ROX MESSAGE ---------- */
+
+  .rox-bot-message{
+    overflow:hidden;
+  }
+
+  .rox-bot-message::before{
+    content:"";
+    position:absolute;
+    left:0;
+    top:0;
+    bottom:0;
+    width:2px;
+    background:
+      linear-gradient(#60a5fa,#8b5cf6);
+    box-shadow:0 0 10px rgba(96,165,250,.38);
+  }
+
+  .rox-bot-message #heroGreeting{
+    font-size:12px;
+    letter-spacing:-.015em;
+  }
+
+  .rox-bot-message small{
+    font-size:8.5px;
+  }
+
+
+  /* ---------- ACTIVE SCENE LABELS ---------- */
+
+  .rox-show-labels span{
+    position:relative;
+    padding-bottom:5px;
+    animation:roxV3Label 20s linear infinite;
+  }
+
+  .rox-show-labels span:nth-child(1){animation-delay:0s}
+  .rox-show-labels span:nth-child(2){animation-delay:5s}
+  .rox-show-labels span:nth-child(3){animation-delay:10s}
+  .rox-show-labels span:nth-child(4){animation-delay:15s}
+
+  .rox-show-labels span::after{
+    content:"";
+    position:absolute;
+    left:0;
+    right:100%;
+    bottom:0;
+    height:1px;
+    border-radius:99px;
+    background:linear-gradient(90deg,#60a5fa,#8b5cf6);
+    box-shadow:0 0 9px rgba(99,102,241,.38);
+    animation:roxV3LabelLine 20s linear infinite;
+  }
+
+  .rox-show-labels span:nth-child(1)::after{animation-delay:0s}
+  .rox-show-labels span:nth-child(2)::after{animation-delay:5s}
+  .rox-show-labels span:nth-child(3)::after{animation-delay:10s}
+  .rox-show-labels span:nth-child(4)::after{animation-delay:15s}
+
+}
+
+
+/* ---------- V3 MOTION ---------- */
+
+@keyframes roxV3Scan{
+  0%,20%{transform:translateX(-110%)}
+  55%,100%{transform:translateX(120%)}
+}
+
+@keyframes roxV3BotHalo{
+  0%,100%{opacity:.55;transform:translate(-50%,-50%) scale(.94)}
+  50%{opacity:1;transform:translate(-50%,-50%) scale(1.08)}
+}
+
+@keyframes roxV3Label{
+  0%,3%{color:#a5b4fc}
+  4%,21%{color:#dbeafe}
+  25%,100%{color:#526075}
+}
+
+@keyframes roxV3LabelLine{
+  0%,3%{right:100%}
+  5%,21%{right:0}
+  25%,100%{right:100%}
+}
+
+/* ROX SHOWCASE V3.1 END */
