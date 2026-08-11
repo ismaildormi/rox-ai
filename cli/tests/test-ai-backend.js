@@ -87,3 +87,7 @@ if (process.exitCode) {
   console.error('SOME TESTS FAILED');
   process.exit(1);
 }
+
+// ROX_TEST_FORCE_EXIT - test runner completed; do not keep deployment validation alive.
+process.exit(process.exitCode || 0);
+
