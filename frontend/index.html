@@ -10086,10 +10086,20 @@ function appendTyping(msgBox) {
 
 // ── chat / code → POST /api/chat ────────────────────────────────────
 function createCodeArtifact(rawText) {
-  const fenced = String(rawText || '').match(/```([a-zA-Z0-9+#.-]*)\s*([\s\S]*?)```/);
+  const rawValue = String(rawText || '').trim();
+  const fenced = rawValue.match(/```([a-zA-Z0-9+#.-]*)\s*([\s\S]*?)```/);
+  const rawHtmlStart = rawValue.search(/<!doctype html|<html[\s>]|<body[\s>]/i);
+
+  // ROX CODE STUDIO DECISION GATE START
+  // Normal conversation must stay a normal assistant message.
+  // An artifact is created only for an explicit fenced code block or
+  // a recognizable standalone HTML document.
+  if (!fenced && rawHtmlStart < 0) return null;
+  // ROX CODE STUDIO DECISION GATE END
+
   const language = (fenced?.[1] || '').toLowerCase();
 
-  let code = (fenced ? fenced[2] : String(rawText || '')).trim();
+  let code = (fenced ? fenced[2] : rawValue).trim();
   const htmlStart = code.search(/<!doctype html|<html[\s>]/i);
   if (htmlStart > 0) code = code.slice(htmlStart);
 
@@ -26051,10 +26061,20 @@ function appendTyping(msgBox) {
 
 // ── chat / code → POST /api/chat ────────────────────────────────────
 function createCodeArtifact(rawText) {
-  const fenced = String(rawText || '').match(/```([a-zA-Z0-9+#.-]*)\s*([\s\S]*?)```/);
+  const rawValue = String(rawText || '').trim();
+  const fenced = rawValue.match(/```([a-zA-Z0-9+#.-]*)\s*([\s\S]*?)```/);
+  const rawHtmlStart = rawValue.search(/<!doctype html|<html[\s>]|<body[\s>]/i);
+
+  // ROX CODE STUDIO DECISION GATE START
+  // Normal conversation must stay a normal assistant message.
+  // An artifact is created only for an explicit fenced code block or
+  // a recognizable standalone HTML document.
+  if (!fenced && rawHtmlStart < 0) return null;
+  // ROX CODE STUDIO DECISION GATE END
+
   const language = (fenced?.[1] || '').toLowerCase();
 
-  let code = (fenced ? fenced[2] : String(rawText || '')).trim();
+  let code = (fenced ? fenced[2] : rawValue).trim();
   const htmlStart = code.search(/<!doctype html|<html[\s>]/i);
   if (htmlStart > 0) code = code.slice(htmlStart);
 
