@@ -35,14 +35,14 @@ function Deploy-RailwayStaging {
 }
 function Deploy-VercelPreview {
   Assert-StagingContext; Ensure-Cli 'vercel' 'vercel'
-  Invoke-RoxProcess -FilePath 'vercel' -Arguments @() -WorkingDirectory $script:RoxFrontend | Out-Null
+  Invoke-RoxProcess -FilePath 'vercel' -Arguments @() -WorkingDirectory $script:RoxRoot | Out-Null
 }
 function Deploy-Production {
   Assert-ProductionContext; Ensure-Cli 'railway' '@railway/cli'; Ensure-Cli 'vercel' 'vercel'
   Write-RoxWarn 'Railway: verify the CLI is linked to the PRODUCTION backend before continuing.'
   if (-not (Confirm-RoxAction 'Deploy backend to the currently linked Railway production service?' -DefaultNo:$true)) { return }
   Invoke-RoxProcess -FilePath 'railway' -Arguments @('up') -WorkingDirectory $script:RoxBackend | Out-Null
-  Invoke-RoxProcess -FilePath 'vercel' -Arguments @('--prod') -WorkingDirectory $script:RoxFrontend | Out-Null
+  Invoke-RoxProcess -FilePath 'vercel' -Arguments @('--prod') -WorkingDirectory $script:RoxRoot | Out-Null
 }
 function Invoke-DeployAction([string]$Selected) {
   switch ($Selected) {
