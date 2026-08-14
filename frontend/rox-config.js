@@ -5,9 +5,9 @@ window.ROX_RUNTIME_CONFIG = Object.freeze({
   SUPABASE_ANON_KEY: 'sb_publishable_jxn-4TT28_G7LtZG4FJXTQ_75JiaSBi',
   API_BASE: 'https://rox-ai-production.up.railway.app',
   FEATURES: Object.freeze({
-    projects: false,
-    history: false,
-    automations: false,
-    roxip: false
+    projects: true,
+    history: true,
+    automations: true,
+    roxip: true
   })
 });
