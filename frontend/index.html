@@ -1631,7 +1631,428 @@ html[data-rox-density="compact"] .chat-input-row{
 .rox-videos-carousel{position:relative;overflow:hidden;background:#080b12;}
 .rox-videos-carousel .rox-video-slide{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:none;}
 .rox-videos-carousel .rox-video-slide.is-active{display:block;}
-</style>
+
+/* ROX FIVE CONVERSATIONS PHASE 1 MOBILE START */
+.feature-screen:is(
+  #feature-chat,
+  #feature-code,
+  #feature-images,
+  #feature-videos,
+  #feature-roxip
+){
+  width:100%;
+  max-width:430px;
+  min-height:100dvh;
+  margin:0 auto;
+  color:#f5f7ff;
+  background:
+    radial-gradient(circle at 50% -10%,rgba(42,88,180,.18),transparent 34%),
+    linear-gradient(180deg,#061126 0%,#07142a 52%,#081326 100%);
+}
+
+.feature-screen:is(
+  #feature-chat,
+  #feature-code,
+  #feature-images,
+  #feature-videos,
+  #feature-roxip
+)::before,
+.feature-screen:is(
+  #feature-chat,
+  #feature-code,
+  #feature-images,
+  #feature-videos,
+  #feature-roxip
+)::after{
+  opacity:.42;
+  pointer-events:none;
+}
+
+.feature-screen:is(
+  #feature-chat,
+  #feature-code,
+  #feature-images,
+  #feature-videos,
+  #feature-roxip
+) .feature-topbar{
+  min-height:68px;
+  padding:10px 14px;
+  gap:10px;
+  border-bottom:1px solid rgba(148,163,184,.14);
+  background:rgba(5,14,31,.76);
+  backdrop-filter:blur(22px);
+  -webkit-backdrop-filter:blur(22px);
+  box-shadow:0 8px 30px rgba(0,0,0,.12);
+}
+
+.feature-screen:is(
+  #feature-chat,
+  #feature-code,
+  #feature-images,
+  #feature-videos,
+  #feature-roxip
+) .feature-topbar .back{
+  width:40px;
+  height:40px;
+  border-radius:50%;
+  border:1px solid rgba(148,163,184,.17);
+  background:rgba(15,23,42,.46);
+  color:#f8fafc;
+  font-size:20px;
+}
+
+.feature-screen:is(
+  #feature-chat,
+  #feature-code,
+  #feature-images,
+  #feature-videos,
+  #feature-roxip
+) .feature-topbar .fic{
+  width:38px;
+  height:38px;
+  border-radius:12px;
+  border:1px solid rgba(255,255,255,.1);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 8px 22px rgba(0,0,0,.18);
+}
+
+.feature-screen:is(
+  #feature-chat,
+  #feature-code,
+  #feature-images,
+  #feature-videos,
+  #feature-roxip
+) .feature-topbar .meta{
+  min-width:0;
+  flex:1;
+}
+
+.feature-screen:is(
+  #feature-chat,
+  #feature-code,
+  #feature-images,
+  #feature-videos,
+  #feature-roxip
+) .feature-topbar .meta .t{
+  color:#f8fafc;
+  font-size:15px;
+  font-weight:700;
+}
+
+.feature-screen:is(
+  #feature-chat,
+  #feature-code,
+  #feature-images,
+  #feature-videos,
+  #feature-roxip
+) .feature-topbar .meta .s{
+  margin-top:3px;
+  color:#8f9bb1;
+  font-size:11px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.feature-screen:is(
+  #feature-chat,
+  #feature-code,
+  #feature-images,
+  #feature-videos,
+  #feature-roxip
+) .chat-messages{
+  width:100%;
+  padding:22px 18px 136px;
+  gap:18px;
+  background:transparent;
+  scrollbar-width:thin;
+  scrollbar-color:rgba(148,163,184,.25) transparent;
+}
+
+.feature-screen:is(
+  #feature-chat,
+  #feature-code,
+  #feature-images,
+  #feature-videos,
+  #feature-roxip
+) .msg{
+  max-width:88%;
+  padding:0;
+  border:0;
+  border-radius:0;
+  background:transparent;
+  box-shadow:none;
+  color:#e9edf7;
+  font-size:14px;
+  line-height:1.72;
+  white-space:pre-wrap;
+  overflow-wrap:anywhere;
+}
+
+.feature-screen:is(
+  #feature-chat,
+  #feature-code,
+  #feature-images,
+  #feature-videos,
+  #feature-roxip
+) .msg.bot{
+  width:100%;
+  max-width:100%;
+  padding:0;
+  border:0;
+  border-radius:0;
+  background:transparent;
+  box-shadow:none;
+  align-self:stretch;
+}
+
+.feature-screen:is(
+  #feature-chat,
+  #feature-code,
+  #feature-images,
+  #feature-videos,
+  #feature-roxip
+) .msg.user{
+  max-width:86%;
+  padding:12px 15px;
+  border:1px solid rgba(147,197,253,.13);
+  border-radius:18px 18px 5px 18px;
+  background:linear-gradient(135deg,#1671df 0%,#275ee8 52%,#7138ef 100%);
+  color:#fff;
+  box-shadow:0 12px 28px rgba(37,99,235,.18);
+  align-self:flex-end;
+  font-weight:500;
+}
+
+.feature-screen:is(
+  #feature-chat,
+  #feature-code,
+  #feature-images,
+  #feature-videos,
+  #feature-roxip
+) .msg img,
+.feature-screen:is(
+  #feature-chat,
+  #feature-code,
+  #feature-images,
+  #feature-videos,
+  #feature-roxip
+) .msg video{
+  display:block;
+  width:min(100%,560px);
+  max-height:52vh;
+  margin:10px 0 0;
+  border:1px solid rgba(148,163,184,.18);
+  border-radius:16px;
+  object-fit:cover;
+  background:#020817;
+  box-shadow:0 16px 42px rgba(0,0,0,.28);
+}
+
+.feature-screen:is(
+  #feature-chat,
+  #feature-code,
+  #feature-images,
+  #feature-videos,
+  #feature-roxip
+) .msg-actions{
+  margin:6px 0 14px;
+  padding:0;
+  gap:2px;
+  border:0;
+  border-radius:0;
+  background:transparent;
+}
+
+.feature-screen:is(
+  #feature-chat,
+  #feature-code,
+  #feature-images,
+  #feature-videos,
+  #feature-roxip
+) .msg-action{
+  width:34px;
+  height:34px;
+  border-radius:10px;
+  color:#9ca8bb;
+  font-size:15px;
+}
+
+.feature-screen:is(
+  #feature-chat,
+  #feature-code,
+  #feature-images,
+  #feature-videos,
+  #feature-roxip
+) .msg-action:hover{
+  color:#fff;
+  background:rgba(148,163,184,.11);
+}
+
+.feature-screen:is(
+  #feature-chat,
+  #feature-code,
+  #feature-images,
+  #feature-videos,
+  #feature-roxip
+) .typing{
+  padding:12px 15px;
+  border:1px solid rgba(148,163,184,.14);
+  border-radius:16px;
+  background:rgba(15,29,52,.58);
+  box-shadow:none;
+}
+
+.feature-screen:is(
+  #feature-chat,
+  #feature-code,
+  #feature-images,
+  #feature-videos,
+  #feature-roxip
+) .chat-input-row{
+  position:absolute;
+  right:10px;
+  bottom:10px;
+  left:10px;
+  z-index:25;
+  min-height:64px;
+  padding:8px;
+  gap:6px;
+  align-items:center;
+  border:1px solid rgba(148,163,184,.2);
+  border-radius:24px;
+  background:linear-gradient(135deg,rgba(24,35,57,.94),rgba(19,29,49,.9));
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.06),
+    0 18px 50px rgba(0,0,0,.34);
+  backdrop-filter:blur(24px);
+  -webkit-backdrop-filter:blur(24px);
+}
+
+.feature-screen:is(
+  #feature-chat,
+  #feature-code,
+  #feature-images,
+  #feature-videos,
+  #feature-roxip
+) .chat-input-row input{
+  min-width:0;
+  height:46px;
+  padding:0 12px;
+  border:0;
+  border-radius:17px;
+  background:transparent;
+  color:#f8fafc;
+  font-size:14px;
+  box-shadow:none;
+}
+
+.feature-screen:is(
+  #feature-chat,
+  #feature-code,
+  #feature-images,
+  #feature-videos,
+  #feature-roxip
+) .chat-input-row input:focus{
+  border:0;
+  outline:0;
+  box-shadow:none;
+}
+
+.feature-screen:is(
+  #feature-chat,
+  #feature-code,
+  #feature-images,
+  #feature-videos,
+  #feature-roxip
+) .chat-input-row .rox-voice-language{
+  flex:0 0 auto;
+  min-width:74px;
+  max-width:88px;
+}
+
+.feature-screen:is(
+  #feature-chat,
+  #feature-code,
+  #feature-images,
+  #feature-videos,
+  #feature-roxip
+) .rox-voice-language-trigger{
+  height:44px;
+  padding:0 9px;
+  gap:5px;
+  border:0;
+  border-radius:15px;
+  background:rgba(255,255,255,.035);
+  box-shadow:none;
+}
+
+.feature-screen:is(
+  #feature-chat,
+  #feature-code,
+  #feature-images,
+  #feature-videos,
+  #feature-roxip
+) .rox-voice-language-icon{
+  display:none;
+}
+
+.feature-screen:is(
+  #feature-chat,
+  #feature-code,
+  #feature-images,
+  #feature-videos,
+  #feature-roxip
+) .rox-voice-language-label{
+  font-size:12px;
+  color:#d7deeb;
+}
+
+.feature-screen:is(
+  #feature-chat,
+  #feature-code,
+  #feature-images,
+  #feature-videos,
+  #feature-roxip
+) .chat-input-row .voice-input-btn,
+.feature-screen:is(
+  #feature-chat,
+  #feature-code,
+  #feature-images,
+  #feature-videos,
+  #feature-roxip
+) .chat-input-row > button[data-send]{
+  width:46px;
+  height:46px;
+  padding:0;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  font-size:17px;
+}
+
+.feature-screen:is(
+  #feature-chat,
+  #feature-code,
+  #feature-images,
+  #feature-videos,
+  #feature-roxip
+) .chat-input-row .voice-input-btn{
+  border:1px solid rgba(148,163,184,.15);
+  background:rgba(255,255,255,.055);
+  color:#eef2ff;
+}
+
+.feature-screen:is(
+  #feature-chat,
+  #feature-code,
+  #feature-images,
+  #feature-videos,
+  #feature-roxip
+) .chat-input-row > button[data-send]{
+  background:linear-gradient(135deg,#1687f8,#235ee8)!important;
+  box-shadow:0 8px 20px rgba(37,99,235,.28);
+}
+/* ROX FIVE CONVERSATIONS PHASE 1 MOBILE END */</style>
 <link rel="stylesheet" href="./rox-brand-blue-violet.css" data-rox-brand="blue-violet-v1">
 </head>
 <body>
@@ -16041,7 +16462,481 @@ html[data-rox-density="compact"] .chat-input-row{
 
 /* ROX SHOWCASE V4.22 RED 3D GRID END */
 
-</style>
+
+/* ROX FIVE CONVERSATIONS PHASE 1 DESKTOP START */
+.modal-backdrop:is(
+  #feature-chat,
+  #feature-code,
+  #feature-images,
+  #feature-videos,
+  #feature-roxip
+){
+  padding:28px;
+  background:rgba(1,7,20,.76);
+  backdrop-filter:blur(13px);
+  -webkit-backdrop-filter:blur(13px);
+}
+
+.modal-backdrop:is(
+  #feature-chat,
+  #feature-code,
+  #feature-images,
+  #feature-videos,
+  #feature-roxip
+) > .feature-screen{
+  position:relative;
+  width:min(1028px,calc(100vw - 56px));
+  max-width:1028px;
+  height:min(930px,calc(100dvh - 56px));
+  max-height:930px;
+  margin:0;
+  overflow:hidden;
+  border:1px solid rgba(148,163,184,.22);
+  border-radius:26px;
+  color:#f5f7ff;
+  background:
+    radial-gradient(circle at 15% 0%,rgba(28,93,174,.14),transparent 32%),
+    linear-gradient(180deg,rgba(7,20,39,.985),rgba(8,23,43,.985));
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.05),
+    0 36px 100px rgba(0,0,0,.56);
+}
+
+.modal-backdrop:is(
+  #feature-chat,
+  #feature-code,
+  #feature-images,
+  #feature-videos,
+  #feature-roxip
+) .modal-topbar{
+  min-height:78px;
+  padding:14px 20px;
+  gap:12px;
+  border-bottom:1px solid rgba(148,163,184,.14);
+  background:rgba(7,18,35,.74);
+  backdrop-filter:blur(22px);
+  -webkit-backdrop-filter:blur(22px);
+}
+
+.modal-backdrop:is(
+  #feature-chat,
+  #feature-code,
+  #feature-images,
+  #feature-videos,
+  #feature-roxip
+) .modal-topbar .back{
+  order:3;
+  width:auto;
+  min-width:78px;
+  height:40px;
+  margin-left:auto;
+  padding:0 15px;
+  gap:7px;
+  border:1px solid rgba(148,163,184,.16);
+  border-radius:12px;
+  background:rgba(15,23,42,.46);
+  color:#f8fafc;
+  font-size:14px;
+}
+
+.modal-backdrop:is(
+  #feature-chat,
+  #feature-code,
+  #feature-images,
+  #feature-videos,
+  #feature-roxip
+) .modal-topbar .fic{
+  width:40px;
+  height:40px;
+  border-radius:13px;
+  border:1px solid rgba(255,255,255,.1);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 8px 22px rgba(0,0,0,.18);
+}
+
+.modal-backdrop:is(
+  #feature-chat,
+  #feature-code,
+  #feature-images,
+  #feature-videos,
+  #feature-roxip
+) .modal-topbar .meta{
+  min-width:0;
+}
+
+.modal-backdrop:is(
+  #feature-chat,
+  #feature-code,
+  #feature-images,
+  #feature-videos,
+  #feature-roxip
+) .modal-topbar .meta .t{
+  color:#f8fafc;
+  font-size:16px;
+  font-weight:700;
+}
+
+.modal-backdrop:is(
+  #feature-chat,
+  #feature-code,
+  #feature-images,
+  #feature-videos,
+  #feature-roxip
+) .modal-topbar .meta .s{
+  margin-top:3px;
+  color:#8f9bb1;
+  font-size:11.5px;
+}
+
+.modal-backdrop:is(
+  #feature-chat,
+  #feature-code,
+  #feature-images,
+  #feature-videos,
+  #feature-roxip
+) .chat-messages{
+  width:min(100%,760px);
+  margin:0 auto;
+  padding:26px 24px 142px;
+  gap:20px;
+  background:transparent;
+  scrollbar-width:thin;
+  scrollbar-color:rgba(148,163,184,.25) transparent;
+}
+
+.modal-backdrop:is(
+  #feature-chat,
+  #feature-code,
+  #feature-images,
+  #feature-videos,
+  #feature-roxip
+) .msg{
+  max-width:84%;
+  padding:0;
+  border:0;
+  border-radius:0;
+  background:transparent;
+  box-shadow:none;
+  color:#e9edf7;
+  font-size:14.5px;
+  line-height:1.72;
+  white-space:pre-wrap;
+  overflow-wrap:anywhere;
+}
+
+.modal-backdrop:is(
+  #feature-chat,
+  #feature-code,
+  #feature-images,
+  #feature-videos,
+  #feature-roxip
+) .msg.bot{
+  width:100%;
+  max-width:100%;
+  padding:0;
+  border:0;
+  border-radius:0;
+  background:transparent;
+  box-shadow:none;
+  align-self:stretch;
+}
+
+.modal-backdrop:is(
+  #feature-chat,
+  #feature-code,
+  #feature-images,
+  #feature-videos,
+  #feature-roxip
+) .msg.user{
+  max-width:72%;
+  padding:13px 17px;
+  border:1px solid rgba(147,197,253,.13);
+  border-radius:18px 18px 5px 18px;
+  background:linear-gradient(135deg,#1671df 0%,#275ee8 52%,#7138ef 100%);
+  color:#fff;
+  box-shadow:0 12px 28px rgba(37,99,235,.18);
+  align-self:flex-end;
+  font-weight:500;
+}
+
+.modal-backdrop:is(
+  #feature-chat,
+  #feature-code,
+  #feature-images,
+  #feature-videos,
+  #feature-roxip
+) .msg img,
+.modal-backdrop:is(
+  #feature-chat,
+  #feature-code,
+  #feature-images,
+  #feature-videos,
+  #feature-roxip
+) .msg video{
+  display:block;
+  width:min(100%,620px);
+  max-height:420px;
+  margin:12px 0 0;
+  border:1px solid rgba(148,163,184,.18);
+  border-radius:17px;
+  object-fit:cover;
+  background:#020817;
+  box-shadow:0 18px 48px rgba(0,0,0,.3);
+}
+
+.modal-backdrop:is(
+  #feature-chat,
+  #feature-code,
+  #feature-images,
+  #feature-videos,
+  #feature-roxip
+) .msg-actions{
+  margin:6px 0 14px;
+  padding:0;
+  gap:3px;
+  border:0;
+  border-radius:0;
+  background:transparent;
+}
+
+.modal-backdrop:is(
+  #feature-chat,
+  #feature-code,
+  #feature-images,
+  #feature-videos,
+  #feature-roxip
+) .msg-action{
+  width:36px;
+  height:36px;
+  border-radius:10px;
+  color:#9ca8bb;
+  font-size:15px;
+}
+
+.modal-backdrop:is(
+  #feature-chat,
+  #feature-code,
+  #feature-images,
+  #feature-videos,
+  #feature-roxip
+) .msg-action:hover{
+  color:#fff;
+  background:rgba(148,163,184,.11);
+}
+
+.modal-backdrop:is(
+  #feature-chat,
+  #feature-code,
+  #feature-images,
+  #feature-videos,
+  #feature-roxip
+) .typing{
+  padding:12px 15px;
+  border:1px solid rgba(148,163,184,.14);
+  border-radius:16px;
+  background:rgba(15,29,52,.58);
+  box-shadow:none;
+}
+
+.modal-backdrop:is(
+  #feature-chat,
+  #feature-code,
+  #feature-images,
+  #feature-videos,
+  #feature-roxip
+) .chat-input-row{
+  position:absolute;
+  right:28px;
+  bottom:18px;
+  left:28px;
+  z-index:25;
+  width:auto;
+  min-height:70px;
+  padding:9px 10px;
+  gap:8px;
+  align-items:center;
+  border:1px solid rgba(148,163,184,.2);
+  border-radius:25px;
+  background:linear-gradient(135deg,rgba(25,36,59,.95),rgba(19,29,49,.91));
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.06),
+    0 20px 56px rgba(0,0,0,.36);
+  backdrop-filter:blur(24px);
+  -webkit-backdrop-filter:blur(24px);
+}
+
+.modal-backdrop:is(
+  #feature-chat,
+  #feature-code,
+  #feature-images,
+  #feature-videos,
+  #feature-roxip
+) .chat-input-row input{
+  min-width:0;
+  height:50px;
+  padding:0 14px;
+  border:0;
+  border-radius:18px;
+  background:transparent;
+  color:#f8fafc;
+  font-size:14.5px;
+  box-shadow:none;
+}
+
+.modal-backdrop:is(
+  #feature-chat,
+  #feature-code,
+  #feature-images,
+  #feature-videos,
+  #feature-roxip
+) .chat-input-row input:focus{
+  border:0;
+  outline:0;
+  box-shadow:none;
+}
+
+.modal-backdrop:is(
+  #feature-chat,
+  #feature-code,
+  #feature-images,
+  #feature-videos,
+  #feature-roxip
+) .chat-input-row .rox-voice-language{
+  flex:0 0 112px;
+  min-width:112px;
+  max-width:112px;
+}
+
+.modal-backdrop:is(
+  #feature-chat,
+  #feature-code,
+  #feature-images,
+  #feature-videos,
+  #feature-roxip
+) .rox-voice-language-trigger{
+  height:48px;
+  padding:0 12px;
+  gap:7px;
+  border:0;
+  border-radius:16px;
+  background:rgba(255,255,255,.035);
+  box-shadow:none;
+}
+
+.modal-backdrop:is(
+  #feature-chat,
+  #feature-code,
+  #feature-images,
+  #feature-videos,
+  #feature-roxip
+) .rox-voice-language-icon{
+  display:none;
+}
+
+.modal-backdrop:is(
+  #feature-chat,
+  #feature-code,
+  #feature-images,
+  #feature-videos,
+  #feature-roxip
+) .rox-voice-language-label{
+  color:#d7deeb;
+  font-size:12.5px;
+}
+
+.modal-backdrop:is(
+  #feature-chat,
+  #feature-code,
+  #feature-images,
+  #feature-videos,
+  #feature-roxip
+) .chat-input-row .voice-input-btn,
+.modal-backdrop:is(
+  #feature-chat,
+  #feature-code,
+  #feature-images,
+  #feature-videos,
+  #feature-roxip
+) .chat-input-row > button[data-send]{
+  width:50px;
+  height:50px;
+  padding:0;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  font-size:18px;
+}
+
+.modal-backdrop:is(
+  #feature-chat,
+  #feature-code,
+  #feature-images,
+  #feature-videos,
+  #feature-roxip
+) .chat-input-row .voice-input-btn{
+  border:1px solid rgba(148,163,184,.15);
+  background:rgba(255,255,255,.055);
+  color:#eef2ff;
+}
+
+.modal-backdrop:is(
+  #feature-chat,
+  #feature-code,
+  #feature-images,
+  #feature-videos,
+  #feature-roxip
+) .chat-input-row > button[data-send]{
+  background:linear-gradient(135deg,#1687f8,#235ee8)!important;
+  box-shadow:0 9px 22px rgba(37,99,235,.3);
+}
+
+@media (max-width:760px){
+  .modal-backdrop:is(
+    #feature-chat,
+    #feature-code,
+    #feature-images,
+    #feature-videos,
+    #feature-roxip
+  ){
+    padding:0;
+  }
+
+  .modal-backdrop:is(
+    #feature-chat,
+    #feature-code,
+    #feature-images,
+    #feature-videos,
+    #feature-roxip
+  ) > .feature-screen{
+    width:100%;
+    height:100dvh;
+    max-height:none;
+    border:0;
+    border-radius:0;
+  }
+
+  .modal-backdrop:is(
+    #feature-chat,
+    #feature-code,
+    #feature-images,
+    #feature-videos,
+    #feature-roxip
+  ) .chat-messages{
+    padding:22px 18px 136px;
+  }
+
+  .modal-backdrop:is(
+    #feature-chat,
+    #feature-code,
+    #feature-images,
+    #feature-videos,
+    #feature-roxip
+  ) .chat-input-row{
+    right:10px;
+    bottom:10px;
+    left:10px;
+  }
+}
+/* ROX FIVE CONVERSATIONS PHASE 1 DESKTOP END */</style>
 <link rel="stylesheet" href="./rox-brand-blue-violet.css" data-rox-brand="blue-violet-v1">
 </head>
 <body>
