@@ -2052,6 +2052,211 @@ html[data-rox-density="compact"] .chat-input-row{
   background:linear-gradient(135deg,#1687f8,#235ee8)!important;
   box-shadow:0 8px 20px rgba(37,99,235,.28);
 }
+
+/* ROX GPT MESSAGE ACTIONS PHASE 2 CSS START */
+.msg-actions.rox-gpt-actions{
+  position:relative;
+  display:flex;
+  align-items:center;
+  align-self:flex-start;
+  width:max-content;
+  max-width:100%;
+  gap:2px;
+  margin:7px 0 15px;
+  padding:0;
+  border:0;
+  border-radius:0;
+  background:transparent;
+  direction:ltr;
+  overflow:visible;
+}
+
+.msg-actions.rox-gpt-actions .msg-action{
+  width:34px;
+  height:34px;
+  min-width:34px;
+  padding:0;
+  display:grid;
+  place-items:center;
+  border:0;
+  border-radius:9px;
+  background:transparent;
+  color:#aab4c5;
+  box-shadow:none;
+  cursor:pointer;
+  transition:
+    color .16s ease,
+    background .16s ease,
+    transform .16s ease;
+}
+
+.msg-actions.rox-gpt-actions .msg-action:hover,
+.msg-actions.rox-gpt-actions .msg-action:focus-visible{
+  color:#f8fafc;
+  background:rgba(148,163,184,.11);
+  transform:none;
+  outline:none;
+}
+
+.msg-actions.rox-gpt-actions .msg-action.is-active{
+  color:#d8e3ff;
+  background:rgba(99,102,241,.17);
+}
+
+.msg-actions.rox-gpt-actions .msg-action svg{
+  width:18px;
+  height:18px;
+  display:block;
+  fill:none;
+  stroke:currentColor;
+  stroke-width:1.8;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+  pointer-events:none;
+}
+
+.msg-actions.rox-gpt-actions .rox-gpt-hidden-action{
+  display:none!important;
+}
+
+.rox-gpt-more-wrap{
+  position:relative;
+  display:flex;
+}
+
+.rox-gpt-more-menu{
+  position:absolute;
+  left:0;
+  bottom:calc(100% + 9px);
+  z-index:120;
+  width:244px;
+  padding:8px;
+  border:1px solid rgba(148,163,184,.19);
+  border-radius:16px;
+  background:
+    linear-gradient(145deg,rgba(37,46,62,.98),rgba(29,38,54,.98));
+  color:#f8fafc;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.055),
+    0 20px 55px rgba(0,0,0,.48);
+  backdrop-filter:blur(24px);
+  -webkit-backdrop-filter:blur(24px);
+  transform-origin:bottom left;
+  animation:roxGptMenuIn .14s ease-out;
+  direction:ltr;
+}
+
+.rox-gpt-more-menu[hidden]{
+  display:none!important;
+}
+
+@keyframes roxGptMenuIn{
+  from{
+    opacity:0;
+    transform:translateY(5px) scale(.98);
+  }
+  to{
+    opacity:1;
+    transform:translateY(0) scale(1);
+  }
+}
+
+.rox-gpt-more-time{
+  padding:8px 11px 9px;
+  color:#d9e0eb;
+  font-size:12.5px;
+  font-weight:600;
+  border-bottom:1px solid rgba(148,163,184,.12);
+  margin-bottom:5px;
+}
+
+.rox-gpt-menu-item{
+  width:100%;
+  min-height:42px;
+  padding:0 10px;
+  display:flex;
+  align-items:center;
+  gap:11px;
+  border:0;
+  border-radius:10px;
+  background:transparent;
+  color:#f3f5fa;
+  font:inherit;
+  font-size:13px;
+  font-weight:550;
+  text-align:left;
+  cursor:pointer;
+  transition:background .15s ease,color .15s ease;
+}
+
+.rox-gpt-menu-item:hover,
+.rox-gpt-menu-item:focus-visible{
+  background:rgba(255,255,255,.075);
+  color:#fff;
+  outline:none;
+}
+
+.rox-gpt-menu-item svg{
+  width:19px;
+  height:19px;
+  flex:0 0 19px;
+  fill:none;
+  stroke:currentColor;
+  stroke-width:1.75;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+}
+
+.rox-gpt-menu-item[aria-disabled="true"]{
+  color:#8f9aad;
+  cursor:default;
+}
+
+.rox-gpt-menu-item[aria-disabled="true"]:hover{
+  background:transparent;
+}
+
+.rox-gpt-action-note{
+  position:absolute;
+  left:0;
+  bottom:calc(100% + 8px);
+  z-index:130;
+  width:max-content;
+  max-width:min(290px,80vw);
+  padding:9px 12px;
+  border:1px solid rgba(148,163,184,.17);
+  border-radius:11px;
+  background:rgba(25,34,49,.98);
+  color:#e8edf6;
+  font-size:12px;
+  line-height:1.35;
+  box-shadow:0 14px 38px rgba(0,0,0,.38);
+  animation:roxGptMenuIn .14s ease-out;
+}
+
+html[dir="rtl"] .rox-gpt-more-menu{
+  right:0;
+  left:auto;
+  transform-origin:bottom right;
+}
+
+html[dir="rtl"] .rox-gpt-menu-item{
+  text-align:right;
+  direction:rtl;
+}
+
+@media(max-width:520px){
+  .rox-gpt-more-menu{
+    width:226px;
+  }
+
+  .msg-actions.rox-gpt-actions .msg-action{
+    width:33px;
+    height:33px;
+    min-width:33px;
+  }
+}
+/* ROX GPT MESSAGE ACTIONS PHASE 2 CSS END */
 /* ROX FIVE CONVERSATIONS PHASE 1 MOBILE END */</style>
 <link rel="stylesheet" href="./rox-brand-blue-violet.css" data-rox-brand="blue-violet-v1">
 </head>
@@ -11052,6 +11257,301 @@ initAuth();
 <\/script>
 </body>
 </html>
+
+/* ROX GPT MESSAGE ACTIONS PHASE 2 JS START */
+(function(){
+  const icon = {
+    copy:
+      '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="11" height="11" rx="2"></rect><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"></path></svg>',
+    like:
+      '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 10v10H4a2 2 0 0 1-2-2v-6a2 2 0 0 1 2-2h3Z"></path><path d="M7 20h9.3a2 2 0 0 0 1.9-1.4l2.2-7A2 2 0 0 0 18.5 9H14l.7-3.1A2.4 2.4 0 0 0 12.3 3L7 10Z"></path></svg>',
+    dislike:
+      '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 14V4H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h3Z"></path><path d="M7 4h9.3a2 2 0 0 1 1.9 1.4l2.2 7a2 2 0 0 1-1.9 2.6H14l.7 3.1a2.4 2.4 0 0 1-2.4 2.9L7 14Z"></path></svg>',
+    more:
+      '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="12" r="1"></circle><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle></svg>',
+    sources:
+      '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H11a3 3 0 0 1 3 3v14a3 3 0 0 0-3-3H6.5A2.5 2.5 0 0 0 4 19.5v-14Z"></path><path d="M20 5.5A2.5 2.5 0 0 0 17.5 3H14v17a3 3 0 0 1 3-3h.5a2.5 2.5 0 0 1 2.5 2.5v-14Z"></path></svg>',
+    branch:
+      '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="6" cy="5" r="2"></circle><circle cx="18" cy="7" r="2"></circle><circle cx="6" cy="19" r="2"></circle><path d="M6 7v10"></path><path d="M8 11h4a6 6 0 0 0 6-2"></path></svg>',
+    listen:
+      '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 5 6.5 9H3v6h3.5L11 19V5Z"></path><path d="M15 9a4 4 0 0 1 0 6"></path><path d="M18 6a8 8 0 0 1 0 12"></path></svg>'
+  };
+
+  const textForLanguage = () => {
+    const lang = String(
+      document.documentElement.lang ||
+      navigator.language ||
+      'en'
+    ).toLowerCase();
+
+    if (lang.startsWith('ar')) {
+      return {
+        copy:'نسخ',
+        like:'إعجاب',
+        dislike:'عدم الإعجاب',
+        more:'المزيد',
+        sources:'عرض المصادر',
+        branch:'فتح فرع في محادثة جديدة',
+        listen:'القراءة بصوت عالٍ',
+        noSources:'لا توجد مصادر مرتبطة بهذا الجواب حالياً.',
+        branchLater:'سيتم ربط إنشاء الفرع بسجل المحادثات في المرحلة المخصصة له.'
+      };
+    }
+
+    if (lang.startsWith('fr')) {
+      return {
+        copy:'Copier',
+        like:'J’aime',
+        dislike:'Je n’aime pas',
+        more:'Plus',
+        sources:'Voir les sources',
+        branch:'Créer une branche dans un nouveau chat',
+        listen:'Lire à voix haute',
+        noSources:'Aucune source liée à cette réponse pour le moment.',
+        branchLater:'La création de branche sera reliée à l’historique dans sa phase dédiée.'
+      };
+    }
+
+    if (lang.startsWith('es')) {
+      return {
+        copy:'Copiar',
+        like:'Me gusta',
+        dislike:'No me gusta',
+        more:'Más',
+        sources:'Ver fuentes',
+        branch:'Crear rama en un chat nuevo',
+        listen:'Leer en voz alta',
+        noSources:'Esta respuesta no tiene fuentes vinculadas.',
+        branchLater:'La función de rama se conectará al historial en su fase dedicada.'
+      };
+    }
+
+    if (lang.startsWith('zh')) {
+      return {
+        copy:'复制',
+        like:'喜欢',
+        dislike:'不喜欢',
+        more:'更多',
+        sources:'查看来源',
+        branch:'在新聊天中创建分支',
+        listen:'朗读',
+        noSources:'此回复目前没有关联来源。',
+        branchLater:'分支功能将在历史记录阶段连接。'
+      };
+    }
+
+    return {
+      copy:'Copy',
+      like:'Like',
+      dislike:'Dislike',
+      more:'More',
+      sources:'View sources',
+      branch:'Branch in new chat',
+      listen:'Read aloud',
+      noSources:'No sources are linked to this response yet.',
+      branchLater:'Branch creation will be connected to conversation history in its dedicated phase.'
+    };
+  };
+
+  const closeAllMenus = except => {
+    document.querySelectorAll('.rox-gpt-more-menu').forEach(menu => {
+      if (menu !== except) {
+        menu.hidden = true;
+        menu.previousElementSibling?.setAttribute('aria-expanded','false');
+      }
+    });
+  };
+
+  const showNote = (actions,message) => {
+    actions.querySelector('.rox-gpt-action-note')?.remove();
+
+    const note = document.createElement('div');
+    note.className = 'rox-gpt-action-note';
+    note.textContent = message;
+    actions.appendChild(note);
+
+    clearTimeout(actions._roxNoteTimer);
+    actions._roxNoteTimer = setTimeout(() => note.remove(),2600);
+  };
+
+  const makeMenuItem = (markup,label,handler,disabled) => {
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'rox-gpt-menu-item';
+    button.innerHTML = markup + '<span></span>';
+    button.querySelector('span').textContent = label;
+
+    if (disabled) {
+      button.setAttribute('aria-disabled','true');
+    }
+
+    button.addEventListener('click',event => {
+      event.stopPropagation();
+      handler(button);
+    });
+
+    return button;
+  };
+
+  const enhanceActions = actions => {
+    if (
+      actions.dataset.roxGptActions === 'true' ||
+      !actions.isConnected
+    ) return;
+
+    const buttons = Array.from(
+      actions.querySelectorAll(':scope > .msg-action')
+    );
+
+    if (buttons.length < 6) return;
+
+    const labels = textForLanguage();
+    const copyButton = buttons[0];
+    const listenButton = buttons[1];
+    const likeButton = buttons[2];
+    const dislikeButton = buttons[3];
+    const shareButton = buttons[4];
+    const downloadButton = buttons[5];
+
+    actions.dataset.roxGptActions = 'true';
+    actions.classList.add('rox-gpt-actions');
+
+    copyButton.innerHTML = icon.copy;
+    copyButton.title = labels.copy;
+    copyButton.setAttribute('aria-label',labels.copy);
+
+    likeButton.innerHTML = icon.like;
+    likeButton.title = labels.like;
+    likeButton.setAttribute('aria-label',labels.like);
+
+    dislikeButton.innerHTML = icon.dislike;
+    dislikeButton.title = labels.dislike;
+    dislikeButton.setAttribute('aria-label',labels.dislike);
+
+    listenButton.classList.add('rox-gpt-hidden-action');
+    shareButton.classList.add('rox-gpt-hidden-action');
+    downloadButton.classList.add('rox-gpt-hidden-action');
+
+    const wrap = document.createElement('div');
+    wrap.className = 'rox-gpt-more-wrap';
+
+    const moreButton = document.createElement('button');
+    moreButton.type = 'button';
+    moreButton.className = 'msg-action rox-gpt-more-button';
+    moreButton.innerHTML = icon.more;
+    moreButton.title = labels.more;
+    moreButton.setAttribute('aria-label',labels.more);
+    moreButton.setAttribute('aria-haspopup','menu');
+    moreButton.setAttribute('aria-expanded','false');
+
+    const menu = document.createElement('div');
+    menu.className = 'rox-gpt-more-menu';
+    menu.setAttribute('role','menu');
+    menu.hidden = true;
+
+    const time = document.createElement('div');
+    time.className = 'rox-gpt-more-time';
+    time.textContent = new Intl.DateTimeFormat(
+      document.documentElement.lang || navigator.language || 'en',
+      {
+        month:'short',
+        day:'numeric',
+        hour:'numeric',
+        minute:'2-digit'
+      }
+    ).format(new Date());
+
+    const message =
+      actions.previousElementSibling?.classList.contains('msg')
+        ? actions.previousElementSibling
+        : null;
+
+    const sourcesButton = makeMenuItem(
+      icon.sources,
+      labels.sources,
+      () => {
+        const links = message
+          ? Array.from(message.querySelectorAll('a[href]'))
+          : [];
+
+        menu.hidden = true;
+        moreButton.setAttribute('aria-expanded','false');
+
+        if (links.length) {
+          links[0].click();
+        } else {
+          showNote(actions,labels.noSources);
+        }
+      },
+      false
+    );
+
+    const branchButton = makeMenuItem(
+      icon.branch,
+      labels.branch,
+      () => {
+        menu.hidden = true;
+        moreButton.setAttribute('aria-expanded','false');
+        showNote(actions,labels.branchLater);
+      },
+      false
+    );
+
+    const readButton = makeMenuItem(
+      icon.listen,
+      labels.listen,
+      () => {
+        menu.hidden = true;
+        moreButton.setAttribute('aria-expanded','false');
+        listenButton.click();
+      },
+      false
+    );
+
+    menu.append(time,sourcesButton,branchButton,readButton);
+    wrap.append(moreButton,menu);
+    actions.appendChild(wrap);
+
+    moreButton.addEventListener('click',event => {
+      event.stopPropagation();
+
+      const willOpen = menu.hidden;
+      closeAllMenus(menu);
+      menu.hidden = !willOpen;
+      moreButton.setAttribute('aria-expanded',String(willOpen));
+    });
+  };
+
+  const scan = root => {
+    if (root?.matches?.('.msg-actions')) {
+      enhanceActions(root);
+    }
+
+    root?.querySelectorAll?.('.msg-actions').forEach(enhanceActions);
+  };
+
+  scan(document);
+
+  const observer = new MutationObserver(records => {
+    records.forEach(record => {
+      record.addedNodes.forEach(node => {
+        if (node.nodeType === 1) scan(node);
+      });
+    });
+  });
+
+  observer.observe(document.documentElement,{
+    childList:true,
+    subtree:true
+  });
+
+  document.addEventListener('click',() => closeAllMenus());
+  window.addEventListener('resize',() => closeAllMenus());
+  document.addEventListener('keydown',event => {
+    if (event.key === 'Escape') closeAllMenus();
+  });
+})();
+/* ROX GPT MESSAGE ACTIONS PHASE 2 JS END */
 </script>
 <script type="text/plain" id="rox-src-desktop"><!DOCTYPE html>
 <html lang="fr">
@@ -16936,6 +17436,211 @@ html[data-rox-density="compact"] .chat-input-row{
     left:10px;
   }
 }
+
+/* ROX GPT MESSAGE ACTIONS PHASE 2 CSS START */
+.msg-actions.rox-gpt-actions{
+  position:relative;
+  display:flex;
+  align-items:center;
+  align-self:flex-start;
+  width:max-content;
+  max-width:100%;
+  gap:2px;
+  margin:7px 0 15px;
+  padding:0;
+  border:0;
+  border-radius:0;
+  background:transparent;
+  direction:ltr;
+  overflow:visible;
+}
+
+.msg-actions.rox-gpt-actions .msg-action{
+  width:34px;
+  height:34px;
+  min-width:34px;
+  padding:0;
+  display:grid;
+  place-items:center;
+  border:0;
+  border-radius:9px;
+  background:transparent;
+  color:#aab4c5;
+  box-shadow:none;
+  cursor:pointer;
+  transition:
+    color .16s ease,
+    background .16s ease,
+    transform .16s ease;
+}
+
+.msg-actions.rox-gpt-actions .msg-action:hover,
+.msg-actions.rox-gpt-actions .msg-action:focus-visible{
+  color:#f8fafc;
+  background:rgba(148,163,184,.11);
+  transform:none;
+  outline:none;
+}
+
+.msg-actions.rox-gpt-actions .msg-action.is-active{
+  color:#d8e3ff;
+  background:rgba(99,102,241,.17);
+}
+
+.msg-actions.rox-gpt-actions .msg-action svg{
+  width:18px;
+  height:18px;
+  display:block;
+  fill:none;
+  stroke:currentColor;
+  stroke-width:1.8;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+  pointer-events:none;
+}
+
+.msg-actions.rox-gpt-actions .rox-gpt-hidden-action{
+  display:none!important;
+}
+
+.rox-gpt-more-wrap{
+  position:relative;
+  display:flex;
+}
+
+.rox-gpt-more-menu{
+  position:absolute;
+  left:0;
+  bottom:calc(100% + 9px);
+  z-index:120;
+  width:244px;
+  padding:8px;
+  border:1px solid rgba(148,163,184,.19);
+  border-radius:16px;
+  background:
+    linear-gradient(145deg,rgba(37,46,62,.98),rgba(29,38,54,.98));
+  color:#f8fafc;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.055),
+    0 20px 55px rgba(0,0,0,.48);
+  backdrop-filter:blur(24px);
+  -webkit-backdrop-filter:blur(24px);
+  transform-origin:bottom left;
+  animation:roxGptMenuIn .14s ease-out;
+  direction:ltr;
+}
+
+.rox-gpt-more-menu[hidden]{
+  display:none!important;
+}
+
+@keyframes roxGptMenuIn{
+  from{
+    opacity:0;
+    transform:translateY(5px) scale(.98);
+  }
+  to{
+    opacity:1;
+    transform:translateY(0) scale(1);
+  }
+}
+
+.rox-gpt-more-time{
+  padding:8px 11px 9px;
+  color:#d9e0eb;
+  font-size:12.5px;
+  font-weight:600;
+  border-bottom:1px solid rgba(148,163,184,.12);
+  margin-bottom:5px;
+}
+
+.rox-gpt-menu-item{
+  width:100%;
+  min-height:42px;
+  padding:0 10px;
+  display:flex;
+  align-items:center;
+  gap:11px;
+  border:0;
+  border-radius:10px;
+  background:transparent;
+  color:#f3f5fa;
+  font:inherit;
+  font-size:13px;
+  font-weight:550;
+  text-align:left;
+  cursor:pointer;
+  transition:background .15s ease,color .15s ease;
+}
+
+.rox-gpt-menu-item:hover,
+.rox-gpt-menu-item:focus-visible{
+  background:rgba(255,255,255,.075);
+  color:#fff;
+  outline:none;
+}
+
+.rox-gpt-menu-item svg{
+  width:19px;
+  height:19px;
+  flex:0 0 19px;
+  fill:none;
+  stroke:currentColor;
+  stroke-width:1.75;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+}
+
+.rox-gpt-menu-item[aria-disabled="true"]{
+  color:#8f9aad;
+  cursor:default;
+}
+
+.rox-gpt-menu-item[aria-disabled="true"]:hover{
+  background:transparent;
+}
+
+.rox-gpt-action-note{
+  position:absolute;
+  left:0;
+  bottom:calc(100% + 8px);
+  z-index:130;
+  width:max-content;
+  max-width:min(290px,80vw);
+  padding:9px 12px;
+  border:1px solid rgba(148,163,184,.17);
+  border-radius:11px;
+  background:rgba(25,34,49,.98);
+  color:#e8edf6;
+  font-size:12px;
+  line-height:1.35;
+  box-shadow:0 14px 38px rgba(0,0,0,.38);
+  animation:roxGptMenuIn .14s ease-out;
+}
+
+html[dir="rtl"] .rox-gpt-more-menu{
+  right:0;
+  left:auto;
+  transform-origin:bottom right;
+}
+
+html[dir="rtl"] .rox-gpt-menu-item{
+  text-align:right;
+  direction:rtl;
+}
+
+@media(max-width:520px){
+  .rox-gpt-more-menu{
+    width:226px;
+  }
+
+  .msg-actions.rox-gpt-actions .msg-action{
+    width:33px;
+    height:33px;
+    min-width:33px;
+  }
+}
+/* ROX GPT MESSAGE ACTIONS PHASE 2 CSS END */
 /* ROX FIVE CONVERSATIONS PHASE 1 DESKTOP END */</style>
 <link rel="stylesheet" href="./rox-brand-blue-violet.css" data-rox-brand="blue-violet-v1">
 </head>
@@ -27079,6 +27784,301 @@ document.addEventListener("DOMContentLoaded",function(){
 <\/script>
 </body>
 </html>
+
+/* ROX GPT MESSAGE ACTIONS PHASE 2 JS START */
+(function(){
+  const icon = {
+    copy:
+      '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="11" height="11" rx="2"></rect><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"></path></svg>',
+    like:
+      '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 10v10H4a2 2 0 0 1-2-2v-6a2 2 0 0 1 2-2h3Z"></path><path d="M7 20h9.3a2 2 0 0 0 1.9-1.4l2.2-7A2 2 0 0 0 18.5 9H14l.7-3.1A2.4 2.4 0 0 0 12.3 3L7 10Z"></path></svg>',
+    dislike:
+      '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 14V4H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h3Z"></path><path d="M7 4h9.3a2 2 0 0 1 1.9 1.4l2.2 7a2 2 0 0 1-1.9 2.6H14l.7 3.1a2.4 2.4 0 0 1-2.4 2.9L7 14Z"></path></svg>',
+    more:
+      '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="12" r="1"></circle><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle></svg>',
+    sources:
+      '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H11a3 3 0 0 1 3 3v14a3 3 0 0 0-3-3H6.5A2.5 2.5 0 0 0 4 19.5v-14Z"></path><path d="M20 5.5A2.5 2.5 0 0 0 17.5 3H14v17a3 3 0 0 1 3-3h.5a2.5 2.5 0 0 1 2.5 2.5v-14Z"></path></svg>',
+    branch:
+      '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="6" cy="5" r="2"></circle><circle cx="18" cy="7" r="2"></circle><circle cx="6" cy="19" r="2"></circle><path d="M6 7v10"></path><path d="M8 11h4a6 6 0 0 0 6-2"></path></svg>',
+    listen:
+      '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 5 6.5 9H3v6h3.5L11 19V5Z"></path><path d="M15 9a4 4 0 0 1 0 6"></path><path d="M18 6a8 8 0 0 1 0 12"></path></svg>'
+  };
+
+  const textForLanguage = () => {
+    const lang = String(
+      document.documentElement.lang ||
+      navigator.language ||
+      'en'
+    ).toLowerCase();
+
+    if (lang.startsWith('ar')) {
+      return {
+        copy:'نسخ',
+        like:'إعجاب',
+        dislike:'عدم الإعجاب',
+        more:'المزيد',
+        sources:'عرض المصادر',
+        branch:'فتح فرع في محادثة جديدة',
+        listen:'القراءة بصوت عالٍ',
+        noSources:'لا توجد مصادر مرتبطة بهذا الجواب حالياً.',
+        branchLater:'سيتم ربط إنشاء الفرع بسجل المحادثات في المرحلة المخصصة له.'
+      };
+    }
+
+    if (lang.startsWith('fr')) {
+      return {
+        copy:'Copier',
+        like:'J’aime',
+        dislike:'Je n’aime pas',
+        more:'Plus',
+        sources:'Voir les sources',
+        branch:'Créer une branche dans un nouveau chat',
+        listen:'Lire à voix haute',
+        noSources:'Aucune source liée à cette réponse pour le moment.',
+        branchLater:'La création de branche sera reliée à l’historique dans sa phase dédiée.'
+      };
+    }
+
+    if (lang.startsWith('es')) {
+      return {
+        copy:'Copiar',
+        like:'Me gusta',
+        dislike:'No me gusta',
+        more:'Más',
+        sources:'Ver fuentes',
+        branch:'Crear rama en un chat nuevo',
+        listen:'Leer en voz alta',
+        noSources:'Esta respuesta no tiene fuentes vinculadas.',
+        branchLater:'La función de rama se conectará al historial en su fase dedicada.'
+      };
+    }
+
+    if (lang.startsWith('zh')) {
+      return {
+        copy:'复制',
+        like:'喜欢',
+        dislike:'不喜欢',
+        more:'更多',
+        sources:'查看来源',
+        branch:'在新聊天中创建分支',
+        listen:'朗读',
+        noSources:'此回复目前没有关联来源。',
+        branchLater:'分支功能将在历史记录阶段连接。'
+      };
+    }
+
+    return {
+      copy:'Copy',
+      like:'Like',
+      dislike:'Dislike',
+      more:'More',
+      sources:'View sources',
+      branch:'Branch in new chat',
+      listen:'Read aloud',
+      noSources:'No sources are linked to this response yet.',
+      branchLater:'Branch creation will be connected to conversation history in its dedicated phase.'
+    };
+  };
+
+  const closeAllMenus = except => {
+    document.querySelectorAll('.rox-gpt-more-menu').forEach(menu => {
+      if (menu !== except) {
+        menu.hidden = true;
+        menu.previousElementSibling?.setAttribute('aria-expanded','false');
+      }
+    });
+  };
+
+  const showNote = (actions,message) => {
+    actions.querySelector('.rox-gpt-action-note')?.remove();
+
+    const note = document.createElement('div');
+    note.className = 'rox-gpt-action-note';
+    note.textContent = message;
+    actions.appendChild(note);
+
+    clearTimeout(actions._roxNoteTimer);
+    actions._roxNoteTimer = setTimeout(() => note.remove(),2600);
+  };
+
+  const makeMenuItem = (markup,label,handler,disabled) => {
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'rox-gpt-menu-item';
+    button.innerHTML = markup + '<span></span>';
+    button.querySelector('span').textContent = label;
+
+    if (disabled) {
+      button.setAttribute('aria-disabled','true');
+    }
+
+    button.addEventListener('click',event => {
+      event.stopPropagation();
+      handler(button);
+    });
+
+    return button;
+  };
+
+  const enhanceActions = actions => {
+    if (
+      actions.dataset.roxGptActions === 'true' ||
+      !actions.isConnected
+    ) return;
+
+    const buttons = Array.from(
+      actions.querySelectorAll(':scope > .msg-action')
+    );
+
+    if (buttons.length < 6) return;
+
+    const labels = textForLanguage();
+    const copyButton = buttons[0];
+    const listenButton = buttons[1];
+    const likeButton = buttons[2];
+    const dislikeButton = buttons[3];
+    const shareButton = buttons[4];
+    const downloadButton = buttons[5];
+
+    actions.dataset.roxGptActions = 'true';
+    actions.classList.add('rox-gpt-actions');
+
+    copyButton.innerHTML = icon.copy;
+    copyButton.title = labels.copy;
+    copyButton.setAttribute('aria-label',labels.copy);
+
+    likeButton.innerHTML = icon.like;
+    likeButton.title = labels.like;
+    likeButton.setAttribute('aria-label',labels.like);
+
+    dislikeButton.innerHTML = icon.dislike;
+    dislikeButton.title = labels.dislike;
+    dislikeButton.setAttribute('aria-label',labels.dislike);
+
+    listenButton.classList.add('rox-gpt-hidden-action');
+    shareButton.classList.add('rox-gpt-hidden-action');
+    downloadButton.classList.add('rox-gpt-hidden-action');
+
+    const wrap = document.createElement('div');
+    wrap.className = 'rox-gpt-more-wrap';
+
+    const moreButton = document.createElement('button');
+    moreButton.type = 'button';
+    moreButton.className = 'msg-action rox-gpt-more-button';
+    moreButton.innerHTML = icon.more;
+    moreButton.title = labels.more;
+    moreButton.setAttribute('aria-label',labels.more);
+    moreButton.setAttribute('aria-haspopup','menu');
+    moreButton.setAttribute('aria-expanded','false');
+
+    const menu = document.createElement('div');
+    menu.className = 'rox-gpt-more-menu';
+    menu.setAttribute('role','menu');
+    menu.hidden = true;
+
+    const time = document.createElement('div');
+    time.className = 'rox-gpt-more-time';
+    time.textContent = new Intl.DateTimeFormat(
+      document.documentElement.lang || navigator.language || 'en',
+      {
+        month:'short',
+        day:'numeric',
+        hour:'numeric',
+        minute:'2-digit'
+      }
+    ).format(new Date());
+
+    const message =
+      actions.previousElementSibling?.classList.contains('msg')
+        ? actions.previousElementSibling
+        : null;
+
+    const sourcesButton = makeMenuItem(
+      icon.sources,
+      labels.sources,
+      () => {
+        const links = message
+          ? Array.from(message.querySelectorAll('a[href]'))
+          : [];
+
+        menu.hidden = true;
+        moreButton.setAttribute('aria-expanded','false');
+
+        if (links.length) {
+          links[0].click();
+        } else {
+          showNote(actions,labels.noSources);
+        }
+      },
+      false
+    );
+
+    const branchButton = makeMenuItem(
+      icon.branch,
+      labels.branch,
+      () => {
+        menu.hidden = true;
+        moreButton.setAttribute('aria-expanded','false');
+        showNote(actions,labels.branchLater);
+      },
+      false
+    );
+
+    const readButton = makeMenuItem(
+      icon.listen,
+      labels.listen,
+      () => {
+        menu.hidden = true;
+        moreButton.setAttribute('aria-expanded','false');
+        listenButton.click();
+      },
+      false
+    );
+
+    menu.append(time,sourcesButton,branchButton,readButton);
+    wrap.append(moreButton,menu);
+    actions.appendChild(wrap);
+
+    moreButton.addEventListener('click',event => {
+      event.stopPropagation();
+
+      const willOpen = menu.hidden;
+      closeAllMenus(menu);
+      menu.hidden = !willOpen;
+      moreButton.setAttribute('aria-expanded',String(willOpen));
+    });
+  };
+
+  const scan = root => {
+    if (root?.matches?.('.msg-actions')) {
+      enhanceActions(root);
+    }
+
+    root?.querySelectorAll?.('.msg-actions').forEach(enhanceActions);
+  };
+
+  scan(document);
+
+  const observer = new MutationObserver(records => {
+    records.forEach(record => {
+      record.addedNodes.forEach(node => {
+        if (node.nodeType === 1) scan(node);
+      });
+    });
+  });
+
+  observer.observe(document.documentElement,{
+    childList:true,
+    subtree:true
+  });
+
+  document.addEventListener('click',() => closeAllMenus());
+  window.addEventListener('resize',() => closeAllMenus());
+  document.addEventListener('keydown',event => {
+    if (event.key === 'Escape') closeAllMenus();
+  });
+})();
+/* ROX GPT MESSAGE ACTIONS PHASE 2 JS END */
 </script>
 <script>
 // ══════════════════════════════════════════════════════════════════
