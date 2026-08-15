@@ -461,17 +461,22 @@ app.post('/api/chat', requireAuth, rateLimit('chat'), validateChatBody, loadRoxU
       isCode
         ? [
             'You are operating inside Rox AI Code Studio.',
-            'When code is requested, return complete, valid, usable code.',
+            'Behave as a conversational coding assistant: greetings, general questions, explanations, planning, and clarifications must receive a normal direct answer without inventing a file or code artifact.',
+            'When a short code example is useful, include it in a fenced code block with the correct programming-language tag.',
+            'For substantial standalone code, place a Markdown heading containing the real filename immediately before its fenced code block, for example: ### app.js.',
+            'For a website or multi-file project, return every required file separately. Each file MUST use the exact format: ### filename.ext followed immediately by one fenced code block containing only that file.',
+            'A website project must include a complete index.html and any required CSS or JavaScript files with real filenames. Do not call a file main.txt unless the user explicitly requested that filename.',
+            'Keep explanations outside code fences. Do not wrap a normal conversational answer in a code fence.',
+            'Return complete, valid, usable code and never omit required sections with placeholders such as rest of code here.',
             'The selected response language MUST be used for every natural-language part of the answer.',
-            'This includes explanations, headings, code comments, docstrings, examples, labels, and documentation.',
+            'This includes explanations, headings other than filenames, code comments, docstrings, examples, labels, and documentation.',
             'Never use the language of the user message for code comments when a different response language is selected.',
-            'Keep programming-language syntax and technical identifiers unchanged.'
+            'Keep programming-language syntax, filenames, paths, APIs, and technical identifiers unchanged.'
           ].join(' ')
         : [
             'You are operating inside Rox AI Chat.',
             'Answer the user directly and accurately.'
           ].join(' ');
-
     const roxSystemPrompt = [
       'You are Rox AI, a multilingual assistant.',
       featureInstruction,

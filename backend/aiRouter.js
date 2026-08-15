@@ -31,6 +31,7 @@ const HIGH_LOAD_TIMEOUT_MS = 6000;
 // cap; see callOpenRouter below for why an uncapped model is a cost/DoS
 // risk, not just a quality knob).
 const MAX_OUTPUT_TOKENS = Number(process.env.MAX_OUTPUT_TOKENS || 2048);
+const CODE_MAX_OUTPUT_TOKENS = Number(process.env.CODE_MAX_OUTPUT_TOKENS || 8192);
 
 const ROUTES = {
   chat: [
@@ -91,8 +92,8 @@ async function withTimeout(promise, ms) {
 // endpoints, same max_tokens cap, same request/response shape â€” this
 // only moved the two functions into src/modules/ai/providers/index.js
 // as registered adapters instead of local functions.
-async function callModel(route, messages) {
-  return providers.call(route.provider, route.model, messages, { maxOutputTokens: MAX_OUTPUT_TOKENS });
+async function callModel(route, messages, maxOutputTokens = MAX_OUTPUT_TOKENS) {
+  return providers.call(route.provider, route.model, messages, { maxOutputTokens });
 }
 
 /**
@@ -125,7 +126,15 @@ async function routeRequest(feature, messages, opts = {}) {
 
     const startedAt = Date.now();
     try {
-      const result = await withTimeout(callModel(route, messages), timeoutMs);
+      const maxOutputTokens =
+        feature === 'code'
+          ? CODE_MAX_OUTPUT_TOKENS
+          : MAX_OUTPUT_TOKENS;
+
+      const result = await withTimeout(
+        callModel(route, messages, maxOutputTokens),
+        timeoutMs
+      );
       attempts.push({ model: route.model, status: 'success' });
 
       await reportOutcome(route.model, true);

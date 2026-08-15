@@ -1522,6 +1522,186 @@ html[data-rox-density="compact"] .chat-input-row{
   .msg video{max-width:100%;border-radius:10px;display:block;margin-top:4px;}
 
 /* Rox AI Code Artifact */
+/* ROX CODE STUDIO CLAUDE RENDERER START */
+.rox-code-response{
+  width:min(100%,680px);
+  align-self:flex-start;
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
+
+.rox-code-explanation{
+  color:var(--text);
+  font-size:13.5px;
+  line-height:1.65;
+  white-space:pre-wrap;
+}
+
+.rox-inline-code{
+  width:100%;
+  overflow:hidden;
+  border:1px solid var(--border);
+  border-radius:16px;
+  background:rgba(7,11,22,.72);
+  box-shadow:0 16px 36px rgba(0,0,0,.18);
+}
+
+.rox-inline-code-head,
+.rox-project-filebar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  padding:10px 12px;
+  border-bottom:1px solid var(--border);
+  background:rgba(255,255,255,.035);
+}
+
+.rox-inline-code-name{
+  overflow:hidden;
+  color:var(--text-dim);
+  font:600 12px/1.2 monospace;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+
+.rox-code-copy,
+.rox-project-action{
+  border:1px solid var(--border);
+  border-radius:9px;
+  padding:7px 10px;
+  background:rgba(255,255,255,.055);
+  color:var(--text);
+  cursor:pointer;
+  font-size:12px;
+}
+
+.rox-inline-code pre{
+  max-height:340px;
+  margin:0;
+  overflow:auto;
+  padding:15px;
+  color:#e8ecf8;
+  font:12.5px/1.65 monospace;
+  white-space:pre;
+}
+
+.rox-project-card{
+  width:100%;
+  overflow:hidden;
+  border:1px solid rgba(139,92,246,.25);
+  border-radius:18px;
+  background:linear-gradient(145deg,rgba(20,25,42,.96),rgba(10,14,27,.96));
+  box-shadow:0 20px 46px rgba(0,0,0,.24);
+}
+
+.rox-project-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  padding:14px;
+  border-bottom:1px solid var(--border);
+}
+
+.rox-project-identity{
+  min-width:0;
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.rox-project-icon{
+  width:36px;
+  height:36px;
+  flex:0 0 36px;
+  display:grid;
+  place-items:center;
+  border-radius:11px;
+  background:linear-gradient(135deg,#2563eb,#7c3aed);
+}
+
+.rox-project-title{
+  overflow:hidden;
+  color:var(--text);
+  font-size:13px;
+  font-weight:700;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+
+.rox-project-subtitle{
+  margin-top:2px;
+  color:var(--text-dim);
+  font-size:11px;
+}
+
+.rox-project-tabs{
+  display:flex;
+  gap:5px;
+  padding:9px 10px;
+  overflow-x:auto;
+  border-bottom:1px solid var(--border);
+}
+
+.rox-project-tab{
+  flex:0 0 auto;
+  border:1px solid transparent;
+  border-radius:9px;
+  padding:7px 10px;
+  background:transparent;
+  color:var(--text-dim);
+  cursor:pointer;
+  font:600 11.5px/1.2 monospace;
+}
+
+.rox-project-tab.active{
+  border-color:rgba(139,92,246,.35);
+  background:rgba(139,92,246,.16);
+  color:var(--text);
+}
+
+.rox-project-view{
+  position:relative;
+  height:260px;
+  background:#090d18;
+}
+
+.rox-project-preview{
+  width:100%;
+  height:100%;
+  border:0;
+  background:#fff;
+}
+
+.rox-project-code{
+  width:100%;
+  height:100%;
+  margin:0;
+  overflow:auto;
+  padding:16px;
+  color:#e8ecf8;
+  font:12.5px/1.65 monospace;
+  white-space:pre;
+}
+
+.rox-project-actions{
+  display:flex;
+  justify-content:flex-end;
+  gap:7px;
+  padding:10px;
+  border-top:1px solid var(--border);
+}
+
+@media(max-width:640px){
+  .rox-code-response{width:100%;}
+  .rox-project-head{align-items:flex-start;}
+  .rox-project-view{height:220px;}
+  .rox-project-actions{justify-content:stretch;}
+  .rox-project-action{flex:1;padding:8px 6px;}
+}
+/* ROX CODE STUDIO CLAUDE RENDERER END */
 .artifact-card{
   width:min(100%,620px);
   align-self:flex-start;
@@ -10086,72 +10266,250 @@ function appendTyping(msgBox) {
 
 // ── chat / code → POST /api/chat ────────────────────────────────────
 function createCodeArtifact(rawText) {
-  const rawValue = String(rawText || '').trim();
-  const fenced = rawValue.match(/```([a-zA-Z0-9+#.-]*)\s*([\s\S]*?)```/);
-  const rawHtmlStart = rawValue.search(/<!doctype html|<html[\s>]|<body[\s>]/i);
-
-  // ROX CODE STUDIO DECISION GATE START
-  // Normal conversation must stay a normal assistant message.
-  // An artifact is created only for an explicit fenced code block or
-  // a recognizable standalone HTML document.
-  if (!fenced && rawHtmlStart < 0) return null;
-  // ROX CODE STUDIO DECISION GATE END
-
-  const language = (fenced?.[1] || '').toLowerCase();
-
-  let code = (fenced ? fenced[2] : rawValue).trim();
-  const htmlStart = code.search(/<!doctype html|<html[\s>]/i);
-  if (htmlStart > 0) code = code.slice(htmlStart);
-
-  if (!code) return null;
-
-  const isHtml = /<!doctype html|<html[\s>]|<body[\s>]/i.test(code);
-  const extensions = {
-    javascript: 'js',
-    js: 'js',
-    typescript: 'ts',
-    ts: 'ts',
-    python: 'py',
-    css: 'css',
-    html: 'html'
+  /* ROX CODE STUDIO CLAUDE RENDERER JS START */
+  const raw = String(rawText || '').trim();
+  const fencePattern = /```([a-zA-Z0-9+#._-]*)[ \t]*\r?\n([\s\S]*?)```/g;
+  const extensionByLanguage = {
+    javascript:'js',
+    js:'js',
+    jsx:'jsx',
+    typescript:'ts',
+    ts:'ts',
+    tsx:'tsx',
+    python:'py',
+    py:'py',
+    html:'html',
+    css:'css',
+    json:'json',
+    java:'java',
+    c:'c',
+    cpp:'cpp',
+    'c++':'cpp',
+    csharp:'cs',
+    'c#':'cs',
+    php:'php',
+    ruby:'rb',
+    go:'go',
+    rust:'rs',
+    sql:'sql',
+    bash:'sh',
+    shell:'sh',
+    markdown:'md',
+    md:'md'
   };
 
-  const extension = isHtml ? 'html' : (extensions[language] || 'txt');
-  const fileName = isHtml ? 'index.html' : `main.${extension}`;
-
   const escapeHtml = value => String(value)
-    .replaceAll('&', '&amp;')
-    .replaceAll('<', '&lt;')
-    .replaceAll('>', '&gt;');
+    .replaceAll('&','&amp;')
+    .replaceAll('<','&lt;')
+    .replaceAll('>','&gt;');
 
-  const previewDocument = isHtml
-    ? code
-    : `<!doctype html><html><body style="margin:0;background:#111114;color:#e5e7eb;"><pre style="padding:24px;white-space:pre-wrap;font:14px/1.6 monospace;">${escapeHtml(code)}</pre></body></html>`;
+  const inferName = (language,index,code) => {
+    const lower = String(language || '').toLowerCase();
+    const extension =
+      /<!doctype html|<html[\s>]|<body[\s>]/i.test(code)
+        ? 'html'
+        : (extensionByLanguage[lower] || lower || 'txt');
+
+    if (extension === 'html') return index ? `page-${index + 1}.html` : 'index.html';
+    if (extension === 'css') return index ? `styles-${index + 1}.css` : 'styles.css';
+    if (extension === 'js') return index ? `script-${index + 1}.js` : 'app.js';
+    if (extension === 'jsx') return index ? `Component${index + 1}.jsx` : 'App.jsx';
+    if (extension === 'tsx') return index ? `Component${index + 1}.tsx` : 'App.tsx';
+    if (extension === 'json') return index ? `data-${index + 1}.json` : 'data.json';
+
+    return `main.${extension}`;
+  };
+
+  const files = [];
+  let match;
+
+  while ((match = fencePattern.exec(raw)) !== null) {
+    const language = String(match[1] || '').toLowerCase();
+    const code = String(match[2] || '').trim();
+    const before = raw.slice(0,match.index);
+    const headingMatches = Array.from(
+      before.matchAll(
+        /(?:^|\n)\s*(?:#{1,6}\s*)?(?:`)?([A-Za-z0-9_@./-]+\.[A-Za-z0-9]+)(?:`)?\s*:?\s*$/g
+      )
+    );
+
+    const explicitName = headingMatches.length
+      ? headingMatches[headingMatches.length - 1][1]
+      : '';
+
+    if (code) {
+      files.push({
+        name: explicitName || inferName(language,files.length,code),
+        language,
+        code,
+        explicitName:Boolean(explicitName)
+      });
+    }
+  }
+
+  if (!files.length) {
+    const htmlStart = raw.search(/<!doctype html|<html[\s>]|<body[\s>]/i);
+
+    if (htmlStart < 0) return null;
+
+    files.push({
+      name:'index.html',
+      language:'html',
+      code:raw.slice(htmlStart).trim(),
+      explicitName:true
+    });
+  }
+
+  let explanation = raw
+    .replace(/```[a-zA-Z0-9+#._-]*[ \t]*\r?\n[\s\S]*?```/g,'')
+    .replace(
+      /(?:^|\n)\s*(?:#{1,6}\s*)?(?:`)?[A-Za-z0-9_@./-]+\.[A-Za-z0-9]+(?:`)?\s*:?\s*(?=\n|$)/g,
+      '\n'
+    )
+    .trim();
+
+  const response = document.createElement('div');
+  response.className = 'rox-code-response';
+
+  if (explanation) {
+    const explanationNode = document.createElement('div');
+    explanationNode.className = 'rox-code-explanation';
+    explanationNode.textContent = explanation;
+    response.appendChild(explanationNode);
+  }
+
+  const lineCount = files[0].code.split(/\r?\n/).length;
+  const isShortInline =
+    files.length === 1 &&
+    !files[0].explicitName &&
+    lineCount <= 15 &&
+    !/<!doctype html|<html[\s>]|<body[\s>]/i.test(files[0].code);
+
+  const copyText = async value => {
+    if (navigator.clipboard?.writeText) {
+      await navigator.clipboard.writeText(value);
+      return;
+    }
+
+    const area = document.createElement('textarea');
+    area.value = value;
+    area.style.position = 'fixed';
+    area.style.opacity = '0';
+    document.body.appendChild(area);
+    area.select();
+    document.execCommand('copy');
+    area.remove();
+  };
+
+  const showCopied = button => {
+    const oldText = button.textContent;
+    button.textContent = roxT('artifact.copied');
+
+    setTimeout(() => {
+      button.textContent = oldText;
+    },1500);
+  };
+
+  if (isShortInline) {
+    const inline = document.createElement('div');
+    inline.className = 'rox-inline-code';
+
+    const inlineHead = document.createElement('div');
+    inlineHead.className = 'rox-inline-code-head';
+
+    const inlineName = document.createElement('div');
+    inlineName.className = 'rox-inline-code-name';
+    inlineName.textContent =
+      files[0].language ||
+      files[0].name;
+
+    const copyButton = document.createElement('button');
+    copyButton.type = 'button';
+    copyButton.className = 'rox-code-copy';
+    copyButton.textContent = roxT('artifact.copy');
+
+    const pre = document.createElement('pre');
+    const codeNode = document.createElement('code');
+    codeNode.textContent = files[0].code;
+    pre.appendChild(codeNode);
+
+    copyButton.onclick = async () => {
+      await copyText(files[0].code);
+      showCopied(copyButton);
+    };
+
+    inlineHead.append(inlineName,copyButton);
+    inline.append(inlineHead,pre);
+    response.appendChild(inline);
+
+    return response;
+  }
 
   const card = document.createElement('div');
-  card.className = 'artifact-card';
+  card.className = 'rox-project-card';
 
-  card.innerHTML = `
-    <div class="artifact-head">
-      <div class="artifact-title">
-        <div class="artifact-icon">⌨️</div>
-        <div>
-          <div class="artifact-name">${fileName}</div>
-          <div class="artifact-type" data-i18n="${isHtml ? 'artifact.webApp' : 'artifact.generatedCode'}">${roxT(isHtml ? 'artifact.webApp' : 'artifact.generatedCode')}</div>
-        </div>
-      </div>
-      <button class="artifact-open" type="button" data-i18n="artifact.open">${roxT('artifact.open')}</button>
-    </div>
+  const head = document.createElement('div');
+  head.className = 'rox-project-head';
 
-    <iframe class="artifact-preview" sandbox="allow-scripts allow-forms allow-modals allow-downloads" referrerpolicy="no-referrer" title="${roxT('artifact.previewTitle')}" data-i18n-title="artifact.previewTitle"></iframe>
+  const identity = document.createElement('div');
+  identity.className = 'rox-project-identity';
 
-    <div class="artifact-actions">
-      <button type="button" data-artifact-preview data-i18n="artifact.preview">${roxT('artifact.preview')}</button>
-      <button type="button" data-artifact-code data-i18n="artifact.code">${roxT('artifact.code')}</button>
-      <button type="button" data-artifact-copy data-i18n="artifact.copy">${roxT('artifact.copy')}</button>
-      <button type="button" data-artifact-download data-i18n="artifact.download">${roxT('artifact.download')}</button>
-    </div>
-  `;
+  const artifactIcon = document.createElement('div');
+  artifactIcon.className = 'rox-project-icon';
+  artifactIcon.textContent = files.length > 1 ? '🗂️' : '⌨️';
+
+  const identityText = document.createElement('div');
+
+  const title = document.createElement('div');
+  title.className = 'rox-project-title';
+  title.textContent =
+    files.length > 1
+      ? `${files.length} files`
+      : files[0].name;
+
+  const subtitle = document.createElement('div');
+  subtitle.className = 'rox-project-subtitle';
+
+  const hasWebsite = files.some(file =>
+    file.name.toLowerCase() === 'index.html' ||
+    /<!doctype html|<html[\s>]/i.test(file.code)
+  );
+
+  subtitle.textContent = hasWebsite
+    ? roxT('artifact.webApp')
+    : roxT('artifact.generatedCode');
+
+  identityText.append(title,subtitle);
+  identity.append(artifactIcon,identityText);
+  const openButton = document.createElement('button');
+  openButton.type = 'button';
+  openButton.className = 'rox-project-action';
+  openButton.textContent = roxT('artifact.open');
+
+  head.append(identity,openButton);
+
+  const tabs = document.createElement('div');
+  tabs.className = 'rox-project-tabs';
+
+  const filebar = document.createElement('div');
+  filebar.className = 'rox-project-filebar';
+
+  const selectedName = document.createElement('div');
+  selectedName.className = 'rox-inline-code-name';
+
+  const modeButton = document.createElement('button');
+  modeButton.type = 'button';
+  modeButton.className = 'rox-project-action';
+
+  const view = document.createElement('div');
+  view.className = 'rox-project-view';
+
+  const previewTemplate = document.createElement('template');
+  previewTemplate.innerHTML =
+    '<iframe class="rox-project-preview" sandbox="allow-scripts allow-forms allow-modals allow-downloads" referrerpolicy="no-referrer"></iframe>';
+
+  const preview = previewTemplate.content.firstElementChild;
+  preview.title = roxT('artifact.previewTitle');
 
   const modal = document.createElement('div');
   modal.className = 'artifact-modal';
@@ -10159,89 +10517,174 @@ function createCodeArtifact(rawText) {
   modal.innerHTML = `
     <div class="artifact-shell">
       <div class="artifact-toolbar">
-        <div class="artifact-tabs">
-          <button type="button" data-tab="preview" class="active" data-i18n="artifact.preview">${roxT('artifact.preview')}</button>
-          <button type="button" data-tab="code" data-i18n="artifact.code">${roxT('artifact.code')}</button>
-        </div>
+        <strong>${roxT('artifact.preview')}</strong>
         <button type="button" class="artifact-close">✕</button>
       </div>
-
       <div class="artifact-body">
-        <iframe sandbox="allow-scripts allow-forms allow-modals allow-downloads" referrerpolicy="no-referrer" title="${roxT('artifact.fullPreviewTitle')}" data-i18n-title="artifact.fullPreviewTitle"></iframe>
-        <pre class="artifact-code"></pre>
+        <iframe sandbox="allow-scripts allow-forms allow-modals allow-downloads" referrerpolicy="no-referrer" title="${roxT('artifact.fullPreviewTitle')}"></iframe>
       </div>
     </div>
   `;
 
   document.body.appendChild(modal);
-  translateRoxUi(card);
-  translateRoxUi(modal);
+  const modalPreview = modal.querySelector('iframe');
 
-  const cardFrame = card.querySelector('.artifact-preview');
-  const modalFrame = modal.querySelector('iframe');
-  const modalCode = modal.querySelector('.artifact-code');
+  const codeView = document.createElement('pre');
+  codeView.className = 'rox-project-code';
 
-  cardFrame.srcdoc = previewDocument;
-  modalFrame.srcdoc = previewDocument;
-  modalCode.textContent = code;
+  const actions = document.createElement('div');
+  actions.className = 'rox-project-actions';
 
-  function showTab(tab) {
-    const previewActive = tab === 'preview';
+  const copyButton = document.createElement('button');
+  copyButton.type = 'button';
+  copyButton.className = 'rox-project-action';
+  copyButton.textContent = roxT('artifact.copy');
 
-    modalFrame.style.display = previewActive ? 'block' : 'none';
-    modalCode.style.display = previewActive ? 'none' : 'block';
+  const downloadButton = document.createElement('button');
+  downloadButton.type = 'button';
+  downloadButton.className = 'rox-project-action';
+  downloadButton.textContent = roxT('artifact.download');
 
-    modal.querySelectorAll('[data-tab]').forEach(button => {
-      button.classList.toggle('active', button.dataset.tab === tab);
-    });
-  }
+  let selectedIndex = 0;
+  let previewMode = hasWebsite;
 
-  function openArtifact(tab = 'preview') {
-    showTab(tab);
-    modal.classList.add('active');
-  }
+  const buildPreview = () => {
+    const htmlFile =
+      files.find(file => file.name.toLowerCase() === 'index.html') ||
+      files.find(file =>
+        /<!doctype html|<html[\s>]|<body[\s>]/i.test(file.code)
+      );
 
-  card.querySelector('.artifact-open').onclick = () => openArtifact('preview');
-  card.querySelector('[data-artifact-preview]').onclick = () => openArtifact('preview');
-  card.querySelector('[data-artifact-code]').onclick = () => openArtifact('code');
+    if (!htmlFile) {
+      return `<!doctype html><html><body style="margin:0;background:#0b1020;color:#e5e7eb"><pre style="padding:24px;white-space:pre-wrap;font:14px/1.6 monospace">${escapeHtml(files[selectedIndex].code)}</pre></body></html>`;
+    }
 
-  card.querySelector('[data-artifact-copy]').onclick = async event => {
-    const copyButton = event.currentTarget;
-    await navigator.clipboard.writeText(code);
+    let documentText = htmlFile.code;
 
-    copyButton.textContent = roxT('artifact.copied');
+    const cssText = files
+      .filter(file =>
+        file.name.toLowerCase().endsWith('.css')
+      )
+      .map(file => file.code)
+      .join('\n\n');
 
-    setTimeout(() => {
-      copyButton.textContent = roxT('artifact.copy');
-    }, 1500);
+    const jsText = files
+      .filter(file =>
+        /\.(?:js|mjs)$/i.test(file.name)
+      )
+      .map(file => file.code)
+      .join('\n\n');
+
+    if (cssText) {
+      const styleTag = `<style>${cssText}</style>`;
+
+      documentText = /<\/head>/i.test(documentText)
+        ? documentText.replace(/<\/head>/i,`${styleTag}</head>`)
+        : styleTag + documentText;
+    }
+
+    if (jsText) {
+      const scriptTag =
+        '<scr' + 'ipt>' +
+        jsText +
+        '</scr' + 'ipt>';
+
+      documentText = /<\/body>/i.test(documentText)
+        ? documentText.replace(/<\/body>/i,`${scriptTag}</body>`)
+        : documentText + scriptTag;
+    }
+
+    return documentText;
   };
 
-  card.querySelector('[data-artifact-download]').onclick = () => {
-    const blob = new Blob([code], {
-      type: isHtml ? 'text/html;charset=utf-8' : 'text/plain;charset=utf-8'
+  const render = () => {
+    const selected = files[selectedIndex];
+    selectedName.textContent = selected.name;
+    codeView.textContent = selected.code;
+
+    preview.style.display = previewMode ? 'block' : 'none';
+    codeView.style.display = previewMode ? 'none' : 'block';
+
+    modeButton.textContent = previewMode
+      ? roxT('artifact.code')
+      : roxT('artifact.preview');
+
+    if (previewMode) {
+      const previewDocument = buildPreview();
+      preview.srcdoc = previewDocument;
+      modalPreview.srcdoc = previewDocument;
+    }
+
+    Array.from(tabs.children).forEach((button,index) => {
+      button.classList.toggle('active',index === selectedIndex);
     });
+  };
+
+  files.forEach((file,index) => {
+    const tab = document.createElement('button');
+    tab.type = 'button';
+    tab.className = 'rox-project-tab';
+    tab.textContent = file.name;
+
+    tab.onclick = () => {
+      selectedIndex = index;
+      render();
+    };
+
+    tabs.appendChild(tab);
+  });
+
+  modeButton.onclick = () => {
+    previewMode = !previewMode;
+    render();
+  };
+
+  copyButton.onclick = async () => {
+    await copyText(files[selectedIndex].code);
+    showCopied(copyButton);
+  };
+
+  downloadButton.onclick = () => {
+    const selected = files[selectedIndex];
+    const blob = new Blob(
+      [selected.code],
+      { type:'text/plain;charset=utf-8' }
+    );
 
     const link = document.createElement('a');
     link.href = URL.createObjectURL(blob);
-    link.download = fileName;
+    link.download = selected.name;
     link.click();
 
-    setTimeout(() => URL.revokeObjectURL(link.href), 1000);
+    setTimeout(() => {
+      URL.revokeObjectURL(link.href);
+    },1000);
   };
 
-  modal.querySelectorAll('[data-tab]').forEach(button => {
-    button.onclick = () => showTab(button.dataset.tab);
-  });
+  openButton.onclick = () => {
+    modalPreview.srcdoc = buildPreview();
+    modal.classList.add('active');
+  };
 
   modal.querySelector('.artifact-close').onclick = () => {
     modal.classList.remove('active');
   };
 
   modal.onclick = event => {
-    if (event.target === modal) modal.classList.remove('active');
+    if (event.target === modal) {
+      modal.classList.remove('active');
+    }
   };
 
-  return card;
+  filebar.append(selectedName,modeButton);
+  view.append(preview,codeView);
+  actions.append(copyButton,downloadButton);
+  card.append(head,tabs,filebar,view,actions);
+  response.appendChild(card);
+
+  render();
+  /* ROX CODE STUDIO CLAUDE RENDERER JS END */
+  return response;
 }
 async function sendChat(feature, text, msgBox) {
   if (feature === 'code') appendMsg(msgBox, 'status', roxT('usage.estimatedCodeCost'));
@@ -13193,6 +13636,186 @@ html[data-rox-density="compact"] .chat-input-row{
   @media (min-width:1180px){.hero-orbit{display:block;}}
 
 /* Rox AI Code Artifact */
+/* ROX CODE STUDIO CLAUDE RENDERER START */
+.rox-code-response{
+  width:min(100%,680px);
+  align-self:flex-start;
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
+
+.rox-code-explanation{
+  color:var(--text);
+  font-size:13.5px;
+  line-height:1.65;
+  white-space:pre-wrap;
+}
+
+.rox-inline-code{
+  width:100%;
+  overflow:hidden;
+  border:1px solid var(--border);
+  border-radius:16px;
+  background:rgba(7,11,22,.72);
+  box-shadow:0 16px 36px rgba(0,0,0,.18);
+}
+
+.rox-inline-code-head,
+.rox-project-filebar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  padding:10px 12px;
+  border-bottom:1px solid var(--border);
+  background:rgba(255,255,255,.035);
+}
+
+.rox-inline-code-name{
+  overflow:hidden;
+  color:var(--text-dim);
+  font:600 12px/1.2 monospace;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+
+.rox-code-copy,
+.rox-project-action{
+  border:1px solid var(--border);
+  border-radius:9px;
+  padding:7px 10px;
+  background:rgba(255,255,255,.055);
+  color:var(--text);
+  cursor:pointer;
+  font-size:12px;
+}
+
+.rox-inline-code pre{
+  max-height:340px;
+  margin:0;
+  overflow:auto;
+  padding:15px;
+  color:#e8ecf8;
+  font:12.5px/1.65 monospace;
+  white-space:pre;
+}
+
+.rox-project-card{
+  width:100%;
+  overflow:hidden;
+  border:1px solid rgba(139,92,246,.25);
+  border-radius:18px;
+  background:linear-gradient(145deg,rgba(20,25,42,.96),rgba(10,14,27,.96));
+  box-shadow:0 20px 46px rgba(0,0,0,.24);
+}
+
+.rox-project-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  padding:14px;
+  border-bottom:1px solid var(--border);
+}
+
+.rox-project-identity{
+  min-width:0;
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.rox-project-icon{
+  width:36px;
+  height:36px;
+  flex:0 0 36px;
+  display:grid;
+  place-items:center;
+  border-radius:11px;
+  background:linear-gradient(135deg,#2563eb,#7c3aed);
+}
+
+.rox-project-title{
+  overflow:hidden;
+  color:var(--text);
+  font-size:13px;
+  font-weight:700;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+
+.rox-project-subtitle{
+  margin-top:2px;
+  color:var(--text-dim);
+  font-size:11px;
+}
+
+.rox-project-tabs{
+  display:flex;
+  gap:5px;
+  padding:9px 10px;
+  overflow-x:auto;
+  border-bottom:1px solid var(--border);
+}
+
+.rox-project-tab{
+  flex:0 0 auto;
+  border:1px solid transparent;
+  border-radius:9px;
+  padding:7px 10px;
+  background:transparent;
+  color:var(--text-dim);
+  cursor:pointer;
+  font:600 11.5px/1.2 monospace;
+}
+
+.rox-project-tab.active{
+  border-color:rgba(139,92,246,.35);
+  background:rgba(139,92,246,.16);
+  color:var(--text);
+}
+
+.rox-project-view{
+  position:relative;
+  height:260px;
+  background:#090d18;
+}
+
+.rox-project-preview{
+  width:100%;
+  height:100%;
+  border:0;
+  background:#fff;
+}
+
+.rox-project-code{
+  width:100%;
+  height:100%;
+  margin:0;
+  overflow:auto;
+  padding:16px;
+  color:#e8ecf8;
+  font:12.5px/1.65 monospace;
+  white-space:pre;
+}
+
+.rox-project-actions{
+  display:flex;
+  justify-content:flex-end;
+  gap:7px;
+  padding:10px;
+  border-top:1px solid var(--border);
+}
+
+@media(max-width:640px){
+  .rox-code-response{width:100%;}
+  .rox-project-head{align-items:flex-start;}
+  .rox-project-view{height:220px;}
+  .rox-project-actions{justify-content:stretch;}
+  .rox-project-action{flex:1;padding:8px 6px;}
+}
+/* ROX CODE STUDIO CLAUDE RENDERER END */
 .artifact-card{
   width:min(100%,620px);
   align-self:flex-start;
@@ -26061,72 +26684,250 @@ function appendTyping(msgBox) {
 
 // ── chat / code → POST /api/chat ────────────────────────────────────
 function createCodeArtifact(rawText) {
-  const rawValue = String(rawText || '').trim();
-  const fenced = rawValue.match(/```([a-zA-Z0-9+#.-]*)\s*([\s\S]*?)```/);
-  const rawHtmlStart = rawValue.search(/<!doctype html|<html[\s>]|<body[\s>]/i);
-
-  // ROX CODE STUDIO DECISION GATE START
-  // Normal conversation must stay a normal assistant message.
-  // An artifact is created only for an explicit fenced code block or
-  // a recognizable standalone HTML document.
-  if (!fenced && rawHtmlStart < 0) return null;
-  // ROX CODE STUDIO DECISION GATE END
-
-  const language = (fenced?.[1] || '').toLowerCase();
-
-  let code = (fenced ? fenced[2] : rawValue).trim();
-  const htmlStart = code.search(/<!doctype html|<html[\s>]/i);
-  if (htmlStart > 0) code = code.slice(htmlStart);
-
-  if (!code) return null;
-
-  const isHtml = /<!doctype html|<html[\s>]|<body[\s>]/i.test(code);
-  const extensions = {
-    javascript: 'js',
-    js: 'js',
-    typescript: 'ts',
-    ts: 'ts',
-    python: 'py',
-    css: 'css',
-    html: 'html'
+  /* ROX CODE STUDIO CLAUDE RENDERER JS START */
+  const raw = String(rawText || '').trim();
+  const fencePattern = /```([a-zA-Z0-9+#._-]*)[ \t]*\r?\n([\s\S]*?)```/g;
+  const extensionByLanguage = {
+    javascript:'js',
+    js:'js',
+    jsx:'jsx',
+    typescript:'ts',
+    ts:'ts',
+    tsx:'tsx',
+    python:'py',
+    py:'py',
+    html:'html',
+    css:'css',
+    json:'json',
+    java:'java',
+    c:'c',
+    cpp:'cpp',
+    'c++':'cpp',
+    csharp:'cs',
+    'c#':'cs',
+    php:'php',
+    ruby:'rb',
+    go:'go',
+    rust:'rs',
+    sql:'sql',
+    bash:'sh',
+    shell:'sh',
+    markdown:'md',
+    md:'md'
   };
 
-  const extension = isHtml ? 'html' : (extensions[language] || 'txt');
-  const fileName = isHtml ? 'index.html' : `main.${extension}`;
-
   const escapeHtml = value => String(value)
-    .replaceAll('&', '&amp;')
-    .replaceAll('<', '&lt;')
-    .replaceAll('>', '&gt;');
+    .replaceAll('&','&amp;')
+    .replaceAll('<','&lt;')
+    .replaceAll('>','&gt;');
 
-  const previewDocument = isHtml
-    ? code
-    : `<!doctype html><html><body style="margin:0;background:#111114;color:#e5e7eb;"><pre style="padding:24px;white-space:pre-wrap;font:14px/1.6 monospace;">${escapeHtml(code)}</pre></body></html>`;
+  const inferName = (language,index,code) => {
+    const lower = String(language || '').toLowerCase();
+    const extension =
+      /<!doctype html|<html[\s>]|<body[\s>]/i.test(code)
+        ? 'html'
+        : (extensionByLanguage[lower] || lower || 'txt');
+
+    if (extension === 'html') return index ? `page-${index + 1}.html` : 'index.html';
+    if (extension === 'css') return index ? `styles-${index + 1}.css` : 'styles.css';
+    if (extension === 'js') return index ? `script-${index + 1}.js` : 'app.js';
+    if (extension === 'jsx') return index ? `Component${index + 1}.jsx` : 'App.jsx';
+    if (extension === 'tsx') return index ? `Component${index + 1}.tsx` : 'App.tsx';
+    if (extension === 'json') return index ? `data-${index + 1}.json` : 'data.json';
+
+    return `main.${extension}`;
+  };
+
+  const files = [];
+  let match;
+
+  while ((match = fencePattern.exec(raw)) !== null) {
+    const language = String(match[1] || '').toLowerCase();
+    const code = String(match[2] || '').trim();
+    const before = raw.slice(0,match.index);
+    const headingMatches = Array.from(
+      before.matchAll(
+        /(?:^|\n)\s*(?:#{1,6}\s*)?(?:`)?([A-Za-z0-9_@./-]+\.[A-Za-z0-9]+)(?:`)?\s*:?\s*$/g
+      )
+    );
+
+    const explicitName = headingMatches.length
+      ? headingMatches[headingMatches.length - 1][1]
+      : '';
+
+    if (code) {
+      files.push({
+        name: explicitName || inferName(language,files.length,code),
+        language,
+        code,
+        explicitName:Boolean(explicitName)
+      });
+    }
+  }
+
+  if (!files.length) {
+    const htmlStart = raw.search(/<!doctype html|<html[\s>]|<body[\s>]/i);
+
+    if (htmlStart < 0) return null;
+
+    files.push({
+      name:'index.html',
+      language:'html',
+      code:raw.slice(htmlStart).trim(),
+      explicitName:true
+    });
+  }
+
+  let explanation = raw
+    .replace(/```[a-zA-Z0-9+#._-]*[ \t]*\r?\n[\s\S]*?```/g,'')
+    .replace(
+      /(?:^|\n)\s*(?:#{1,6}\s*)?(?:`)?[A-Za-z0-9_@./-]+\.[A-Za-z0-9]+(?:`)?\s*:?\s*(?=\n|$)/g,
+      '\n'
+    )
+    .trim();
+
+  const response = document.createElement('div');
+  response.className = 'rox-code-response';
+
+  if (explanation) {
+    const explanationNode = document.createElement('div');
+    explanationNode.className = 'rox-code-explanation';
+    explanationNode.textContent = explanation;
+    response.appendChild(explanationNode);
+  }
+
+  const lineCount = files[0].code.split(/\r?\n/).length;
+  const isShortInline =
+    files.length === 1 &&
+    !files[0].explicitName &&
+    lineCount <= 15 &&
+    !/<!doctype html|<html[\s>]|<body[\s>]/i.test(files[0].code);
+
+  const copyText = async value => {
+    if (navigator.clipboard?.writeText) {
+      await navigator.clipboard.writeText(value);
+      return;
+    }
+
+    const area = document.createElement('textarea');
+    area.value = value;
+    area.style.position = 'fixed';
+    area.style.opacity = '0';
+    document.body.appendChild(area);
+    area.select();
+    document.execCommand('copy');
+    area.remove();
+  };
+
+  const showCopied = button => {
+    const oldText = button.textContent;
+    button.textContent = roxT('artifact.copied');
+
+    setTimeout(() => {
+      button.textContent = oldText;
+    },1500);
+  };
+
+  if (isShortInline) {
+    const inline = document.createElement('div');
+    inline.className = 'rox-inline-code';
+
+    const inlineHead = document.createElement('div');
+    inlineHead.className = 'rox-inline-code-head';
+
+    const inlineName = document.createElement('div');
+    inlineName.className = 'rox-inline-code-name';
+    inlineName.textContent =
+      files[0].language ||
+      files[0].name;
+
+    const copyButton = document.createElement('button');
+    copyButton.type = 'button';
+    copyButton.className = 'rox-code-copy';
+    copyButton.textContent = roxT('artifact.copy');
+
+    const pre = document.createElement('pre');
+    const codeNode = document.createElement('code');
+    codeNode.textContent = files[0].code;
+    pre.appendChild(codeNode);
+
+    copyButton.onclick = async () => {
+      await copyText(files[0].code);
+      showCopied(copyButton);
+    };
+
+    inlineHead.append(inlineName,copyButton);
+    inline.append(inlineHead,pre);
+    response.appendChild(inline);
+
+    return response;
+  }
 
   const card = document.createElement('div');
-  card.className = 'artifact-card';
+  card.className = 'rox-project-card';
 
-  card.innerHTML = `
-    <div class="artifact-head">
-      <div class="artifact-title">
-        <div class="artifact-icon">⌨️</div>
-        <div>
-          <div class="artifact-name">${fileName}</div>
-          <div class="artifact-type" data-i18n="${isHtml ? 'artifact.webApp' : 'artifact.generatedCode'}">${roxT(isHtml ? 'artifact.webApp' : 'artifact.generatedCode')}</div>
-        </div>
-      </div>
-      <button class="artifact-open" type="button" data-i18n="artifact.open">${roxT('artifact.open')}</button>
-    </div>
+  const head = document.createElement('div');
+  head.className = 'rox-project-head';
 
-    <iframe class="artifact-preview" sandbox="allow-scripts allow-forms allow-modals allow-downloads" referrerpolicy="no-referrer" title="${roxT('artifact.previewTitle')}" data-i18n-title="artifact.previewTitle"></iframe>
+  const identity = document.createElement('div');
+  identity.className = 'rox-project-identity';
 
-    <div class="artifact-actions">
-      <button type="button" data-artifact-preview data-i18n="artifact.preview">${roxT('artifact.preview')}</button>
-      <button type="button" data-artifact-code data-i18n="artifact.code">${roxT('artifact.code')}</button>
-      <button type="button" data-artifact-copy data-i18n="artifact.copy">${roxT('artifact.copy')}</button>
-      <button type="button" data-artifact-download data-i18n="artifact.download">${roxT('artifact.download')}</button>
-    </div>
-  `;
+  const artifactIcon = document.createElement('div');
+  artifactIcon.className = 'rox-project-icon';
+  artifactIcon.textContent = files.length > 1 ? '🗂️' : '⌨️';
+
+  const identityText = document.createElement('div');
+
+  const title = document.createElement('div');
+  title.className = 'rox-project-title';
+  title.textContent =
+    files.length > 1
+      ? `${files.length} files`
+      : files[0].name;
+
+  const subtitle = document.createElement('div');
+  subtitle.className = 'rox-project-subtitle';
+
+  const hasWebsite = files.some(file =>
+    file.name.toLowerCase() === 'index.html' ||
+    /<!doctype html|<html[\s>]/i.test(file.code)
+  );
+
+  subtitle.textContent = hasWebsite
+    ? roxT('artifact.webApp')
+    : roxT('artifact.generatedCode');
+
+  identityText.append(title,subtitle);
+  identity.append(artifactIcon,identityText);
+  const openButton = document.createElement('button');
+  openButton.type = 'button';
+  openButton.className = 'rox-project-action';
+  openButton.textContent = roxT('artifact.open');
+
+  head.append(identity,openButton);
+
+  const tabs = document.createElement('div');
+  tabs.className = 'rox-project-tabs';
+
+  const filebar = document.createElement('div');
+  filebar.className = 'rox-project-filebar';
+
+  const selectedName = document.createElement('div');
+  selectedName.className = 'rox-inline-code-name';
+
+  const modeButton = document.createElement('button');
+  modeButton.type = 'button';
+  modeButton.className = 'rox-project-action';
+
+  const view = document.createElement('div');
+  view.className = 'rox-project-view';
+
+  const previewTemplate = document.createElement('template');
+  previewTemplate.innerHTML =
+    '<iframe class="rox-project-preview" sandbox="allow-scripts allow-forms allow-modals allow-downloads" referrerpolicy="no-referrer"></iframe>';
+
+  const preview = previewTemplate.content.firstElementChild;
+  preview.title = roxT('artifact.previewTitle');
 
   const modal = document.createElement('div');
   modal.className = 'artifact-modal';
@@ -26134,89 +26935,174 @@ function createCodeArtifact(rawText) {
   modal.innerHTML = `
     <div class="artifact-shell">
       <div class="artifact-toolbar">
-        <div class="artifact-tabs">
-          <button type="button" data-tab="preview" class="active" data-i18n="artifact.preview">${roxT('artifact.preview')}</button>
-          <button type="button" data-tab="code" data-i18n="artifact.code">${roxT('artifact.code')}</button>
-        </div>
+        <strong>${roxT('artifact.preview')}</strong>
         <button type="button" class="artifact-close">✕</button>
       </div>
-
       <div class="artifact-body">
-        <iframe sandbox="allow-scripts allow-forms allow-modals allow-downloads" referrerpolicy="no-referrer" title="${roxT('artifact.fullPreviewTitle')}" data-i18n-title="artifact.fullPreviewTitle"></iframe>
-        <pre class="artifact-code"></pre>
+        <iframe sandbox="allow-scripts allow-forms allow-modals allow-downloads" referrerpolicy="no-referrer" title="${roxT('artifact.fullPreviewTitle')}"></iframe>
       </div>
     </div>
   `;
 
   document.body.appendChild(modal);
-  translateRoxUi(card);
-  translateRoxUi(modal);
+  const modalPreview = modal.querySelector('iframe');
 
-  const cardFrame = card.querySelector('.artifact-preview');
-  const modalFrame = modal.querySelector('iframe');
-  const modalCode = modal.querySelector('.artifact-code');
+  const codeView = document.createElement('pre');
+  codeView.className = 'rox-project-code';
 
-  cardFrame.srcdoc = previewDocument;
-  modalFrame.srcdoc = previewDocument;
-  modalCode.textContent = code;
+  const actions = document.createElement('div');
+  actions.className = 'rox-project-actions';
 
-  function showTab(tab) {
-    const previewActive = tab === 'preview';
+  const copyButton = document.createElement('button');
+  copyButton.type = 'button';
+  copyButton.className = 'rox-project-action';
+  copyButton.textContent = roxT('artifact.copy');
 
-    modalFrame.style.display = previewActive ? 'block' : 'none';
-    modalCode.style.display = previewActive ? 'none' : 'block';
+  const downloadButton = document.createElement('button');
+  downloadButton.type = 'button';
+  downloadButton.className = 'rox-project-action';
+  downloadButton.textContent = roxT('artifact.download');
 
-    modal.querySelectorAll('[data-tab]').forEach(button => {
-      button.classList.toggle('active', button.dataset.tab === tab);
-    });
-  }
+  let selectedIndex = 0;
+  let previewMode = hasWebsite;
 
-  function openArtifact(tab = 'preview') {
-    showTab(tab);
-    modal.classList.add('active');
-  }
+  const buildPreview = () => {
+    const htmlFile =
+      files.find(file => file.name.toLowerCase() === 'index.html') ||
+      files.find(file =>
+        /<!doctype html|<html[\s>]|<body[\s>]/i.test(file.code)
+      );
 
-  card.querySelector('.artifact-open').onclick = () => openArtifact('preview');
-  card.querySelector('[data-artifact-preview]').onclick = () => openArtifact('preview');
-  card.querySelector('[data-artifact-code]').onclick = () => openArtifact('code');
+    if (!htmlFile) {
+      return `<!doctype html><html><body style="margin:0;background:#0b1020;color:#e5e7eb"><pre style="padding:24px;white-space:pre-wrap;font:14px/1.6 monospace">${escapeHtml(files[selectedIndex].code)}</pre></body></html>`;
+    }
 
-  card.querySelector('[data-artifact-copy]').onclick = async event => {
-    const copyButton = event.currentTarget;
-    await navigator.clipboard.writeText(code);
+    let documentText = htmlFile.code;
 
-    copyButton.textContent = roxT('artifact.copied');
+    const cssText = files
+      .filter(file =>
+        file.name.toLowerCase().endsWith('.css')
+      )
+      .map(file => file.code)
+      .join('\n\n');
 
-    setTimeout(() => {
-      copyButton.textContent = roxT('artifact.copy');
-    }, 1500);
+    const jsText = files
+      .filter(file =>
+        /\.(?:js|mjs)$/i.test(file.name)
+      )
+      .map(file => file.code)
+      .join('\n\n');
+
+    if (cssText) {
+      const styleTag = `<style>${cssText}</style>`;
+
+      documentText = /<\/head>/i.test(documentText)
+        ? documentText.replace(/<\/head>/i,`${styleTag}</head>`)
+        : styleTag + documentText;
+    }
+
+    if (jsText) {
+      const scriptTag =
+        '<scr' + 'ipt>' +
+        jsText +
+        '</scr' + 'ipt>';
+
+      documentText = /<\/body>/i.test(documentText)
+        ? documentText.replace(/<\/body>/i,`${scriptTag}</body>`)
+        : documentText + scriptTag;
+    }
+
+    return documentText;
   };
 
-  card.querySelector('[data-artifact-download]').onclick = () => {
-    const blob = new Blob([code], {
-      type: isHtml ? 'text/html;charset=utf-8' : 'text/plain;charset=utf-8'
+  const render = () => {
+    const selected = files[selectedIndex];
+    selectedName.textContent = selected.name;
+    codeView.textContent = selected.code;
+
+    preview.style.display = previewMode ? 'block' : 'none';
+    codeView.style.display = previewMode ? 'none' : 'block';
+
+    modeButton.textContent = previewMode
+      ? roxT('artifact.code')
+      : roxT('artifact.preview');
+
+    if (previewMode) {
+      const previewDocument = buildPreview();
+      preview.srcdoc = previewDocument;
+      modalPreview.srcdoc = previewDocument;
+    }
+
+    Array.from(tabs.children).forEach((button,index) => {
+      button.classList.toggle('active',index === selectedIndex);
     });
+  };
+
+  files.forEach((file,index) => {
+    const tab = document.createElement('button');
+    tab.type = 'button';
+    tab.className = 'rox-project-tab';
+    tab.textContent = file.name;
+
+    tab.onclick = () => {
+      selectedIndex = index;
+      render();
+    };
+
+    tabs.appendChild(tab);
+  });
+
+  modeButton.onclick = () => {
+    previewMode = !previewMode;
+    render();
+  };
+
+  copyButton.onclick = async () => {
+    await copyText(files[selectedIndex].code);
+    showCopied(copyButton);
+  };
+
+  downloadButton.onclick = () => {
+    const selected = files[selectedIndex];
+    const blob = new Blob(
+      [selected.code],
+      { type:'text/plain;charset=utf-8' }
+    );
 
     const link = document.createElement('a');
     link.href = URL.createObjectURL(blob);
-    link.download = fileName;
+    link.download = selected.name;
     link.click();
 
-    setTimeout(() => URL.revokeObjectURL(link.href), 1000);
+    setTimeout(() => {
+      URL.revokeObjectURL(link.href);
+    },1000);
   };
 
-  modal.querySelectorAll('[data-tab]').forEach(button => {
-    button.onclick = () => showTab(button.dataset.tab);
-  });
+  openButton.onclick = () => {
+    modalPreview.srcdoc = buildPreview();
+    modal.classList.add('active');
+  };
 
   modal.querySelector('.artifact-close').onclick = () => {
     modal.classList.remove('active');
   };
 
   modal.onclick = event => {
-    if (event.target === modal) modal.classList.remove('active');
+    if (event.target === modal) {
+      modal.classList.remove('active');
+    }
   };
 
-  return card;
+  filebar.append(selectedName,modeButton);
+  view.append(preview,codeView);
+  actions.append(copyButton,downloadButton);
+  card.append(head,tabs,filebar,view,actions);
+  response.appendChild(card);
+
+  render();
+  /* ROX CODE STUDIO CLAUDE RENDERER JS END */
+  return response;
 }
 async function sendChat(feature, text, msgBox) {
   if (feature === 'code') appendMsg(msgBox, 'status', roxT('usage.estimatedCodeCost'));
