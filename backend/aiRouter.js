@@ -26,6 +26,7 @@ const PRIMARY_TIMEOUT_MS = 15000;
 // line for a full 15s before falling back â€” fail toward the cheap
 // models faster so a traffic spike doesn't also mean a latency spike.
 const HIGH_LOAD_TIMEOUT_MS = 6000;
+const CODE_TIMEOUT_MS = Number(process.env.CODE_TIMEOUT_MS || 60000);
 
 // Applies to EVERY model in the chain (previously only Claude had this
 // cap; see callOpenRouter below for why an uncapped model is a cost/DoS
@@ -112,7 +113,14 @@ async function routeRequest(feature, messages, opts = {}) {
   const chain = getEffectiveChain(feature, loadLevel, isPro);
   const chainReordered = chain[0]?.model !== originalChain[0]?.model;
 
-  const timeoutMs = loadLevel === 'high' ? HIGH_LOAD_TIMEOUT_MS : PRIMARY_TIMEOUT_MS;
+  const timeoutMs =
+    feature === 'code'
+      ? CODE_TIMEOUT_MS
+      : (
+          loadLevel === 'high'
+            ? HIGH_LOAD_TIMEOUT_MS
+            : PRIMARY_TIMEOUT_MS
+        );
   const attempts = [];
 
   for (let i = 0; i < chain.length; i++) {
