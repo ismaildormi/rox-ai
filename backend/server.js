@@ -49,6 +49,21 @@ const { checkAndIncrementDailyChat, peekDailyChat } = require('./lib/dailyChatLi
 const stripeWebhookRouter = require('./stripeWebhook');
 const createCheckoutSessionRouter = require('./createCheckoutSession');
 const createTopupSessionRouter = require('./createTopupSession');
+const {
+  createConversationRouter
+} = require('./lib/conversationRoutes');
+const {
+  createRoxIpRouter
+} = require('./lib/roxIpRoutes');
+const {
+  inspectConversationTurn,
+  prepareConversationTurn,
+  completeConversationTurn
+} = require('./lib/conversationTurn');
+const {
+  prepareGenerationConversation,
+  failGenerationConversation
+} = require('./lib/conversationGeneration');
 const { featureCost } = require('./src/core/config');
 // New, additive-only: stub routes for every not-yet-built feature (see
 // ARCHITECTURE.md). Each route is flag-gated and returns a clear
@@ -176,6 +191,17 @@ app.use((req, res, next) => {
 
 app.use('/api/create-checkout-session', requireAuth, createCheckoutSessionRouter);
 app.use('/api/create-topup-session', requireAuth, createTopupSessionRouter);
+app.use(
+  '/api/conversations',
+  requireAuth,
+  createConversationRouter()
+);
+app.use(
+  '/api/roxip',
+  requireAuth,
+  rateLimit('roxip'),
+  createRoxIpRouter()
+);
 
 app.get('/metrics', async (req, res) => {
   // Deliberately not gated by ALLOWED_ORIGINS above: this endpoint is
@@ -383,14 +409,69 @@ app.get('/api/history', requireAuth, async (req, res) => {
 });
 // --- Chat / Code: synchronous, routed through aiRouter's fallback chain ---
 app.post('/api/chat', requireAuth, rateLimit('chat'), validateChatBody, loadRoxUserMiddleware, async (req, res) => {
-  const { messages, feature, aiPreferences = {} } = req.body; // feature: 'chat' | 'code'
+  const {
+    messages,
+    feature,
+    aiPreferences = {},
+    conversationId = null,
+    turnId = null
+  } = req.body; // feature: 'chat' | 'code'
   const userId = req.userId;
   const requestId = crypto.randomUUID();
+  const memoryRequestKey = turnId || requestId;
   const isPro = req.roxUser && req.roxUser.subscription_status === 'pro';
 
   // Chat is free with a daily limit for every user.
   // Code is paid and consumes credits for every user.
   const isCode = feature === 'code';
+  let memoryConversation = null;
+
+  if (conversationId) {
+    try {
+      memoryConversation = await inspectConversationTurn({
+        conversationId,
+        ownerId: userId,
+        feature: feature || 'chat'
+      });
+    } catch (error) {
+      const code = String(error.code || error.message || '');
+
+      if (code === 'conversation_not_found') {
+        return res.status(404).json({
+          status: 'error',
+          code,
+          message: 'Conversation not found.'
+        });
+      }
+
+      if (code === 'conversation_feature_mismatch') {
+        return res.status(409).json({
+          status: 'error',
+          code,
+          message: 'This conversation belongs to another Rox service.'
+        });
+      }
+
+      if (code === 'conversation_message_limit') {
+        return res.status(409).json({
+          status: 'error',
+          code,
+          message: 'This conversation reached 1000 messages. Start a new chat.'
+        });
+      }
+
+      console.error(
+        '[chat-memory] conversation inspection failed:',
+        error.message
+      );
+
+      return res.status(500).json({
+        status: 'error',
+        code: 'conversation_memory_unavailable',
+        message: 'Conversation memory is temporarily unavailable.'
+      });
+    }
+  }
 
   if (isCode && !isPro) {
     return res.status(403).json({
@@ -448,6 +529,22 @@ app.post('/api/chat', requireAuth, rateLimit('chat'), validateChatBody, loadRoxU
   recordLoadLevel('chat', loadLevel);
 
   try {
+    let providerMessages = messages.filter(
+      message => message.role !== 'system'
+    );
+
+    if (memoryConversation) {
+      const preparedTurn = await prepareConversationTurn({
+        conversationId,
+        ownerId: userId,
+        feature: feature || 'chat',
+        messages,
+        requestKey: memoryRequestKey
+      });
+
+      providerMessages = preparedTurn.providerMessages;
+    }
+
     // ROX AI PREFERENCES PROMPT START
     const normalizedAiPreferences =
       normalizeAiPreferences(aiPreferences);
@@ -485,14 +582,22 @@ app.post('/api/chat', requireAuth, rateLimit('chat'), validateChatBody, loadRoxU
       'If the request is unclear, ask one short clarification.'
     ].join(' ');
 
+    const durableMemoryInstructions = providerMessages
+      .filter(message => message.role === 'system')
+      .map(message => message.content)
+      .filter(Boolean)
+      .join(' ');
+
     const routedMessages = [
       {
         role: 'system',
-        content: roxSystemPrompt
+        content: [
+          roxSystemPrompt,
+          durableMemoryInstructions
+        ].filter(Boolean).join(' ')
       },
-      ...messages.filter(
-        message =>
-          message.role !== 'system'
+      ...providerMessages.filter(
+        message => message.role !== 'system'
       )
     ];
     // ROX AI PREFERENCES PROMPT END
@@ -535,30 +640,63 @@ app.post('/api/chat', requireAuth, rateLimit('chat'), validateChatBody, loadRoxU
       },
     });
 
-    // Save a private conversation snapshot without blocking the chat response.
-    try {
-      const { error: historyError } = await supabaseAdmin
-        .from('shared_conversations')
-        .insert({
-          owner_id: userId,
-          is_public: false,
-          content: {
-            feature: feature || 'chat',
-            messages: messages.filter(message => message.role !== 'system'),
-            assistant: {
-              role: 'assistant',
-              content: result.text,
-              model: result.model,
-              responseId: requestId
-            }
-          }
+    let memorySaved;
+    let conversationMessageCount;
+
+    if (memoryConversation) {
+      try {
+        const assistantMessage = await completeConversationTurn({
+          conversationId,
+          ownerId: userId,
+          feature: feature || 'chat',
+          text: result.text,
+          model: result.model,
+          provider: result.provider || null,
+          responseId: requestId,
+          requestKey: memoryRequestKey
         });
 
-      if (historyError) {
+        memorySaved = true;
+        conversationMessageCount =
+          assistantMessage &&
+          Number(assistantMessage.sequence_no);
+      } catch (memoryError) {
+        memorySaved = false;
+
+        console.error(
+          '[chat-memory] assistant save failed:',
+          memoryError.message
+        );
+      }
+    }
+
+    // Keep the old snapshot behavior only for clients that have not yet
+    // switched to the durable conversationId flow.
+    if (!memoryConversation) {
+      try {
+        const { error: historyError } = await supabaseAdmin
+          .from('shared_conversations')
+          .insert({
+            owner_id: userId,
+            is_public: false,
+            content: {
+              feature: feature || 'chat',
+              messages: messages.filter(message => message.role !== 'system'),
+              assistant: {
+                role: 'assistant',
+                content: result.text,
+                model: result.model,
+                responseId: requestId
+              }
+            }
+          });
+
+        if (historyError) {
+          console.error('[chat-history] save failed:', historyError.message);
+        }
+      } catch (historyError) {
         console.error('[chat-history] save failed:', historyError.message);
       }
-    } catch (historyError) {
-      console.error('[chat-history] save failed:', historyError.message);
     }
 
     res.json({
@@ -566,6 +704,13 @@ app.post('/api/chat', requireAuth, rateLimit('chat'), validateChatBody, loadRoxU
       text: result.text,
       model: result.model,
       responseId: requestId,
+      conversationId: conversationId || undefined,
+      memorySaved:
+        conversationId ? Boolean(memorySaved) : undefined,
+      conversationMessageCount:
+        conversationId && Number.isFinite(conversationMessageCount)
+          ? conversationMessageCount
+          : undefined,
       dailyChatUsed: dailyStatus ? dailyStatus.current : undefined,
       dailyChatLimit: dailyStatus ? dailyStatus.limit : undefined,
       newBalance: settlement ? settlement.new_balance : (reservation ? reservation.newBalance : undefined),
@@ -598,7 +743,12 @@ app.post('/api/chat', requireAuth, rateLimit('chat'), validateChatBody, loadRoxU
 
 // --- Image/Video: async, credits reserved BEFORE enqueue (not after completion) ---
 async function handleGenerationRequest(req, res, { feature, queue }) {
-  const { prompt, aiPreferences = {} } = req.body;
+  const {
+    prompt,
+    aiPreferences = {},
+    conversationId = null,
+    turnId = null
+  } = req.body;
   const normalizedAiPreferences =
     normalizeAiPreferences(aiPreferences);
 
@@ -613,6 +763,55 @@ async function handleGenerationRequest(req, res, { feature, queue }) {
   // generation_jobs.id, and the BullMQ jobId ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â so a job, its charge,
   // and its refund (if any) are always the same id to look up.
   const requestId = crypto.randomUUID();
+  const memoryRequestKey = turnId || requestId;
+  let memoryConversation = null;
+
+  if (conversationId) {
+    try {
+      memoryConversation = await inspectConversationTurn({
+        conversationId,
+        ownerId: userId,
+        feature
+      });
+    } catch (error) {
+      const code = String(error.code || error.message || '');
+
+      if (code === 'conversation_not_found') {
+        return res.status(404).json({
+          status: 'error',
+          code,
+          message: 'Conversation not found.'
+        });
+      }
+
+      if (code === 'conversation_feature_mismatch') {
+        return res.status(409).json({
+          status: 'error',
+          code,
+          message: 'This conversation belongs to another Rox service.'
+        });
+      }
+
+      if (code === 'conversation_message_limit') {
+        return res.status(409).json({
+          status: 'error',
+          code,
+          message: 'This conversation reached 1000 messages. Start a new chat.'
+        });
+      }
+
+      console.error(
+        `[${feature}-memory] conversation inspection failed:`,
+        error.message
+      );
+
+      return res.status(500).json({
+        status: 'error',
+        code: 'conversation_memory_unavailable',
+        message: 'Conversation memory is temporarily unavailable.'
+      });
+    }
+  }
 
   let pricing;
   try {
@@ -640,20 +839,87 @@ async function handleGenerationRequest(req, res, { feature, queue }) {
     return res.status(500).json({ status: 'error', message: 'Internal server error.' });
   }
 
+  let requestMessage = null;
+
+  if (memoryConversation) {
+    try {
+      requestMessage = await prepareGenerationConversation({
+        conversationId,
+        ownerId: userId,
+        feature,
+        prompt,
+        requestKey: memoryRequestKey
+      });
+    } catch (memoryError) {
+      await refundCredits(requestId).catch(refundErr =>
+        reportRefundFailure({ requestId, userId, feature, error: refundErr })
+      );
+
+      console.error(
+        `[${feature}-memory] prompt save failed:`,
+        memoryError.message
+      );
+
+      return res.status(500).json({
+        status: 'error',
+        code: 'conversation_memory_save_failed',
+        message: 'The generation prompt could not be saved.'
+      });
+    }
+  }
+
   const { error: insertError } = await supabaseAdmin
     .from('generation_jobs')
-    .insert([{ id: requestId, user_id: userId, feature, prompt, status: 'queued' }]);
+    .insert([{
+      id: requestId,
+      user_id: userId,
+      feature,
+      prompt,
+      status: 'queued',
+      conversation_id: conversationId || null,
+      request_message_id:
+        requestMessage ? requestMessage.id : null
+    }]);
 
   if (insertError) {
     // Job row couldn't be created ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â refund immediately, nothing was enqueued.
     await refundCredits(requestId).catch(refundErr =>
       reportRefundFailure({ requestId, userId, feature, error: refundErr })
     );
+
+    if (memoryConversation) {
+      await failGenerationConversation({
+        conversationId,
+        ownerId: userId,
+        feature,
+        errorMessage: 'generation_job_create_failed',
+        requestKey: memoryRequestKey
+      }).catch(memoryError => {
+        console.error(
+          `[${feature}-memory] job-create failure save failed:`,
+          memoryError.message
+        );
+      });
+    }
+
     return res.status(500).json({ status: 'error', message: 'The generation job could not be created.' });
   }
 
   try {
-    await queue.add('generate', { jobRowId: requestId, requestId, userId, prompt: generationPrompt, originalPrompt: prompt, aiPreferences: normalizedAiPreferences, feature, creditsConsumed }, {
+    await queue.add('generate', {
+      jobRowId: requestId,
+      requestId,
+      userId,
+      prompt: generationPrompt,
+      originalPrompt: prompt,
+      aiPreferences: normalizedAiPreferences,
+      feature,
+      creditsConsumed,
+      conversationId: conversationId || null,
+      requestMessageId:
+        requestMessage ? requestMessage.id : null,
+      memoryRequestKey
+    }, {
       ...defaultJobOptions,
       jobId: requestId,
     });
@@ -672,12 +938,31 @@ async function handleGenerationRequest(req, res, { feature, queue }) {
     await refundCredits(requestId).catch(refundErr =>
       reportRefundFailure({ requestId, userId, feature, error: refundErr })
     );
+
+    if (memoryConversation) {
+      await failGenerationConversation({
+        conversationId,
+        ownerId: userId,
+        feature,
+        errorMessage: 'queue_unavailable',
+        requestKey: memoryRequestKey
+      }).catch(memoryError => {
+        console.error(
+          `[${feature}-memory] queue failure save failed:`,
+          memoryError.message
+        );
+      });
+    }
+
     return res.status(503).json({ status: 'error', message: 'The generation queue is unavailable. Please try again.' });
   }
 
   res.status(202).json({
     status: 'queued',
     jobId: requestId,
+    conversationId: conversationId || undefined,
+    requestMessageId:
+      requestMessage ? requestMessage.id : undefined,
     creditsCharged: creditsConsumed,
     newBalance: reservation.newBalance,
   });

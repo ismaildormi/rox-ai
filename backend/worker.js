@@ -28,6 +28,10 @@ const { connection } = require('./lib/queue');
 const { supabaseAdmin } = require('./lib/supabaseAdmin');
 const { refundCredits, logCreditEvent, reportRefundFailure } = require('./gatekeeper');
 const { recordRefund } = require('./lib/metrics');
+const {
+  completeGenerationConversation,
+  failGenerationConversation
+} = require('./lib/conversationGeneration');
 
 const CONCURRENCY = Number(process.env.WORKER_CONCURRENCY || 2);
 
@@ -48,43 +52,113 @@ const IMAGE_MODEL = 'black-forest-labs/flux-schnell';
 const VIDEO_MODEL = process.env.REPLICATE_VIDEO_MODEL || 'wan-video/wan-2.2-t2v-fast'; // real text-to-video model ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â takes { prompt }, not an image
 
 async function processImageJob(job) {
-  const { jobRowId, prompt } = job.data;
-  await markJob(jobRowId, { status: 'processing', started_at: new Date().toISOString() });
+  const {
+    jobRowId,
+    requestId,
+    userId,
+    prompt,
+    conversationId = null,
+    memoryRequestKey = null
+  } = job.data;
+
+  await markJob(jobRowId, {
+    status: 'processing',
+    started_at: new Date().toISOString()
+  });
 
   const result = await generateImage(prompt);
+  let memoryResult = null;
+
+  if (conversationId) {
+    try {
+      memoryResult = await completeGenerationConversation({
+        conversationId,
+        ownerId: userId,
+        feature: 'image',
+        resultUrl: result.url,
+        requestKey: memoryRequestKey || requestId || jobRowId,
+        provider: result.provider || null,
+        model: result.model || null
+      });
+    } catch (memoryError) {
+      console.error(
+        '[worker-memory] image completion save failed:',
+        memoryError.message
+      );
+    }
+  }
 
   await markJob(jobRowId, {
     status: 'done',
     result_url: result.url,
-    completed_at: new Date().toISOString(),
+    response_message_id:
+      memoryResult?.assistantMessage?.id || null,
+    completed_at: new Date().toISOString()
   });
-  // No credit deduction here ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â it was already reserved before enqueue.
+
+  // Credits were already reserved before enqueue.
 }
 
 async function processVideoJob(job) {
-  const { jobRowId, prompt } = job.data;
-  await markJob(jobRowId, { status: 'processing', started_at: new Date().toISOString() });
+  const {
+    jobRowId,
+    requestId,
+    userId,
+    prompt,
+    conversationId = null,
+    memoryRequestKey = null
+  } = job.data;
 
-  // Previous version passed the user's TEXT prompt into `input_image`
-  // on stability-ai/stable-video-diffusion ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â but SVD is image-to-video
-  // only (it animates an existing image, it does not read text at all).
-  // Since the frontend only ever collects a text prompt for this
-  // feature (see rox-ai-mobile.html), the correct fix is a real
-  // text-to-video model that accepts { prompt } directly.
+  await markJob(jobRowId, {
+    status: 'processing',
+    started_at: new Date().toISOString()
+  });
+
   if (!process.env.REPLICATE_API_TOKEN) {
     throw new Error('replicate_video_provider_not_configured');
   }
 
   const replicate = new Replicate({
-    auth: process.env.REPLICATE_API_TOKEN,
+    auth: process.env.REPLICATE_API_TOKEN
   });
 
-  const output = await replicate.run(VIDEO_MODEL, { input: { prompt } });
+  const output = await replicate.run(
+    VIDEO_MODEL,
+    { input: { prompt } }
+  );
+
+  const resultUrl =
+    Array.isArray(output)
+      ? output[0]
+      : output;
+
+  let memoryResult = null;
+
+  if (conversationId) {
+    try {
+      memoryResult = await completeGenerationConversation({
+        conversationId,
+        ownerId: userId,
+        feature: 'video',
+        resultUrl,
+        requestKey: memoryRequestKey || requestId || jobRowId,
+        provider: 'replicate',
+        model: VIDEO_MODEL
+      });
+    } catch (memoryError) {
+      console.error(
+        '[worker-memory] video completion save failed:',
+        memoryError.message
+      );
+    }
+  }
 
   await markJob(jobRowId, {
     status: 'done',
-    result_url: Array.isArray(output) ? output[0] : output,
-    completed_at: new Date().toISOString(),
+    result_url: resultUrl,
+    response_message_id:
+      memoryResult?.assistantMessage?.id || null,
+    completed_at: new Date().toISOString()
   });
 }
 
@@ -100,30 +174,58 @@ const videoWorker = new Worker('rox-video-generation', processVideoJob, {
 
 // ---------- Failure handling: refund only once retries are exhausted ----------
 async function handleJobFailure(job, err, feature) {
-  const { jobRowId, userId, requestId } = job.data;
+  const {
+    jobRowId,
+    userId,
+    requestId,
+    conversationId = null,
+    memoryRequestKey = null
+  } = job.data;
+
   const attemptsMade = job.attemptsMade;
   const maxAttempts = job.opts.attempts;
 
   if (attemptsMade < maxAttempts) {
-    // BullMQ will retry this automatically (exponential backoff) ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â don't
-    // refund or mark it failed yet, it may still succeed.
+    // BullMQ will retry automatically. Do not save failure or refund yet.
     return;
+  }
+
+  let failureMessage = null;
+
+  if (conversationId) {
+    try {
+      failureMessage = await failGenerationConversation({
+        conversationId,
+        ownerId: userId,
+        feature,
+        errorMessage: err.message,
+        requestKey: memoryRequestKey || requestId || jobRowId
+      });
+    } catch (memoryError) {
+      console.error(
+        `[worker-memory] ${feature} failure save failed:`,
+        memoryError.message
+      );
+    }
   }
 
   await markJob(jobRowId, {
     status: 'failed',
     error_message: err.message,
-    completed_at: new Date().toISOString(),
+    response_message_id: failureMessage?.id || null,
+    completed_at: new Date().toISOString()
   });
 
   try {
     await refundCredits(requestId);
     recordRefund(feature);
   } catch (refundErr) {
-    // Must be visible ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â a failed refund means the user paid for a
-    // generation that never happened and support needs to step in.
-    // Persisted to refund_failures/system_alerts, not just this log line.
-    await reportRefundFailure({ requestId, userId, feature, error: refundErr });
+    await reportRefundFailure({
+      requestId,
+      userId,
+      feature,
+      error: refundErr
+    });
   }
 
   await logCreditEvent({
@@ -131,7 +233,7 @@ async function handleJobFailure(job, err, feature) {
     feature,
     status: 'error',
     requestId: `${requestId}:detail`,
-    errorMessage: err.message,
+    errorMessage: err.message
   });
 
   console.error(

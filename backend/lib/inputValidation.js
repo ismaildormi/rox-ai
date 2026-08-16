@@ -18,6 +18,8 @@ const MAX_PROMPT_CHARS = Number(process.env.MAX_PROMPT_CHARS || 2000);
 
 const ALLOWED_FEATURES = new Set(['chat', 'code']);
 const ALLOWED_ROLES = new Set(['user', 'assistant', 'system']);
+const UUID_PATTERN =
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 const ALLOWED_AI_LANGUAGES =
   new Set(['auto', 'ar', 'fr', 'en', 'es', 'zh']);
 
@@ -31,9 +33,32 @@ function badRequest(res, message) {
   return res.status(400).json({ status: 'error', message });
 }
 
+function validateConversationReferences(body, res) {
+  for (const field of ['conversationId', 'turnId']) {
+    const value = body[field];
+
+    if (value === undefined) continue;
+
+    if (
+      typeof value !== 'string' ||
+      !UUID_PATTERN.test(value)
+    ) {
+      badRequest(res, `${field} must be a valid UUID.`);
+      return false;
+    }
+  }
+
+  return true;
+}
+
 /** Mount before gatekeeperMiddleware on POST /api/chat. */
 function validateChatBody(req, res, next) {
-  const { messages, feature, aiPreferences } = req.body || {};
+  const body = req.body || {};
+  const { messages, feature, aiPreferences } = body;
+
+  if (!validateConversationReferences(body, res)) {
+    return;
+  }
 
   if (feature !== undefined && !ALLOWED_FEATURES.has(feature)) {
     return badRequest(res, `feature must be one of: ${[...ALLOWED_FEATURES].join(', ')}`);
@@ -113,7 +138,13 @@ function validateChatBody(req, res, next) {
 
 /** Mount before gatekeeperMiddleware on POST /api/generate-image and /api/generate-video. */
 function validatePromptBody(req, res, next) {
-  const { prompt } = req.body || {};
+  const body = req.body || {};
+  const { prompt } = body;
+
+  if (!validateConversationReferences(body, res)) {
+    return;
+  }
+
   if (typeof prompt !== 'string' || prompt.trim().length === 0) {
     return badRequest(res, 'prompt must be a non-empty string.');
   }
@@ -123,4 +154,8 @@ function validatePromptBody(req, res, next) {
   next();
 }
 
-module.exports = { validateChatBody, validatePromptBody };
+module.exports = {
+  validateChatBody,
+  validatePromptBody,
+  validateConversationReferences
+};

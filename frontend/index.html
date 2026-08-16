@@ -180,6 +180,80 @@
   .prow .t{font-size:13.5px;font-weight:600;}
   .prow .s{font-size:11.5px;color:var(--text-dim);}
   .prow .chev{margin-left:auto;color:var(--text-faint);}
+  .rox-history-view-tabs{
+    margin:12px 16px 0;
+    padding:4px;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:4px;
+    border:1px solid var(--border);
+    border-radius:12px;
+    background:var(--panel-2);
+  }
+  .rox-history-view{
+    min-height:36px;
+    border:0;
+    border-radius:9px;
+    background:transparent;
+    color:var(--text-dim);
+    font:inherit;
+    font-size:12.5px;
+    font-weight:700;
+    cursor:pointer;
+  }
+  .rox-history-view[aria-selected="true"]{
+    background:var(--panel);
+    color:var(--text);
+    box-shadow:0 1px 5px rgba(0,0,0,.18);
+  }
+  .rox-history-actions{
+    margin-left:auto;
+    display:flex;
+    align-items:center;
+    gap:8px;
+    flex-shrink:0;
+  }
+  .rox-history-actions .chev{
+    margin-left:0;
+  }
+  .rox-history-archive,
+  .rox-history-pin,
+  .rox-history-rename{
+    width:32px;
+    height:32px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border:1px solid var(--border);
+    border-radius:9px;
+    background:var(--panel-2);
+    color:var(--text-dim);
+    font:inherit;
+    cursor:pointer;
+    transition:border-color .15s ease,color .15s ease,background .15s ease,transform .15s ease;
+  }
+  .rox-history-archive:hover,
+  .rox-history-pin:hover,
+  .rox-history-rename:hover{
+    border-color:var(--border-soft);
+    color:var(--text);
+  }
+  .rox-history-archive:active,
+  .rox-history-pin:active,
+  .rox-history-rename:active{
+    transform:scale(.94);
+  }
+  .rox-history-archive:disabled,
+  .rox-history-pin:disabled,
+  .rox-history-rename:disabled{
+    opacity:.55;
+    cursor:wait;
+  }
+  .rox-history-pin[aria-pressed="true"]{
+    border-color:rgba(139,92,246,.48);
+    background:rgba(139,92,246,.14);
+    color:#c4b5fd;
+  }
 
   /* CORE METER — credits/usage gauge, jagged "crack" fill */
   .usage-card{background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:16px;margin:6px 0 4px;position:relative;overflow:hidden;}
@@ -377,6 +451,82 @@
   .feature-topbar .meta .t{font-size:15px;font-weight:700;}
   .feature-topbar .meta .s{font-size:11.5px;color:var(--text-dim);}
 
+  .rox-history-search-bar{
+    display:flex;
+    align-items:center;
+    gap:9px;
+    margin:16px 16px 0;
+    padding:10px 12px;
+    border:1px solid var(--border);
+    border-radius:12px;
+    background:var(--panel);
+    color:var(--text-dim);
+  }
+
+  .rox-history-search-bar input{
+    width:100%;
+    min-width:0;
+    border:0;
+    outline:0;
+    background:transparent;
+    color:var(--text);
+    font:inherit;
+  }
+
+  .rox-history-search-bar input::placeholder{
+    color:var(--text-faint);
+  }
+  .rox-new-chat{
+    min-width:40px;
+    height:40px;
+    margin-left:auto;
+    padding:0 12px;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:7px;
+    flex-shrink:0;
+    border:1px solid rgba(148,163,184,.18);
+    border-radius:12px;
+    background:rgba(15,23,42,.5);
+    color:#f8fafc;
+    font:inherit;
+    font-size:12px;
+    font-weight:700;
+    cursor:pointer;
+    transition:
+      transform .15s ease,
+      border-color .15s ease,
+      background .15s ease;
+  }
+  .rox-new-chat:hover{
+    border-color:rgba(167,139,250,.5);
+    background:rgba(124,58,237,.18);
+    transform:translateY(-1px);
+  }
+  .rox-new-chat:active{
+    transform:scale(.96);
+  }
+  .rox-new-chat-symbol{
+    font-size:19px;
+    line-height:1;
+  }
+  .modal-backdrop .modal-topbar .rox-new-chat{
+    order:2;
+    margin-left:auto;
+  }
+  .modal-backdrop .modal-topbar .back{
+    margin-left:0;
+  }
+  @media (max-width:430px){
+    .feature-topbar .rox-new-chat{
+      width:40px;
+      padding:0;
+    }
+    .feature-topbar .rox-new-chat-label{
+      display:none;
+    }
+  }
   .chat-messages{flex:1;overflow-y:auto;padding:18px 16px;display:flex;flex-direction:column;gap:12px;}
   .msg{max-width:80%;padding:11px 14px;border-radius:14px;font-size:13.5px;line-height:1.5;animation:msgIn .22s ease;}
   @keyframes msgIn{from{opacity:0;transform:translateY(4px);}to{opacity:1;transform:translateY(0);}}
@@ -3059,6 +3209,21 @@ html[dir="rtl"] .rox-gpt-menu-item{
       <div class="back" data-close>←</div>
       <div class="fic" style="background:var(--panel-2);">🕘</div>
       <div class="meta"><div class="t" data-i18n="common.history">History</div><div class="s" data-i18n="common.recentActivity">Recent activity</div></div>
+    </div>
+    <div class="rox-history-search-bar">
+      <span aria-hidden="true">🔍</span>
+      <input
+        type="search"
+        data-rox-history-search
+        data-i18n-placeholder="common.search"
+        placeholder="Search..."
+        maxlength="80"
+        autocomplete="off"
+      >
+    </div>
+    <div class="rox-history-view-tabs" role="tablist" aria-label="History view">
+      <button type="button" class="rox-history-view" data-rox-history-view="active" aria-selected="true" data-i18n="history.active">Active</button>
+      <button type="button" class="rox-history-view" data-rox-history-view="archived" aria-selected="false" data-i18n="history.archived">Archived</button>
     </div>
     <div id="roxHistoryList" class="project-list" data-rox-history-list style="margin:20px 16px;"><div class="placeholder-view" data-i18n="history.placeholder">Image generated · Video created · IP connection · Code executed</div></div>
   </div>
@@ -7273,6 +7438,18 @@ const ROX_I18N = {
     'automations.subtitle': 'Automated tasks',
     'automations.empty': 'No automation is configured yet.',
     'history.placeholder': 'Image generated · Video created · IP connection · Code executed',
+    'history.rename': 'Rename',
+    'history.renamePrompt': 'Enter a new conversation name',
+    'history.renameFailed': 'The conversation could not be renamed.',
+    'history.pin': 'Pin',
+    'history.unpin': 'Unpin',
+    'history.pinFailed': 'The conversation pin could not be updated.',
+    'history.active': 'Active',
+    'history.archived': 'Archived',
+    'history.archive': 'Archive',
+    'history.unarchive': 'Unarchive',
+    'history.archiveConfirm': 'Archive this conversation?',
+    'history.archiveFailed': 'The conversation archive could not be updated.',
     'voice.languageTitle': 'Voice language',
     'voice.languageHelp': 'Choose the language for voice input',
     'voice.search': 'Search languages...',
@@ -7563,6 +7740,18 @@ const ROX_I18N = {
     'automations.subtitle': 'Tâches automatiques',
     'automations.empty': 'Aucune automatisation n’est configurée pour le moment.',
     'history.placeholder': 'Image générée · Vidéo créée · Connexion IP · Code exécuté',
+    'history.rename': 'Renommer',
+    'history.renamePrompt': 'Saisissez un nouveau nom pour la conversation',
+    'history.renameFailed': 'La conversation n’a pas pu être renommée.',
+    'history.pin': 'Épingler',
+    'history.unpin': 'Désépingler',
+    'history.pinFailed': 'L’épinglage de la conversation n’a pas pu être modifié.',
+    'history.active': 'Actives',
+    'history.archived': 'Archivées',
+    'history.archive': 'Archiver',
+    'history.unarchive': 'Désarchiver',
+    'history.archiveConfirm': 'Archiver cette conversation ?',
+    'history.archiveFailed': 'L’archivage de la conversation n’a pas pu être modifié.',
     'voice.languageTitle': 'Langue vocale',
     'voice.languageHelp': 'Choisissez la langue de la saisie vocale',
     'voice.search': 'Rechercher une langue…',
@@ -7853,6 +8042,18 @@ const ROX_I18N = {
     'automations.subtitle': 'مهام تلقائية',
     'automations.empty': 'لا توجد أتمتة مهيأة حالياً.',
     'history.placeholder': 'تم إنشاء صورة · تم إنشاء فيديو · اتصال IP · تم تشغيل الكود',
+    'history.rename': 'إعادة التسمية',
+    'history.renamePrompt': 'أدخل اسماً جديداً للمحادثة',
+    'history.renameFailed': 'تعذر تغيير اسم المحادثة.',
+    'history.pin': 'تثبيت',
+    'history.unpin': 'إلغاء التثبيت',
+    'history.pinFailed': 'تعذر تحديث تثبيت المحادثة.',
+    'history.active': 'النشطة',
+    'history.archived': 'المؤرشفة',
+    'history.archive': 'أرشفة',
+    'history.unarchive': 'إلغاء الأرشفة',
+    'history.archiveConfirm': 'هل تريد أرشفة هذه المحادثة؟',
+    'history.archiveFailed': 'تعذر تحديث أرشفة المحادثة.',
     'voice.languageTitle': 'لغة الصوت',
     'voice.languageHelp': 'اختر لغة الإدخال الصوتي',
     'voice.search': 'ابحث عن لغة...',
@@ -8143,6 +8344,18 @@ const ROX_I18N = {
     'automations.subtitle': 'Tareas automáticas',
     'automations.empty': 'Todavía no hay ninguna automatización configurada.',
     'history.placeholder': 'Imagen generada · Vídeo creado · Conexión IP · Código ejecutado',
+    'history.rename': 'Renombrar',
+    'history.renamePrompt': 'Introduce un nuevo nombre para la conversación',
+    'history.renameFailed': 'No se pudo cambiar el nombre de la conversación.',
+    'history.pin': 'Fijar',
+    'history.unpin': 'Desfijar',
+    'history.pinFailed': 'No se pudo actualizar la fijación de la conversación.',
+    'history.active': 'Activas',
+    'history.archived': 'Archivadas',
+    'history.archive': 'Archivar',
+    'history.unarchive': 'Desarchivar',
+    'history.archiveConfirm': '¿Archivar esta conversación?',
+    'history.archiveFailed': 'No se pudo actualizar el archivo de la conversación.',
     'voice.languageTitle': 'Idioma de voz',
     'voice.languageHelp': 'Elige el idioma de entrada de voz',
     'voice.search': 'Buscar idiomas...',
@@ -8433,6 +8646,18 @@ const ROX_I18N = {
     'automations.subtitle': '自动任务',
     'automations.empty': '尚未配置自动化。',
     'history.placeholder': '已生成图像 · 已创建视频 · IP 连接 · 已运行代码',
+    'history.rename': '重命名',
+    'history.renamePrompt': '输入新的对话名称',
+    'history.renameFailed': '无法重命名对话。',
+    'history.pin': '置顶',
+    'history.unpin': '取消置顶',
+    'history.pinFailed': '无法更新对话置顶状态。',
+    'history.active': '活跃',
+    'history.archived': '已归档',
+    'history.archive': '归档',
+    'history.unarchive': '取消归档',
+    'history.archiveConfirm': '要归档此对话吗？',
+    'history.archiveFailed': '无法更新对话归档状态。',
     'voice.languageTitle': '语音语言',
     'voice.languageHelp': '选择语音输入语言',
     'voice.search': '搜索语言...',
@@ -9703,198 +9928,836 @@ document.querySelectorAll('[data-close]').forEach(el=>{
   });
 });
 
-function openRoxHistoryItem(item){
-  if(!item || !item.content || typeof item.content !== 'object') return;
+async function loadAllRoxConversationMessages(conversationId){
+  const messages=[];
+  let beforeSequence=null;
+  let pageCount=0;
 
-  const content = item.content;
-  const feature = String(content.feature || 'chat').toLowerCase() === 'code'
-    ? 'code'
-    : 'chat';
+  while(pageCount<10 && messages.length<1000){
+    const suffix=beforeSequence
+      ? '&beforeSequence='+encodeURIComponent(beforeSequence)
+      : '';
 
-  const savedMessages = Array.isArray(content.messages)
-    ? content.messages
-    : [];
+    const response=await authFetch(
+      '/api/conversations/'+encodeURIComponent(conversationId)+
+      '/messages?limit=100'+suffix,
+      {method:'GET'}
+    );
 
-  const assistant =
-    content.assistant && typeof content.assistant === 'object'
-      ? content.assistant
-      : null;
+    const data=await response.json().catch(()=>({}));
 
-  const transcript = savedMessages
-    .filter(message =>
-      message &&
-      (message.role === 'user' || message.role === 'assistant') &&
-      typeof message.content === 'string' &&
-      message.content.trim()
-    )
-    .map(message => ({
-      role: message.role,
-      content: message.content
-    }));
+    if(!response.ok||data.status!=='success'){
+      throw new Error(
+        data.message||('HTTP '+response.status)
+      );
+    }
+
+    const page=Array.isArray(data.messages)
+      ? data.messages
+      : [];
+
+    if(!page.length)break;
+
+    messages.unshift(...page);
+    pageCount++;
+
+    if(!data.hasMore)break;
+
+    const firstSequence=Number(page[0]?.sequence_no);
+
+    if(
+      !Number.isInteger(firstSequence)||
+      firstSequence<=1||
+      firstSequence===beforeSequence
+    ){
+      break;
+    }
+
+    beforeSequence=firstSequence;
+  }
+
+  return messages.slice(-1000);
+}
+
+function createRoxHistoryMedia(message, feature){
+  const content=
+    message.content&&typeof message.content==='object'
+      ? message.content
+      : {};
+
+  const url=String(content.url||'').trim();
+
+  if(!url)return null;
+
+  const wrap=document.createElement('div');
 
   if(
-    assistant &&
-    typeof assistant.content === 'string' &&
-    assistant.content.trim()
+    message.message_type==='image'||
+    feature==='images'
   ){
-    transcript.push({
-      role: 'assistant',
-      content: assistant.content,
-      responseId: assistant.responseId || null,
-      model: assistant.model || null
-    });
+    const image=document.createElement('img');
+    image.src=url;
+    image.alt=roxT('result.generatedAlt');
+    wrap.appendChild(image);
+  }else{
+    const video=document.createElement('video');
+    video.src=url;
+    video.controls=true;
+    video.playsInline=true;
+    wrap.appendChild(video);
   }
 
-  conversations[feature] = transcript
-    .slice(-CHAT_HISTORY_LIMIT)
-    .map(message => ({
-      role: message.role,
-      content: message.content
-    }));
+  return wrap;
+}
 
-  const msgBox = document.getElementById('msgs-' + feature);
-  const featureView = document.getElementById('feature-' + feature);
-  const historyView = document.getElementById('feature-history');
+async function openRoxHistoryItem(item, row=null){
+  if(!item||!item.id)return;
 
-  if(!msgBox || !featureView) return;
-
-  msgBox.innerHTML = '';
-
-  transcript.forEach(message => {
-    const isAssistant = message.role === 'assistant';
-
-    appendMsg(
-      msgBox,
-      isAssistant ? 'bot' : 'user',
-      message.content,
-      false,
-      isAssistant
-        ? {
-            responseId: message.responseId || null,
-            model: message.model || null,
-            feature
-          }
-        : {}
-    );
-  });
-
-  if(historyView){
-    historyView.classList.remove('active');
-  }
-
-  featureView.classList.add('active');
-  msgBox.scrollTop = msgBox.scrollHeight;
-
-  const input = document.querySelector(
-    'input[data-feature="' + feature + '"]'
+  const feature=normalizeRoxConversationFeature(
+    item.feature
   );
 
-  if(input){
-    setTimeout(() => input.focus(), 0);
+  const msgBox=document.getElementById(
+    'msgs-'+feature
+  );
+
+  const featureView=document.getElementById(
+    'feature-'+feature
+  );
+
+  if(!msgBox||!featureView)return;
+
+  if(row){
+    row.dataset.roxHistoryLoading='true';
+  }
+
+  try{
+    const messages=
+      await loadAllRoxConversationMessages(item.id);
+
+    setActiveRoxConversation(feature,item.id);
+
+    if(conversations[feature]){
+      conversations[feature]=messages
+        .filter(message=>
+          (message.role==='user'||
+           message.role==='assistant')&&
+          typeof message.plain_text==='string'&&
+          message.plain_text.trim()
+        )
+        .slice(-CHAT_HISTORY_LIMIT)
+        .map(message=>({
+          role:message.role,
+          content:message.plain_text
+        }));
+    }
+
+    msgBox.innerHTML='';
+
+    messages.forEach(message=>{
+      if(!message||typeof message!=='object')return;
+
+      const role=String(message.role||'');
+      const messageType=String(
+        message.message_type||'text'
+      );
+
+      const content=
+        message.content&&typeof message.content==='object'
+          ? message.content
+          : {};
+
+      const text=String(
+        message.plain_text||
+        content.text||
+        content.error||
+        ''
+      ).trim();
+
+      if(
+        messageType==='image'||
+        messageType==='video'
+      ){
+        const media=createRoxHistoryMedia(
+          message,
+          feature
+        );
+
+        if(media){
+          appendMsg(msgBox,'bot',media,true);
+        }
+
+        return;
+      }
+
+      if(!text)return;
+
+      if(role==='user'){
+        appendMsg(msgBox,'user',text);
+        return;
+      }
+
+      if(
+        feature==='code'&&
+        messageType==='code'
+      ){
+        const artifact=createCodeArtifact(text);
+
+        if(artifact){
+          msgBox.appendChild(artifact);
+          return;
+        }
+      }
+
+      if(messageType==='status'){
+        const failed=
+          content.generationStatus==='failed';
+
+        appendMsg(
+          msgBox,
+          failed?'error':'status',
+          text
+        );
+
+        return;
+      }
+
+      if(messageType==='roxip_event'){
+        appendMsg(msgBox,'status',text);
+        return;
+      }
+
+      appendMsg(
+        msgBox,
+        'bot',
+        text,
+        false,
+        {
+          responseId:content.responseId||null,
+          model:message.model||null,
+          feature
+        }
+      );
+    });
+
+    document
+      .querySelectorAll('#feature-history')
+      .forEach(view=>{
+        view.classList.remove('active');
+      });
+
+    featureView.classList.add('active');
+    msgBox.scrollTop=msgBox.scrollHeight;
+
+    const input=document.querySelector(
+      'input[data-feature="'+feature+'"]'
+    );
+
+    if(input){
+      setTimeout(()=>input.focus(),0);
+    }
+  }catch(error){
+    console.error(
+      '[history-ui] conversation load failed:',
+      error
+    );
+
+    if(row){
+      const chevron=row.querySelector('.chev');
+
+      if(chevron){
+        chevron.textContent='!';
+      }
+    }
+  }finally{
+    if(row){
+      delete row.dataset.roxHistoryLoading;
+    }
   }
 }
 
 function bindRoxHistoryRows(target, items){
-  target.querySelectorAll('[data-rox-history-id]').forEach(row => {
-    row.style.cursor = 'pointer';
+  target
+    .querySelectorAll('[data-rox-conversation-id]')
+    .forEach(row=>{
+      row.style.cursor='pointer';
 
-    row.addEventListener('click', () => {
-      const id = String(row.dataset.roxHistoryId || '');
-
-      const item = items.find(
-        candidate => String(candidate?.id || '') === id
+      const archiveButton=row.querySelector(
+        '[data-rox-history-archive]'
       );
 
-      if(item){
-        openRoxHistoryItem(item);
+      if(archiveButton){
+        archiveButton.addEventListener(
+          'click',
+          async event=>{
+            event.preventDefault();
+            event.stopPropagation();
+
+            if(archiveButton.disabled){
+              return;
+            }
+
+            const id=String(
+              row.dataset.roxConversationId||''
+            );
+
+            const item=items.find(
+              candidate=>
+                String(candidate?.id||'')===id
+            );
+
+            if(!item){
+              return;
+            }
+
+            const nextArchived=!Boolean(item.archived);
+
+            if(
+              nextArchived&&
+              !window.confirm(
+                roxT('history.archiveConfirm')
+              )
+            ){
+              return;
+            }
+
+            archiveButton.disabled=true;
+
+            try{
+              const response=await authFetch(
+                '/api/conversations/'+
+                encodeURIComponent(id),
+                {
+                  method:'PATCH',
+                  headers:{
+                    'Content-Type':'application/json'
+                  },
+                  body:JSON.stringify({
+                    archived:nextArchived
+                  })
+                }
+              );
+
+              const data=await response
+                .json()
+                .catch(()=>({}));
+
+              if(
+                !response.ok||
+                data.status!=='success'||
+                !data.conversation
+              ){
+                throw new Error(
+                  data.message||
+                  ('HTTP '+response.status)
+                );
+              }
+
+              item.archived=Boolean(
+                data.conversation.archived
+              );
+
+              const historyRoot=target.closest(
+                '.feature-screen, .modal-backdrop'
+              );
+
+              const searchInput=historyRoot
+                ? historyRoot.querySelector(
+                    '[data-rox-history-search]'
+                  )
+                : null;
+
+              await loadRoxHistory(
+                searchInput
+                  ? searchInput.value
+                  : ''
+              );
+            }catch(error){
+              console.error(
+                '[history-ui] archive failed:',
+                error
+              );
+
+              window.alert(
+                roxT('history.archiveFailed')
+              );
+            }finally{
+              archiveButton.disabled=false;
+            }
+          }
+        );
       }
+      const pinButton=row.querySelector(
+        '[data-rox-history-pin]'
+      );
+
+      if(pinButton){
+        pinButton.addEventListener(
+          'click',
+          async event=>{
+            event.preventDefault();
+            event.stopPropagation();
+
+            if(pinButton.disabled){
+              return;
+            }
+
+            const id=String(
+              row.dataset.roxConversationId||''
+            );
+
+            const item=items.find(
+              candidate=>
+                String(candidate?.id||'')===id
+            );
+
+            if(!item){
+              return;
+            }
+
+            const nextPinned=!Boolean(item.pinned);
+            pinButton.disabled=true;
+
+            try{
+              const response=await authFetch(
+                '/api/conversations/'+
+                encodeURIComponent(id),
+                {
+                  method:'PATCH',
+                  headers:{
+                    'Content-Type':'application/json'
+                  },
+                  body:JSON.stringify({
+                    pinned:nextPinned
+                  })
+                }
+              );
+
+              const data=await response
+                .json()
+                .catch(()=>({}));
+
+              if(
+                !response.ok||
+                data.status!=='success'||
+                !data.conversation
+              ){
+                throw new Error(
+                  data.message||
+                  ('HTTP '+response.status)
+                );
+              }
+
+              item.pinned=Boolean(
+                data.conversation.pinned
+              );
+
+              const historyRoot=target.closest(
+                '.feature-screen, .modal-backdrop'
+              );
+
+              const searchInput=historyRoot
+                ? historyRoot.querySelector(
+                    '[data-rox-history-search]'
+                  )
+                : null;
+
+              await loadRoxHistory(
+                searchInput
+                  ? searchInput.value
+                  : ''
+              );
+            }catch(error){
+              console.error(
+                '[history-ui] pin failed:',
+                error
+              );
+
+              window.alert(
+                roxT('history.pinFailed')
+              );
+            }finally{
+              pinButton.disabled=false;
+            }
+          }
+        );
+      }
+
+      const renameButton=row.querySelector(
+        '[data-rox-history-rename]'
+      );
+
+      if(renameButton){
+        renameButton.addEventListener(
+          'click',
+          async event=>{
+            event.preventDefault();
+            event.stopPropagation();
+
+            if(renameButton.disabled){
+              return;
+            }
+
+            const id=String(
+              row.dataset.roxConversationId||''
+            );
+
+            const item=items.find(
+              candidate=>
+                String(candidate?.id||'')===id
+            );
+
+            if(!item){
+              return;
+            }
+
+            const entered=window.prompt(
+              roxT('history.renamePrompt'),
+              String(item.title||'')
+            );
+
+            if(entered===null){
+              return;
+            }
+
+            const nextTitle=String(entered).trim();
+
+            if(
+              !nextTitle||
+              nextTitle===String(item.title||'')
+            ){
+              return;
+            }
+
+            renameButton.disabled=true;
+
+            try{
+              const response=await authFetch(
+                '/api/conversations/'+
+                encodeURIComponent(id),
+                {
+                  method:'PATCH',
+                  headers:{
+                    'Content-Type':'application/json'
+                  },
+                  body:JSON.stringify({
+                    title:nextTitle
+                  })
+                }
+              );
+
+              const data=await response
+                .json()
+                .catch(()=>({}));
+
+              if(
+                !response.ok||
+                data.status!=='success'||
+                !data.conversation
+              ){
+                throw new Error(
+                  data.message||
+                  ('HTTP '+response.status)
+                );
+              }
+
+              item.title=String(
+                data.conversation.title||
+                nextTitle
+              );
+
+              const titleNode=row.querySelector('.t');
+
+              if(titleNode){
+                titleNode.textContent=item.title;
+              }
+            }catch(error){
+              console.error(
+                '[history-ui] rename failed:',
+                error
+              );
+
+              window.alert(
+                roxT('history.renameFailed')
+              );
+            }finally{
+              renameButton.disabled=false;
+            }
+          }
+        );
+      }
+
+      row.addEventListener('click',()=>{
+        if(row.dataset.roxHistoryLoading==='true'){
+          return;
+        }
+
+        const id=String(
+          row.dataset.roxConversationId||''
+        );
+
+        const item=items.find(
+          candidate=>
+            String(candidate?.id||'')===id
+        );
+
+        if(item){
+          openRoxHistoryItem(item,row);
+        }
+      });
     });
-  });
 }
 
-async function loadRoxHistory(){
-  const targets=[...document.querySelectorAll('[data-rox-history-list]')];
+async function loadRoxHistory(search=''){
+  const targets=[
+    ...document.querySelectorAll(
+      '[data-rox-history-list]'
+    )
+  ];
+
   if(!targets.length)return;
 
   targets.forEach(target=>{
-    target.innerHTML='<div class="placeholder-view">Loading history...</div>';
+    target.innerHTML=
+      '<div class="placeholder-view">'+
+      'Loading history...</div>';
   });
 
+  if(isRoxDemoSession()){
+    targets.forEach(target=>{
+      target.innerHTML=
+        '<div class="placeholder-view">'+
+        'No saved history yet.</div>';
+    });
+
+    return;
+  }
+
   try{
-    const response=await authFetch('/api/history',{method:'GET'});
-    const data=await response.json().catch(()=>({}));
+    const normalizedSearch=String(search||'')
+      .trim()
+      .slice(0,80);
+
+    const archived=Boolean(
+      document.querySelector(
+        '[data-rox-history-view="archived"]'+
+        '[aria-selected="true"]'
+      )
+    );
+
+    const query=
+      '/api/conversations?limit=100&archived='+
+      (archived?'true':'false')+
+      (normalizedSearch
+        ? '&search='+encodeURIComponent(normalizedSearch)
+        : '');
+    const response=await authFetch(
+      query,
+      {method:'GET'}
+    );
+
+    const data=await response
+      .json()
+      .catch(()=>({}));
 
     if(!response.ok||data.status!=='success'){
-      throw new Error(data.message||('HTTP '+response.status));
+      throw new Error(
+        data.message||('HTTP '+response.status)
+      );
     }
 
-    const items=Array.isArray(data.items)?data.items:[];
+    const items=Array.isArray(data.items)
+      ? data.items
+      : [];
 
     if(!items.length){
       targets.forEach(target=>{
-        target.innerHTML='<div class="placeholder-view">No saved history yet.</div>';
+        target.innerHTML=
+          '<div class="placeholder-view">'+
+          'No saved history yet.</div>';
       });
+
       return;
     }
 
-    const html=items.map(item=>{
-      const content=item&&item.content&&typeof item.content==='object'
-        ? item.content
-        : {};
-
-      const feature=String(content.feature||'chat').toLowerCase();
-      const messages=Array.isArray(content.messages)?content.messages:[];
-      const assistant=content.assistant&&typeof content.assistant==='object'
-        ? content.assistant
-        : {};
-
-      const firstUser=messages.find(message=>message&&message.role==='user'&&message.content);
-      const title=String(firstUser?.content||assistant.content||'Saved conversation')
-        .replace(/\s+/g,' ')
-        .trim()
-        .slice(0,80);
-
-      const created=item.created_at
-        ? new Date(item.created_at).toLocaleString()
-        : '';
-
-      const icon=
-        feature==='code'?'⌨️':
-        feature==='images'||feature==='image'?'🖼️':
-        feature==='videos'||feature==='video'?'🎬':
-        '💬';
-
-      const safeTitle=title
+    const escapeHtml=value=>
+      String(value||'')
         .replace(/&/g,'&amp;')
         .replace(/</g,'&lt;')
         .replace(/>/g,'&gt;')
         .replace(/"/g,'&quot;')
         .replace(/'/g,'&#039;');
 
-      const safeDate=String(created)
-        .replace(/&/g,'&amp;')
-        .replace(/</g,'&lt;')
-        .replace(/>/g,'&gt;');
+    const html=items.map(item=>{
+      const feature=normalizeRoxConversationFeature(
+        item.feature
+      );
 
-      return '<div class="prow" data-rox-history-id="'+String(item.id||'')+'">'+
-        '<div class="thumb" style="background:var(--panel-2);display:flex;align-items:center;justify-content:center;">'+icon+'</div>'+
-        '<div><div class="t">'+safeTitle+'</div><div class="s">'+safeDate+'</div></div>'+
-        '<div class="chev">›</div></div>';
+      const title=String(
+        item.title||'New conversation'
+      )
+        .replace(/\s+/g,' ')
+        .trim()
+        .slice(0,80);
+
+      const updated=
+        item.last_message_at||
+        item.updated_at||
+        item.created_at;
+
+      const date=updated
+        ? new Date(updated).toLocaleString()
+        : '';
+
+      const icon=
+        feature==='code'?'⌨️':
+        feature==='images'?'🖼️':
+        feature==='videos'?'🎬':
+        feature==='roxip'?'🖥️':
+        '💬';
+
+      const pin=item.pinned?' · 📌':'';
+
+      const pinActionLabel=item.pinned
+        ? roxT('history.unpin')
+        : roxT('history.pin');
+
+      const archiveActionLabel=item.archived
+        ? roxT('history.unarchive')
+        : roxT('history.archive');
+
+      return (
+        '<div class="prow" '+
+        'data-rox-conversation-id="'+
+        escapeHtml(item.id)+'">'+
+        '<div class="thumb" style="'+
+        'background:var(--panel-2);'+
+        'display:flex;align-items:center;'+
+        'justify-content:center;">'+
+        icon+
+        '</div>'+
+        '<div><div class="t">'+
+        escapeHtml(title)+
+        '</div><div class="s">'+
+        escapeHtml(date+pin)+
+        '</div></div>'+
+        '<div class="rox-history-actions">'+
+        '<button type="button" '+
+        'class="rox-history-archive" '+
+        'data-rox-history-archive '+
+        'title="'+
+        escapeHtml(archiveActionLabel)+
+        '" aria-label="'+
+        escapeHtml(archiveActionLabel)+
+        '">'+
+        (item.archived?'↩':'🗄️')+
+        '</button>'+
+        '<button type="button" '+
+        'class="rox-history-pin" '+
+        'data-rox-history-pin '+
+        'aria-pressed="'+
+        (item.pinned?'true':'false')+
+        '" title="'+
+        escapeHtml(pinActionLabel)+
+        '" aria-label="'+
+        escapeHtml(pinActionLabel)+
+        '">📌</button>'+
+        '<button type="button" '+
+        'class="rox-history-rename" '+
+        'data-rox-history-rename '+
+        'title="'+
+        escapeHtml(roxT('history.rename'))+
+        '" aria-label="'+
+        escapeHtml(roxT('history.rename'))+
+        '">✎</button>'+
+        '<div class="chev">›</div></div></div>'
+      );
     }).join('');
 
     targets.forEach(target=>{
       target.innerHTML=html;
-      bindRoxHistoryRows(target, items);
+      bindRoxHistoryRows(target,items);
     });
-
   }catch(error){
     console.error('[history-ui] load failed:',error);
+
     targets.forEach(target=>{
-      target.innerHTML='<div class="placeholder-view">History could not be loaded.</div>';
+      target.innerHTML=
+        '<div class="placeholder-view">'+
+        'History could not be loaded.</div>';
     });
   }
 }
 
+function setupRoxHistoryViews(){
+  document.querySelectorAll(
+    '[data-rox-history-view]'
+  ).forEach(button=>{
+    if(button.dataset.roxHistoryViewReady==='true'){
+      return;
+    }
+
+    button.dataset.roxHistoryViewReady='true';
+
+    button.addEventListener('click',()=>{
+      const nextView=String(
+        button.dataset.roxHistoryView||'active'
+      );
+
+      document.querySelectorAll(
+        '[data-rox-history-view]'
+      ).forEach(candidate=>{
+        candidate.setAttribute(
+          'aria-selected',
+          String(
+            candidate.dataset.roxHistoryView===
+            nextView
+          )
+        );
+      });
+
+      const historyRoot=button.closest(
+        '.feature-screen, .modal-backdrop'
+      );
+
+      const searchInput=historyRoot
+        ? historyRoot.querySelector(
+            '[data-rox-history-search]'
+          )
+        : null;
+
+      loadRoxHistory(
+        searchInput
+          ? searchInput.value
+          : ''
+      );
+    });
+  });
+}
+function setupRoxHistorySearch(){
+  document.querySelectorAll(
+    '[data-rox-history-search]'
+  ).forEach(input=>{
+    if(input.dataset.roxHistorySearchReady==='true'){
+      return;
+    }
+
+    input.dataset.roxHistorySearchReady='true';
+
+    let timer=null;
+
+    input.addEventListener('input',()=>{
+      clearTimeout(timer);
+
+      timer=setTimeout(()=>{
+        loadRoxHistory(input.value);
+      },250);
+    });
+  });
+}
+
+setupRoxHistoryViews();
+setupRoxHistorySearch();
 document.querySelectorAll('[data-open="history"]').forEach(el=>{
   el.addEventListener('click',()=>{
     loadRoxHistory();
@@ -9909,6 +10772,191 @@ document.querySelectorAll('[data-open="history"]').forEach(el=>{
 // reload) — no browser storage involved.
 const CHAT_HISTORY_LIMIT = 40; // mirrors backend MAX_MESSAGES_PER_CHAT default
 const conversations = { chat: [], code: [] };
+
+// Durable conversation identity shared by all five Rox services.
+const ROX_CONVERSATION_FEATURES =
+  new Set(['chat', 'code', 'images', 'videos', 'roxip']);
+
+const activeRoxConversationIds = {
+  chat: null,
+  code: null,
+  images: null,
+  videos: null,
+  roxip: null
+};
+
+const roxConversationCreationPromises = {
+  chat: null,
+  code: null,
+  images: null,
+  videos: null,
+  roxip: null
+};
+
+function normalizeRoxConversationFeature(feature) {
+  const value = String(feature || '')
+    .trim()
+    .toLowerCase();
+
+  if (value === 'image') return 'images';
+  if (value === 'video') return 'videos';
+
+  if (!ROX_CONVERSATION_FEATURES.has(value)) {
+    throw new Error('invalid_conversation_feature');
+  }
+
+  return value;
+}
+
+function createRoxClientUuid() {
+  const roxCrypto = globalThis.crypto;
+
+  if (
+    roxCrypto &&
+    typeof roxCrypto.randomUUID === 'function'
+  ) {
+    return roxCrypto.randomUUID();
+  }
+
+  const bytes = new Uint8Array(16);
+
+  if (
+    roxCrypto &&
+    typeof roxCrypto.getRandomValues === 'function'
+  ) {
+    roxCrypto.getRandomValues(bytes);
+  } else {
+    for (let index = 0; index < bytes.length; index++) {
+      bytes[index] = Math.floor(Math.random() * 256);
+    }
+  }
+
+  bytes[6] = (bytes[6] & 0x0f) | 0x40;
+  bytes[8] = (bytes[8] & 0x3f) | 0x80;
+
+  const hex = Array.from(
+    bytes,
+    value => value.toString(16).padStart(2, '0')
+  );
+
+  return [
+    hex.slice(0, 4).join(''),
+    hex.slice(4, 6).join(''),
+    hex.slice(6, 8).join(''),
+    hex.slice(8, 10).join(''),
+    hex.slice(10, 16).join('')
+  ].join('-');
+}
+
+function setActiveRoxConversation(feature, conversationId) {
+  const normalizedFeature =
+    normalizeRoxConversationFeature(feature);
+
+  activeRoxConversationIds[normalizedFeature] =
+    conversationId || null;
+
+  return activeRoxConversationIds[normalizedFeature];
+}
+
+function resetActiveRoxConversation(feature) {
+  const normalizedFeature =
+    normalizeRoxConversationFeature(feature);
+
+  activeRoxConversationIds[normalizedFeature] = null;
+  roxConversationCreationPromises[normalizedFeature] = null;
+
+  if (conversations[normalizedFeature]) {
+    conversations[normalizedFeature] = [];
+  }
+}
+
+function isRoxDemoSession() {
+  return Boolean(
+    session &&
+    session.access_token === DEMO_TOKEN
+  );
+}
+
+async function ensureRoxConversation(feature, firstText = '') {
+  const normalizedFeature =
+    normalizeRoxConversationFeature(feature);
+
+  if (activeRoxConversationIds[normalizedFeature]) {
+    return activeRoxConversationIds[normalizedFeature];
+  }
+
+  if (roxConversationCreationPromises[normalizedFeature]) {
+    return roxConversationCreationPromises[normalizedFeature];
+  }
+
+  const creationPromise = (async () => {
+    if (isRoxDemoSession()) {
+      return setActiveRoxConversation(
+        normalizedFeature,
+        createRoxClientUuid()
+      );
+    }
+
+    const title = String(firstText || '')
+      .replace(/\s+/g, ' ')
+      .trim()
+      .slice(0, 80) || 'New Rox conversation';
+
+    const response = await authFetch(
+      '/api/conversations',
+      {
+        method: 'POST',
+        body: JSON.stringify({
+          feature: normalizedFeature,
+          title,
+          metadata: {
+            source: 'rox_web',
+            memory_version: 1
+          }
+        })
+      }
+    );
+
+    const data = await response
+      .json()
+      .catch(() => ({}));
+
+    const conversationId =
+      data &&
+      data.conversation &&
+      data.conversation.id;
+
+    if (!response.ok || !conversationId) {
+      const error = new Error(
+        data.code ||
+        data.message ||
+        'conversation_create_failed'
+      );
+
+      error.status = response.status;
+      throw error;
+    }
+
+    return setActiveRoxConversation(
+      normalizedFeature,
+      conversationId
+    );
+  })();
+
+  roxConversationCreationPromises[normalizedFeature] =
+    creationPromise;
+
+  try {
+    return await creationPromise;
+  } finally {
+    roxConversationCreationPromises[normalizedFeature] =
+      null;
+  }
+}
+
+function createRoxTurnId() {
+  return createRoxClientUuid();
+}
 
 function pushHistory(feature, role, content) {
   const hist = conversations[feature];
@@ -10697,11 +11745,17 @@ async function sendChat(feature, text, msgBox) {
   // turns in a row with nothing in between, which the API rejects.
   const outgoing = [...conversations[feature], { role: 'user', content: text }];
   try {
+    const conversationId =
+      await ensureRoxConversation(feature, text);
+    const turnId = createRoxTurnId();
+
     const res = await authFetch('/api/chat', {
       method: 'POST',
       body: JSON.stringify({
         messages: outgoing,
         feature,
+        conversationId,
+        turnId,
         aiPreferences:
           getRoxAiPreferences()
       }),
@@ -10727,6 +11781,19 @@ async function sendChat(feature, text, msgBox) {
       // user retry, instead of silently failing forever.
       conversations[feature] = conversations[feature].slice(-10);
       appendMsg(msgBox, 'error', roxT('error.conversationTooLong'));
+      return;
+    }
+    if (
+      res.status === 409 &&
+      data.code === 'conversation_message_limit'
+    ) {
+      resetActiveRoxConversation(feature);
+      conversations[feature] = [];
+      appendMsg(
+        msgBox,
+        'error',
+        data.message || roxT('error.conversationTooLong')
+      );
       return;
     }
     if (!res.ok) { appendMsg(msgBox, 'error', data.message || roxT('error.allModelsFailed')); return; }
@@ -10773,7 +11840,23 @@ const GEN_TIMEOUT_MS = 120000;
 async function sendGeneration(feature, text, msgBox) {
   const typing = appendTyping(msgBox);
   try {
-    const res = await authFetch(GEN_ROUTES[feature], { method: 'POST', body: JSON.stringify({ prompt: text, aiPreferences: getRoxAiPreferences() }) });
+    const conversationId =
+      await ensureRoxConversation(feature, text);
+    const turnId = createRoxTurnId();
+
+    const res = await authFetch(
+      GEN_ROUTES[feature],
+      {
+        method: 'POST',
+        body: JSON.stringify({
+          prompt: text,
+          conversationId,
+          turnId,
+          aiPreferences:
+            getRoxAiPreferences()
+        })
+      }
+    );
     const data = await res.json();
 
     if (res.status === 403 && data.code === 'pro_out_of_credits') {
@@ -10790,6 +11873,19 @@ async function sendGeneration(feature, text, msgBox) {
       return;
     }
     if (res.status === 429) { typing.remove(); appendMsg(msgBox, 'status', roxT('error.tooManyRequests', { seconds: data.retry_after_seconds || roxT('error.fewSeconds') })); return; }
+    if (
+      res.status === 409 &&
+      data.code === 'conversation_message_limit'
+    ) {
+      typing.remove();
+      resetActiveRoxConversation(feature);
+      appendMsg(
+        msgBox,
+        'error',
+        data.message || roxT('error.conversationTooLong')
+      );
+      return;
+    }
     if (!res.ok || !data.jobId) { typing.remove(); appendMsg(msgBox, 'error', data.message || roxT('error.jobCreate')); return; }
 
     if (typeof data.newBalance === 'number' && profile) {
@@ -10846,7 +11942,7 @@ async function pollJob(jobId, feature, msgBox, typing) {
 }
 
 // ── roxip: no backend route yet, kept as a clearly-labeled demo ────
-function sendRoxIpDemo(text, msgBox) {
+async function sendRoxIpDemo(text, msgBox) {
   const typing = appendTyping(msgBox);
   const preferences = getRoxAiPreferences();
 
@@ -10910,12 +12006,173 @@ function sendRoxIpDemo(text, msgBox) {
     finalMessage = `✨ ${finalMessage}`;
   }
 
-  setTimeout(() => {
+  await new Promise(resolve => {
+    setTimeout(resolve, 700);
+  });
+
+  if (isRoxDemoSession()) {
     typing.remove();
     appendMsg(msgBox, 'status', finalMessage);
-  }, 700);
+    return;
+  }
+
+  try {
+    const conversationId =
+      await ensureRoxConversation('roxip', text);
+    const turnId = createRoxTurnId();
+
+    const response = await authFetch(
+      '/api/roxip/demo-turn',
+      {
+        method: 'POST',
+        body: JSON.stringify({
+          conversationId,
+          turnId,
+          command: text,
+          responseText: finalMessage
+        })
+      }
+    );
+
+    const data = await response
+      .json()
+      .catch(() => ({}));
+
+    typing.remove();
+
+    if (
+      response.status === 409 &&
+      data.code === 'conversation_message_limit'
+    ) {
+      resetActiveRoxConversation('roxip');
+
+      appendMsg(
+        msgBox,
+        'error',
+        roxT('error.conversationTooLong')
+      );
+
+      return;
+    }
+
+    if (!response.ok) {
+      appendMsg(
+        msgBox,
+        'error',
+        data.message || roxT('error.network')
+      );
+
+      return;
+    }
+
+    if (
+      data.demoOnly !== true ||
+      data.deviceActionExecuted !== false
+    ) {
+      appendMsg(
+        msgBox,
+        'error',
+        roxT('error.network')
+      );
+
+      return;
+    }
+
+    appendMsg(msgBox, 'status', finalMessage);
+  } catch (error) {
+    typing.remove();
+
+    if (error.message !== 'session_expired') {
+      appendMsg(
+        msgBox,
+        'error',
+        roxT('error.network')
+      );
+    }
+  }
 }
 // ── dispatch ─────────────────────────────────────────────────────────
+function setupRoxNewChatButtons() {
+  const promptKeys = {
+    chat: 'features.chat.prompt',
+    code: 'features.code.prompt',
+    images: 'features.images.prompt',
+    videos: 'features.videos.prompt',
+    roxip: 'features.roxip.prompt'
+  };
+
+  document.querySelectorAll(
+    '#feature-chat, #feature-code, #feature-images, ' +
+    '#feature-videos, #feature-roxip'
+  ).forEach(container => {
+    const feature = String(container.id || '')
+      .replace(/^feature-/, '');
+
+    const topbar = container.querySelector(
+      '.feature-topbar, .modal-topbar'
+    );
+
+    if (!topbar || !promptKeys[feature]) return;
+
+    let button = topbar.querySelector('[data-rox-new-chat]');
+
+    if (!button) {
+      button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'rox-new-chat';
+      button.dataset.roxNewChat = feature;
+      button.title = roxT('features.chat.new');
+      button.setAttribute(
+        'aria-label',
+        roxT('features.chat.new')
+      );
+
+      const symbol = document.createElement('span');
+      symbol.className = 'rox-new-chat-symbol';
+      symbol.setAttribute('aria-hidden', 'true');
+      symbol.textContent = '+';
+
+      const label = document.createElement('span');
+      label.className = 'rox-new-chat-label';
+      label.dataset.i18n = 'features.chat.new';
+      label.textContent = roxT('features.chat.new');
+
+      button.append(symbol, label);
+      topbar.appendChild(button);
+    }
+
+    if (button.dataset.roxNewChatBound === 'true') return;
+    button.dataset.roxNewChatBound = 'true';
+
+    button.addEventListener('click', () => {
+      resetActiveRoxConversation(feature);
+
+      const msgBox = container.querySelector(
+        '.chat-messages'
+      );
+
+      if (msgBox) {
+        const prompt = document.createElement('div');
+        prompt.className = 'msg bot';
+        prompt.dataset.i18n = promptKeys[feature];
+        prompt.textContent = roxT(promptKeys[feature]);
+        msgBox.replaceChildren(prompt);
+        msgBox.scrollTop = 0;
+      }
+
+      const input = container.querySelector(
+        'input[data-feature="' + feature + '"]'
+      );
+
+      if (input) {
+        input.value = '';
+        input.focus();
+      }
+    });
+  });
+}
+
+setupRoxNewChatButtons();
 function sendMessage(feature){
   const input = document.querySelector('input[data-feature="'+feature+'"]');
   const text = input.value.trim();
@@ -12471,6 +13728,80 @@ initAuth();
   .prow .t{font-size:13.5px;font-weight:600;}
   .prow .s{font-size:11.5px;color:var(--text-dim);}
   .prow .chev{margin-left:auto;color:var(--text-faint);}
+  .rox-history-view-tabs{
+    margin:12px 16px 0;
+    padding:4px;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:4px;
+    border:1px solid var(--border);
+    border-radius:12px;
+    background:var(--panel-2);
+  }
+  .rox-history-view{
+    min-height:36px;
+    border:0;
+    border-radius:9px;
+    background:transparent;
+    color:var(--text-dim);
+    font:inherit;
+    font-size:12.5px;
+    font-weight:700;
+    cursor:pointer;
+  }
+  .rox-history-view[aria-selected="true"]{
+    background:var(--panel);
+    color:var(--text);
+    box-shadow:0 1px 5px rgba(0,0,0,.18);
+  }
+  .rox-history-actions{
+    margin-left:auto;
+    display:flex;
+    align-items:center;
+    gap:8px;
+    flex-shrink:0;
+  }
+  .rox-history-actions .chev{
+    margin-left:0;
+  }
+  .rox-history-archive,
+  .rox-history-pin,
+  .rox-history-rename{
+    width:32px;
+    height:32px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border:1px solid var(--border);
+    border-radius:9px;
+    background:var(--panel-2);
+    color:var(--text-dim);
+    font:inherit;
+    cursor:pointer;
+    transition:border-color .15s ease,color .15s ease,background .15s ease,transform .15s ease;
+  }
+  .rox-history-archive:hover,
+  .rox-history-pin:hover,
+  .rox-history-rename:hover{
+    border-color:var(--border-soft);
+    color:var(--text);
+  }
+  .rox-history-archive:active,
+  .rox-history-pin:active,
+  .rox-history-rename:active{
+    transform:scale(.94);
+  }
+  .rox-history-archive:disabled,
+  .rox-history-pin:disabled,
+  .rox-history-rename:disabled{
+    opacity:.55;
+    cursor:wait;
+  }
+  .rox-history-pin[aria-pressed="true"]{
+    border-color:rgba(139,92,246,.48);
+    background:rgba(139,92,246,.14);
+    color:#c4b5fd;
+  }
 /* ROX SETTINGS DESIGN START */
 .rox-settings-body{
   width:100%;
@@ -13023,6 +14354,82 @@ html[data-rox-density="compact"] .chat-input-row{
   .modal-topbar .meta .t{font-size:15px;font-weight:700;}
   .modal-topbar .meta .s{font-size:11.5px;color:var(--text-dim);}
 
+  .rox-history-search-bar{
+    display:flex;
+    align-items:center;
+    gap:9px;
+    margin:16px 16px 0;
+    padding:10px 12px;
+    border:1px solid var(--border);
+    border-radius:12px;
+    background:var(--panel);
+    color:var(--text-dim);
+  }
+
+  .rox-history-search-bar input{
+    width:100%;
+    min-width:0;
+    border:0;
+    outline:0;
+    background:transparent;
+    color:var(--text);
+    font:inherit;
+  }
+
+  .rox-history-search-bar input::placeholder{
+    color:var(--text-faint);
+  }
+  .rox-new-chat{
+    min-width:40px;
+    height:40px;
+    margin-left:auto;
+    padding:0 12px;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:7px;
+    flex-shrink:0;
+    border:1px solid rgba(148,163,184,.18);
+    border-radius:12px;
+    background:rgba(15,23,42,.5);
+    color:#f8fafc;
+    font:inherit;
+    font-size:12px;
+    font-weight:700;
+    cursor:pointer;
+    transition:
+      transform .15s ease,
+      border-color .15s ease,
+      background .15s ease;
+  }
+  .rox-new-chat:hover{
+    border-color:rgba(167,139,250,.5);
+    background:rgba(124,58,237,.18);
+    transform:translateY(-1px);
+  }
+  .rox-new-chat:active{
+    transform:scale(.96);
+  }
+  .rox-new-chat-symbol{
+    font-size:19px;
+    line-height:1;
+  }
+  .modal-backdrop .modal-topbar .rox-new-chat{
+    order:2;
+    margin-left:auto;
+  }
+  .modal-backdrop .modal-topbar .back{
+    margin-left:0;
+  }
+  @media (max-width:430px){
+    .feature-topbar .rox-new-chat{
+      width:40px;
+      padding:0;
+    }
+    .feature-topbar .rox-new-chat-label{
+      display:none;
+    }
+  }
   .chat-messages{flex:1;overflow-y:auto;padding:20px 20px;display:flex;flex-direction:column;gap:12px;}
   .msg{max-width:74%;padding:11px 14px;border-radius:14px;font-size:13.5px;line-height:1.5;animation:msgIn .22s ease;
 }
@@ -19391,6 +20798,21 @@ document.addEventListener("DOMContentLoaded", function () {
       <div class="fic" style="background:var(--panel-2);">🕘</div>
       <div class="meta"><div class="t" data-i18n="common.history">History</div><div class="s" data-i18n="common.recentActivity">Recent activity</div></div>
     </div>
+    <div class="rox-history-search-bar">
+      <span aria-hidden="true">🔍</span>
+      <input
+        type="search"
+        data-rox-history-search
+        data-i18n-placeholder="common.search"
+        placeholder="Search..."
+        maxlength="80"
+        autocomplete="off"
+      >
+    </div>
+    <div class="rox-history-view-tabs" role="tablist" aria-label="History view">
+      <button type="button" class="rox-history-view" data-rox-history-view="active" aria-selected="true" data-i18n="history.active">Active</button>
+      <button type="button" class="rox-history-view" data-rox-history-view="archived" aria-selected="false" data-i18n="history.archived">Archived</button>
+    </div>
     <div class="project-list" data-rox-history-list style="margin:20px;"><div class="placeholder-view" data-i18n="history.placeholder">Image generated · Video created · IP connection · Code executed</div></div>
   </div>
 </div>
@@ -23664,6 +25086,18 @@ const ROX_I18N = {
     'automations.subtitle': 'Automated tasks',
     'automations.empty': 'No automation is configured yet.',
     'history.placeholder': 'Image generated · Video created · IP connection · Code executed',
+    'history.rename': 'Rename',
+    'history.renamePrompt': 'Enter a new conversation name',
+    'history.renameFailed': 'The conversation could not be renamed.',
+    'history.pin': 'Pin',
+    'history.unpin': 'Unpin',
+    'history.pinFailed': 'The conversation pin could not be updated.',
+    'history.active': 'Active',
+    'history.archived': 'Archived',
+    'history.archive': 'Archive',
+    'history.unarchive': 'Unarchive',
+    'history.archiveConfirm': 'Archive this conversation?',
+    'history.archiveFailed': 'The conversation archive could not be updated.',
     'voice.languageTitle': 'Voice language',
     'voice.languageHelp': 'Choose the language for voice input',
     'voice.search': 'Search languages...',
@@ -23954,6 +25388,18 @@ const ROX_I18N = {
     'automations.subtitle': 'Tâches automatiques',
     'automations.empty': 'Aucune automatisation n’est configurée pour le moment.',
     'history.placeholder': 'Image générée · Vidéo créée · Connexion IP · Code exécuté',
+    'history.rename': 'Renommer',
+    'history.renamePrompt': 'Saisissez un nouveau nom pour la conversation',
+    'history.renameFailed': 'La conversation n’a pas pu être renommée.',
+    'history.pin': 'Épingler',
+    'history.unpin': 'Désépingler',
+    'history.pinFailed': 'L’épinglage de la conversation n’a pas pu être modifié.',
+    'history.active': 'Actives',
+    'history.archived': 'Archivées',
+    'history.archive': 'Archiver',
+    'history.unarchive': 'Désarchiver',
+    'history.archiveConfirm': 'Archiver cette conversation ?',
+    'history.archiveFailed': 'L’archivage de la conversation n’a pas pu être modifié.',
     'voice.languageTitle': 'Langue vocale',
     'voice.languageHelp': 'Choisissez la langue de la saisie vocale',
     'voice.search': 'Rechercher une langue…',
@@ -24244,6 +25690,18 @@ const ROX_I18N = {
     'automations.subtitle': 'مهام تلقائية',
     'automations.empty': 'لا توجد أتمتة مهيأة حالياً.',
     'history.placeholder': 'تم إنشاء صورة · تم إنشاء فيديو · اتصال IP · تم تشغيل الكود',
+    'history.rename': 'إعادة التسمية',
+    'history.renamePrompt': 'أدخل اسماً جديداً للمحادثة',
+    'history.renameFailed': 'تعذر تغيير اسم المحادثة.',
+    'history.pin': 'تثبيت',
+    'history.unpin': 'إلغاء التثبيت',
+    'history.pinFailed': 'تعذر تحديث تثبيت المحادثة.',
+    'history.active': 'النشطة',
+    'history.archived': 'المؤرشفة',
+    'history.archive': 'أرشفة',
+    'history.unarchive': 'إلغاء الأرشفة',
+    'history.archiveConfirm': 'هل تريد أرشفة هذه المحادثة؟',
+    'history.archiveFailed': 'تعذر تحديث أرشفة المحادثة.',
     'voice.languageTitle': 'لغة الصوت',
     'voice.languageHelp': 'اختر لغة الإدخال الصوتي',
     'voice.search': 'ابحث عن لغة...',
@@ -24534,6 +25992,18 @@ const ROX_I18N = {
     'automations.subtitle': 'Tareas automáticas',
     'automations.empty': 'Todavía no hay ninguna automatización configurada.',
     'history.placeholder': 'Imagen generada · Vídeo creado · Conexión IP · Código ejecutado',
+    'history.rename': 'Renombrar',
+    'history.renamePrompt': 'Introduce un nuevo nombre para la conversación',
+    'history.renameFailed': 'No se pudo cambiar el nombre de la conversación.',
+    'history.pin': 'Fijar',
+    'history.unpin': 'Desfijar',
+    'history.pinFailed': 'No se pudo actualizar la fijación de la conversación.',
+    'history.active': 'Activas',
+    'history.archived': 'Archivadas',
+    'history.archive': 'Archivar',
+    'history.unarchive': 'Desarchivar',
+    'history.archiveConfirm': '¿Archivar esta conversación?',
+    'history.archiveFailed': 'No se pudo actualizar el archivo de la conversación.',
     'voice.languageTitle': 'Idioma de voz',
     'voice.languageHelp': 'Elige el idioma de entrada de voz',
     'voice.search': 'Buscar idiomas...',
@@ -24824,6 +26294,18 @@ const ROX_I18N = {
     'automations.subtitle': '自动任务',
     'automations.empty': '尚未配置自动化。',
     'history.placeholder': '已生成图像 · 已创建视频 · IP 连接 · 已运行代码',
+    'history.rename': '重命名',
+    'history.renamePrompt': '输入新的对话名称',
+    'history.renameFailed': '无法重命名对话。',
+    'history.pin': '置顶',
+    'history.unpin': '取消置顶',
+    'history.pinFailed': '无法更新对话置顶状态。',
+    'history.active': '活跃',
+    'history.archived': '已归档',
+    'history.archive': '归档',
+    'history.unarchive': '取消归档',
+    'history.archiveConfirm': '要归档此对话吗？',
+    'history.archiveFailed': '无法更新对话归档状态。',
     'voice.languageTitle': '语音语言',
     'voice.languageHelp': '选择语音输入语言',
     'voice.search': '搜索语言...',
@@ -26121,198 +27603,836 @@ document.querySelectorAll('.modal-backdrop').forEach(el=>{
   el.addEventListener('click', (e)=>{ if (e.target === el) el.classList.remove('active'); });
 });
 
-function openRoxHistoryItem(item){
-  if(!item || !item.content || typeof item.content !== 'object') return;
+async function loadAllRoxConversationMessages(conversationId){
+  const messages=[];
+  let beforeSequence=null;
+  let pageCount=0;
 
-  const content = item.content;
-  const feature = String(content.feature || 'chat').toLowerCase() === 'code'
-    ? 'code'
-    : 'chat';
+  while(pageCount<10 && messages.length<1000){
+    const suffix=beforeSequence
+      ? '&beforeSequence='+encodeURIComponent(beforeSequence)
+      : '';
 
-  const savedMessages = Array.isArray(content.messages)
-    ? content.messages
-    : [];
+    const response=await authFetch(
+      '/api/conversations/'+encodeURIComponent(conversationId)+
+      '/messages?limit=100'+suffix,
+      {method:'GET'}
+    );
 
-  const assistant =
-    content.assistant && typeof content.assistant === 'object'
-      ? content.assistant
-      : null;
+    const data=await response.json().catch(()=>({}));
 
-  const transcript = savedMessages
-    .filter(message =>
-      message &&
-      (message.role === 'user' || message.role === 'assistant') &&
-      typeof message.content === 'string' &&
-      message.content.trim()
-    )
-    .map(message => ({
-      role: message.role,
-      content: message.content
-    }));
+    if(!response.ok||data.status!=='success'){
+      throw new Error(
+        data.message||('HTTP '+response.status)
+      );
+    }
+
+    const page=Array.isArray(data.messages)
+      ? data.messages
+      : [];
+
+    if(!page.length)break;
+
+    messages.unshift(...page);
+    pageCount++;
+
+    if(!data.hasMore)break;
+
+    const firstSequence=Number(page[0]?.sequence_no);
+
+    if(
+      !Number.isInteger(firstSequence)||
+      firstSequence<=1||
+      firstSequence===beforeSequence
+    ){
+      break;
+    }
+
+    beforeSequence=firstSequence;
+  }
+
+  return messages.slice(-1000);
+}
+
+function createRoxHistoryMedia(message, feature){
+  const content=
+    message.content&&typeof message.content==='object'
+      ? message.content
+      : {};
+
+  const url=String(content.url||'').trim();
+
+  if(!url)return null;
+
+  const wrap=document.createElement('div');
 
   if(
-    assistant &&
-    typeof assistant.content === 'string' &&
-    assistant.content.trim()
+    message.message_type==='image'||
+    feature==='images'
   ){
-    transcript.push({
-      role: 'assistant',
-      content: assistant.content,
-      responseId: assistant.responseId || null,
-      model: assistant.model || null
-    });
+    const image=document.createElement('img');
+    image.src=url;
+    image.alt=roxT('result.generatedAlt');
+    wrap.appendChild(image);
+  }else{
+    const video=document.createElement('video');
+    video.src=url;
+    video.controls=true;
+    video.playsInline=true;
+    wrap.appendChild(video);
   }
 
-  conversations[feature] = transcript
-    .slice(-CHAT_HISTORY_LIMIT)
-    .map(message => ({
-      role: message.role,
-      content: message.content
-    }));
+  return wrap;
+}
 
-  const msgBox = document.getElementById('msgs-' + feature);
-  const featureView = document.getElementById('feature-' + feature);
-  const historyView = document.getElementById('feature-history');
+async function openRoxHistoryItem(item, row=null){
+  if(!item||!item.id)return;
 
-  if(!msgBox || !featureView) return;
-
-  msgBox.innerHTML = '';
-
-  transcript.forEach(message => {
-    const isAssistant = message.role === 'assistant';
-
-    appendMsg(
-      msgBox,
-      isAssistant ? 'bot' : 'user',
-      message.content,
-      false,
-      isAssistant
-        ? {
-            responseId: message.responseId || null,
-            model: message.model || null,
-            feature
-          }
-        : {}
-    );
-  });
-
-  if(historyView){
-    historyView.classList.remove('active');
-  }
-
-  featureView.classList.add('active');
-  msgBox.scrollTop = msgBox.scrollHeight;
-
-  const input = document.querySelector(
-    'input[data-feature="' + feature + '"]'
+  const feature=normalizeRoxConversationFeature(
+    item.feature
   );
 
-  if(input){
-    setTimeout(() => input.focus(), 0);
+  const msgBox=document.getElementById(
+    'msgs-'+feature
+  );
+
+  const featureView=document.getElementById(
+    'feature-'+feature
+  );
+
+  if(!msgBox||!featureView)return;
+
+  if(row){
+    row.dataset.roxHistoryLoading='true';
+  }
+
+  try{
+    const messages=
+      await loadAllRoxConversationMessages(item.id);
+
+    setActiveRoxConversation(feature,item.id);
+
+    if(conversations[feature]){
+      conversations[feature]=messages
+        .filter(message=>
+          (message.role==='user'||
+           message.role==='assistant')&&
+          typeof message.plain_text==='string'&&
+          message.plain_text.trim()
+        )
+        .slice(-CHAT_HISTORY_LIMIT)
+        .map(message=>({
+          role:message.role,
+          content:message.plain_text
+        }));
+    }
+
+    msgBox.innerHTML='';
+
+    messages.forEach(message=>{
+      if(!message||typeof message!=='object')return;
+
+      const role=String(message.role||'');
+      const messageType=String(
+        message.message_type||'text'
+      );
+
+      const content=
+        message.content&&typeof message.content==='object'
+          ? message.content
+          : {};
+
+      const text=String(
+        message.plain_text||
+        content.text||
+        content.error||
+        ''
+      ).trim();
+
+      if(
+        messageType==='image'||
+        messageType==='video'
+      ){
+        const media=createRoxHistoryMedia(
+          message,
+          feature
+        );
+
+        if(media){
+          appendMsg(msgBox,'bot',media,true);
+        }
+
+        return;
+      }
+
+      if(!text)return;
+
+      if(role==='user'){
+        appendMsg(msgBox,'user',text);
+        return;
+      }
+
+      if(
+        feature==='code'&&
+        messageType==='code'
+      ){
+        const artifact=createCodeArtifact(text);
+
+        if(artifact){
+          msgBox.appendChild(artifact);
+          return;
+        }
+      }
+
+      if(messageType==='status'){
+        const failed=
+          content.generationStatus==='failed';
+
+        appendMsg(
+          msgBox,
+          failed?'error':'status',
+          text
+        );
+
+        return;
+      }
+
+      if(messageType==='roxip_event'){
+        appendMsg(msgBox,'status',text);
+        return;
+      }
+
+      appendMsg(
+        msgBox,
+        'bot',
+        text,
+        false,
+        {
+          responseId:content.responseId||null,
+          model:message.model||null,
+          feature
+        }
+      );
+    });
+
+    document
+      .querySelectorAll('#feature-history')
+      .forEach(view=>{
+        view.classList.remove('active');
+      });
+
+    featureView.classList.add('active');
+    msgBox.scrollTop=msgBox.scrollHeight;
+
+    const input=document.querySelector(
+      'input[data-feature="'+feature+'"]'
+    );
+
+    if(input){
+      setTimeout(()=>input.focus(),0);
+    }
+  }catch(error){
+    console.error(
+      '[history-ui] conversation load failed:',
+      error
+    );
+
+    if(row){
+      const chevron=row.querySelector('.chev');
+
+      if(chevron){
+        chevron.textContent='!';
+      }
+    }
+  }finally{
+    if(row){
+      delete row.dataset.roxHistoryLoading;
+    }
   }
 }
 
 function bindRoxHistoryRows(target, items){
-  target.querySelectorAll('[data-rox-history-id]').forEach(row => {
-    row.style.cursor = 'pointer';
+  target
+    .querySelectorAll('[data-rox-conversation-id]')
+    .forEach(row=>{
+      row.style.cursor='pointer';
 
-    row.addEventListener('click', () => {
-      const id = String(row.dataset.roxHistoryId || '');
-
-      const item = items.find(
-        candidate => String(candidate?.id || '') === id
+      const archiveButton=row.querySelector(
+        '[data-rox-history-archive]'
       );
 
-      if(item){
-        openRoxHistoryItem(item);
+      if(archiveButton){
+        archiveButton.addEventListener(
+          'click',
+          async event=>{
+            event.preventDefault();
+            event.stopPropagation();
+
+            if(archiveButton.disabled){
+              return;
+            }
+
+            const id=String(
+              row.dataset.roxConversationId||''
+            );
+
+            const item=items.find(
+              candidate=>
+                String(candidate?.id||'')===id
+            );
+
+            if(!item){
+              return;
+            }
+
+            const nextArchived=!Boolean(item.archived);
+
+            if(
+              nextArchived&&
+              !window.confirm(
+                roxT('history.archiveConfirm')
+              )
+            ){
+              return;
+            }
+
+            archiveButton.disabled=true;
+
+            try{
+              const response=await authFetch(
+                '/api/conversations/'+
+                encodeURIComponent(id),
+                {
+                  method:'PATCH',
+                  headers:{
+                    'Content-Type':'application/json'
+                  },
+                  body:JSON.stringify({
+                    archived:nextArchived
+                  })
+                }
+              );
+
+              const data=await response
+                .json()
+                .catch(()=>({}));
+
+              if(
+                !response.ok||
+                data.status!=='success'||
+                !data.conversation
+              ){
+                throw new Error(
+                  data.message||
+                  ('HTTP '+response.status)
+                );
+              }
+
+              item.archived=Boolean(
+                data.conversation.archived
+              );
+
+              const historyRoot=target.closest(
+                '.feature-screen, .modal-backdrop'
+              );
+
+              const searchInput=historyRoot
+                ? historyRoot.querySelector(
+                    '[data-rox-history-search]'
+                  )
+                : null;
+
+              await loadRoxHistory(
+                searchInput
+                  ? searchInput.value
+                  : ''
+              );
+            }catch(error){
+              console.error(
+                '[history-ui] archive failed:',
+                error
+              );
+
+              window.alert(
+                roxT('history.archiveFailed')
+              );
+            }finally{
+              archiveButton.disabled=false;
+            }
+          }
+        );
       }
+      const pinButton=row.querySelector(
+        '[data-rox-history-pin]'
+      );
+
+      if(pinButton){
+        pinButton.addEventListener(
+          'click',
+          async event=>{
+            event.preventDefault();
+            event.stopPropagation();
+
+            if(pinButton.disabled){
+              return;
+            }
+
+            const id=String(
+              row.dataset.roxConversationId||''
+            );
+
+            const item=items.find(
+              candidate=>
+                String(candidate?.id||'')===id
+            );
+
+            if(!item){
+              return;
+            }
+
+            const nextPinned=!Boolean(item.pinned);
+            pinButton.disabled=true;
+
+            try{
+              const response=await authFetch(
+                '/api/conversations/'+
+                encodeURIComponent(id),
+                {
+                  method:'PATCH',
+                  headers:{
+                    'Content-Type':'application/json'
+                  },
+                  body:JSON.stringify({
+                    pinned:nextPinned
+                  })
+                }
+              );
+
+              const data=await response
+                .json()
+                .catch(()=>({}));
+
+              if(
+                !response.ok||
+                data.status!=='success'||
+                !data.conversation
+              ){
+                throw new Error(
+                  data.message||
+                  ('HTTP '+response.status)
+                );
+              }
+
+              item.pinned=Boolean(
+                data.conversation.pinned
+              );
+
+              const historyRoot=target.closest(
+                '.feature-screen, .modal-backdrop'
+              );
+
+              const searchInput=historyRoot
+                ? historyRoot.querySelector(
+                    '[data-rox-history-search]'
+                  )
+                : null;
+
+              await loadRoxHistory(
+                searchInput
+                  ? searchInput.value
+                  : ''
+              );
+            }catch(error){
+              console.error(
+                '[history-ui] pin failed:',
+                error
+              );
+
+              window.alert(
+                roxT('history.pinFailed')
+              );
+            }finally{
+              pinButton.disabled=false;
+            }
+          }
+        );
+      }
+
+      const renameButton=row.querySelector(
+        '[data-rox-history-rename]'
+      );
+
+      if(renameButton){
+        renameButton.addEventListener(
+          'click',
+          async event=>{
+            event.preventDefault();
+            event.stopPropagation();
+
+            if(renameButton.disabled){
+              return;
+            }
+
+            const id=String(
+              row.dataset.roxConversationId||''
+            );
+
+            const item=items.find(
+              candidate=>
+                String(candidate?.id||'')===id
+            );
+
+            if(!item){
+              return;
+            }
+
+            const entered=window.prompt(
+              roxT('history.renamePrompt'),
+              String(item.title||'')
+            );
+
+            if(entered===null){
+              return;
+            }
+
+            const nextTitle=String(entered).trim();
+
+            if(
+              !nextTitle||
+              nextTitle===String(item.title||'')
+            ){
+              return;
+            }
+
+            renameButton.disabled=true;
+
+            try{
+              const response=await authFetch(
+                '/api/conversations/'+
+                encodeURIComponent(id),
+                {
+                  method:'PATCH',
+                  headers:{
+                    'Content-Type':'application/json'
+                  },
+                  body:JSON.stringify({
+                    title:nextTitle
+                  })
+                }
+              );
+
+              const data=await response
+                .json()
+                .catch(()=>({}));
+
+              if(
+                !response.ok||
+                data.status!=='success'||
+                !data.conversation
+              ){
+                throw new Error(
+                  data.message||
+                  ('HTTP '+response.status)
+                );
+              }
+
+              item.title=String(
+                data.conversation.title||
+                nextTitle
+              );
+
+              const titleNode=row.querySelector('.t');
+
+              if(titleNode){
+                titleNode.textContent=item.title;
+              }
+            }catch(error){
+              console.error(
+                '[history-ui] rename failed:',
+                error
+              );
+
+              window.alert(
+                roxT('history.renameFailed')
+              );
+            }finally{
+              renameButton.disabled=false;
+            }
+          }
+        );
+      }
+
+      row.addEventListener('click',()=>{
+        if(row.dataset.roxHistoryLoading==='true'){
+          return;
+        }
+
+        const id=String(
+          row.dataset.roxConversationId||''
+        );
+
+        const item=items.find(
+          candidate=>
+            String(candidate?.id||'')===id
+        );
+
+        if(item){
+          openRoxHistoryItem(item,row);
+        }
+      });
     });
-  });
 }
 
-async function loadRoxHistory(){
-  const targets=[...document.querySelectorAll('[data-rox-history-list]')];
+async function loadRoxHistory(search=''){
+  const targets=[
+    ...document.querySelectorAll(
+      '[data-rox-history-list]'
+    )
+  ];
+
   if(!targets.length)return;
 
   targets.forEach(target=>{
-    target.innerHTML='<div class="placeholder-view">Loading history...</div>';
+    target.innerHTML=
+      '<div class="placeholder-view">'+
+      'Loading history...</div>';
   });
 
+  if(isRoxDemoSession()){
+    targets.forEach(target=>{
+      target.innerHTML=
+        '<div class="placeholder-view">'+
+        'No saved history yet.</div>';
+    });
+
+    return;
+  }
+
   try{
-    const response=await authFetch('/api/history',{method:'GET'});
-    const data=await response.json().catch(()=>({}));
+    const normalizedSearch=String(search||'')
+      .trim()
+      .slice(0,80);
+
+    const archived=Boolean(
+      document.querySelector(
+        '[data-rox-history-view="archived"]'+
+        '[aria-selected="true"]'
+      )
+    );
+
+    const query=
+      '/api/conversations?limit=100&archived='+
+      (archived?'true':'false')+
+      (normalizedSearch
+        ? '&search='+encodeURIComponent(normalizedSearch)
+        : '');
+    const response=await authFetch(
+      query,
+      {method:'GET'}
+    );
+
+    const data=await response
+      .json()
+      .catch(()=>({}));
 
     if(!response.ok||data.status!=='success'){
-      throw new Error(data.message||('HTTP '+response.status));
+      throw new Error(
+        data.message||('HTTP '+response.status)
+      );
     }
 
-    const items=Array.isArray(data.items)?data.items:[];
+    const items=Array.isArray(data.items)
+      ? data.items
+      : [];
 
     if(!items.length){
       targets.forEach(target=>{
-        target.innerHTML='<div class="placeholder-view">No saved history yet.</div>';
+        target.innerHTML=
+          '<div class="placeholder-view">'+
+          'No saved history yet.</div>';
       });
+
       return;
     }
 
-    const html=items.map(item=>{
-      const content=item&&item.content&&typeof item.content==='object'
-        ? item.content
-        : {};
-
-      const feature=String(content.feature||'chat').toLowerCase();
-      const messages=Array.isArray(content.messages)?content.messages:[];
-      const assistant=content.assistant&&typeof content.assistant==='object'
-        ? content.assistant
-        : {};
-
-      const firstUser=messages.find(message=>message&&message.role==='user'&&message.content);
-      const title=String(firstUser?.content||assistant.content||'Saved conversation')
-        .replace(/\s+/g,' ')
-        .trim()
-        .slice(0,80);
-
-      const created=item.created_at
-        ? new Date(item.created_at).toLocaleString()
-        : '';
-
-      const icon=
-        feature==='code'?'⌨️':
-        feature==='images'||feature==='image'?'🖼️':
-        feature==='videos'||feature==='video'?'🎬':
-        '💬';
-
-      const safeTitle=title
+    const escapeHtml=value=>
+      String(value||'')
         .replace(/&/g,'&amp;')
         .replace(/</g,'&lt;')
         .replace(/>/g,'&gt;')
         .replace(/"/g,'&quot;')
         .replace(/'/g,'&#039;');
 
-      const safeDate=String(created)
-        .replace(/&/g,'&amp;')
-        .replace(/</g,'&lt;')
-        .replace(/>/g,'&gt;');
+    const html=items.map(item=>{
+      const feature=normalizeRoxConversationFeature(
+        item.feature
+      );
 
-      return '<div class="prow" data-rox-history-id="'+String(item.id||'')+'">'+
-        '<div class="thumb" style="background:var(--panel-2);display:flex;align-items:center;justify-content:center;">'+icon+'</div>'+
-        '<div><div class="t">'+safeTitle+'</div><div class="s">'+safeDate+'</div></div>'+
-        '<div class="chev">›</div></div>';
+      const title=String(
+        item.title||'New conversation'
+      )
+        .replace(/\s+/g,' ')
+        .trim()
+        .slice(0,80);
+
+      const updated=
+        item.last_message_at||
+        item.updated_at||
+        item.created_at;
+
+      const date=updated
+        ? new Date(updated).toLocaleString()
+        : '';
+
+      const icon=
+        feature==='code'?'⌨️':
+        feature==='images'?'🖼️':
+        feature==='videos'?'🎬':
+        feature==='roxip'?'🖥️':
+        '💬';
+
+      const pin=item.pinned?' · 📌':'';
+
+      const pinActionLabel=item.pinned
+        ? roxT('history.unpin')
+        : roxT('history.pin');
+
+      const archiveActionLabel=item.archived
+        ? roxT('history.unarchive')
+        : roxT('history.archive');
+
+      return (
+        '<div class="prow" '+
+        'data-rox-conversation-id="'+
+        escapeHtml(item.id)+'">'+
+        '<div class="thumb" style="'+
+        'background:var(--panel-2);'+
+        'display:flex;align-items:center;'+
+        'justify-content:center;">'+
+        icon+
+        '</div>'+
+        '<div><div class="t">'+
+        escapeHtml(title)+
+        '</div><div class="s">'+
+        escapeHtml(date+pin)+
+        '</div></div>'+
+        '<div class="rox-history-actions">'+
+        '<button type="button" '+
+        'class="rox-history-archive" '+
+        'data-rox-history-archive '+
+        'title="'+
+        escapeHtml(archiveActionLabel)+
+        '" aria-label="'+
+        escapeHtml(archiveActionLabel)+
+        '">'+
+        (item.archived?'↩':'🗄️')+
+        '</button>'+
+        '<button type="button" '+
+        'class="rox-history-pin" '+
+        'data-rox-history-pin '+
+        'aria-pressed="'+
+        (item.pinned?'true':'false')+
+        '" title="'+
+        escapeHtml(pinActionLabel)+
+        '" aria-label="'+
+        escapeHtml(pinActionLabel)+
+        '">📌</button>'+
+        '<button type="button" '+
+        'class="rox-history-rename" '+
+        'data-rox-history-rename '+
+        'title="'+
+        escapeHtml(roxT('history.rename'))+
+        '" aria-label="'+
+        escapeHtml(roxT('history.rename'))+
+        '">✎</button>'+
+        '<div class="chev">›</div></div></div>'
+      );
     }).join('');
 
     targets.forEach(target=>{
       target.innerHTML=html;
-      bindRoxHistoryRows(target, items);
+      bindRoxHistoryRows(target,items);
     });
-
   }catch(error){
     console.error('[history-ui] load failed:',error);
+
     targets.forEach(target=>{
-      target.innerHTML='<div class="placeholder-view">History could not be loaded.</div>';
+      target.innerHTML=
+        '<div class="placeholder-view">'+
+        'History could not be loaded.</div>';
     });
   }
 }
 
+function setupRoxHistoryViews(){
+  document.querySelectorAll(
+    '[data-rox-history-view]'
+  ).forEach(button=>{
+    if(button.dataset.roxHistoryViewReady==='true'){
+      return;
+    }
+
+    button.dataset.roxHistoryViewReady='true';
+
+    button.addEventListener('click',()=>{
+      const nextView=String(
+        button.dataset.roxHistoryView||'active'
+      );
+
+      document.querySelectorAll(
+        '[data-rox-history-view]'
+      ).forEach(candidate=>{
+        candidate.setAttribute(
+          'aria-selected',
+          String(
+            candidate.dataset.roxHistoryView===
+            nextView
+          )
+        );
+      });
+
+      const historyRoot=button.closest(
+        '.feature-screen, .modal-backdrop'
+      );
+
+      const searchInput=historyRoot
+        ? historyRoot.querySelector(
+            '[data-rox-history-search]'
+          )
+        : null;
+
+      loadRoxHistory(
+        searchInput
+          ? searchInput.value
+          : ''
+      );
+    });
+  });
+}
+function setupRoxHistorySearch(){
+  document.querySelectorAll(
+    '[data-rox-history-search]'
+  ).forEach(input=>{
+    if(input.dataset.roxHistorySearchReady==='true'){
+      return;
+    }
+
+    input.dataset.roxHistorySearchReady='true';
+
+    let timer=null;
+
+    input.addEventListener('input',()=>{
+      clearTimeout(timer);
+
+      timer=setTimeout(()=>{
+        loadRoxHistory(input.value);
+      },250);
+    });
+  });
+}
+
+setupRoxHistoryViews();
+setupRoxHistorySearch();
 document.querySelectorAll('[data-open="history"]').forEach(el=>{
   el.addEventListener('click',()=>{
     loadRoxHistory();
@@ -26327,6 +28447,191 @@ document.querySelectorAll('[data-open="history"]').forEach(el=>{
 // reload) — no browser storage involved.
 const CHAT_HISTORY_LIMIT = 40; // mirrors backend MAX_MESSAGES_PER_CHAT default
 const conversations = { chat: [], code: [] };
+
+// Durable conversation identity shared by all five Rox services.
+const ROX_CONVERSATION_FEATURES =
+  new Set(['chat', 'code', 'images', 'videos', 'roxip']);
+
+const activeRoxConversationIds = {
+  chat: null,
+  code: null,
+  images: null,
+  videos: null,
+  roxip: null
+};
+
+const roxConversationCreationPromises = {
+  chat: null,
+  code: null,
+  images: null,
+  videos: null,
+  roxip: null
+};
+
+function normalizeRoxConversationFeature(feature) {
+  const value = String(feature || '')
+    .trim()
+    .toLowerCase();
+
+  if (value === 'image') return 'images';
+  if (value === 'video') return 'videos';
+
+  if (!ROX_CONVERSATION_FEATURES.has(value)) {
+    throw new Error('invalid_conversation_feature');
+  }
+
+  return value;
+}
+
+function createRoxClientUuid() {
+  const roxCrypto = globalThis.crypto;
+
+  if (
+    roxCrypto &&
+    typeof roxCrypto.randomUUID === 'function'
+  ) {
+    return roxCrypto.randomUUID();
+  }
+
+  const bytes = new Uint8Array(16);
+
+  if (
+    roxCrypto &&
+    typeof roxCrypto.getRandomValues === 'function'
+  ) {
+    roxCrypto.getRandomValues(bytes);
+  } else {
+    for (let index = 0; index < bytes.length; index++) {
+      bytes[index] = Math.floor(Math.random() * 256);
+    }
+  }
+
+  bytes[6] = (bytes[6] & 0x0f) | 0x40;
+  bytes[8] = (bytes[8] & 0x3f) | 0x80;
+
+  const hex = Array.from(
+    bytes,
+    value => value.toString(16).padStart(2, '0')
+  );
+
+  return [
+    hex.slice(0, 4).join(''),
+    hex.slice(4, 6).join(''),
+    hex.slice(6, 8).join(''),
+    hex.slice(8, 10).join(''),
+    hex.slice(10, 16).join('')
+  ].join('-');
+}
+
+function setActiveRoxConversation(feature, conversationId) {
+  const normalizedFeature =
+    normalizeRoxConversationFeature(feature);
+
+  activeRoxConversationIds[normalizedFeature] =
+    conversationId || null;
+
+  return activeRoxConversationIds[normalizedFeature];
+}
+
+function resetActiveRoxConversation(feature) {
+  const normalizedFeature =
+    normalizeRoxConversationFeature(feature);
+
+  activeRoxConversationIds[normalizedFeature] = null;
+  roxConversationCreationPromises[normalizedFeature] = null;
+
+  if (conversations[normalizedFeature]) {
+    conversations[normalizedFeature] = [];
+  }
+}
+
+function isRoxDemoSession() {
+  return Boolean(
+    session &&
+    session.access_token === DEMO_TOKEN
+  );
+}
+
+async function ensureRoxConversation(feature, firstText = '') {
+  const normalizedFeature =
+    normalizeRoxConversationFeature(feature);
+
+  if (activeRoxConversationIds[normalizedFeature]) {
+    return activeRoxConversationIds[normalizedFeature];
+  }
+
+  if (roxConversationCreationPromises[normalizedFeature]) {
+    return roxConversationCreationPromises[normalizedFeature];
+  }
+
+  const creationPromise = (async () => {
+    if (isRoxDemoSession()) {
+      return setActiveRoxConversation(
+        normalizedFeature,
+        createRoxClientUuid()
+      );
+    }
+
+    const title = String(firstText || '')
+      .replace(/\s+/g, ' ')
+      .trim()
+      .slice(0, 80) || 'New Rox conversation';
+
+    const response = await authFetch(
+      '/api/conversations',
+      {
+        method: 'POST',
+        body: JSON.stringify({
+          feature: normalizedFeature,
+          title,
+          metadata: {
+            source: 'rox_web',
+            memory_version: 1
+          }
+        })
+      }
+    );
+
+    const data = await response
+      .json()
+      .catch(() => ({}));
+
+    const conversationId =
+      data &&
+      data.conversation &&
+      data.conversation.id;
+
+    if (!response.ok || !conversationId) {
+      const error = new Error(
+        data.code ||
+        data.message ||
+        'conversation_create_failed'
+      );
+
+      error.status = response.status;
+      throw error;
+    }
+
+    return setActiveRoxConversation(
+      normalizedFeature,
+      conversationId
+    );
+  })();
+
+  roxConversationCreationPromises[normalizedFeature] =
+    creationPromise;
+
+  try {
+    return await creationPromise;
+  } finally {
+    roxConversationCreationPromises[normalizedFeature] =
+      null;
+  }
+}
+
+function createRoxTurnId() {
+  return createRoxClientUuid();
+}
 
 function pushHistory(feature, role, content) {
   const hist = conversations[feature];
@@ -27115,11 +29420,17 @@ async function sendChat(feature, text, msgBox) {
   // turns in a row with nothing in between, which the API rejects.
   const outgoing = [...conversations[feature], { role: 'user', content: text }];
   try {
+    const conversationId =
+      await ensureRoxConversation(feature, text);
+    const turnId = createRoxTurnId();
+
     const res = await authFetch('/api/chat', {
       method: 'POST',
       body: JSON.stringify({
         messages: outgoing,
         feature,
+        conversationId,
+        turnId,
         aiPreferences:
           getRoxAiPreferences()
       }),
@@ -27145,6 +29456,19 @@ async function sendChat(feature, text, msgBox) {
       // user retry, instead of silently failing forever.
       conversations[feature] = conversations[feature].slice(-10);
       appendMsg(msgBox, 'error', roxT('error.conversationTooLong'));
+      return;
+    }
+    if (
+      res.status === 409 &&
+      data.code === 'conversation_message_limit'
+    ) {
+      resetActiveRoxConversation(feature);
+      conversations[feature] = [];
+      appendMsg(
+        msgBox,
+        'error',
+        data.message || roxT('error.conversationTooLong')
+      );
       return;
     }
     if (!res.ok) { appendMsg(msgBox, 'error', data.message || roxT('error.allModelsFailed')); return; }
@@ -27192,7 +29516,23 @@ const GEN_TIMEOUT_MS = 120000;
 async function sendGeneration(feature, text, msgBox) {
   const typing = appendTyping(msgBox);
   try {
-    const res = await authFetch(GEN_ROUTES[feature], { method: 'POST', body: JSON.stringify({ prompt: text, aiPreferences: getRoxAiPreferences() }) });
+    const conversationId =
+      await ensureRoxConversation(feature, text);
+    const turnId = createRoxTurnId();
+
+    const res = await authFetch(
+      GEN_ROUTES[feature],
+      {
+        method: 'POST',
+        body: JSON.stringify({
+          prompt: text,
+          conversationId,
+          turnId,
+          aiPreferences:
+            getRoxAiPreferences()
+        })
+      }
+    );
     const data = await res.json();
 
     if (res.status === 403 && data.code === 'pro_out_of_credits') {
@@ -27209,6 +29549,19 @@ async function sendGeneration(feature, text, msgBox) {
       return;
     }
     if (res.status === 429) { typing.remove(); appendMsg(msgBox, 'status', roxT('error.tooManyRequests', { seconds: data.retry_after_seconds || roxT('error.fewSeconds') })); return; }
+    if (
+      res.status === 409 &&
+      data.code === 'conversation_message_limit'
+    ) {
+      typing.remove();
+      resetActiveRoxConversation(feature);
+      appendMsg(
+        msgBox,
+        'error',
+        data.message || roxT('error.conversationTooLong')
+      );
+      return;
+    }
     if (!res.ok || !data.jobId) { typing.remove(); appendMsg(msgBox, 'error', data.message || roxT('error.jobCreate')); return; }
 
     if (typeof data.newBalance === 'number' && profile) {
@@ -27266,7 +29619,7 @@ async function pollJob(jobId, feature, msgBox, typing) {
 }
 
 // ── roxip: no backend route yet, kept as a clearly-labeled demo ────
-function sendRoxIpDemo(text, msgBox) {
+async function sendRoxIpDemo(text, msgBox) {
   const typing = appendTyping(msgBox);
   const preferences = getRoxAiPreferences();
 
@@ -27330,12 +29683,173 @@ function sendRoxIpDemo(text, msgBox) {
     finalMessage = `✨ ${finalMessage}`;
   }
 
-  setTimeout(() => {
+  await new Promise(resolve => {
+    setTimeout(resolve, 700);
+  });
+
+  if (isRoxDemoSession()) {
     typing.remove();
     appendMsg(msgBox, 'status', finalMessage);
-  }, 700);
+    return;
+  }
+
+  try {
+    const conversationId =
+      await ensureRoxConversation('roxip', text);
+    const turnId = createRoxTurnId();
+
+    const response = await authFetch(
+      '/api/roxip/demo-turn',
+      {
+        method: 'POST',
+        body: JSON.stringify({
+          conversationId,
+          turnId,
+          command: text,
+          responseText: finalMessage
+        })
+      }
+    );
+
+    const data = await response
+      .json()
+      .catch(() => ({}));
+
+    typing.remove();
+
+    if (
+      response.status === 409 &&
+      data.code === 'conversation_message_limit'
+    ) {
+      resetActiveRoxConversation('roxip');
+
+      appendMsg(
+        msgBox,
+        'error',
+        roxT('error.conversationTooLong')
+      );
+
+      return;
+    }
+
+    if (!response.ok) {
+      appendMsg(
+        msgBox,
+        'error',
+        data.message || roxT('error.network')
+      );
+
+      return;
+    }
+
+    if (
+      data.demoOnly !== true ||
+      data.deviceActionExecuted !== false
+    ) {
+      appendMsg(
+        msgBox,
+        'error',
+        roxT('error.network')
+      );
+
+      return;
+    }
+
+    appendMsg(msgBox, 'status', finalMessage);
+  } catch (error) {
+    typing.remove();
+
+    if (error.message !== 'session_expired') {
+      appendMsg(
+        msgBox,
+        'error',
+        roxT('error.network')
+      );
+    }
+  }
 }
 // ── dispatch ─────────────────────────────────────────────────────────
+function setupRoxNewChatButtons() {
+  const promptKeys = {
+    chat: 'features.chat.prompt',
+    code: 'features.code.prompt',
+    images: 'features.images.prompt',
+    videos: 'features.videos.prompt',
+    roxip: 'features.roxip.prompt'
+  };
+
+  document.querySelectorAll(
+    '#feature-chat, #feature-code, #feature-images, ' +
+    '#feature-videos, #feature-roxip'
+  ).forEach(container => {
+    const feature = String(container.id || '')
+      .replace(/^feature-/, '');
+
+    const topbar = container.querySelector(
+      '.feature-topbar, .modal-topbar'
+    );
+
+    if (!topbar || !promptKeys[feature]) return;
+
+    let button = topbar.querySelector('[data-rox-new-chat]');
+
+    if (!button) {
+      button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'rox-new-chat';
+      button.dataset.roxNewChat = feature;
+      button.title = roxT('features.chat.new');
+      button.setAttribute(
+        'aria-label',
+        roxT('features.chat.new')
+      );
+
+      const symbol = document.createElement('span');
+      symbol.className = 'rox-new-chat-symbol';
+      symbol.setAttribute('aria-hidden', 'true');
+      symbol.textContent = '+';
+
+      const label = document.createElement('span');
+      label.className = 'rox-new-chat-label';
+      label.dataset.i18n = 'features.chat.new';
+      label.textContent = roxT('features.chat.new');
+
+      button.append(symbol, label);
+      topbar.appendChild(button);
+    }
+
+    if (button.dataset.roxNewChatBound === 'true') return;
+    button.dataset.roxNewChatBound = 'true';
+
+    button.addEventListener('click', () => {
+      resetActiveRoxConversation(feature);
+
+      const msgBox = container.querySelector(
+        '.chat-messages'
+      );
+
+      if (msgBox) {
+        const prompt = document.createElement('div');
+        prompt.className = 'msg bot';
+        prompt.dataset.i18n = promptKeys[feature];
+        prompt.textContent = roxT(promptKeys[feature]);
+        msgBox.replaceChildren(prompt);
+        msgBox.scrollTop = 0;
+      }
+
+      const input = container.querySelector(
+        'input[data-feature="' + feature + '"]'
+      );
+
+      if (input) {
+        input.value = '';
+        input.focus();
+      }
+    });
+  });
+}
+
+setupRoxNewChatButtons();
 function sendMessage(feature){
   const input = document.querySelector('input[data-feature="'+feature+'"]');
   const text = input.value.trim();
