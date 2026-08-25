@@ -6145,7 +6145,13 @@ function renderProfile() {
   const isPro = profile.subscription_status === 'pro';
 
   document.getElementById('userAvatar').textContent = initial;
-  document.getElementById('heroGreeting').textContent = roxT('home.greetingName', { name: displayName });
+  const heroGreeting =
+    document.getElementById('heroGreeting');
+
+  if (heroGreeting) {
+    heroGreeting.textContent =
+      roxT('home.greetingName', { name: displayName });
+  }
 
   // Overwritten right after by renderProUsage()/renderDailyUsage() once
   // /api/usage-status responds — this is just the safe initial state.
@@ -25322,7 +25328,13 @@ function renderProfile() {
         ? roxT('settings.account.planPro')
         : roxT('settings.account.planFree');
   }
-  document.getElementById('heroGreeting').textContent = roxT('home.greetingName', { name: displayName });
+  const heroGreeting =
+    document.getElementById('heroGreeting');
+
+  if (heroGreeting) {
+    heroGreeting.textContent =
+      roxT('home.greetingName', { name: displayName });
+  }
 
   // Overwritten right after by renderProUsage()/renderDailyUsage() once
   // /api/usage-status responds — this is just the safe initial state.
