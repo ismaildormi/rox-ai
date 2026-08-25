@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ZUVYR</title>
-<link rel="icon" type="image/png" href="./zuvyr-logo.svg?v=1">
+<link rel="icon" type="image/png" href="./zuvyr-logo.svg?v=2">
 </head>
 <body>
 <script type="text/plain" id="rox-src-mobile"><!DOCTYPE html>
@@ -13,7 +13,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>ZUVYR — Mobile</title>
-<link rel="icon" type="image/png" href="./zuvyr-logo.svg?v=1">
+<link rel="icon" type="image/png" href="./zuvyr-logo.svg?v=2">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.110.8/dist/umd/supabase.js"><\/script>
@@ -13733,7 +13733,7 @@ body.zuvyr-ui{
 
   const brandMarkup=
     '<img class="zuvyr-brand-logo" '+
-    'src="./zuvyr-logo.svg?v=1" '+
+    'src="./zuvyr-logo.svg?v=2" '+
     'alt="ZUVYR">'+
     '<span class="zuvyr-brand-name">ZUVYR</span>';
 
@@ -13950,7 +13950,548 @@ body.zuvyr-ui{
 }
 /* ZUVYR COMPLETE UI THEME END */
 
+/* ZUVYR EXACT REFERENCE LOCK START */
+function installZuvyrExactReferenceLock(){
+  if(document.querySelector('style[data-zuvyr-exact-reference="1"]')){
+    return;
+  }
+
+  var style=document.createElement("style");
+  style.setAttribute("data-zuvyr-exact-reference","1");
+  style.textContent=`
+html,
+body{
+  background:#050505!important;
+}
+
+body.zuvyr-ui{
+  margin:0!important;
+  color:#f5f5f4!important;
+  background:
+    radial-gradient(circle at 74% 18%,rgba(255,71,28,.025),transparent 30%),
+    #050505!important;
+}
+
+body.zuvyr-ui .app{
+  min-height:100vh!important;
+  background:#050505!important;
+}
+
+body.zuvyr-ui .sidebar{
+  width:clamp(220px,20.38vw,313px)!important;
+  min-width:clamp(220px,20.38vw,313px)!important;
+  max-width:313px!important;
+  padding:18px 19px!important;
+  background:#050505!important;
+  background-image:none!important;
+  border-right:1px solid #272727!important;
+  box-shadow:none!important;
+}
+
+body.zuvyr-ui .rox-sidebar-brand{
+  min-height:72px!important;
+  margin:0 0 22px!important;
+  padding:0 5px!important;
+  display:flex!important;
+  align-items:center!important;
+  gap:17px!important;
+  background:transparent!important;
+  border:0!important;
+  box-shadow:none!important;
+}
+
+body.zuvyr-ui .zuvyr-brand-logo{
+  width:clamp(64px,5.47vw,84px)!important;
+  height:58px!important;
+  padding:0!important;
+  margin:0!important;
+  object-fit:contain!important;
+  background:transparent!important;
+  background-image:none!important;
+  border:0!important;
+  border-radius:0!important;
+  box-shadow:none!important;
+  filter:none!important;
+}
+
+body.zuvyr-ui .brand-name{
+  color:#f8f8f7!important;
+  font-size:clamp(21px,1.63vw,25px)!important;
+  line-height:1!important;
+  font-weight:650!important;
+  letter-spacing:.24em!important;
+  text-shadow:none!important;
+}
+
+body.zuvyr-ui .sidebar-nav{
+  gap:3px!important;
+}
+
+body.zuvyr-ui .nav-item{
+  min-height:51px!important;
+  margin:0!important;
+  padding:0 20px!important;
+  gap:15px!important;
+  color:#bdbdbd!important;
+  font-size:16px!important;
+  font-weight:430!important;
+  background:transparent!important;
+  background-image:none!important;
+  border:1px solid transparent!important;
+  border-radius:8px!important;
+  box-shadow:none!important;
+  transform:none!important;
+}
+
+body.zuvyr-ui .nav-item svg{
+  color:#bdbdbd!important;
+  opacity:1!important;
+}
+
+body.zuvyr-ui .nav-item.active{
+  position:relative!important;
+  color:#f6f6f6!important;
+  background:#121212!important;
+  background-image:none!important;
+  border-color:#2c2c2c!important;
+  box-shadow:none!important;
+}
+
+body.zuvyr-ui .nav-item.active::before{
+  content:""!important;
+  position:absolute!important;
+  left:-1px!important;
+  top:0!important;
+  bottom:0!important;
+  width:4px!important;
+  border-radius:5px!important;
+  background:#ff4b24!important;
+  box-shadow:none!important;
+}
+
+body.zuvyr-ui .nav-item.active svg{
+  color:#f6f6f6!important;
+}
+
+body.zuvyr-ui .nav-item[data-open="roxip"]::after{
+  background:#ff4b24!important;
+  box-shadow:none!important;
+}
+
+body.zuvyr-ui .sidebar-divider{
+  margin:12px 0!important;
+  border-color:#242424!important;
+}
+
+body.zuvyr-ui .usage-card{
+  left:19px!important;
+  right:19px!important;
+  bottom:18px!important;
+  width:auto!important;
+  padding:18px 22px!important;
+  color:#f3f3f3!important;
+  background:#0b0b0b!important;
+  background-image:none!important;
+  border:1px solid #303030!important;
+  border-radius:11px!important;
+  box-shadow:none!important;
+}
+
+body.zuvyr-ui .usage-label{
+  color:#f2f2f2!important;
+}
+
+body.zuvyr-ui .usage-label span:last-child{
+  color:#ff4b24!important;
+}
+
+body.zuvyr-ui .usage-bar{
+  background:#292929!important;
+}
+
+body.zuvyr-ui .usage-fill{
+  background:#ff4b24!important;
+}
+
+body.zuvyr-ui .main{
+  min-width:0!important;
+  padding:0 clamp(18px,2.08vw,32px) 28px!important;
+  background:#050505!important;
+  background-image:none!important;
+}
+
+body.zuvyr-ui .topbar{
+  min-height:85px!important;
+  height:85px!important;
+  padding:0!important;
+  gap:24px!important;
+  background:#050505!important;
+  background-image:none!important;
+  border:0!important;
+  box-shadow:none!important;
+}
+
+body.zuvyr-ui .topbar .search{
+  height:52px!important;
+  flex:1 1 auto!important;
+  max-width:none!important;
+  padding:0 18px!important;
+  color:#858585!important;
+  font-size:16px!important;
+  background:#090909!important;
+  background-image:none!important;
+  border:1px solid #303030!important;
+  border-radius:10px!important;
+  box-shadow:none!important;
+}
+
+body.zuvyr-ui .topbar-actions{
+  flex:0 0 auto!important;
+  margin-left:auto!important;
+  gap:12px!important;
+}
+
+body.zuvyr-ui .avatar-sm{
+  width:50px!important;
+  height:50px!important;
+  border-radius:50%!important;
+  border:1px solid #303030!important;
+  background:#171717!important;
+  box-shadow:none!important;
+}
+
+body.zuvyr-ui .hero.rox-showcase-hero{
+  height:clamp(235px,19.4vw,298px)!important;
+  min-height:235px!important;
+  margin:0 0 18px!important;
+  padding:30px 36px 20px!important;
+  background:
+    radial-gradient(circle at 94% 50%,rgba(255,69,25,.105),transparent 26%),
+    linear-gradient(115deg,#080808 0%,#090909 62%,#100a08 100%)!important;
+  background-image:
+    radial-gradient(circle at 94% 50%,rgba(255,69,25,.105),transparent 26%),
+    linear-gradient(115deg,#080808 0%,#090909 62%,#100a08 100%)!important;
+  border:1px solid #303030!important;
+  border-radius:11px!important;
+  box-shadow:none!important;
+  overflow:hidden!important;
+}
+
+body.zuvyr-ui .hero.rox-showcase-hero::before{
+  opacity:.14!important;
+}
+
+body.zuvyr-ui .hero.rox-showcase-hero::after{
+  opacity:.12!important;
+}
+
+body.zuvyr-ui .rox-hero-copy{
+  width:62%!important;
+  max-width:650px!important;
+  position:relative!important;
+  z-index:3!important;
+}
+
+body.zuvyr-ui .rox-hero-kicker{
+  color:#c7c7c7!important;
+  font-size:13px!important;
+  font-weight:650!important;
+  letter-spacing:.24em!important;
+}
+
+body.zuvyr-ui .rox-hero-kicker::before{
+  background:#ff4b24!important;
+  box-shadow:none!important;
+}
+
+body.zuvyr-ui .rox-hero-title{
+  max-width:650px!important;
+  margin:18px 0 8px!important;
+  color:#f4f4f3!important;
+  font-size:clamp(33px,3.12vw,48px)!important;
+  line-height:1.08!important;
+  font-weight:650!important;
+  letter-spacing:-.035em!important;
+  text-shadow:none!important;
+}
+
+body.zuvyr-ui .rox-hero-description{
+  color:#a9a9a9!important;
+  font-size:16px!important;
+  line-height:1.45!important;
+}
+
+body.zuvyr-ui .rox-showcase-tabs{
+  left:36px!important;
+  bottom:0!important;
+  gap:45px!important;
+}
+
+body.zuvyr-ui .rox-showcase-tab{
+  min-height:48px!important;
+  color:#a4a4a4!important;
+  font-size:12px!important;
+  font-weight:650!important;
+  letter-spacing:.22em!important;
+  background:transparent!important;
+  border:0!important;
+  box-shadow:none!important;
+}
+
+body.zuvyr-ui .rox-showcase-tab.is-active{
+  color:#ff4b24!important;
+}
+
+body.zuvyr-ui .rox-showcase-tab.is-active::after{
+  height:2px!important;
+  background:#ff4b24!important;
+  box-shadow:none!important;
+}
+
+body.zuvyr-ui .zuvyr-hero-graphic{
+  right:25px!important;
+  top:21px!important;
+  bottom:21px!important;
+  width:40%!important;
+  opacity:.92!important;
+  filter:none!important;
+}
+
+body.zuvyr-ui .feature-grid{
+  grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  gap:14px 18px!important;
+  align-items:start!important;
+}
+
+body.zuvyr-ui .fcard{
+  min-width:0!important;
+  height:247px!important;
+  min-height:247px!important;
+  padding:18px 20px!important;
+  color:#efefef!important;
+  background:#090909!important;
+  background-image:none!important;
+  border:1px solid #303030!important;
+  border-radius:11px!important;
+  box-shadow:none!important;
+  transform:none!important;
+}
+
+body.zuvyr-ui .fcard:hover{
+  transform:none!important;
+  border-color:#3a3a3a!important;
+  box-shadow:none!important;
+}
+
+body.zuvyr-ui .fcard-head{
+  min-height:36px!important;
+  gap:12px!important;
+}
+
+body.zuvyr-ui .fcard-head h3{
+  color:#ededed!important;
+  font-size:18px!important;
+  font-weight:520!important;
+}
+
+body.zuvyr-ui .fcard-ic{
+  width:38px!important;
+  height:38px!important;
+  color:#ededed!important;
+  background:#151515!important;
+  background-image:none!important;
+  border:1px solid #2e2e2e!important;
+  border-radius:8px!important;
+  box-shadow:none!important;
+}
+
+body.zuvyr-ui .fcard p{
+  margin-top:11px!important;
+  color:#b4b4b4!important;
+  font-size:14px!important;
+  line-height:1.42!important;
+}
+
+body.zuvyr-ui .fcard-thumb{
+  border:1px solid #2b2b2b!important;
+  border-radius:7px!important;
+  box-shadow:none!important;
+}
+
+body.zuvyr-ui .fcard-form input,
+body.zuvyr-ui .fcard-form select{
+  height:43px!important;
+  color:#bdbdbd!important;
+  background:#0b0b0b!important;
+  background-image:none!important;
+  border:1px solid #313131!important;
+  border-radius:7px!important;
+  box-shadow:none!important;
+}
+
+body.zuvyr-ui .fcard-btn{
+  height:43px!important;
+  color:#f4f4f4!important;
+  background:#161616!important;
+  background-image:none!important;
+  border:1px solid #313131!important;
+  border-radius:7px!important;
+  box-shadow:none!important;
+  text-shadow:none!important;
+}
+
+body.zuvyr-ui .fcard[data-open="images"] .fcard-btn,
+body.zuvyr-ui .fcard[data-open="videos"] .fcard-btn{
+  background:#ff4218!important;
+  background-image:linear-gradient(100deg,#ff3815,#ff5122)!important;
+  border-color:#ff5a32!important;
+  box-shadow:none!important;
+}
+
+body.zuvyr-ui .fcard.rox-ip .fcard-btn{
+  background:#ff4218!important;
+  background-image:linear-gradient(100deg,#ff3815,#ff5122)!important;
+  border-color:#ff5a32!important;
+  box-shadow:none!important;
+}
+
+body.zuvyr-ui .fcard.rox-ip{
+  grid-column:2!important;
+}
+
+body.zuvyr-ui .fcard[data-open="code"]{
+  grid-column:1!important;
+}
+
+body.zuvyr-ui .recent-projects,
+body.zuvyr-ui .recent-activity,
+body.zuvyr-ui .project-grid,
+body.zuvyr-ui .dashboard-bottom{
+  display:none!important;
+}
+
+body.zuvyr-ui .main,
+body.zuvyr-ui .sidebar,
+body.zuvyr-ui .topbar,
+body.zuvyr-ui .hero,
+body.zuvyr-ui .fcard{
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+}
+
+@media (max-width:1180px) and (min-width:761px){
+  body.zuvyr-ui .sidebar{
+    padding-left:14px!important;
+    padding-right:14px!important;
+  }
+
+  body.zuvyr-ui .nav-item{
+    padding-left:14px!important;
+    padding-right:10px!important;
+    gap:10px!important;
+    font-size:13px!important;
+  }
+
+  body.zuvyr-ui .main{
+    padding-left:16px!important;
+    padding-right:16px!important;
+  }
+
+  body.zuvyr-ui .topbar{
+    min-height:78px!important;
+    height:78px!important;
+  }
+
+  body.zuvyr-ui .hero.rox-showcase-hero{
+    padding-left:25px!important;
+    padding-right:25px!important;
+  }
+
+  body.zuvyr-ui .rox-hero-title{
+    font-size:clamp(29px,3.2vw,38px)!important;
+  }
+
+  body.zuvyr-ui .feature-grid{
+    gap:12px!important;
+  }
+
+  body.zuvyr-ui .fcard{
+    padding:15px!important;
+  }
+}
+
+@media (max-width:760px){
+  body.zuvyr-ui{
+    background:#050505!important;
+  }
+
+  body.zuvyr-ui .sidebar{
+    background:#050505!important;
+  }
+
+  body.zuvyr-ui .zuvyr-brand-logo{
+    width:58px!important;
+    height:44px!important;
+  }
+
+  body.zuvyr-ui .nav-item.active{
+    color:#f5f5f5!important;
+    background:#121212!important;
+    background-image:none!important;
+  }
+
+  body.zuvyr-ui .main{
+    background:#050505!important;
+  }
+
+  body.zuvyr-ui .feature-grid{
+    grid-template-columns:1fr!important;
+  }
+
+  body.zuvyr-ui .fcard,
+  body.zuvyr-ui .fcard[data-open="code"],
+  body.zuvyr-ui .fcard.rox-ip{
+    grid-column:auto!important;
+  }
+}
+/* ZUVYR EXACT REFERENCE LOCK END */
+`;
+
+  document.head.appendChild(style);
+
+  function applyExactReference(){
+    if(document.body){
+      document.body.classList.add("zuvyr-ui");
+    }
+
+    document.querySelectorAll("img.zuvyr-brand-logo").forEach(function(image){
+      var required="./zuvyr-logo.svg?v=2";
+
+      if(image.getAttribute("src")!==required){
+        image.setAttribute("src",required);
+      }
+
+      image.removeAttribute("style");
+    });
+
+    document.querySelectorAll(".rox-sidebar-logo").forEach(function(oldLogo){
+      oldLogo.style.setProperty("display","none","important");
+    });
+  }
+
+  applyExactReference();
+
+  requestAnimationFrame(function(){
+    applyExactReference();
+    requestAnimationFrame(applyExactReference);
+  });
+
+  setTimeout(applyExactReference,400);
+  setTimeout(applyExactReference,1200);
+}
+/* ZUVYR EXACT REFERENCE LOCK SCRIPT END */
 setupZuvyrCompleteUi();
+installZuvyrExactReferenceLock();
 initAuth();
 /* ROX GPT MESSAGE ACTIONS PHASE 2 JS START */
 (function(){
@@ -14258,7 +14799,7 @@ initAuth();
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ZUVYR — Desktop</title>
-<link rel="icon" type="image/png" href="./zuvyr-logo.svg?v=1">
+<link rel="icon" type="image/png" href="./zuvyr-logo.svg?v=2">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.110.8/dist/umd/supabase.js"><\/script>
@@ -32423,7 +32964,7 @@ body.zuvyr-ui{
 
   const brandMarkup=
     '<img class="zuvyr-brand-logo" '+
-    'src="./zuvyr-logo.svg?v=1" '+
+    'src="./zuvyr-logo.svg?v=2" '+
     'alt="ZUVYR">'+
     '<span class="zuvyr-brand-name">ZUVYR</span>';
 
@@ -32640,7 +33181,548 @@ body.zuvyr-ui{
 }
 /* ZUVYR COMPLETE UI THEME END */
 
+/* ZUVYR EXACT REFERENCE LOCK START */
+function installZuvyrExactReferenceLock(){
+  if(document.querySelector('style[data-zuvyr-exact-reference="1"]')){
+    return;
+  }
+
+  var style=document.createElement("style");
+  style.setAttribute("data-zuvyr-exact-reference","1");
+  style.textContent=`
+html,
+body{
+  background:#050505!important;
+}
+
+body.zuvyr-ui{
+  margin:0!important;
+  color:#f5f5f4!important;
+  background:
+    radial-gradient(circle at 74% 18%,rgba(255,71,28,.025),transparent 30%),
+    #050505!important;
+}
+
+body.zuvyr-ui .app{
+  min-height:100vh!important;
+  background:#050505!important;
+}
+
+body.zuvyr-ui .sidebar{
+  width:clamp(220px,20.38vw,313px)!important;
+  min-width:clamp(220px,20.38vw,313px)!important;
+  max-width:313px!important;
+  padding:18px 19px!important;
+  background:#050505!important;
+  background-image:none!important;
+  border-right:1px solid #272727!important;
+  box-shadow:none!important;
+}
+
+body.zuvyr-ui .rox-sidebar-brand{
+  min-height:72px!important;
+  margin:0 0 22px!important;
+  padding:0 5px!important;
+  display:flex!important;
+  align-items:center!important;
+  gap:17px!important;
+  background:transparent!important;
+  border:0!important;
+  box-shadow:none!important;
+}
+
+body.zuvyr-ui .zuvyr-brand-logo{
+  width:clamp(64px,5.47vw,84px)!important;
+  height:58px!important;
+  padding:0!important;
+  margin:0!important;
+  object-fit:contain!important;
+  background:transparent!important;
+  background-image:none!important;
+  border:0!important;
+  border-radius:0!important;
+  box-shadow:none!important;
+  filter:none!important;
+}
+
+body.zuvyr-ui .brand-name{
+  color:#f8f8f7!important;
+  font-size:clamp(21px,1.63vw,25px)!important;
+  line-height:1!important;
+  font-weight:650!important;
+  letter-spacing:.24em!important;
+  text-shadow:none!important;
+}
+
+body.zuvyr-ui .sidebar-nav{
+  gap:3px!important;
+}
+
+body.zuvyr-ui .nav-item{
+  min-height:51px!important;
+  margin:0!important;
+  padding:0 20px!important;
+  gap:15px!important;
+  color:#bdbdbd!important;
+  font-size:16px!important;
+  font-weight:430!important;
+  background:transparent!important;
+  background-image:none!important;
+  border:1px solid transparent!important;
+  border-radius:8px!important;
+  box-shadow:none!important;
+  transform:none!important;
+}
+
+body.zuvyr-ui .nav-item svg{
+  color:#bdbdbd!important;
+  opacity:1!important;
+}
+
+body.zuvyr-ui .nav-item.active{
+  position:relative!important;
+  color:#f6f6f6!important;
+  background:#121212!important;
+  background-image:none!important;
+  border-color:#2c2c2c!important;
+  box-shadow:none!important;
+}
+
+body.zuvyr-ui .nav-item.active::before{
+  content:""!important;
+  position:absolute!important;
+  left:-1px!important;
+  top:0!important;
+  bottom:0!important;
+  width:4px!important;
+  border-radius:5px!important;
+  background:#ff4b24!important;
+  box-shadow:none!important;
+}
+
+body.zuvyr-ui .nav-item.active svg{
+  color:#f6f6f6!important;
+}
+
+body.zuvyr-ui .nav-item[data-open="roxip"]::after{
+  background:#ff4b24!important;
+  box-shadow:none!important;
+}
+
+body.zuvyr-ui .sidebar-divider{
+  margin:12px 0!important;
+  border-color:#242424!important;
+}
+
+body.zuvyr-ui .usage-card{
+  left:19px!important;
+  right:19px!important;
+  bottom:18px!important;
+  width:auto!important;
+  padding:18px 22px!important;
+  color:#f3f3f3!important;
+  background:#0b0b0b!important;
+  background-image:none!important;
+  border:1px solid #303030!important;
+  border-radius:11px!important;
+  box-shadow:none!important;
+}
+
+body.zuvyr-ui .usage-label{
+  color:#f2f2f2!important;
+}
+
+body.zuvyr-ui .usage-label span:last-child{
+  color:#ff4b24!important;
+}
+
+body.zuvyr-ui .usage-bar{
+  background:#292929!important;
+}
+
+body.zuvyr-ui .usage-fill{
+  background:#ff4b24!important;
+}
+
+body.zuvyr-ui .main{
+  min-width:0!important;
+  padding:0 clamp(18px,2.08vw,32px) 28px!important;
+  background:#050505!important;
+  background-image:none!important;
+}
+
+body.zuvyr-ui .topbar{
+  min-height:85px!important;
+  height:85px!important;
+  padding:0!important;
+  gap:24px!important;
+  background:#050505!important;
+  background-image:none!important;
+  border:0!important;
+  box-shadow:none!important;
+}
+
+body.zuvyr-ui .topbar .search{
+  height:52px!important;
+  flex:1 1 auto!important;
+  max-width:none!important;
+  padding:0 18px!important;
+  color:#858585!important;
+  font-size:16px!important;
+  background:#090909!important;
+  background-image:none!important;
+  border:1px solid #303030!important;
+  border-radius:10px!important;
+  box-shadow:none!important;
+}
+
+body.zuvyr-ui .topbar-actions{
+  flex:0 0 auto!important;
+  margin-left:auto!important;
+  gap:12px!important;
+}
+
+body.zuvyr-ui .avatar-sm{
+  width:50px!important;
+  height:50px!important;
+  border-radius:50%!important;
+  border:1px solid #303030!important;
+  background:#171717!important;
+  box-shadow:none!important;
+}
+
+body.zuvyr-ui .hero.rox-showcase-hero{
+  height:clamp(235px,19.4vw,298px)!important;
+  min-height:235px!important;
+  margin:0 0 18px!important;
+  padding:30px 36px 20px!important;
+  background:
+    radial-gradient(circle at 94% 50%,rgba(255,69,25,.105),transparent 26%),
+    linear-gradient(115deg,#080808 0%,#090909 62%,#100a08 100%)!important;
+  background-image:
+    radial-gradient(circle at 94% 50%,rgba(255,69,25,.105),transparent 26%),
+    linear-gradient(115deg,#080808 0%,#090909 62%,#100a08 100%)!important;
+  border:1px solid #303030!important;
+  border-radius:11px!important;
+  box-shadow:none!important;
+  overflow:hidden!important;
+}
+
+body.zuvyr-ui .hero.rox-showcase-hero::before{
+  opacity:.14!important;
+}
+
+body.zuvyr-ui .hero.rox-showcase-hero::after{
+  opacity:.12!important;
+}
+
+body.zuvyr-ui .rox-hero-copy{
+  width:62%!important;
+  max-width:650px!important;
+  position:relative!important;
+  z-index:3!important;
+}
+
+body.zuvyr-ui .rox-hero-kicker{
+  color:#c7c7c7!important;
+  font-size:13px!important;
+  font-weight:650!important;
+  letter-spacing:.24em!important;
+}
+
+body.zuvyr-ui .rox-hero-kicker::before{
+  background:#ff4b24!important;
+  box-shadow:none!important;
+}
+
+body.zuvyr-ui .rox-hero-title{
+  max-width:650px!important;
+  margin:18px 0 8px!important;
+  color:#f4f4f3!important;
+  font-size:clamp(33px,3.12vw,48px)!important;
+  line-height:1.08!important;
+  font-weight:650!important;
+  letter-spacing:-.035em!important;
+  text-shadow:none!important;
+}
+
+body.zuvyr-ui .rox-hero-description{
+  color:#a9a9a9!important;
+  font-size:16px!important;
+  line-height:1.45!important;
+}
+
+body.zuvyr-ui .rox-showcase-tabs{
+  left:36px!important;
+  bottom:0!important;
+  gap:45px!important;
+}
+
+body.zuvyr-ui .rox-showcase-tab{
+  min-height:48px!important;
+  color:#a4a4a4!important;
+  font-size:12px!important;
+  font-weight:650!important;
+  letter-spacing:.22em!important;
+  background:transparent!important;
+  border:0!important;
+  box-shadow:none!important;
+}
+
+body.zuvyr-ui .rox-showcase-tab.is-active{
+  color:#ff4b24!important;
+}
+
+body.zuvyr-ui .rox-showcase-tab.is-active::after{
+  height:2px!important;
+  background:#ff4b24!important;
+  box-shadow:none!important;
+}
+
+body.zuvyr-ui .zuvyr-hero-graphic{
+  right:25px!important;
+  top:21px!important;
+  bottom:21px!important;
+  width:40%!important;
+  opacity:.92!important;
+  filter:none!important;
+}
+
+body.zuvyr-ui .feature-grid{
+  grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  gap:14px 18px!important;
+  align-items:start!important;
+}
+
+body.zuvyr-ui .fcard{
+  min-width:0!important;
+  height:247px!important;
+  min-height:247px!important;
+  padding:18px 20px!important;
+  color:#efefef!important;
+  background:#090909!important;
+  background-image:none!important;
+  border:1px solid #303030!important;
+  border-radius:11px!important;
+  box-shadow:none!important;
+  transform:none!important;
+}
+
+body.zuvyr-ui .fcard:hover{
+  transform:none!important;
+  border-color:#3a3a3a!important;
+  box-shadow:none!important;
+}
+
+body.zuvyr-ui .fcard-head{
+  min-height:36px!important;
+  gap:12px!important;
+}
+
+body.zuvyr-ui .fcard-head h3{
+  color:#ededed!important;
+  font-size:18px!important;
+  font-weight:520!important;
+}
+
+body.zuvyr-ui .fcard-ic{
+  width:38px!important;
+  height:38px!important;
+  color:#ededed!important;
+  background:#151515!important;
+  background-image:none!important;
+  border:1px solid #2e2e2e!important;
+  border-radius:8px!important;
+  box-shadow:none!important;
+}
+
+body.zuvyr-ui .fcard p{
+  margin-top:11px!important;
+  color:#b4b4b4!important;
+  font-size:14px!important;
+  line-height:1.42!important;
+}
+
+body.zuvyr-ui .fcard-thumb{
+  border:1px solid #2b2b2b!important;
+  border-radius:7px!important;
+  box-shadow:none!important;
+}
+
+body.zuvyr-ui .fcard-form input,
+body.zuvyr-ui .fcard-form select{
+  height:43px!important;
+  color:#bdbdbd!important;
+  background:#0b0b0b!important;
+  background-image:none!important;
+  border:1px solid #313131!important;
+  border-radius:7px!important;
+  box-shadow:none!important;
+}
+
+body.zuvyr-ui .fcard-btn{
+  height:43px!important;
+  color:#f4f4f4!important;
+  background:#161616!important;
+  background-image:none!important;
+  border:1px solid #313131!important;
+  border-radius:7px!important;
+  box-shadow:none!important;
+  text-shadow:none!important;
+}
+
+body.zuvyr-ui .fcard[data-open="images"] .fcard-btn,
+body.zuvyr-ui .fcard[data-open="videos"] .fcard-btn{
+  background:#ff4218!important;
+  background-image:linear-gradient(100deg,#ff3815,#ff5122)!important;
+  border-color:#ff5a32!important;
+  box-shadow:none!important;
+}
+
+body.zuvyr-ui .fcard.rox-ip .fcard-btn{
+  background:#ff4218!important;
+  background-image:linear-gradient(100deg,#ff3815,#ff5122)!important;
+  border-color:#ff5a32!important;
+  box-shadow:none!important;
+}
+
+body.zuvyr-ui .fcard.rox-ip{
+  grid-column:2!important;
+}
+
+body.zuvyr-ui .fcard[data-open="code"]{
+  grid-column:1!important;
+}
+
+body.zuvyr-ui .recent-projects,
+body.zuvyr-ui .recent-activity,
+body.zuvyr-ui .project-grid,
+body.zuvyr-ui .dashboard-bottom{
+  display:none!important;
+}
+
+body.zuvyr-ui .main,
+body.zuvyr-ui .sidebar,
+body.zuvyr-ui .topbar,
+body.zuvyr-ui .hero,
+body.zuvyr-ui .fcard{
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+}
+
+@media (max-width:1180px) and (min-width:761px){
+  body.zuvyr-ui .sidebar{
+    padding-left:14px!important;
+    padding-right:14px!important;
+  }
+
+  body.zuvyr-ui .nav-item{
+    padding-left:14px!important;
+    padding-right:10px!important;
+    gap:10px!important;
+    font-size:13px!important;
+  }
+
+  body.zuvyr-ui .main{
+    padding-left:16px!important;
+    padding-right:16px!important;
+  }
+
+  body.zuvyr-ui .topbar{
+    min-height:78px!important;
+    height:78px!important;
+  }
+
+  body.zuvyr-ui .hero.rox-showcase-hero{
+    padding-left:25px!important;
+    padding-right:25px!important;
+  }
+
+  body.zuvyr-ui .rox-hero-title{
+    font-size:clamp(29px,3.2vw,38px)!important;
+  }
+
+  body.zuvyr-ui .feature-grid{
+    gap:12px!important;
+  }
+
+  body.zuvyr-ui .fcard{
+    padding:15px!important;
+  }
+}
+
+@media (max-width:760px){
+  body.zuvyr-ui{
+    background:#050505!important;
+  }
+
+  body.zuvyr-ui .sidebar{
+    background:#050505!important;
+  }
+
+  body.zuvyr-ui .zuvyr-brand-logo{
+    width:58px!important;
+    height:44px!important;
+  }
+
+  body.zuvyr-ui .nav-item.active{
+    color:#f5f5f5!important;
+    background:#121212!important;
+    background-image:none!important;
+  }
+
+  body.zuvyr-ui .main{
+    background:#050505!important;
+  }
+
+  body.zuvyr-ui .feature-grid{
+    grid-template-columns:1fr!important;
+  }
+
+  body.zuvyr-ui .fcard,
+  body.zuvyr-ui .fcard[data-open="code"],
+  body.zuvyr-ui .fcard.rox-ip{
+    grid-column:auto!important;
+  }
+}
+/* ZUVYR EXACT REFERENCE LOCK END */
+`;
+
+  document.head.appendChild(style);
+
+  function applyExactReference(){
+    if(document.body){
+      document.body.classList.add("zuvyr-ui");
+    }
+
+    document.querySelectorAll("img.zuvyr-brand-logo").forEach(function(image){
+      var required="./zuvyr-logo.svg?v=2";
+
+      if(image.getAttribute("src")!==required){
+        image.setAttribute("src",required);
+      }
+
+      image.removeAttribute("style");
+    });
+
+    document.querySelectorAll(".rox-sidebar-logo").forEach(function(oldLogo){
+      oldLogo.style.setProperty("display","none","important");
+    });
+  }
+
+  applyExactReference();
+
+  requestAnimationFrame(function(){
+    applyExactReference();
+    requestAnimationFrame(applyExactReference);
+  });
+
+  setTimeout(applyExactReference,400);
+  setTimeout(applyExactReference,1200);
+}
+/* ZUVYR EXACT REFERENCE LOCK SCRIPT END */
 setupZuvyrCompleteUi();
+installZuvyrExactReferenceLock();
 initAuth();
 <\/script>
 
