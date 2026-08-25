@@ -13928,9 +13928,21 @@ body.zuvyr-ui{
         }
       }
 
-      card.querySelectorAll('.fcard-ic').forEach(icon=>{
+      const zuvyrCardIcons={
+        chat:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5.5h16v11H9l-5 3v-14Z"/><path d="M8 10.8h.01M12 10.8h.01M16 10.8h.01"/></svg>',
+        images:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="4" width="17" height="16" rx="2"/><circle cx="8.3" cy="8.5" r="1.3"/><path d="m5.5 17 4.2-4.2 3 3 2.1-2.1 3.7 3.3"/></svg>',
+        videos:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="4.5" width="17" height="15" rx="2"/><path d="m10 9 5 3-5 3V9Z"/></svg>',
+        code:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m8 7-5 5 5 5M16 7l5 5-5 5M14 4l-4 16"/></svg>',
+        roxip:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8M12 17v4"/></svg>'
+      };
+
+      const icon=card.querySelector('.fcard-ic');
+      const feature=String(card.dataset.open||'');
+
+      if(icon && zuvyrCardIcons[feature]){
         icon.removeAttribute('style');
-      });
+        icon.innerHTML=zuvyrCardIcons[feature];
+      }
     });
   });
 
@@ -14460,37 +14472,107 @@ body.zuvyr-ui .fcard{
     grid-column:auto!important;
   }
 }
-/* ZUVYR FULL DESKTOP CARD SIZE FIX START */
-/* Preserve complete card content on short laptop screens instead of clipping it. */
+/* ZUVYR COMPLETE CARD LAYOUT FIX START */
 @media (min-width:761px){
+  body.zuvyr-ui .feature-grid{
+    grid-template-columns:repeat(3,minmax(0,1fr))!important;
+    grid-auto-rows:272px!important;
+    gap:14px 18px!important;
+    align-items:stretch!important;
+  }
+
   body.zuvyr-ui .fcard{
-    height:247px!important;
-    min-height:247px!important;
-    padding:18px 20px!important;
+    box-sizing:border-box!important;
+    display:flex!important;
+    flex-direction:column!important;
+    width:100%!important;
+    height:272px!important;
+    min-height:272px!important;
+    padding:16px 18px!important;
+    overflow:hidden!important;
   }
 
   body.zuvyr-ui .fcard-head{
-    min-height:36px!important;
+    display:flex!important;
+    align-items:center!important;
+    flex:0 0 38px!important;
+    min-height:38px!important;
+    gap:12px!important;
   }
 
   body.zuvyr-ui .fcard-ic{
+    display:grid!important;
+    place-items:center!important;
+    flex:0 0 38px!important;
     width:38px!important;
     height:38px!important;
+    padding:0!important;
+    overflow:hidden!important;
+  }
+
+  body.zuvyr-ui .fcard-ic svg{
+    display:block!important;
+    width:21px!important;
+    height:21px!important;
+    flex:none!important;
   }
 
   body.zuvyr-ui .fcard p{
-    margin-top:11px!important;
-    font-size:14px!important;
-    line-height:1.42!important;
+    flex:0 0 auto!important;
+    margin:8px 0 0!important;
+    min-height:38px!important;
+    font-size:13px!important;
+    line-height:1.4!important;
+  }
+
+  body.zuvyr-ui .fcard-thumb{
+    flex:0 0 62px!important;
+    width:100%!important;
+    height:62px!important;
+    min-height:62px!important;
+    margin:8px 0 0!important;
+    overflow:hidden!important;
+  }
+
+  body.zuvyr-ui .fcard-form{
+    display:flex!important;
+    flex-direction:column!important;
+    flex:0 0 auto!important;
+    width:100%!important;
+    margin-top:auto!important;
+    gap:6px!important;
   }
 
   body.zuvyr-ui .fcard-form input,
   body.zuvyr-ui .fcard-form select,
   body.zuvyr-ui .fcard-btn{
-    height:43px!important;
+    box-sizing:border-box!important;
+    flex:0 0 38px!important;
+    width:100%!important;
+    height:38px!important;
+    min-height:38px!important;
+    margin:0!important;
+  }
+
+  body.zuvyr-ui .fcard[data-open="chat"] .fcard-form,
+  body.zuvyr-ui .fcard[data-open="code"] .fcard-form{
+    margin-top:auto!important;
+  }
+
+  body.zuvyr-ui .fcard[data-open="chat"] .fcard-btn,
+  body.zuvyr-ui .fcard[data-open="code"] .fcard-btn{
+    display:flex!important;
+  }
+
+  body.zuvyr-ui .fcard.rox-ip{
+    grid-column:2!important;
+  }
+
+  body.zuvyr-ui .fcard[data-open="code"]{
+    grid-column:1!important;
   }
 }
-/* ZUVYR FULL DESKTOP CARD SIZE FIX END */
+/* ZUVYR COMPLETE CARD LAYOUT FIX END */
 /* ZUVYR EXACT REFERENCE LOCK END */
 `;
 
@@ -33196,9 +33278,21 @@ body.zuvyr-ui{
         }
       }
 
-      card.querySelectorAll('.fcard-ic').forEach(icon=>{
+      const zuvyrCardIcons={
+        chat:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5.5h16v11H9l-5 3v-14Z"/><path d="M8 10.8h.01M12 10.8h.01M16 10.8h.01"/></svg>',
+        images:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="4" width="17" height="16" rx="2"/><circle cx="8.3" cy="8.5" r="1.3"/><path d="m5.5 17 4.2-4.2 3 3 2.1-2.1 3.7 3.3"/></svg>',
+        videos:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="4.5" width="17" height="15" rx="2"/><path d="m10 9 5 3-5 3V9Z"/></svg>',
+        code:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m8 7-5 5 5 5M16 7l5 5-5 5M14 4l-4 16"/></svg>',
+        roxip:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8M12 17v4"/></svg>'
+      };
+
+      const icon=card.querySelector('.fcard-ic');
+      const feature=String(card.dataset.open||'');
+
+      if(icon && zuvyrCardIcons[feature]){
         icon.removeAttribute('style');
-      });
+        icon.innerHTML=zuvyrCardIcons[feature];
+      }
     });
   });
 
@@ -33797,37 +33891,107 @@ body.zuvyr-ui .fcard{
     grid-column:auto!important;
   }
 }
-/* ZUVYR FULL DESKTOP CARD SIZE FIX START */
-/* Preserve complete card content on short laptop screens instead of clipping it. */
+/* ZUVYR COMPLETE CARD LAYOUT FIX START */
 @media (min-width:761px){
+  body.zuvyr-ui .feature-grid{
+    grid-template-columns:repeat(3,minmax(0,1fr))!important;
+    grid-auto-rows:272px!important;
+    gap:14px 18px!important;
+    align-items:stretch!important;
+  }
+
   body.zuvyr-ui .fcard{
-    height:247px!important;
-    min-height:247px!important;
-    padding:18px 20px!important;
+    box-sizing:border-box!important;
+    display:flex!important;
+    flex-direction:column!important;
+    width:100%!important;
+    height:272px!important;
+    min-height:272px!important;
+    padding:16px 18px!important;
+    overflow:hidden!important;
   }
 
   body.zuvyr-ui .fcard-head{
-    min-height:36px!important;
+    display:flex!important;
+    align-items:center!important;
+    flex:0 0 38px!important;
+    min-height:38px!important;
+    gap:12px!important;
   }
 
   body.zuvyr-ui .fcard-ic{
+    display:grid!important;
+    place-items:center!important;
+    flex:0 0 38px!important;
     width:38px!important;
     height:38px!important;
+    padding:0!important;
+    overflow:hidden!important;
+  }
+
+  body.zuvyr-ui .fcard-ic svg{
+    display:block!important;
+    width:21px!important;
+    height:21px!important;
+    flex:none!important;
   }
 
   body.zuvyr-ui .fcard p{
-    margin-top:11px!important;
-    font-size:14px!important;
-    line-height:1.42!important;
+    flex:0 0 auto!important;
+    margin:8px 0 0!important;
+    min-height:38px!important;
+    font-size:13px!important;
+    line-height:1.4!important;
+  }
+
+  body.zuvyr-ui .fcard-thumb{
+    flex:0 0 62px!important;
+    width:100%!important;
+    height:62px!important;
+    min-height:62px!important;
+    margin:8px 0 0!important;
+    overflow:hidden!important;
+  }
+
+  body.zuvyr-ui .fcard-form{
+    display:flex!important;
+    flex-direction:column!important;
+    flex:0 0 auto!important;
+    width:100%!important;
+    margin-top:auto!important;
+    gap:6px!important;
   }
 
   body.zuvyr-ui .fcard-form input,
   body.zuvyr-ui .fcard-form select,
   body.zuvyr-ui .fcard-btn{
-    height:43px!important;
+    box-sizing:border-box!important;
+    flex:0 0 38px!important;
+    width:100%!important;
+    height:38px!important;
+    min-height:38px!important;
+    margin:0!important;
+  }
+
+  body.zuvyr-ui .fcard[data-open="chat"] .fcard-form,
+  body.zuvyr-ui .fcard[data-open="code"] .fcard-form{
+    margin-top:auto!important;
+  }
+
+  body.zuvyr-ui .fcard[data-open="chat"] .fcard-btn,
+  body.zuvyr-ui .fcard[data-open="code"] .fcard-btn{
+    display:flex!important;
+  }
+
+  body.zuvyr-ui .fcard.rox-ip{
+    grid-column:2!important;
+  }
+
+  body.zuvyr-ui .fcard[data-open="code"]{
+    grid-column:1!important;
   }
 }
-/* ZUVYR FULL DESKTOP CARD SIZE FIX END */
+/* ZUVYR COMPLETE CARD LAYOUT FIX END */
 /* ZUVYR EXACT REFERENCE LOCK END */
 `;
 
