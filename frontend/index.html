@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ZUVYR</title>
-<link rel="icon" type="image/png" href="./zuvyr-logo.svg?v=2">
+<link rel="icon" type="image/png" href="./zuvyr-logo.svg?v=3">
 </head>
 <body>
 <script type="text/plain" id="rox-src-mobile"><!DOCTYPE html>
@@ -13,7 +13,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>ZUVYR — Mobile</title>
-<link rel="icon" type="image/png" href="./zuvyr-logo.svg?v=2">
+<link rel="icon" type="image/png" href="./zuvyr-logo.svg?v=3">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.110.8/dist/umd/supabase.js"><\/script>
@@ -13733,7 +13733,7 @@ body.zuvyr-ui{
 
   const brandMarkup=
     '<img class="zuvyr-brand-logo" '+
-    'src="./zuvyr-logo.svg?v=2" '+
+    'src="./zuvyr-logo.svg?v=3" '+
     'alt="ZUVYR">'+
     '<span class="zuvyr-brand-name">ZUVYR</span>';
 
@@ -14465,7 +14465,7 @@ body.zuvyr-ui .fcard{
     }
 
     document.querySelectorAll("img.zuvyr-brand-logo").forEach(function(image){
-      var required="./zuvyr-logo.svg?v=2";
+      var required="./zuvyr-logo.svg?v=3";
 
       if(image.getAttribute("src")!==required){
         image.setAttribute("src",required);
@@ -14799,7 +14799,7 @@ initAuth();
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ZUVYR — Desktop</title>
-<link rel="icon" type="image/png" href="./zuvyr-logo.svg?v=2">
+<link rel="icon" type="image/png" href="./zuvyr-logo.svg?v=3">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.110.8/dist/umd/supabase.js"><\/script>
@@ -32964,7 +32964,7 @@ body.zuvyr-ui{
 
   const brandMarkup=
     '<img class="zuvyr-brand-logo" '+
-    'src="./zuvyr-logo.svg?v=2" '+
+    'src="./zuvyr-logo.svg?v=3" '+
     'alt="ZUVYR">'+
     '<span class="zuvyr-brand-name">ZUVYR</span>';
 
@@ -33594,6 +33594,25 @@ body.zuvyr-ui .fcard[data-open="code"]{
   grid-column:1!important;
 }
 
+
+
+/* ZUVYR FINAL REFERENCE FIT START */
+/* Chat and Code Studio show only the single action visible in the reference. */
+body.zuvyr-ui .fcard[data-open="chat"] .fcard-form input,
+body.zuvyr-ui .fcard[data-open="code"] .fcard-form select{
+  display:none!important;
+}
+
+body.zuvyr-ui .fcard[data-open="chat"] .fcard-form,
+body.zuvyr-ui .fcard[data-open="code"] .fcard-form{
+  margin-top:auto!important;
+}
+
+body.zuvyr-ui .fcard[data-open="chat"] .fcard-btn,
+body.zuvyr-ui .fcard[data-open="code"] .fcard-btn{
+  width:100%!important;
+}
+
 body.zuvyr-ui .recent-projects,
 body.zuvyr-ui .recent-activity,
 body.zuvyr-ui .project-grid,
@@ -33609,6 +33628,56 @@ body.zuvyr-ui .fcard{
   backdrop-filter:none!important;
   -webkit-backdrop-filter:none!important;
 }
+
+/* Fit the complete two-row reference inside common laptop viewports. */
+@media (min-width:761px) and (max-height:900px){
+  body.zuvyr-ui .sidebar{padding-top:12px!important;padding-bottom:12px!important;}
+  body.zuvyr-ui .rox-sidebar-brand{min-height:58px!important;margin-bottom:10px!important;}
+  body.zuvyr-ui .zuvyr-brand-logo{height:50px!important;}
+  body.zuvyr-ui .nav-item{min-height:43px!important;}
+  body.zuvyr-ui .sidebar-divider{margin:7px 0!important;}
+  body.zuvyr-ui .usage-card{bottom:12px!important;padding:14px 18px!important;}
+  body.zuvyr-ui .main{padding-bottom:14px!important;}
+  body.zuvyr-ui .topbar{min-height:68px!important;height:68px!important;}
+  body.zuvyr-ui .topbar .search{height:46px!important;}
+  body.zuvyr-ui .avatar-sm{width:44px!important;height:44px!important;}
+  body.zuvyr-ui .hero.rox-showcase-hero{
+    height:250px!important;min-height:250px!important;margin-bottom:12px!important;
+    padding-top:23px!important;padding-bottom:16px!important;
+  }
+  body.zuvyr-ui .rox-hero-title{margin-top:12px!important;}
+  body.zuvyr-ui .rox-showcase-tab{min-height:42px!important;}
+  body.zuvyr-ui .feature-grid{gap:12px 16px!important;}
+  body.zuvyr-ui .fcard{
+    height:220px!important;min-height:220px!important;
+    padding-top:14px!important;padding-bottom:14px!important;
+  }
+  body.zuvyr-ui .fcard-head{min-height:32px!important;}
+  body.zuvyr-ui .fcard-ic{width:34px!important;height:34px!important;}
+  body.zuvyr-ui .fcard p{margin-top:7px!important;}
+  body.zuvyr-ui .fcard-form input,
+  body.zuvyr-ui .fcard-form select,
+  body.zuvyr-ui .fcard-btn{height:38px!important;}
+}
+
+@media (min-width:761px) and (max-height:780px){
+  body.zuvyr-ui .rox-sidebar-brand{min-height:50px!important;margin-bottom:5px!important;}
+  body.zuvyr-ui .nav-item{min-height:38px!important;}
+  body.zuvyr-ui .usage-card{padding:10px 16px!important;}
+  body.zuvyr-ui .topbar{min-height:60px!important;height:60px!important;}
+  body.zuvyr-ui .hero.rox-showcase-hero{
+    height:220px!important;min-height:220px!important;padding-top:18px!important;
+  }
+  body.zuvyr-ui .rox-hero-title{
+    margin-top:8px!important;font-size:clamp(28px,3vw,38px)!important;
+  }
+  body.zuvyr-ui .rox-showcase-tab{min-height:36px!important;}
+  body.zuvyr-ui .fcard{
+    height:198px!important;min-height:198px!important;padding:12px 15px!important;
+  }
+  body.zuvyr-ui .fcard p{margin-top:5px!important;font-size:13px!important;}
+}
+/* ZUVYR FINAL REFERENCE FIT END */
 
 @media (max-width:1180px) and (min-width:761px){
   body.zuvyr-ui .sidebar{
@@ -33696,7 +33765,7 @@ body.zuvyr-ui .fcard{
     }
 
     document.querySelectorAll("img.zuvyr-brand-logo").forEach(function(image){
-      var required="./zuvyr-logo.svg?v=2";
+      var required="./zuvyr-logo.svg?v=3";
 
       if(image.getAttribute("src")!==required){
         image.setAttribute("src",required);
