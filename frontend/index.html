@@ -1536,6 +1536,41 @@ html[data-rox-density="compact"] .fcard{
 html[data-rox-density="compact"] .chat-input-row{
   gap:6px;
 }
+/* ZUVYR SETTINGS LINE ICONS START */
+.rox-settings-heading > .rox-settings-line-icon{
+  width:24px!important;
+  height:24px!important;
+  flex:0 0 24px!important;
+  display:grid!important;
+  place-items:center!important;
+  color:#f1f1f1!important;
+  background:transparent!important;
+  border:0!important;
+  border-radius:0!important;
+  box-shadow:none!important;
+  font-size:0!important;
+}
+
+.feature-topbar .fic.rox-settings-line-icon,
+.modal-topbar .fic.rox-settings-line-icon{
+  width:24px!important;
+  height:24px!important;
+  flex:0 0 24px!important;
+  color:#f1f1f1!important;
+  background:transparent!important;
+  border:0!important;
+  border-radius:0!important;
+  box-shadow:none!important;
+  font-size:0!important;
+}
+
+.rox-settings-line-icon svg{
+  display:block!important;
+  width:22px!important;
+  height:22px!important;
+  flex:none!important;
+}
+/* ZUVYR SETTINGS LINE ICONS END */
 /* ROX SETTINGS CORE STYLES END */
 /* ===== ZUVYR SETTINGS RESTYLE START ===== */
 .rox-settings-body{
@@ -3330,7 +3365,7 @@ html[dir="rtl"] .rox-gpt-menu-item{
   <div class="feature-screen" id="feature-settings">
     <div class="feature-topbar">
       <div class="back" data-close>←</div>
-      <div class="fic" style="background:var(--panel-2);">⚙️</div>
+      <div class="fic rox-settings-line-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.88l.06.06-2.83 2.83-.06-.06A1.7 1.7 0 0 0 15 19.4a1.7 1.7 0 0 0-1 .6 1.7 1.7 0 0 0-.4 1.1V21h-4v-.09A1.7 1.7 0 0 0 8.6 19.4a1.7 1.7 0 0 0-1.88.34l-.06.06-2.83-2.83.06-.06A1.7 1.7 0 0 0 4.6 15a1.7 1.7 0 0 0-.6-1 1.7 1.7 0 0 0-1.1-.4H3v-4h.09A1.7 1.7 0 0 0 4.6 8.6a1.7 1.7 0 0 0-.34-1.88l-.06-.06 2.83-2.83.06.06A1.7 1.7 0 0 0 9 4.6a1.7 1.7 0 0 0 1-.6 1.7 1.7 0 0 0 .4-1.1V3h4v.09A1.7 1.7 0 0 0 15.4 4.6a1.7 1.7 0 0 0 1.88-.34l.06-.06 2.83 2.83-.06.06A1.7 1.7 0 0 0 19.4 9c.14.37.36.7.66.96.3.26.68.4 1.08.4H21v4h-.09A1.7 1.7 0 0 0 19.4 15Z"/></svg></div>
       <div class="meta"><div class="t" data-i18n="settings.shell.title">Settings</div><div class="s" data-i18n="settings.shell.subtitle">Account & preferences</div></div>
     </div>
     <!-- ROX SETTINGS UI START -->
@@ -3392,7 +3427,7 @@ html[dir="rtl"] .rox-gpt-menu-item{
           data-settings-section="general"
         >
           <div class="rox-settings-heading">
-            <span>⚙️</span>
+            <span class="rox-settings-line-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.88l.06.06-2.83 2.83-.06-.06A1.7 1.7 0 0 0 15 19.4a1.7 1.7 0 0 0-1 .6 1.7 1.7 0 0 0-.4 1.1V21h-4v-.09A1.7 1.7 0 0 0 8.6 19.4a1.7 1.7 0 0 0-1.88.34l-.06.06-2.83-2.83.06-.06A1.7 1.7 0 0 0 4.6 15a1.7 1.7 0 0 0-.6-1 1.7 1.7 0 0 0-1.1-.4H3v-4h.09A1.7 1.7 0 0 0 4.6 8.6a1.7 1.7 0 0 0-.34-1.88l-.06-.06 2.83-2.83.06.06A1.7 1.7 0 0 0 9 4.6a1.7 1.7 0 0 0 1-.6 1.7 1.7 0 0 0 .4-1.1V3h4v.09A1.7 1.7 0 0 0 15.4 4.6a1.7 1.7 0 0 0 1.88-.34l.06-.06 2.83 2.83-.06.06A1.7 1.7 0 0 0 19.4 9c.14.37.36.7.66.96.3.26.68.4 1.08.4H21v4h-.09A1.7 1.7 0 0 0 19.4 15Z"/></svg></span>
             <div>
               <h3 data-i18n="settings.general.title">General</h3>
               <p data-i18n="settings.general.description">Customize the ZUVYR interface.</p>
@@ -3463,7 +3498,7 @@ html[dir="rtl"] .rox-gpt-menu-item{
           hidden
         >
           <div class="rox-settings-heading">
-            <span>✨</span>
+            <span class="rox-settings-line-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m12 3-1.5 4.5L6 9l4.5 1.5L12 15l1.5-4.5L18 9l-4.5-1.5L12 3Z"/><path d="m5 15-.75 2.25L2 18l2.25.75L5 21l.75-2.25L8 18l-2.25-.75L5 15Z"/></svg></span>
             <div>
               <h3 data-i18n="settings.ai.title">AI preferences</h3>
               <p data-i18n="settings.ai.description">Choose how Rox responds to you.</p>
@@ -3525,7 +3560,7 @@ html[dir="rtl"] .rox-gpt-menu-item{
           hidden
         >
           <div class="rox-settings-heading">
-            <span>🎙️</span>
+            <span class="rox-settings-line-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10a7 7 0 0 0 14 0M12 17v5M8 22h8"/></svg></span>
             <div>
               <h3 data-i18n="settings.voice.title">Voice</h3>
               <p data-i18n="settings.voice.description">Configure dictation and audio playback.</p>
@@ -3602,7 +3637,7 @@ html[dir="rtl"] .rox-gpt-menu-item{
           hidden
         >
           <div class="rox-settings-heading">
-            <span>💬</span>
+            <span class="rox-settings-line-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M21 15a4 4 0 0 1-4 4H8l-5 3 1.5-4A7 7 0 0 1 3 14V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4Z"/><path d="M8 10h.01M12 10h.01M16 10h.01"/></svg></span>
             <div>
               <h3 data-i18n="settings.data.title">Chat & data</h3>
               <p data-i18n="settings.data.description">Manage your conversations and how they are stored.</p>
@@ -3645,7 +3680,7 @@ html[dir="rtl"] .rox-gpt-menu-item{
           hidden
         >
           <div class="rox-settings-heading">
-            <span>👤</span>
+            <span class="rox-settings-line-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg></span>
             <div>
               <h3 data-i18n="settings.account.title">Account</h3>
               <p data-i18n="settings.account.description">Your information and subscription.</p>
@@ -3703,7 +3738,7 @@ html[dir="rtl"] .rox-gpt-menu-item{
           hidden
         >
           <div class="rox-settings-heading">
-            <span>🛡️</span>
+            <span class="rox-settings-line-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 3 20 6v6c0 5-3.4 8-8 10-4.6-2-8-5-8-10V6Z"/><path d="m9 12 2 2 4-4"/></svg></span>
             <div>
               <h3 data-i18n="settings.privacy.title">Privacy & security</h3>
               <p data-i18n="settings.privacy.description">Control the security of your account.</p>
@@ -16104,6 +16139,41 @@ html[data-rox-density="compact"] .fcard{
 html[data-rox-density="compact"] .chat-input-row{
   gap:6px;
 }
+/* ZUVYR SETTINGS LINE ICONS START */
+.rox-settings-heading > .rox-settings-line-icon{
+  width:24px!important;
+  height:24px!important;
+  flex:0 0 24px!important;
+  display:grid!important;
+  place-items:center!important;
+  color:#f1f1f1!important;
+  background:transparent!important;
+  border:0!important;
+  border-radius:0!important;
+  box-shadow:none!important;
+  font-size:0!important;
+}
+
+.feature-topbar .fic.rox-settings-line-icon,
+.modal-topbar .fic.rox-settings-line-icon{
+  width:24px!important;
+  height:24px!important;
+  flex:0 0 24px!important;
+  color:#f1f1f1!important;
+  background:transparent!important;
+  border:0!important;
+  border-radius:0!important;
+  box-shadow:none!important;
+  font-size:0!important;
+}
+
+.rox-settings-line-icon svg{
+  display:block!important;
+  width:22px!important;
+  height:22px!important;
+  flex:none!important;
+}
+/* ZUVYR SETTINGS LINE ICONS END */
 /* ROX SETTINGS CORE STYLES END */
 /* ===== ZUVYR SETTINGS RESTYLE START ===== */
 .rox-settings-body{
@@ -22703,7 +22773,7 @@ document.addEventListener("DOMContentLoaded", function () {
   <div class="feature-screen">
     <div class="modal-topbar">
       <div class="back" data-close>←</div>
-      <div class="fic" style="background:var(--panel-2);">⚙️</div>
+      <div class="fic rox-settings-line-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.88l.06.06-2.83 2.83-.06-.06A1.7 1.7 0 0 0 15 19.4a1.7 1.7 0 0 0-1 .6 1.7 1.7 0 0 0-.4 1.1V21h-4v-.09A1.7 1.7 0 0 0 8.6 19.4a1.7 1.7 0 0 0-1.88.34l-.06.06-2.83-2.83.06-.06A1.7 1.7 0 0 0 4.6 15a1.7 1.7 0 0 0-.6-1 1.7 1.7 0 0 0-1.1-.4H3v-4h.09A1.7 1.7 0 0 0 4.6 8.6a1.7 1.7 0 0 0-.34-1.88l-.06-.06 2.83-2.83.06.06A1.7 1.7 0 0 0 9 4.6a1.7 1.7 0 0 0 1-.6 1.7 1.7 0 0 0 .4-1.1V3h4v.09A1.7 1.7 0 0 0 15.4 4.6a1.7 1.7 0 0 0 1.88-.34l.06-.06 2.83 2.83-.06.06A1.7 1.7 0 0 0 19.4 9c.14.37.36.7.66.96.3.26.68.4 1.08.4H21v4h-.09A1.7 1.7 0 0 0 19.4 15Z"/></svg></div>
       <div class="meta"><div class="t" data-i18n="settings.shell.title">Settings</div><div class="s" data-i18n="settings.shell.subtitle">Account & preferences</div></div>
     </div>
     <!-- ROX SETTINGS UI START -->
@@ -22765,7 +22835,7 @@ document.addEventListener("DOMContentLoaded", function () {
           data-settings-section="general"
         >
           <div class="rox-settings-heading">
-            <span>⚙️</span>
+            <span class="rox-settings-line-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.88l.06.06-2.83 2.83-.06-.06A1.7 1.7 0 0 0 15 19.4a1.7 1.7 0 0 0-1 .6 1.7 1.7 0 0 0-.4 1.1V21h-4v-.09A1.7 1.7 0 0 0 8.6 19.4a1.7 1.7 0 0 0-1.88.34l-.06.06-2.83-2.83.06-.06A1.7 1.7 0 0 0 4.6 15a1.7 1.7 0 0 0-.6-1 1.7 1.7 0 0 0-1.1-.4H3v-4h.09A1.7 1.7 0 0 0 4.6 8.6a1.7 1.7 0 0 0-.34-1.88l-.06-.06 2.83-2.83.06.06A1.7 1.7 0 0 0 9 4.6a1.7 1.7 0 0 0 1-.6 1.7 1.7 0 0 0 .4-1.1V3h4v.09A1.7 1.7 0 0 0 15.4 4.6a1.7 1.7 0 0 0 1.88-.34l.06-.06 2.83 2.83-.06.06A1.7 1.7 0 0 0 19.4 9c.14.37.36.7.66.96.3.26.68.4 1.08.4H21v4h-.09A1.7 1.7 0 0 0 19.4 15Z"/></svg></span>
             <div>
               <h3 data-i18n="settings.general.title">General</h3>
               <p data-i18n="settings.general.description">Customize the ZUVYR interface.</p>
@@ -22836,7 +22906,7 @@ document.addEventListener("DOMContentLoaded", function () {
           hidden
         >
           <div class="rox-settings-heading">
-            <span>✨</span>
+            <span class="rox-settings-line-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m12 3-1.5 4.5L6 9l4.5 1.5L12 15l1.5-4.5L18 9l-4.5-1.5L12 3Z"/><path d="m5 15-.75 2.25L2 18l2.25.75L5 21l.75-2.25L8 18l-2.25-.75L5 15Z"/></svg></span>
             <div>
               <h3 data-i18n="settings.ai.title">AI preferences</h3>
               <p data-i18n="settings.ai.description">Choose how Rox responds to you.</p>
@@ -22898,7 +22968,7 @@ document.addEventListener("DOMContentLoaded", function () {
           hidden
         >
           <div class="rox-settings-heading">
-            <span>🎙️</span>
+            <span class="rox-settings-line-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10a7 7 0 0 0 14 0M12 17v5M8 22h8"/></svg></span>
             <div>
               <h3 data-i18n="settings.voice.title">Voice</h3>
               <p data-i18n="settings.voice.description">Configure dictation and audio playback.</p>
@@ -22975,7 +23045,7 @@ document.addEventListener("DOMContentLoaded", function () {
           hidden
         >
           <div class="rox-settings-heading">
-            <span>💬</span>
+            <span class="rox-settings-line-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M21 15a4 4 0 0 1-4 4H8l-5 3 1.5-4A7 7 0 0 1 3 14V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4Z"/><path d="M8 10h.01M12 10h.01M16 10h.01"/></svg></span>
             <div>
               <h3 data-i18n="settings.data.title">Chat & data</h3>
               <p data-i18n="settings.data.description">Manage your conversations and how they are stored.</p>
@@ -23018,7 +23088,7 @@ document.addEventListener("DOMContentLoaded", function () {
           hidden
         >
           <div class="rox-settings-heading">
-            <span>👤</span>
+            <span class="rox-settings-line-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg></span>
             <div>
               <h3 data-i18n="settings.account.title">Account</h3>
               <p data-i18n="settings.account.description">Your information and subscription.</p>
@@ -23076,7 +23146,7 @@ document.addEventListener("DOMContentLoaded", function () {
           hidden
         >
           <div class="rox-settings-heading">
-            <span>🛡️</span>
+            <span class="rox-settings-line-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 3 20 6v6c0 5-3.4 8-8 10-4.6-2-8-5-8-10V6Z"/><path d="m9 12 2 2 4-4"/></svg></span>
             <div>
               <h3 data-i18n="settings.privacy.title">Privacy & security</h3>
               <p data-i18n="settings.privacy.description">Control the security of your account.</p>
