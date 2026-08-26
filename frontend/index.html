@@ -15139,9 +15139,10 @@ initAuth();
     -webkit-font-smoothing:antialiased;min-height:100vh;
   }
   h1,h2,h3,.brand,.fcard h3,.pcard .t,.feature-topbar .t,.modal-topbar .t{font-family:'Space Grotesk','Tajawal',sans-serif;letter-spacing:-.01em;}
-  ::-webkit-scrollbar{width:10px;height:10px;}
+  html{scrollbar-width:thin;scrollbar-color:#fff transparent;}
+  ::-webkit-scrollbar{width:7px;height:7px;}
   ::-webkit-scrollbar-track{background:transparent;}
-  ::-webkit-scrollbar-thumb{background:var(--panel-3);border-radius:8px;border:2px solid var(--bg);}
+  ::-webkit-scrollbar-thumb{background:#fff;border-radius:99px;border:0;}
 
   @media (prefers-reduced-motion: reduce){
     *,*::before,*::after{animation-duration:.001ms !important;animation-iteration-count:1 !important;transition-duration:.001ms !important;}
