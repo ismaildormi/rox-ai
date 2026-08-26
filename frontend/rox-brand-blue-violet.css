@@ -3157,47 +3157,6 @@ html[data-rox-theme="light"] body{
 }
 
 /* ROX TOPUP DESKTOP WIDE V5.4 END */
-/* =========================================================
-   ROX REAL LOGO V6 START
-   ========================================================= */
-
-@media (min-width:900px){
-
-  .sidebar .rox-sidebar-logo,
-  .sidebar .rox-sidebar-brand > :first-child,
-  .sidebar .brand > .logo{
-    background:
-      url("./rox-logo-transparent-v7.png?v=7")
-      center / cover
-      no-repeat !important;
-
-    color:transparent !important;
-    font-size:0 !important;
-    text-shadow:none !important;
-
-    border:0 !important;
-    box-shadow:none !important;
-  }
-
-  .sidebar .rox-sidebar-logo *,
-  .sidebar .rox-sidebar-brand > :first-child *,
-  .sidebar .brand > .logo *{
-    opacity:0 !important;
-  }
-
-  .sidebar .rox-sidebar-logo::before,
-  .sidebar .rox-sidebar-logo::after,
-  .sidebar .rox-sidebar-brand > :first-child::before,
-  .sidebar .rox-sidebar-brand > :first-child::after,
-  .sidebar .brand > .logo::before,
-  .sidebar .brand > .logo::after{
-    display:none !important;
-    content:none !important;
-  }
-
-}
-
-/* ROX REAL LOGO V6 END */
 /* ROX GLOBAL BACK CHEVRON V1 START */
 
 /* Unified professional back control — visual only, functionality untouched */
