@@ -4075,23 +4075,8 @@ html[data-rox-theme="light"] body{
   overflow:hidden !important;
 }
 
-.fcard[data-open="images"] .fcard-ic::before{
-  content:"\25A3";
-  font-size:18px !important;
-  color:#A78BFA !important;
-}
 
-.fcard[data-open="videos"] .fcard-ic::before{
-  content:"\25B6";
-  font-size:16px !important;
-  color:#F9A8D4 !important;
-}
 
-.fcard[data-open="roxip"] .fcard-ic::before{
-  content:"\25A1";
-  font-size:18px !important;
-  color:#4ADE80 !important;
-}
 
 /* Realistic desktop mouse pointer for Rox IP */
 .rox-cursor{
