@@ -1531,7 +1531,7 @@ html[data-rox-theme="light"] body{
     width:100% !important;
     height:100% !important;
     display:none !important;
-    object-fit:contain !important;
+    object-fit:cover !important;
     object-position:center !important;
     background:#05070c;
   }
