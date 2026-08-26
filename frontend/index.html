@@ -5149,62 +5149,6 @@ button:hover{filter:brightness(1.2)}
 <button class="equal" onclick="try{document.getElementById('d').value=Function('return '+document.getElementById('d').value)()}catch(e){document.getElementById('d').value='Error'}">=</button>
 </div>
 </div>
-<script>
-(function(){
-  var iconMap = {
-    settingsResetAiPreferences: '<path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/>',
-    settingsExportChats: '<path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/>',
-    settingsDeleteChats: '<path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>',
-    settingsConnectedDevices: '<rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/>',
-    settingsChangePassword: '<circle cx="8" cy="15" r="4"/><path d="m10.5 12.5 8-8M17 8l2 2M14 5l2 2"/>',
-    settingsLogoutBtn: '<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="m16 17 5-5-5-5"/><path d="M21 12H9"/>',
-    settingsDeleteAccount: '<path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>',
-    settingsLogoutAllDevices: '<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="m16 17 5-5-5-5"/><path d="M21 12H9"/>',
-    settingsUpgradeBtn: '<polygon points="12 2 15 9 22 9.5 17 14.5 18.5 22 12 18 5.5 22 7 14.5 2 9.5 9 9"/>'
-  };
-
-  function cleanAndIconize(el, svgInner){
-    if(!el || el.dataset.iconized === "1") return;
-    var text = el.textContent.replace(/^[^\p{L}]+/u, '').trim();
-    el.innerHTML = '';
-    var svg = document.createElementNS('http://www.w3.org/2000/svg','svg');
-    svg.setAttribute('viewBox','0 0 24 24');
-    svg.setAttribute('width','16');
-    svg.setAttribute('height','16');
-    svg.setAttribute('fill','none');
-    svg.setAttribute('stroke','currentColor');
-    svg.setAttribute('stroke-width','2');
-    svg.setAttribute('stroke-linecap','round');
-    svg.setAttribute('stroke-linejoin','round');
-    svg.innerHTML = svgInner;
-    svg.style.marginRight = '8px';
-    svg.style.verticalAlign = 'middle';
-    svg.style.flexShrink = '0';
-    el.appendChild(svg);
-    el.appendChild(document.createTextNode(text));
-    el.dataset.iconized = "1";
-  }
-
-  function applyIcons(){
-    Object.keys(iconMap).forEach(function(id){
-      cleanAndIconize(document.getElementById(id), iconMap[id]);
-    });
-  }
-
-  applyIcons();
-  var settingsTrigger = document.querySelector('[data-open="settings"]');
-  if(settingsTrigger){
-    settingsTrigger.addEventListener('click', function(){ setTimeout(applyIcons, 80); });
-  }
-  var langSelect = document.getElementById('settingsUiLanguage');
-  if(langSelect){
-    langSelect.addEventListener('change', function(){
-      document.querySelectorAll('[data-iconized]').forEach(function(el){ delete el.dataset.iconized; });
-      setTimeout(applyIcons, 200);
-    });
-  }
-})();
-</script>
 </body>
 </html>`;
 
@@ -11766,63 +11710,7 @@ function createCodeArtifact(rawText) {
       );
 
     if (!htmlFile) {
-      return `<!doctype html><html><body style="margin:0;background:#0b1020;color:#e5e7eb"><pre style="padding:24px;white-space:pre-wrap;font:14px/1.6 monospace">${escapeHtml(files[selectedIndex].code)}</pre><script>
-(function(){
-  var iconMap = {
-    settingsResetAiPreferences: '<path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/>',
-    settingsExportChats: '<path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/>',
-    settingsDeleteChats: '<path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>',
-    settingsConnectedDevices: '<rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/>',
-    settingsChangePassword: '<circle cx="8" cy="15" r="4"/><path d="m10.5 12.5 8-8M17 8l2 2M14 5l2 2"/>',
-    settingsLogoutBtn: '<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="m16 17 5-5-5-5"/><path d="M21 12H9"/>',
-    settingsDeleteAccount: '<path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>',
-    settingsLogoutAllDevices: '<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="m16 17 5-5-5-5"/><path d="M21 12H9"/>',
-    settingsUpgradeBtn: '<polygon points="12 2 15 9 22 9.5 17 14.5 18.5 22 12 18 5.5 22 7 14.5 2 9.5 9 9"/>'
-  };
-
-  function cleanAndIconize(el, svgInner){
-    if(!el || el.dataset.iconized === "1") return;
-    var text = el.textContent.replace(/^[^\p{L}]+/u, '').trim();
-    el.innerHTML = '';
-    var svg = document.createElementNS('http://www.w3.org/2000/svg','svg');
-    svg.setAttribute('viewBox','0 0 24 24');
-    svg.setAttribute('width','16');
-    svg.setAttribute('height','16');
-    svg.setAttribute('fill','none');
-    svg.setAttribute('stroke','currentColor');
-    svg.setAttribute('stroke-width','2');
-    svg.setAttribute('stroke-linecap','round');
-    svg.setAttribute('stroke-linejoin','round');
-    svg.innerHTML = svgInner;
-    svg.style.marginRight = '8px';
-    svg.style.verticalAlign = 'middle';
-    svg.style.flexShrink = '0';
-    el.appendChild(svg);
-    el.appendChild(document.createTextNode(text));
-    el.dataset.iconized = "1";
-  }
-
-  function applyIcons(){
-    Object.keys(iconMap).forEach(function(id){
-      cleanAndIconize(document.getElementById(id), iconMap[id]);
-    });
-  }
-
-  applyIcons();
-  var settingsTrigger = document.querySelector('[data-open="settings"]');
-  if(settingsTrigger){
-    settingsTrigger.addEventListener('click', function(){ setTimeout(applyIcons, 80); });
-  }
-  var langSelect = document.getElementById('settingsUiLanguage');
-  if(langSelect){
-    langSelect.addEventListener('change', function(){
-      document.querySelectorAll('[data-iconized]').forEach(function(el){ delete el.dataset.iconized; });
-      setTimeout(applyIcons, 200);
-    });
-  }
-})();
-</script>
-</body></html>`;
+      return `<!doctype html><html><body style="margin:0;background:#0b1020;color:#e5e7eb"><pre style="padding:24px;white-space:pre-wrap;font:14px/1.6 monospace">${escapeHtml(files[selectedIndex].code)}</pre></body></html>`;
     }
 
     let documentText = htmlFile.code;
@@ -11856,63 +11744,7 @@ function createCodeArtifact(rawText) {
         '</scr' + 'ipt>';
 
       documentText = /<\/body>/i.test(documentText)
-        ? documentText.replace(/<\/body>/i,`${scriptTag}<script>
-(function(){
-  var iconMap = {
-    settingsResetAiPreferences: '<path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/>',
-    settingsExportChats: '<path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/>',
-    settingsDeleteChats: '<path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>',
-    settingsConnectedDevices: '<rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/>',
-    settingsChangePassword: '<circle cx="8" cy="15" r="4"/><path d="m10.5 12.5 8-8M17 8l2 2M14 5l2 2"/>',
-    settingsLogoutBtn: '<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="m16 17 5-5-5-5"/><path d="M21 12H9"/>',
-    settingsDeleteAccount: '<path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>',
-    settingsLogoutAllDevices: '<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="m16 17 5-5-5-5"/><path d="M21 12H9"/>',
-    settingsUpgradeBtn: '<polygon points="12 2 15 9 22 9.5 17 14.5 18.5 22 12 18 5.5 22 7 14.5 2 9.5 9 9"/>'
-  };
-
-  function cleanAndIconize(el, svgInner){
-    if(!el || el.dataset.iconized === "1") return;
-    var text = el.textContent.replace(/^[^\p{L}]+/u, '').trim();
-    el.innerHTML = '';
-    var svg = document.createElementNS('http://www.w3.org/2000/svg','svg');
-    svg.setAttribute('viewBox','0 0 24 24');
-    svg.setAttribute('width','16');
-    svg.setAttribute('height','16');
-    svg.setAttribute('fill','none');
-    svg.setAttribute('stroke','currentColor');
-    svg.setAttribute('stroke-width','2');
-    svg.setAttribute('stroke-linecap','round');
-    svg.setAttribute('stroke-linejoin','round');
-    svg.innerHTML = svgInner;
-    svg.style.marginRight = '8px';
-    svg.style.verticalAlign = 'middle';
-    svg.style.flexShrink = '0';
-    el.appendChild(svg);
-    el.appendChild(document.createTextNode(text));
-    el.dataset.iconized = "1";
-  }
-
-  function applyIcons(){
-    Object.keys(iconMap).forEach(function(id){
-      cleanAndIconize(document.getElementById(id), iconMap[id]);
-    });
-  }
-
-  applyIcons();
-  var settingsTrigger = document.querySelector('[data-open="settings"]');
-  if(settingsTrigger){
-    settingsTrigger.addEventListener('click', function(){ setTimeout(applyIcons, 80); });
-  }
-  var langSelect = document.getElementById('settingsUiLanguage');
-  if(langSelect){
-    langSelect.addEventListener('change', function(){
-      document.querySelectorAll('[data-iconized]').forEach(function(el){ delete el.dataset.iconized; });
-      setTimeout(applyIcons, 200);
-    });
-  }
-})();
-</script>
-</body>`)
+        ? documentText.replace(/<\/body>/i,`${scriptTag}</body>`)
         : documentText + scriptTag;
     }
 
@@ -15201,62 +15033,6 @@ initAuth();
 })();
 /* ROX GPT MESSAGE ACTIONS PHASE 2 JS END */
 <\/script>
-<script>
-(function(){
-  var iconMap = {
-    settingsResetAiPreferences: '<path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/>',
-    settingsExportChats: '<path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/>',
-    settingsDeleteChats: '<path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>',
-    settingsConnectedDevices: '<rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/>',
-    settingsChangePassword: '<circle cx="8" cy="15" r="4"/><path d="m10.5 12.5 8-8M17 8l2 2M14 5l2 2"/>',
-    settingsLogoutBtn: '<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="m16 17 5-5-5-5"/><path d="M21 12H9"/>',
-    settingsDeleteAccount: '<path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>',
-    settingsLogoutAllDevices: '<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="m16 17 5-5-5-5"/><path d="M21 12H9"/>',
-    settingsUpgradeBtn: '<polygon points="12 2 15 9 22 9.5 17 14.5 18.5 22 12 18 5.5 22 7 14.5 2 9.5 9 9"/>'
-  };
-
-  function cleanAndIconize(el, svgInner){
-    if(!el || el.dataset.iconized === "1") return;
-    var text = el.textContent.replace(/^[^\p{L}]+/u, '').trim();
-    el.innerHTML = '';
-    var svg = document.createElementNS('http://www.w3.org/2000/svg','svg');
-    svg.setAttribute('viewBox','0 0 24 24');
-    svg.setAttribute('width','16');
-    svg.setAttribute('height','16');
-    svg.setAttribute('fill','none');
-    svg.setAttribute('stroke','currentColor');
-    svg.setAttribute('stroke-width','2');
-    svg.setAttribute('stroke-linecap','round');
-    svg.setAttribute('stroke-linejoin','round');
-    svg.innerHTML = svgInner;
-    svg.style.marginRight = '8px';
-    svg.style.verticalAlign = 'middle';
-    svg.style.flexShrink = '0';
-    el.appendChild(svg);
-    el.appendChild(document.createTextNode(text));
-    el.dataset.iconized = "1";
-  }
-
-  function applyIcons(){
-    Object.keys(iconMap).forEach(function(id){
-      cleanAndIconize(document.getElementById(id), iconMap[id]);
-    });
-  }
-
-  applyIcons();
-  var settingsTrigger = document.querySelector('[data-open="settings"]');
-  if(settingsTrigger){
-    settingsTrigger.addEventListener('click', function(){ setTimeout(applyIcons, 80); });
-  }
-  var langSelect = document.getElementById('settingsUiLanguage');
-  if(langSelect){
-    langSelect.addEventListener('change', function(){
-      document.querySelectorAll('[data-iconized]').forEach(function(el){ delete el.dataset.iconized; });
-      setTimeout(applyIcons, 200);
-    });
-  }
-})();
-</script>
 </body>
 </html>
 
@@ -24769,62 +24545,6 @@ button:hover{filter:brightness(1.2)}
 <button class="equal" onclick="try{document.getElementById('d').value=Function('return '+document.getElementById('d').value)()}catch(e){document.getElementById('d').value='Error'}">=</button>
 </div>
 </div>
-<script>
-(function(){
-  var iconMap = {
-    settingsResetAiPreferences: '<path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/>',
-    settingsExportChats: '<path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/>',
-    settingsDeleteChats: '<path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>',
-    settingsConnectedDevices: '<rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/>',
-    settingsChangePassword: '<circle cx="8" cy="15" r="4"/><path d="m10.5 12.5 8-8M17 8l2 2M14 5l2 2"/>',
-    settingsLogoutBtn: '<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="m16 17 5-5-5-5"/><path d="M21 12H9"/>',
-    settingsDeleteAccount: '<path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>',
-    settingsLogoutAllDevices: '<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="m16 17 5-5-5-5"/><path d="M21 12H9"/>',
-    settingsUpgradeBtn: '<polygon points="12 2 15 9 22 9.5 17 14.5 18.5 22 12 18 5.5 22 7 14.5 2 9.5 9 9"/>'
-  };
-
-  function cleanAndIconize(el, svgInner){
-    if(!el || el.dataset.iconized === "1") return;
-    var text = el.textContent.replace(/^[^\p{L}]+/u, '').trim();
-    el.innerHTML = '';
-    var svg = document.createElementNS('http://www.w3.org/2000/svg','svg');
-    svg.setAttribute('viewBox','0 0 24 24');
-    svg.setAttribute('width','16');
-    svg.setAttribute('height','16');
-    svg.setAttribute('fill','none');
-    svg.setAttribute('stroke','currentColor');
-    svg.setAttribute('stroke-width','2');
-    svg.setAttribute('stroke-linecap','round');
-    svg.setAttribute('stroke-linejoin','round');
-    svg.innerHTML = svgInner;
-    svg.style.marginRight = '8px';
-    svg.style.verticalAlign = 'middle';
-    svg.style.flexShrink = '0';
-    el.appendChild(svg);
-    el.appendChild(document.createTextNode(text));
-    el.dataset.iconized = "1";
-  }
-
-  function applyIcons(){
-    Object.keys(iconMap).forEach(function(id){
-      cleanAndIconize(document.getElementById(id), iconMap[id]);
-    });
-  }
-
-  applyIcons();
-  var settingsTrigger = document.querySelector('[data-open="settings"]');
-  if(settingsTrigger){
-    settingsTrigger.addEventListener('click', function(){ setTimeout(applyIcons, 80); });
-  }
-  var langSelect = document.getElementById('settingsUiLanguage');
-  if(langSelect){
-    langSelect.addEventListener('change', function(){
-      document.querySelectorAll('[data-iconized]').forEach(function(el){ delete el.dataset.iconized; });
-      setTimeout(applyIcons, 200);
-    });
-  }
-})();
-</script>
 </body>
 </html>`;
 
@@ -31439,63 +31159,7 @@ function createCodeArtifact(rawText) {
       );
 
     if (!htmlFile) {
-      return `<!doctype html><html><body style="margin:0;background:#0b1020;color:#e5e7eb"><pre style="padding:24px;white-space:pre-wrap;font:14px/1.6 monospace">${escapeHtml(files[selectedIndex].code)}</pre><script>
-(function(){
-  var iconMap = {
-    settingsResetAiPreferences: '<path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/>',
-    settingsExportChats: '<path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/>',
-    settingsDeleteChats: '<path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>',
-    settingsConnectedDevices: '<rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/>',
-    settingsChangePassword: '<circle cx="8" cy="15" r="4"/><path d="m10.5 12.5 8-8M17 8l2 2M14 5l2 2"/>',
-    settingsLogoutBtn: '<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="m16 17 5-5-5-5"/><path d="M21 12H9"/>',
-    settingsDeleteAccount: '<path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>',
-    settingsLogoutAllDevices: '<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="m16 17 5-5-5-5"/><path d="M21 12H9"/>',
-    settingsUpgradeBtn: '<polygon points="12 2 15 9 22 9.5 17 14.5 18.5 22 12 18 5.5 22 7 14.5 2 9.5 9 9"/>'
-  };
-
-  function cleanAndIconize(el, svgInner){
-    if(!el || el.dataset.iconized === "1") return;
-    var text = el.textContent.replace(/^[^\p{L}]+/u, '').trim();
-    el.innerHTML = '';
-    var svg = document.createElementNS('http://www.w3.org/2000/svg','svg');
-    svg.setAttribute('viewBox','0 0 24 24');
-    svg.setAttribute('width','16');
-    svg.setAttribute('height','16');
-    svg.setAttribute('fill','none');
-    svg.setAttribute('stroke','currentColor');
-    svg.setAttribute('stroke-width','2');
-    svg.setAttribute('stroke-linecap','round');
-    svg.setAttribute('stroke-linejoin','round');
-    svg.innerHTML = svgInner;
-    svg.style.marginRight = '8px';
-    svg.style.verticalAlign = 'middle';
-    svg.style.flexShrink = '0';
-    el.appendChild(svg);
-    el.appendChild(document.createTextNode(text));
-    el.dataset.iconized = "1";
-  }
-
-  function applyIcons(){
-    Object.keys(iconMap).forEach(function(id){
-      cleanAndIconize(document.getElementById(id), iconMap[id]);
-    });
-  }
-
-  applyIcons();
-  var settingsTrigger = document.querySelector('[data-open="settings"]');
-  if(settingsTrigger){
-    settingsTrigger.addEventListener('click', function(){ setTimeout(applyIcons, 80); });
-  }
-  var langSelect = document.getElementById('settingsUiLanguage');
-  if(langSelect){
-    langSelect.addEventListener('change', function(){
-      document.querySelectorAll('[data-iconized]').forEach(function(el){ delete el.dataset.iconized; });
-      setTimeout(applyIcons, 200);
-    });
-  }
-})();
-</script>
-</body></html>`;
+      return `<!doctype html><html><body style="margin:0;background:#0b1020;color:#e5e7eb"><pre style="padding:24px;white-space:pre-wrap;font:14px/1.6 monospace">${escapeHtml(files[selectedIndex].code)}</pre></body></html>`;
     }
 
     let documentText = htmlFile.code;
@@ -31529,63 +31193,7 @@ function createCodeArtifact(rawText) {
         '</scr' + 'ipt>';
 
       documentText = /<\/body>/i.test(documentText)
-        ? documentText.replace(/<\/body>/i,`${scriptTag}<script>
-(function(){
-  var iconMap = {
-    settingsResetAiPreferences: '<path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/>',
-    settingsExportChats: '<path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/>',
-    settingsDeleteChats: '<path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>',
-    settingsConnectedDevices: '<rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/>',
-    settingsChangePassword: '<circle cx="8" cy="15" r="4"/><path d="m10.5 12.5 8-8M17 8l2 2M14 5l2 2"/>',
-    settingsLogoutBtn: '<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="m16 17 5-5-5-5"/><path d="M21 12H9"/>',
-    settingsDeleteAccount: '<path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>',
-    settingsLogoutAllDevices: '<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="m16 17 5-5-5-5"/><path d="M21 12H9"/>',
-    settingsUpgradeBtn: '<polygon points="12 2 15 9 22 9.5 17 14.5 18.5 22 12 18 5.5 22 7 14.5 2 9.5 9 9"/>'
-  };
-
-  function cleanAndIconize(el, svgInner){
-    if(!el || el.dataset.iconized === "1") return;
-    var text = el.textContent.replace(/^[^\p{L}]+/u, '').trim();
-    el.innerHTML = '';
-    var svg = document.createElementNS('http://www.w3.org/2000/svg','svg');
-    svg.setAttribute('viewBox','0 0 24 24');
-    svg.setAttribute('width','16');
-    svg.setAttribute('height','16');
-    svg.setAttribute('fill','none');
-    svg.setAttribute('stroke','currentColor');
-    svg.setAttribute('stroke-width','2');
-    svg.setAttribute('stroke-linecap','round');
-    svg.setAttribute('stroke-linejoin','round');
-    svg.innerHTML = svgInner;
-    svg.style.marginRight = '8px';
-    svg.style.verticalAlign = 'middle';
-    svg.style.flexShrink = '0';
-    el.appendChild(svg);
-    el.appendChild(document.createTextNode(text));
-    el.dataset.iconized = "1";
-  }
-
-  function applyIcons(){
-    Object.keys(iconMap).forEach(function(id){
-      cleanAndIconize(document.getElementById(id), iconMap[id]);
-    });
-  }
-
-  applyIcons();
-  var settingsTrigger = document.querySelector('[data-open="settings"]');
-  if(settingsTrigger){
-    settingsTrigger.addEventListener('click', function(){ setTimeout(applyIcons, 80); });
-  }
-  var langSelect = document.getElementById('settingsUiLanguage');
-  if(langSelect){
-    langSelect.addEventListener('change', function(){
-      document.querySelectorAll('[data-iconized]').forEach(function(el){ delete el.dataset.iconized; });
-      setTimeout(applyIcons, 200);
-    });
-  }
-})();
-</script>
-</body>`)
+        ? documentText.replace(/<\/body>/i,`${scriptTag}</body>`)
         : documentText + scriptTag;
     }
 
@@ -35506,62 +35114,6 @@ document.addEventListener("DOMContentLoaded",function(){
 })();
 /* ROX GPT MESSAGE ACTIONS PHASE 2 JS END */
 <\/script>
-<script>
-(function(){
-  var iconMap = {
-    settingsResetAiPreferences: '<path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/>',
-    settingsExportChats: '<path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/>',
-    settingsDeleteChats: '<path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>',
-    settingsConnectedDevices: '<rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/>',
-    settingsChangePassword: '<circle cx="8" cy="15" r="4"/><path d="m10.5 12.5 8-8M17 8l2 2M14 5l2 2"/>',
-    settingsLogoutBtn: '<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="m16 17 5-5-5-5"/><path d="M21 12H9"/>',
-    settingsDeleteAccount: '<path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>',
-    settingsLogoutAllDevices: '<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="m16 17 5-5-5-5"/><path d="M21 12H9"/>',
-    settingsUpgradeBtn: '<polygon points="12 2 15 9 22 9.5 17 14.5 18.5 22 12 18 5.5 22 7 14.5 2 9.5 9 9"/>'
-  };
-
-  function cleanAndIconize(el, svgInner){
-    if(!el || el.dataset.iconized === "1") return;
-    var text = el.textContent.replace(/^[^\p{L}]+/u, '').trim();
-    el.innerHTML = '';
-    var svg = document.createElementNS('http://www.w3.org/2000/svg','svg');
-    svg.setAttribute('viewBox','0 0 24 24');
-    svg.setAttribute('width','16');
-    svg.setAttribute('height','16');
-    svg.setAttribute('fill','none');
-    svg.setAttribute('stroke','currentColor');
-    svg.setAttribute('stroke-width','2');
-    svg.setAttribute('stroke-linecap','round');
-    svg.setAttribute('stroke-linejoin','round');
-    svg.innerHTML = svgInner;
-    svg.style.marginRight = '8px';
-    svg.style.verticalAlign = 'middle';
-    svg.style.flexShrink = '0';
-    el.appendChild(svg);
-    el.appendChild(document.createTextNode(text));
-    el.dataset.iconized = "1";
-  }
-
-  function applyIcons(){
-    Object.keys(iconMap).forEach(function(id){
-      cleanAndIconize(document.getElementById(id), iconMap[id]);
-    });
-  }
-
-  applyIcons();
-  var settingsTrigger = document.querySelector('[data-open="settings"]');
-  if(settingsTrigger){
-    settingsTrigger.addEventListener('click', function(){ setTimeout(applyIcons, 80); });
-  }
-  var langSelect = document.getElementById('settingsUiLanguage');
-  if(langSelect){
-    langSelect.addEventListener('change', function(){
-      document.querySelectorAll('[data-iconized]').forEach(function(el){ delete el.dataset.iconized; });
-      setTimeout(applyIcons, 200);
-    });
-  }
-})();
-</script>
 </body>
 </html>
 
@@ -35597,63 +35149,7 @@ document.addEventListener("DOMContentLoaded",function(){
 
   // ── resize / rotation support ───────────────────────────────────
   // Appended into the chosen document right before its closing
-  // <script>
-(function(){
-  var iconMap = {
-    settingsResetAiPreferences: '<path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/>',
-    settingsExportChats: '<path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/>',
-    settingsDeleteChats: '<path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>',
-    settingsConnectedDevices: '<rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/>',
-    settingsChangePassword: '<circle cx="8" cy="15" r="4"/><path d="m10.5 12.5 8-8M17 8l2 2M14 5l2 2"/>',
-    settingsLogoutBtn: '<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="m16 17 5-5-5-5"/><path d="M21 12H9"/>',
-    settingsDeleteAccount: '<path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>',
-    settingsLogoutAllDevices: '<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="m16 17 5-5-5-5"/><path d="M21 12H9"/>',
-    settingsUpgradeBtn: '<polygon points="12 2 15 9 22 9.5 17 14.5 18.5 22 12 18 5.5 22 7 14.5 2 9.5 9 9"/>'
-  };
-
-  function cleanAndIconize(el, svgInner){
-    if(!el || el.dataset.iconized === "1") return;
-    var text = el.textContent.replace(/^[^\p{L}]+/u, '').trim();
-    el.innerHTML = '';
-    var svg = document.createElementNS('http://www.w3.org/2000/svg','svg');
-    svg.setAttribute('viewBox','0 0 24 24');
-    svg.setAttribute('width','16');
-    svg.setAttribute('height','16');
-    svg.setAttribute('fill','none');
-    svg.setAttribute('stroke','currentColor');
-    svg.setAttribute('stroke-width','2');
-    svg.setAttribute('stroke-linecap','round');
-    svg.setAttribute('stroke-linejoin','round');
-    svg.innerHTML = svgInner;
-    svg.style.marginRight = '8px';
-    svg.style.verticalAlign = 'middle';
-    svg.style.flexShrink = '0';
-    el.appendChild(svg);
-    el.appendChild(document.createTextNode(text));
-    el.dataset.iconized = "1";
-  }
-
-  function applyIcons(){
-    Object.keys(iconMap).forEach(function(id){
-      cleanAndIconize(document.getElementById(id), iconMap[id]);
-    });
-  }
-
-  applyIcons();
-  var settingsTrigger = document.querySelector('[data-open="settings"]');
-  if(settingsTrigger){
-    settingsTrigger.addEventListener('click', function(){ setTimeout(applyIcons, 80); });
-  }
-  var langSelect = document.getElementById('settingsUiLanguage');
-  if(langSelect){
-    langSelect.addEventListener('change', function(){
-      document.querySelectorAll('[data-iconized]').forEach(function(el){ delete el.dataset.iconized; });
-      setTimeout(applyIcons, 200);
-    });
-  }
-})();
-</script>
-</body> tag. If the viewport crosses the 768px breakpoint after
+  // </body> tag. If the viewport crosses the 768px breakpoint after
   // load (window resize or device rotation), reload this same URL
   // once so index.html re-detects and serves the correct interface.
   // The reload only fires when the category actually flips (mobile
@@ -35691,64 +35187,7 @@ document.addEventListener("DOMContentLoaded",function(){
 })();
 </script>
 
-<script>
-(function(){
-  var iconMap = {
-    settingsResetAiPreferences: '<path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/>',
-    settingsExportChats: '<path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/>',
-    settingsDeleteChats: '<path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>',
-    settingsConnectedDevices: '<rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/>',
-    settingsChangePassword: '<circle cx="8" cy="15" r="4"/><path d="m10.5 12.5 8-8M17 8l2 2M14 5l2 2"/>',
-    settingsLogoutBtn: '<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="m16 17 5-5-5-5"/><path d="M21 12H9"/>',
-    settingsDeleteAccount: '<path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>',
-    settingsLogoutAllDevices: '<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="m16 17 5-5-5-5"/><path d="M21 12H9"/>',
-    settingsUpgradeBtn: '<polygon points="12 2 15 9 22 9.5 17 14.5 18.5 22 12 18 5.5 22 7 14.5 2 9.5 9 9"/>'
-  };
-
-  function cleanAndIconize(el, svgInner){
-    if(!el || el.dataset.iconized === "1") return;
-    var text = el.textContent.replace(/^[^\p{L}]+/u, '').trim();
-    el.innerHTML = '';
-    var svg = document.createElementNS('http://www.w3.org/2000/svg','svg');
-    svg.setAttribute('viewBox','0 0 24 24');
-    svg.setAttribute('width','16');
-    svg.setAttribute('height','16');
-    svg.setAttribute('fill','none');
-    svg.setAttribute('stroke','currentColor');
-    svg.setAttribute('stroke-width','2');
-    svg.setAttribute('stroke-linecap','round');
-    svg.setAttribute('stroke-linejoin','round');
-    svg.innerHTML = svgInner;
-    svg.style.marginRight = '8px';
-    svg.style.verticalAlign = 'middle';
-    svg.style.flexShrink = '0';
-    el.appendChild(svg);
-    el.appendChild(document.createTextNode(text));
-    el.dataset.iconized = "1";
-  }
-
-  function applyIcons(){
-    Object.keys(iconMap).forEach(function(id){
-      cleanAndIconize(document.getElementById(id), iconMap[id]);
-    });
-  }
-
-  applyIcons();
-  var settingsTrigger = document.querySelector('[data-open="settings"]');
-  if(settingsTrigger){
-    settingsTrigger.addEventListener('click', function(){ setTimeout(applyIcons, 80); });
-  }
-  var langSelect = document.getElementById('settingsUiLanguage');
-  if(langSelect){
-    langSelect.addEventListener('change', function(){
-      document.querySelectorAll('[data-iconized]').forEach(function(el){ delete el.dataset.iconized; });
-      setTimeout(applyIcons, 200);
-    });
-  }
-})();
-</script>
 </body>
 </html>
-
 
 
