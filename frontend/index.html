@@ -13693,6 +13693,11 @@ body.zuvyr-ui{
     'alt="ZUVYR">'+
     '<span class="zuvyr-brand-name">ZUVYR</span>';
 
+  const sidebarBrandMarkup=
+    '<img class="zuvyr-brand-logo" '+
+    'src="./zuvyr-sidebar-mark-transparent.png?v=1" '+
+    'alt="ZUVYR">'+
+    '<span class="zuvyr-brand-name">ZUVYR</span>';
   document.querySelectorAll('.brand').forEach(brand=>{
     brand.innerHTML=brandMarkup;
   });
@@ -13700,7 +13705,7 @@ body.zuvyr-ui{
   const sidebarBrand=document.querySelector('.rox-sidebar-brand');
 
   if(sidebarBrand){
-    sidebarBrand.innerHTML=brandMarkup;
+    sidebarBrand.innerHTML=sidebarBrandMarkup;
 
     let candidate=sidebarBrand.parentElement;
 
@@ -14630,7 +14635,9 @@ body.zuvyr-ui .feature-grid{
     }
 
     document.querySelectorAll("img.zuvyr-brand-logo").forEach(function(image){
-      var required="./zuvyr-brand-mark-20260826.svg";
+      var required=image.closest(".rox-sidebar-brand")
+        ? "./zuvyr-sidebar-mark-transparent.png?v=1"
+        : "./zuvyr-brand-mark-20260826.svg";
 
       if(image.getAttribute("src")!==required){
         image.setAttribute("src",required);
@@ -33090,6 +33097,11 @@ body.zuvyr-ui{
     'alt="ZUVYR">'+
     '<span class="zuvyr-brand-name">ZUVYR</span>';
 
+  const sidebarBrandMarkup=
+    '<img class="zuvyr-brand-logo" '+
+    'src="./zuvyr-sidebar-mark-transparent.png?v=1" '+
+    'alt="ZUVYR">'+
+    '<span class="zuvyr-brand-name">ZUVYR</span>';
   document.querySelectorAll('.brand').forEach(brand=>{
     brand.innerHTML=brandMarkup;
   });
@@ -33097,7 +33109,7 @@ body.zuvyr-ui{
   const sidebarBrand=document.querySelector('.rox-sidebar-brand');
 
   if(sidebarBrand){
-    sidebarBrand.innerHTML=brandMarkup;
+    sidebarBrand.innerHTML=sidebarBrandMarkup;
 
     let candidate=sidebarBrand.parentElement;
 
@@ -34083,7 +34095,9 @@ body.zuvyr-ui .feature-grid{
     }
 
     document.querySelectorAll("img.zuvyr-brand-logo").forEach(function(image){
-      var required="./zuvyr-brand-mark-20260826.svg";
+      var required=image.closest(".rox-sidebar-brand")
+        ? "./zuvyr-sidebar-mark-transparent.png?v=1"
+        : "./zuvyr-brand-mark-20260826.svg";
 
       if(image.getAttribute("src")!==required){
         image.setAttribute("src",required);
