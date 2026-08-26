@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-labelledby="title description">
+  <title id="title">ZUVYR</title>
+  <desc id="description">Five intelligent paths converging into one observing eye.</desc>
+  <g fill="none" stroke="#f8f8f8" stroke-width="17" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M30 48h35c34 0 45 57 83 57h23"/>
+    <path d="M30 83h43c30 0 42 39 74 39h24"/>
+    <path d="M30 128h141"/>
+    <path d="M30 173h43c30 0 42-39 74-39h24"/>
+    <path d="M30 208h35c34 0 45-57 83-57h23"/>
+  </g>
+  <g fill="#f8f8f8">
+    <circle cx="30" cy="48" r="13"/>
+    <circle cx="30" cy="83" r="13"/>
+    <circle cx="30" cy="128" r="13"/>
+    <circle cx="30" cy="173" r="13"/>
+    <circle cx="30" cy="208" r="13"/>
+    <path d="M143 128c23-35 47-53 70-53 12 14 19 32 19 53s-7 39-19 53c-23 0-47-18-70-53Z"/>
+  </g>
+  <path d="M165 128c13-17 29-26 47-26 11 8 18 16 24 26-6 10-13 18-24 26-18 0-34-9-47-26Z" fill="#080808"/>
+  <circle cx="211" cy="128" r="13" fill="#ff5a1f"/>
+  <circle cx="216" cy="123" r="3.5" fill="#ffffff" opacity=".72"/>
+</svg>
