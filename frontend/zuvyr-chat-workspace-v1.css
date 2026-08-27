@@ -631,3 +631,160 @@ body.zuvyr-ui #feature-chat
     padding: 0 3px !important;
   }
 }
+/* ZUVYR ATTACH MENU V1 */
+body.zuvyr-ui #feature-chat .zuvyr-chat-main > .chat-input-row {
+  overflow: visible !important;
+}
+
+body.zuvyr-ui #feature-chat .zuvyr-attach-button {
+  position: relative;
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  width: 46px;
+  height: 46px;
+  padding: 0;
+  color: #f5f5f5;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  cursor: pointer;
+  transition: color .18s ease, background .18s ease, transform .18s ease;
+}
+
+body.zuvyr-ui #feature-chat .zuvyr-attach-button:hover,
+body.zuvyr-ui #feature-chat .zuvyr-attach-button[aria-expanded="true"] {
+  color: #fff;
+  background: rgba(255,255,255,.10);
+}
+
+body.zuvyr-ui #feature-chat .zuvyr-attach-plus {
+  display: block;
+  width: 25px;
+  height: 25px;
+  pointer-events: none;
+  transform-origin: center;
+}
+
+body.zuvyr-ui #feature-chat .zuvyr-attach-button[aria-expanded="true"] .zuvyr-attach-plus {
+  animation: zuvyrAttachContinuousSpin 1.15s linear infinite;
+}
+
+@keyframes zuvyrAttachContinuousSpin {
+  to { transform: rotate(360deg); }
+}
+
+body.zuvyr-ui #feature-chat .zuvyr-attach-menu {
+  position: absolute;
+  bottom: calc(100% + 12px);
+  left: 0;
+  z-index: 120;
+  width: min(286px, calc(100vw - 32px));
+  padding: 8px;
+  color: #f4f4f5;
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 18px;
+  background: linear-gradient(180deg,rgba(33,33,35,.98),rgba(20,20,22,.98));
+  box-shadow: 0 24px 65px rgba(0,0,0,.52),0 0 0 1px rgba(255,91,24,.05);
+  backdrop-filter: blur(18px);
+  transform-origin: bottom left;
+  animation: zuvyrAttachMenuIn .18s ease-out;
+}
+
+body.zuvyr-ui #feature-chat .zuvyr-attach-menu[hidden] {
+  display: none !important;
+}
+
+@keyframes zuvyrAttachMenuIn {
+  from { opacity: 0; transform: translateY(8px) scale(.97); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+body.zuvyr-ui #feature-chat .zuvyr-attach-brand {
+  padding: 8px 11px 6px;
+  color: #ff6a2d;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .13em;
+  text-transform: uppercase;
+}
+
+body.zuvyr-ui #feature-chat .zuvyr-attach-action {
+  display: grid;
+  grid-template-columns: 42px minmax(0,1fr) 18px;
+  align-items: center;
+  width: 100%;
+  min-height: 60px;
+  padding: 8px 10px;
+  color: #f4f4f5;
+  border: 0;
+  border-radius: 13px;
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+  transition: background .16s ease, transform .16s ease;
+}
+
+body.zuvyr-ui #feature-chat .zuvyr-attach-action:hover {
+  background: rgba(255,255,255,.09);
+  transform: translateX(2px);
+}
+
+body.zuvyr-ui #feature-chat .zuvyr-attach-action-icon {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  color: #ff6a2d;
+  border-radius: 10px;
+  background: rgba(255,91,24,.12);
+}
+
+body.zuvyr-ui #feature-chat .zuvyr-attach-action-icon svg {
+  width: 22px;
+  height: 22px;
+}
+
+body.zuvyr-ui #feature-chat .zuvyr-attach-action-copy { min-width: 0; }
+
+body.zuvyr-ui #feature-chat .zuvyr-attach-action-title {
+  display: block;
+  color: #f7f7f8;
+  font-size: 15px;
+  font-weight: 750;
+  line-height: 1.2;
+}
+
+body.zuvyr-ui #feature-chat .zuvyr-attach-action-subtitle {
+  display: block;
+  margin-top: 3px;
+  overflow: hidden;
+  color: #97979d;
+  font-size: 12px;
+  line-height: 1.25;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+body.zuvyr-ui #feature-chat .zuvyr-attach-action-chevron {
+  color: #8f8f95;
+  font-size: 22px;
+  line-height: 1;
+}
+
+body.zuvyr-ui #feature-chat .chat-input-row.zuvyr-voice-listening .zuvyr-attach-button {
+  display: none !important;
+}
+
+@media (max-width: 760px) {
+  body.zuvyr-ui #feature-chat .zuvyr-attach-button {
+    width: 42px;
+    height: 42px;
+  }
+
+  body.zuvyr-ui #feature-chat .zuvyr-attach-menu {
+    bottom: calc(100% + 9px);
+    left: -1px;
+    width: min(270px, calc(100vw - 24px));
+  }
+}

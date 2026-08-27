@@ -655,3 +655,103 @@
     }
   );
 })();
+/* ZUVYR ATTACH MENU V1 */
+(() => {
+  const plusIcon = `
+    <svg class="zuvyr-attach-plus" viewBox="0 0 24 24" aria-hidden="true"
+      fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+      <path d="M12 5v14"></path><path d="M5 12h14"></path>
+    </svg>`;
+
+  const historyIcon = `
+    <svg viewBox="0 0 24 24" aria-hidden="true" fill="none"
+      stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M3 12a9 9 0 1 0 3-6.7"></path>
+      <path d="M3 4v5h5"></path><path d="M12 7v5l3 2"></path>
+    </svg>`;
+
+  const enhanceAttachMenu = () => {
+    document.querySelectorAll('#feature-chat .chat-input-row').forEach((row) => {
+      if (row.dataset.zuvyrAttachMenu === '1') return;
+
+      const input = row.querySelector('input[data-feature="chat"]');
+      if (!input) return;
+
+      row.dataset.zuvyrAttachMenu = '1';
+
+      const trigger = document.createElement('button');
+      trigger.type = 'button';
+      trigger.className = 'zuvyr-attach-button';
+      trigger.setAttribute('aria-label','Attach and ZUVYR tools');
+      trigger.setAttribute('aria-expanded','false');
+      trigger.title = 'Attach';
+      trigger.innerHTML = plusIcon;
+
+      const menu = document.createElement('div');
+      menu.className = 'zuvyr-attach-menu';
+      menu.setAttribute('aria-label','ZUVYR tools');
+      menu.hidden = true;
+      menu.innerHTML = `
+        <div class="zuvyr-attach-brand">ZUVYR tools</div>
+        <button type="button" class="zuvyr-attach-action" data-zuvyr-attach-action="recent">
+          <span class="zuvyr-attach-action-icon">${historyIcon}</span>
+          <span class="zuvyr-attach-action-copy">
+            <span class="zuvyr-attach-action-title">Recent</span>
+            <span class="zuvyr-attach-action-subtitle">Open your saved conversations</span>
+          </span>
+          <span class="zuvyr-attach-action-chevron" aria-hidden="true">â€º</span>
+        </button>`;
+
+      row.insertBefore(trigger,input);
+      row.appendChild(menu);
+
+      const setOpen = (open) => {
+        menu.hidden = !open;
+        trigger.setAttribute('aria-expanded',open ? 'true' : 'false');
+      };
+
+      trigger.addEventListener('click',(event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        setOpen(menu.hidden);
+      });
+
+      menu.querySelector('[data-zuvyr-attach-action="recent"]').addEventListener('click',async () => {
+        setOpen(false);
+        const historyScreen = document.getElementById('feature-history');
+        if (!historyScreen) {
+          console.warn('ZUVYR history screen not found');
+          return;
+        }
+
+        historyScreen.classList.add('active');
+
+        if (typeof window.loadRoxHistory === 'function') {
+          try {
+            await window.loadRoxHistory();
+          } catch (error) {
+            console.warn('Unable to load ZUVYR history:',error);
+          }
+        }
+      });
+
+      document.addEventListener('pointerdown',(event) => {
+        if (menu.hidden || menu.contains(event.target) || trigger.contains(event.target)) return;
+        setOpen(false);
+      });
+
+      document.addEventListener('keydown',(event) => {
+        if (event.key === 'Escape' && !menu.hidden) {
+          setOpen(false);
+          trigger.focus();
+        }
+      });
+    });
+  };
+
+  enhanceAttachMenu();
+  new MutationObserver(enhanceAttachMenu).observe(document.documentElement,{
+    childList: true,
+    subtree: true
+  });
+})();
