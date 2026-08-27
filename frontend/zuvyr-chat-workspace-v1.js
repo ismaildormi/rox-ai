@@ -222,3 +222,163 @@
     setupZuvyrChatWorkspace();
   }
 })();
+/* ZUVYR CHAT VOICE UI V1 */
+(() => {
+  const micIcon = `
+    <svg class="zuvyr-voice-icon" viewBox="0 0 24 24"
+      aria-hidden="true" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="9" y="3" width="6" height="11" rx="3"></rect>
+      <path d="M5.5 11a6.5 6.5 0 0 0 13 0"></path>
+      <path d="M12 17.5V21"></path>
+      <path d="M9 21h6"></path>
+    </svg>`;
+
+  const stopIcon = `
+    <svg class="zuvyr-voice-icon" viewBox="0 0 24 24"
+      aria-hidden="true" fill="currentColor">
+      <rect x="7" y="7" width="10" height="10" rx="2"></rect>
+    </svg>`;
+
+  const enhanceVoice = () => {
+    document
+      .querySelectorAll(
+        '#feature-chat button[data-voice-input="chat"]'
+      )
+      .forEach((button) => {
+        if (button.dataset.zuvyrVoiceUi === '1') return;
+
+        const row = button.closest('.chat-input-row');
+        const input = row?.querySelector(
+          'input[data-feature="chat"]'
+        );
+
+        if (!row || !input) return;
+
+        button.dataset.zuvyrVoiceUi = '1';
+        button.innerHTML = micIcon;
+        button.title = 'Dictate — Ctrl+Shift+D';
+
+        const cancel = document.createElement('button');
+        cancel.type = 'button';
+        cancel.className = 'zuvyr-voice-cancel';
+        cancel.setAttribute('aria-label', 'Cancel dictation');
+        cancel.title = 'Cancel dictation';
+        cancel.innerHTML = `
+          <svg viewBox="0 0 24 24" width="21" height="21"
+            aria-hidden="true" fill="none" stroke="currentColor"
+            stroke-width="2" stroke-linecap="round">
+            <path d="M6 6l12 12M18 6L6 18"></path>
+          </svg>`;
+
+        const waveform = document.createElement('div');
+        waveform.className = 'zuvyr-voice-waveform';
+        waveform.setAttribute('role', 'status');
+        waveform.setAttribute('aria-label', 'Listening');
+
+        for (let index = 0; index < 24; index++) {
+          const bar = document.createElement('span');
+          bar.style.setProperty('--i', String(index));
+          waveform.appendChild(bar);
+        }
+
+        row.insertBefore(cancel, input);
+        row.insertBefore(waveform, input);
+
+        button.addEventListener(
+          'click',
+          () => {
+            if (!button.classList.contains('is-listening')) {
+              button.dataset.zuvyrVoiceBefore = input.value;
+              delete row.dataset.zuvyrVoiceCancel;
+            }
+          },
+          true
+        );
+
+        cancel.addEventListener('click', () => {
+          row.dataset.zuvyrVoiceCancel = '1';
+
+          if (button.classList.contains('is-listening')) {
+            button.click();
+          } else {
+            input.value =
+              button.dataset.zuvyrVoiceBefore || '';
+            input.dispatchEvent(
+              new Event('input', { bubbles: true })
+            );
+          }
+        });
+
+        const syncVoiceState = () => {
+          const listening =
+            button.classList.contains('is-listening');
+
+          row.classList.toggle(
+            'zuvyr-voice-listening',
+            listening
+          );
+
+          button.innerHTML = listening ? stopIcon : micIcon;
+          button.title = listening
+            ? 'Stop dictation'
+            : 'Dictate — Ctrl+Shift+D';
+
+          if (
+            !listening &&
+            row.dataset.zuvyrVoiceCancel === '1'
+          ) {
+            input.value =
+              button.dataset.zuvyrVoiceBefore || '';
+
+            input.dispatchEvent(
+              new Event('input', { bubbles: true })
+            );
+
+            delete row.dataset.zuvyrVoiceCancel;
+            input.focus();
+          }
+        };
+
+        new MutationObserver(syncVoiceState).observe(
+          button,
+          {
+            attributes: true,
+            attributeFilter: ['class']
+          }
+        );
+
+        syncVoiceState();
+      });
+  };
+
+  document.addEventListener('keydown', (event) => {
+    if (
+      event.ctrlKey &&
+      event.shiftKey &&
+      event.code === 'KeyD'
+    ) {
+      const button = document.querySelector(
+        '#feature-chat button[data-voice-input="chat"]'
+      );
+
+      if (
+        button &&
+        button.offsetParent !== null
+      ) {
+        event.preventDefault();
+        button.click();
+      }
+    }
+  });
+
+  enhanceVoice();
+
+  new MutationObserver(enhanceVoice).observe(
+    document.documentElement,
+    {
+      childList: true,
+      subtree: true
+    }
+  );
+})();

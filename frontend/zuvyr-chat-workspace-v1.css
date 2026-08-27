@@ -478,3 +478,116 @@ body.zuvyr-ui #feature-chat .zuvyr-chat-welcome-mark {
     font-size: 29px !important;
   }
 }
+/* ZUVYR CHAT VOICE UI V1 */
+body.zuvyr-ui #feature-chat .chat-input-row
+button[data-voice-input="chat"][data-zuvyr-voice-ui="1"] {
+  position: relative !important;
+  display: grid !important;
+  place-items: center !important;
+  flex: 0 0 auto !important;
+  width: 46px !important;
+  height: 46px !important;
+  padding: 0 !important;
+  color: #f4f4f5 !important;
+  border: 0 !important;
+  border-radius: 50% !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  animation: none !important;
+}
+
+body.zuvyr-ui #feature-chat .chat-input-row
+button[data-voice-input="chat"] .zuvyr-voice-icon {
+  width: 24px;
+  height: 24px;
+  pointer-events: none;
+}
+
+body.zuvyr-ui #feature-chat .chat-input-row
+button[data-voice-input="chat"]:hover {
+  background: rgba(255,255,255,.09) !important;
+}
+
+body.zuvyr-ui #feature-chat .zuvyr-voice-cancel,
+body.zuvyr-ui #feature-chat .zuvyr-voice-waveform {
+  display: none;
+}
+
+body.zuvyr-ui #feature-chat .chat-input-row.zuvyr-voice-listening {
+  gap: 8px !important;
+  padding-left: 9px !important;
+  border-color: rgba(255,103,39,.52) !important;
+  box-shadow:
+    0 0 0 1px rgba(255,103,39,.12),
+    0 12px 35px rgba(0,0,0,.28) !important;
+}
+
+body.zuvyr-ui #feature-chat .chat-input-row.zuvyr-voice-listening
+input[data-feature="chat"],
+body.zuvyr-ui #feature-chat .chat-input-row.zuvyr-voice-listening
+.rox-voice-language {
+  display: none !important;
+}
+
+body.zuvyr-ui #feature-chat .chat-input-row.zuvyr-voice-listening
+.zuvyr-voice-cancel {
+  display: grid !important;
+  place-items: center !important;
+  flex: 0 0 auto;
+  width: 42px;
+  height: 42px;
+  padding: 0;
+  color: #f4f4f5;
+  border: 1px solid rgba(255,255,255,.16);
+  border-radius: 50%;
+  background: transparent;
+  cursor: pointer;
+}
+
+body.zuvyr-ui #feature-chat .chat-input-row.zuvyr-voice-listening
+.zuvyr-voice-cancel:hover {
+  background: rgba(255,255,255,.09);
+}
+
+body.zuvyr-ui #feature-chat .chat-input-row.zuvyr-voice-listening
+.zuvyr-voice-waveform {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  flex: 1 1 auto;
+  min-width: 0;
+  height: 44px;
+  gap: 3px;
+  overflow: hidden;
+}
+
+body.zuvyr-ui #feature-chat .zuvyr-voice-waveform span {
+  width: 3px;
+  height: 7px;
+  border-radius: 999px;
+  background: rgba(255,255,255,.82);
+  animation: zuvyrVoiceWave 1s ease-in-out infinite;
+  animation-delay: calc(var(--i) * -45ms);
+}
+
+body.zuvyr-ui #feature-chat .chat-input-row.zuvyr-voice-listening
+button[data-voice-input="chat"] {
+  color: #101010 !important;
+  background: #f4f4f5 !important;
+}
+
+body.zuvyr-ui #feature-chat .chat-input-row.zuvyr-voice-listening
+button[data-voice-input="chat"]:hover {
+  background: #fff !important;
+}
+
+@keyframes zuvyrVoiceWave {
+  0%, 100% { height: 6px; opacity: .42; }
+  50% { height: calc(10px + (var(--i) % 5) * 4px); opacity: 1; }
+}
+
+@media (max-width: 760px) {
+  body.zuvyr-ui #feature-chat .zuvyr-voice-waveform span:nth-child(n+17) {
+    display: none;
+  }
+}
