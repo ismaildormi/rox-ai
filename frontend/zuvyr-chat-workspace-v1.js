@@ -3,6 +3,47 @@
 
   const ICON = './zuvyr-app-icon-20260827.png?v=1';
 
+  function getZuvyrAccountName() {
+    try {
+      if (typeof getRoxAccountDisplayName === 'function') {
+        const accountName = String(
+          getRoxAccountDisplayName() || ''
+        ).trim();
+
+        if (
+          accountName &&
+          accountName !== 'Rox user' &&
+          accountName !== '–'
+        ) {
+          return accountName;
+        }
+      }
+    } catch (_) {
+      // The profile may still be loading.
+    }
+
+    const candidates = [
+      document.getElementById('topbarUserName'),
+      document.getElementById('sidebarProfileName')
+    ];
+
+    for (const candidate of candidates) {
+      const value = candidate
+        ? String(candidate.textContent || '').trim()
+        : '';
+
+      if (
+        value &&
+        value !== '–' &&
+        value !== 'Loading...'
+      ) {
+        return value;
+      }
+    }
+
+    return '';
+  }
+
   function enhanceWelcome(messages) {
     const messageNodes = messages.querySelectorAll(':scope > .msg');
     const first = messageNodes[0];
@@ -11,27 +52,39 @@
       first &&
       first.classList.contains('bot');
 
-    messages.classList.toggle('zuvyr-chat-empty', Boolean(isEmpty));
+    messages.classList.toggle(
+      'zuvyr-chat-empty',
+      Boolean(isEmpty)
+    );
 
-    if (!isEmpty || first.dataset.zuvyrWelcome === '1') return;
+    if (!isEmpty) return;
 
-    first.dataset.zuvyrWelcome = '1';
-    first.removeAttribute('data-i18n');
-    first.replaceChildren();
+    if (first.dataset.zuvyrWelcome !== '1') {
+      first.dataset.zuvyrWelcome = '1';
+      first.removeAttribute('data-i18n');
+      first.replaceChildren();
 
-    const mark = document.createElement('img');
-    mark.className = 'zuvyr-chat-welcome-mark';
-    mark.src = ICON;
-    mark.alt = '';
+      const title = document.createElement('strong');
+      title.className = 'zuvyr-chat-welcome-title';
 
-    const title = document.createElement('strong');
-    title.textContent = 'How can ZUVYR help?';
+      const subtitle = document.createElement('span');
+      subtitle.className = 'zuvyr-chat-welcome-subtitle';
+      subtitle.textContent =
+        'Ask questions, create, plan, or build anything.';
 
-    const subtitle = document.createElement('span');
-    subtitle.textContent =
-      'Ask questions, create, plan, or build anything.';
+      first.append(title, subtitle);
+    }
 
-    first.append(mark, title, subtitle);
+    const title = first.querySelector(
+      '.zuvyr-chat-welcome-title'
+    );
+    const accountName = getZuvyrAccountName();
+
+    if (title) {
+      title.textContent = accountName
+        ? 'How can ZUVYR help, ' + accountName + '?'
+        : 'How can ZUVYR help?';
+    }
   }
 
   function setupZuvyrChatWorkspace() {
@@ -136,6 +189,26 @@
       enhanceWelcome(messages);
     });
     observer.observe(messages, { childList: true });
+
+    const accountSources = [
+      document.getElementById('heroGreeting'),
+      document.getElementById('topbarUserName'),
+      document.getElementById('sidebarProfileName')
+    ].filter(Boolean);
+
+    if (accountSources.length) {
+      const accountObserver = new MutationObserver(function () {
+        enhanceWelcome(messages);
+      });
+
+      accountSources.forEach(function (source) {
+        accountObserver.observe(source, {
+          childList: true,
+          characterData: true,
+          subtree: true
+        });
+      });
+    }
   }
 
   if (document.readyState === 'loading') {
