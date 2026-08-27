@@ -61,6 +61,7 @@
 
     if (first.dataset.zuvyrWelcome !== '1') {
       first.dataset.zuvyrWelcome = '1';
+      first.classList.add('zuvyr-chat-welcome');
       first.removeAttribute('data-i18n');
       first.replaceChildren();
 
