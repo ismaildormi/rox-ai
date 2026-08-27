@@ -382,3 +382,276 @@
     }
   );
 })();
+/* ZUVYR REAL AUDIO WAVEFORM V2 */
+(() => {
+  const sessions = new WeakMap();
+
+  const stopVisualizer = (button) => {
+    const session = sessions.get(button);
+    if (!session) return;
+
+    session.wanted = false;
+
+    if (session.frame) {
+      cancelAnimationFrame(session.frame);
+    }
+
+    if (session.stream) {
+      session.stream
+        .getTracks()
+        .forEach((track) => track.stop());
+    }
+
+    if (
+      session.context &&
+      session.context.state !== 'closed'
+    ) {
+      session.context.close().catch(() => {});
+    }
+
+    if (session.waveform) {
+      session.waveform.classList.remove(
+        'zuvyr-waveform-live'
+      );
+
+      session.waveform
+        .querySelectorAll('span')
+        .forEach((bar) => {
+          bar.style.removeProperty('height');
+          bar.style.removeProperty('opacity');
+        });
+    }
+
+    sessions.delete(button);
+  };
+
+  const startVisualizer = async (
+    button,
+    row,
+    waveform
+  ) => {
+    if (
+      sessions.has(button) ||
+      !navigator.mediaDevices?.getUserMedia
+    ) {
+      return;
+    }
+
+    const AudioEngine =
+      window.AudioContext ||
+      window.webkitAudioContext;
+
+    if (!AudioEngine) return;
+
+    const context = new AudioEngine();
+    context.resume().catch(() => {});
+
+    const session = {
+      wanted: true,
+      context,
+      stream: null,
+      frame: 0,
+      waveform
+    };
+
+    sessions.set(button, session);
+
+    try {
+      const stream =
+        await navigator.mediaDevices.getUserMedia({
+          audio: {
+            channelCount: 1,
+            echoCancellation: true,
+            noiseSuppression: true,
+            autoGainControl: true
+          }
+        });
+
+      session.stream = stream;
+
+      if (
+        !session.wanted ||
+        !button.classList.contains('is-listening')
+      ) {
+        stopVisualizer(button);
+        return;
+      }
+
+      const source =
+        context.createMediaStreamSource(stream);
+
+      const analyser = context.createAnalyser();
+      analyser.fftSize = 2048;
+      analyser.smoothingTimeConstant = 0.72;
+
+      source.connect(analyser);
+
+      const samples =
+        new Uint8Array(analyser.fftSize);
+
+      const bars = Array.from(
+        waveform.querySelectorAll('span')
+      );
+
+      const smoothed =
+        new Float32Array(bars.length);
+
+      waveform.classList.add(
+        'zuvyr-waveform-live'
+      );
+
+      const draw = () => {
+        if (
+          !session.wanted ||
+          !button.classList.contains('is-listening')
+        ) {
+          stopVisualizer(button);
+          return;
+        }
+
+        analyser.getByteTimeDomainData(samples);
+
+        const segmentSize = Math.max(
+          1,
+          Math.floor(samples.length / bars.length)
+        );
+
+        bars.forEach((bar, index) => {
+          const start = index * segmentSize;
+          const end = Math.min(
+            samples.length,
+            start + segmentSize
+          );
+
+          let energy = 0;
+
+          for (
+            let sampleIndex = start;
+            sampleIndex < end;
+            sampleIndex++
+          ) {
+            const value =
+              (samples[sampleIndex] - 128) / 128;
+
+            energy += value * value;
+          }
+
+          const rms = Math.sqrt(
+            energy / Math.max(1, end - start)
+          );
+
+          const level = Math.min(1, rms * 7.5);
+
+          smoothed[index] =
+            smoothed[index] * 0.58 +
+            level * 0.42;
+
+          const height =
+            3 + Math.pow(smoothed[index], 0.72) * 34;
+
+          bar.style.height = `${height.toFixed(1)}px`;
+          bar.style.opacity = String(
+            Math.min(
+              1,
+              0.34 + smoothed[index] * 1.25
+            )
+          );
+        });
+
+        session.frame =
+          requestAnimationFrame(draw);
+      };
+
+      draw();
+    } catch (error) {
+      console.warn(
+        'ZUVYR live waveform unavailable:',
+        error
+      );
+
+      stopVisualizer(button);
+    }
+  };
+
+  const enhanceRealWaveform = () => {
+    document
+      .querySelectorAll(
+        '#feature-chat button[data-voice-input="chat"]'
+      )
+      .forEach((button) => {
+        if (
+          button.dataset.zuvyrRealWaveform === '1'
+        ) {
+          return;
+        }
+
+        const row = button.closest('.chat-input-row');
+        const waveform = row?.querySelector(
+          '.zuvyr-voice-waveform'
+        );
+
+        if (!row || !waveform) return;
+
+        button.dataset.zuvyrRealWaveform = '1';
+
+        while (waveform.children.length < 64) {
+          const bar = document.createElement('span');
+
+          bar.style.setProperty(
+            '--i',
+            String(waveform.children.length)
+          );
+
+          waveform.appendChild(bar);
+        }
+
+        button.addEventListener(
+          'click',
+          () => {
+            if (
+              !button.classList.contains(
+                'is-listening'
+              )
+            ) {
+              void startVisualizer(
+                button,
+                row,
+                waveform
+              );
+            }
+          },
+          true
+        );
+
+        const sync = () => {
+          if (
+            !button.classList.contains(
+              'is-listening'
+            )
+          ) {
+            stopVisualizer(button);
+          }
+        };
+
+        new MutationObserver(sync).observe(
+          button,
+          {
+            attributes: true,
+            attributeFilter: ['class']
+          }
+        );
+      });
+  };
+
+  enhanceRealWaveform();
+
+  new MutationObserver(
+    enhanceRealWaveform
+  ).observe(
+    document.documentElement,
+    {
+      childList: true,
+      subtree: true
+    }
+  );
+})();

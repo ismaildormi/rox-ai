@@ -591,3 +591,43 @@ button[data-voice-input="chat"]:hover {
     display: none;
   }
 }
+/* ZUVYR REAL AUDIO WAVEFORM V2 */
+body.zuvyr-ui #feature-chat
+.chat-input-row.zuvyr-voice-listening
+.zuvyr-voice-waveform {
+  justify-content: stretch !important;
+  gap: 2px !important;
+  padding: 0 8px !important;
+}
+
+body.zuvyr-ui #feature-chat
+.zuvyr-voice-waveform span {
+  display: block !important;
+  flex: 1 1 3px !important;
+  width: auto !important;
+  min-width: 2px !important;
+  max-width: 8px !important;
+  transform-origin: center !important;
+}
+
+body.zuvyr-ui #feature-chat
+.zuvyr-voice-waveform.zuvyr-waveform-live span {
+  animation: none !important;
+  transition:
+    height 42ms linear,
+    opacity 42ms linear !important;
+}
+
+@media (max-width: 760px) {
+  body.zuvyr-ui #feature-chat
+  .zuvyr-voice-waveform span:nth-child(n) {
+    display: block !important;
+  }
+
+  body.zuvyr-ui #feature-chat
+  .chat-input-row.zuvyr-voice-listening
+  .zuvyr-voice-waveform {
+    gap: 1px !important;
+    padding: 0 3px !important;
+  }
+}
