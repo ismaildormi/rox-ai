@@ -1003,4 +1003,16 @@ body.zuvyr-ui #feature-chat .zuvyr-sidebar-new-chat{width:42px!important;padding
 body.zuvyr-ui #feature-chat .zuvyr-chat-search-layer{padding:66px 8px 8px}
 body.zuvyr-ui #feature-chat .zuvyr-chat-search-dialog{width:100%;max-height:calc(100dvh - 74px)}
 }
+body.zuvyr-ui #feature-chat .zuvyr-sidebar-recents{display:flex;min-height:0;flex:1;flex-direction:column;gap:8px;overflow:hidden}
+body.zuvyr-ui #feature-chat .zuvyr-sidebar-recents-title{padding:5px 12px 2px;color:#8e8e8e;font-size:12px;font-weight:650}
+body.zuvyr-ui #feature-chat .zuvyr-sidebar-recents-list{min-height:0;overflow-y:auto;scrollbar-width:thin;scrollbar-color:#424242 transparent}
+body.zuvyr-ui #feature-chat .zuvyr-sidebar-recent{display:flex;width:100%;min-height:38px;align-items:center;gap:9px;padding:0 11px;color:#d5d5d5;border:0;border-radius:9px;background:transparent;text-align:left;cursor:pointer}
+body.zuvyr-ui #feature-chat .zuvyr-sidebar-recent:hover,body.zuvyr-ui #feature-chat .zuvyr-sidebar-recent.is-active{color:#fff;background:#202020}
+body.zuvyr-ui #feature-chat .zuvyr-sidebar-recent:disabled{opacity:.65;cursor:wait}
+body.zuvyr-ui #feature-chat .zuvyr-sidebar-recent-icon{display:grid;flex:0 0 18px;place-items:center}
+body.zuvyr-ui #feature-chat .zuvyr-sidebar-recent-icon svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+body.zuvyr-ui #feature-chat .zuvyr-sidebar-recent-title{min-width:0;overflow:hidden;font-size:13px;line-height:1.25;text-overflow:ellipsis;white-space:nowrap}
+body.zuvyr-ui #feature-chat .zuvyr-sidebar-recents-state{padding:10px 12px;color:#777;font-size:12px;line-height:1.4}
+body.zuvyr-ui #feature-chat .zuvyr-sidebar-collapsed .zuvyr-sidebar-recents{display:none!important}
+@media(max-width:760px){body.zuvyr-ui #feature-chat .zuvyr-sidebar-recents{display:none!important}}
 /* ZUVYR CHATGPT SIDEBAR PHASE 1 END */
