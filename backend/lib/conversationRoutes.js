@@ -128,6 +128,117 @@ function createConversationRouter({
     }
   });
 
+  router.post('/:conversationId/branch', async (req, res) => {
+    if (!isConversationId(req.params.conversationId)) {
+      return res.status(400).json({
+        status: 'error',
+        code: 'invalid_conversation_id',
+        message: 'Invalid conversation id.'
+      });
+    }
+
+    const body =
+      req.body && typeof req.body === 'object' && !Array.isArray(req.body)
+        ? req.body
+        : {};
+
+    const throughSequence =
+      body.throughSequence === undefined
+        ? null
+        : Number(body.throughSequence);
+
+    if (
+      throughSequence !== null &&
+      (!Number.isInteger(throughSequence) || throughSequence < 1)
+    ) {
+      return res.status(400).json({
+        status: 'error',
+        code: 'invalid_branch_sequence',
+        message: 'Invalid branch sequence.'
+      });
+    }
+
+    try {
+      const source = await store.requireOwnedConversation(
+        req.params.conversationId,
+        req.userId
+      );
+
+      let messages = [];
+      let beforeSequence;
+
+      while (messages.length < 1000) {
+        const page = await store.listMessages({
+          conversationId: source.id,
+          ownerId: req.userId,
+          beforeSequence,
+          limit: 100
+        });
+
+        if (!page.length) break;
+
+        messages = [...page,...messages];
+
+        if (page.length < 100) break;
+
+        const nextBefore = Number(page[0].sequence_no);
+
+        if (
+          !Number.isInteger(nextBefore) ||
+          nextBefore < 2 ||
+          nextBefore === beforeSequence
+        ) break;
+
+        beforeSequence = nextBefore;
+      }
+
+      const selected = throughSequence === null
+        ? messages
+        : messages.filter(
+            message =>
+              Number(message.sequence_no) <= throughSequence
+          );
+
+      const conversation = await store.createConversation({
+        ownerId:req.userId,
+        feature:source.feature,
+        title:source.title+' \u2014 branch',
+        metadata:{
+          ...(source.metadata||{}),
+          branched_from_conversation_id:source.id,
+          branched_through_sequence:throughSequence
+        }
+      });
+
+      for (const message of selected) {
+        await store.appendMessage({
+          conversationId:conversation.id,
+          ownerId:req.userId,
+          role:message.role,
+          messageType:message.message_type,
+          plainText:message.plain_text,
+          content:message.content,
+          metadata:{
+            ...(message.metadata||{}),
+            branched_from_message_id:message.id
+          },
+          provider:message.provider,
+          model:message.model,
+          requestId:
+            'branch:'+source.id+':'+message.id
+        });
+      }
+
+      return res.status(201).json({
+        status:'success',
+        conversation,
+        copiedMessages:selected.length
+      });
+    } catch (error) {
+      return sendConversationError(res,error,'branch');
+    }
+  });
+
   router.patch('/:conversationId', async (req, res) => {
     if (!isConversationId(req.params.conversationId)) {
       return res.status(400).json({

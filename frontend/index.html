@@ -10286,7 +10286,13 @@ async function openRoxHistoryItem(item, row=null){
         {
           responseId:content.responseId||null,
           model:message.model||null,
-          feature
+          feature,
+          conversationId:item.id,
+          sequenceNo:message.sequence_no,
+          createdAt:message.created_at,
+          sources:Array.isArray(content.sources)
+            ?content.sources
+            :[]
         }
       );
     });
@@ -11120,6 +11126,19 @@ function pushHistory(feature, role, content) {
 function appendMsg(msgBox, cls, content, isNode, meta = {}) {
   const el = document.createElement('div');
   el.className = 'msg ' + cls;
+  el._zuvyrMeta = meta && typeof meta === 'object' ? meta : {};
+
+  if (el._zuvyrMeta.createdAt) {
+    el.dataset.zuvyrCreatedAt = el._zuvyrMeta.createdAt;
+  }
+
+  if (el._zuvyrMeta.conversationId) {
+    el.dataset.zuvyrConversationId = el._zuvyrMeta.conversationId;
+  }
+
+  if (Number.isInteger(Number(el._zuvyrMeta.sequenceNo))) {
+    el.dataset.zuvyrSequenceNo = String(el._zuvyrMeta.sequenceNo);
+  }
 
   if (isNode) {
     el.appendChild(content);
@@ -11960,10 +11979,26 @@ async function sendChat(feature, text, msgBox) {
     msgBox.appendChild(artifact);
     msgBox.scrollTop = msgBox.scrollHeight;
   } else {
-    appendMsg(msgBox, 'bot', data.text, false, { responseId: data.responseId, model: data.model, feature });
+    appendMsg(msgBox, 'bot', data.text, false, {
+      responseId: data.responseId,
+      model: data.model,
+      feature,
+      conversationId: data.conversationId || conversationId,
+      sequenceNo: data.conversationMessageCount,
+      createdAt: new Date().toISOString(),
+      sources: Array.isArray(data.sources) ? data.sources : []
+    });
   }
 } else {
-  appendMsg(msgBox, 'bot', data.text, false, { responseId: data.responseId, model: data.model, feature });
+  appendMsg(msgBox, 'bot', data.text, false, {
+      responseId: data.responseId,
+      model: data.model,
+      feature,
+      conversationId: data.conversationId || conversationId,
+      sequenceNo: data.conversationMessageCount,
+      createdAt: new Date().toISOString(),
+      sources: Array.isArray(data.sources) ? data.sources : []
+    });
 }
   if (feature === 'chat') {
     maybeAutoReadRoxMessage(data.text);
@@ -14692,7 +14727,11 @@ initAuth();
     branch:
       '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="6" cy="5" r="2"></circle><circle cx="18" cy="7" r="2"></circle><circle cx="6" cy="19" r="2"></circle><path d="M6 7v10"></path><path d="M8 11h4a6 6 0 0 0 6-2"></path></svg>',
     listen:
-      '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 5 6.5 9H3v6h3.5L11 19V5Z"></path><path d="M15 9a4 4 0 0 1 0 6"></path><path d="M18 6a8 8 0 0 1 0 12"></path></svg>'
+      '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 5 6.5 9H3v6h3.5L11 19V5Z"></path><path d="M15 9a4 4 0 0 1 0 6"></path><path d="M18 6a8 8 0 0 1 0 12"></path></svg>',
+    share:
+      '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 16V3"></path><path d="m7 8 5-5 5 5"></path><path d="M5 13v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6"></path></svg>',
+    retry:
+      '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11a8 8 0 1 0-2.34 5.66"></path><path d="M20 4v7h-7"></path></svg>'
   };
 
   const textForLanguage = () => {
@@ -14824,6 +14863,48 @@ initAuth();
     if (buttons.length < 6) return;
 
     const labels = textForLanguage();
+    const actionLanguage = String(
+      document.documentElement.lang||
+      navigator.language||
+      'en'
+    ).toLowerCase();
+
+    const extraLabels = actionLanguage.startsWith('ar')
+      ? {
+          share:'\u0645\u0634\u0627\u0631\u0643\u0629',
+          retry:'\u0625\u0639\u0627\u062f\u0629 \u0625\u0646\u0634\u0627\u0621 \u0627\u0644\u062c\u0648\u0627\u0628',
+          branching:'\u062c\u0627\u0631\u064a \u0625\u0646\u0634\u0627\u0621 \u0627\u0644\u0641\u0631\u0639...',
+          branchFailed:'\u062a\u0639\u0630\u0631 \u0625\u0646\u0634\u0627\u0621 \u0627\u0644\u0641\u0631\u0639.'
+        }
+      : actionLanguage.startsWith('fr')
+        ? {
+            share:'Partager',
+            retry:'R\u00e9g\u00e9n\u00e9rer',
+            branching:'Cr\u00e9ation de la branche...',
+            branchFailed:'Impossible de cr\u00e9er la branche.'
+          }
+        : actionLanguage.startsWith('es')
+          ? {
+              share:'Compartir',
+              retry:'Regenerar',
+              branching:'Creando la rama...',
+              branchFailed:'No se pudo crear la rama.'
+            }
+          : actionLanguage.startsWith('zh')
+            ? {
+                share:'\u5206\u4eab',
+                retry:'\u91cd\u65b0\u751f\u6210',
+                branching:'\u6b63\u5728\u521b\u5efa\u5206\u652f...',
+                branchFailed:'\u65e0\u6cd5\u521b\u5efa\u5206\u652f\u3002'
+              }
+            : {
+                share:'Share',
+                retry:'Regenerate',
+                branching:'Creating branch...',
+                branchFailed:'Could not create the branch.'
+              };
+
+    Object.assign(labels,extraLabels);
     const copyButton = buttons[0];
     const listenButton = buttons[1];
     const likeButton = buttons[2];
@@ -14847,8 +14928,54 @@ initAuth();
     dislikeButton.setAttribute('aria-label',labels.dislike);
 
     listenButton.classList.add('rox-gpt-hidden-action');
-    shareButton.classList.add('rox-gpt-hidden-action');
     downloadButton.classList.add('rox-gpt-hidden-action');
+
+    shareButton.classList.remove('rox-gpt-hidden-action');
+    shareButton.innerHTML = icon.share;
+    shareButton.title = labels.share;
+    shareButton.setAttribute('aria-label',labels.share);
+
+    const retryButton = document.createElement('button');
+    retryButton.type = 'button';
+    retryButton.className = 'msg-action rox-gpt-retry-button';
+    retryButton.innerHTML = icon.retry;
+    retryButton.title = labels.retry;
+    retryButton.setAttribute('aria-label',labels.retry);
+
+    retryButton.addEventListener('click',() => {
+      let previous = actions.previousElementSibling;
+
+      while (previous) {
+        if (
+          previous.classList?.contains('msg') &&
+          previous.classList.contains('user')
+        ) break;
+
+        previous = previous.previousElementSibling;
+      }
+
+      const text = String(
+        previous?.innerText||
+        previous?.textContent||
+        ''
+      ).trim();
+
+      const composer = document.querySelector(
+        '#feature-chat [data-feature="chat"]'
+      );
+
+      if (!text || !composer) return;
+
+      composer.value = text;
+      composer.dispatchEvent(
+        new Event('input',{bubbles:true})
+      );
+      composer.focus();
+
+      if (typeof sendMessage === 'function') {
+        sendMessage('chat');
+      }
+    });
 
     const wrap = document.createElement('div');
     wrap.className = 'rox-gpt-more-wrap';
@@ -14867,6 +14994,16 @@ initAuth();
     menu.setAttribute('role','menu');
     menu.hidden = true;
 
+    const message =
+      actions.previousElementSibling?.classList.contains('msg')
+        ? actions.previousElementSibling
+        : null;
+
+    const messageDate = new Date(
+      message?.dataset.zuvyrCreatedAt||
+      Date.now()
+    );
+
     const time = document.createElement('div');
     time.className = 'rox-gpt-more-time';
     time.textContent = new Intl.DateTimeFormat(
@@ -14877,12 +15014,7 @@ initAuth();
         hour:'numeric',
         minute:'2-digit'
       }
-    ).format(new Date());
-
-    const message =
-      actions.previousElementSibling?.classList.contains('msg')
-        ? actions.previousElementSibling
-        : null;
+    ).format(messageDate);
 
     const sourcesButton = makeMenuItem(
       icon.sources,
@@ -14891,6 +15023,26 @@ initAuth();
         const links = message
           ? Array.from(message.querySelectorAll('a[href]'))
           : [];
+
+        const metaSources = Array.isArray(
+          message?._zuvyrMeta?.sources
+        )
+          ? message._zuvyrMeta.sources
+          : [];
+
+        metaSources.forEach(source => {
+          const url = typeof source === 'string'
+            ? source
+            : source?.url;
+
+          if (!url) return;
+
+          const link = document.createElement('a');
+          link.href = url;
+          link.target = '_blank';
+          link.rel = 'noopener noreferrer';
+          links.push(link);
+        });
 
         menu.hidden = true;
         moreButton.setAttribute('aria-expanded','false');
@@ -14907,10 +15059,62 @@ initAuth();
     const branchButton = makeMenuItem(
       icon.branch,
       labels.branch,
-      () => {
+      async button => {
         menu.hidden = true;
         moreButton.setAttribute('aria-expanded','false');
-        showNote(actions,labels.branchLater);
+
+        const meta = message?._zuvyrMeta||{};
+        const conversationId =
+          meta.conversationId||
+          message?.dataset.zuvyrConversationId||
+          (
+            typeof activeRoxConversationIds !== 'undefined'
+              ? activeRoxConversationIds.chat
+              : null
+          );
+
+        if (!conversationId) {
+          showNote(actions,labels.branchFailed);
+          return;
+        }
+
+        button.disabled = true;
+        showNote(actions,labels.branching);
+
+        try {
+          const response = await authFetch(
+            '/api/conversations/'+
+            encodeURIComponent(conversationId)+
+            '/branch',
+            {
+              method:'POST',
+              body:JSON.stringify({
+                throughSequence:
+                  Number(meta.sequenceNo)||
+                  Number(message?.dataset.zuvyrSequenceNo)||
+                  undefined
+              })
+            }
+          );
+
+          const data = await response.json().catch(() => ({}));
+
+          if (!response.ok || !data.conversation) {
+            throw new Error(
+              data.message||
+              'conversation_branch_failed'
+            );
+          }
+
+          if (typeof openRoxHistoryItem === 'function') {
+            await openRoxHistoryItem(data.conversation);
+          }
+        } catch (error) {
+          console.error('ZUVYR branch failed:',error);
+          showNote(actions,labels.branchFailed);
+        } finally {
+          button.disabled = false;
+        }
       },
       false
     );
@@ -14928,6 +15132,7 @@ initAuth();
 
     menu.append(time,sourcesButton,branchButton,readButton);
     wrap.append(moreButton,menu);
+    actions.appendChild(retryButton);
     actions.appendChild(wrap);
 
     moreButton.addEventListener('click',event => {
@@ -29674,7 +29879,13 @@ async function openRoxHistoryItem(item, row=null){
         {
           responseId:content.responseId||null,
           model:message.model||null,
-          feature
+          feature,
+          conversationId:item.id,
+          sequenceNo:message.sequence_no,
+          createdAt:message.created_at,
+          sources:Array.isArray(content.sources)
+            ?content.sources
+            :[]
         }
       );
     });
@@ -30508,6 +30719,19 @@ function pushHistory(feature, role, content) {
 function appendMsg(msgBox, cls, content, isNode, meta = {}) {
   const el = document.createElement('div');
   el.className = 'msg ' + cls;
+  el._zuvyrMeta = meta && typeof meta === 'object' ? meta : {};
+
+  if (el._zuvyrMeta.createdAt) {
+    el.dataset.zuvyrCreatedAt = el._zuvyrMeta.createdAt;
+  }
+
+  if (el._zuvyrMeta.conversationId) {
+    el.dataset.zuvyrConversationId = el._zuvyrMeta.conversationId;
+  }
+
+  if (Number.isInteger(Number(el._zuvyrMeta.sequenceNo))) {
+    el.dataset.zuvyrSequenceNo = String(el._zuvyrMeta.sequenceNo);
+  }
 
   if (isNode) {
     el.appendChild(content);
@@ -31348,10 +31572,26 @@ async function sendChat(feature, text, msgBox) {
     msgBox.appendChild(artifact);
     msgBox.scrollTop = msgBox.scrollHeight;
   } else {
-    appendMsg(msgBox, 'bot', data.text, false, { responseId: data.responseId, model: data.model, feature });
+    appendMsg(msgBox, 'bot', data.text, false, {
+      responseId: data.responseId,
+      model: data.model,
+      feature,
+      conversationId: data.conversationId || conversationId,
+      sequenceNo: data.conversationMessageCount,
+      createdAt: new Date().toISOString(),
+      sources: Array.isArray(data.sources) ? data.sources : []
+    });
   }
 } else {
-  appendMsg(msgBox, 'bot', data.text, false, { responseId: data.responseId, model: data.model, feature });
+  appendMsg(msgBox, 'bot', data.text, false, {
+      responseId: data.responseId,
+      model: data.model,
+      feature,
+      conversationId: data.conversationId || conversationId,
+      sequenceNo: data.conversationMessageCount,
+      createdAt: new Date().toISOString(),
+      sources: Array.isArray(data.sources) ? data.sources : []
+    });
 }
   if (feature === 'chat') {
     maybeAutoReadRoxMessage(data.text);
@@ -34699,7 +34939,11 @@ document.addEventListener("DOMContentLoaded",function(){
     branch:
       '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="6" cy="5" r="2"></circle><circle cx="18" cy="7" r="2"></circle><circle cx="6" cy="19" r="2"></circle><path d="M6 7v10"></path><path d="M8 11h4a6 6 0 0 0 6-2"></path></svg>',
     listen:
-      '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 5 6.5 9H3v6h3.5L11 19V5Z"></path><path d="M15 9a4 4 0 0 1 0 6"></path><path d="M18 6a8 8 0 0 1 0 12"></path></svg>'
+      '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 5 6.5 9H3v6h3.5L11 19V5Z"></path><path d="M15 9a4 4 0 0 1 0 6"></path><path d="M18 6a8 8 0 0 1 0 12"></path></svg>',
+    share:
+      '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 16V3"></path><path d="m7 8 5-5 5 5"></path><path d="M5 13v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6"></path></svg>',
+    retry:
+      '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11a8 8 0 1 0-2.34 5.66"></path><path d="M20 4v7h-7"></path></svg>'
   };
 
   const textForLanguage = () => {
@@ -34831,6 +35075,48 @@ document.addEventListener("DOMContentLoaded",function(){
     if (buttons.length < 6) return;
 
     const labels = textForLanguage();
+    const actionLanguage = String(
+      document.documentElement.lang||
+      navigator.language||
+      'en'
+    ).toLowerCase();
+
+    const extraLabels = actionLanguage.startsWith('ar')
+      ? {
+          share:'\u0645\u0634\u0627\u0631\u0643\u0629',
+          retry:'\u0625\u0639\u0627\u062f\u0629 \u0625\u0646\u0634\u0627\u0621 \u0627\u0644\u062c\u0648\u0627\u0628',
+          branching:'\u062c\u0627\u0631\u064a \u0625\u0646\u0634\u0627\u0621 \u0627\u0644\u0641\u0631\u0639...',
+          branchFailed:'\u062a\u0639\u0630\u0631 \u0625\u0646\u0634\u0627\u0621 \u0627\u0644\u0641\u0631\u0639.'
+        }
+      : actionLanguage.startsWith('fr')
+        ? {
+            share:'Partager',
+            retry:'R\u00e9g\u00e9n\u00e9rer',
+            branching:'Cr\u00e9ation de la branche...',
+            branchFailed:'Impossible de cr\u00e9er la branche.'
+          }
+        : actionLanguage.startsWith('es')
+          ? {
+              share:'Compartir',
+              retry:'Regenerar',
+              branching:'Creando la rama...',
+              branchFailed:'No se pudo crear la rama.'
+            }
+          : actionLanguage.startsWith('zh')
+            ? {
+                share:'\u5206\u4eab',
+                retry:'\u91cd\u65b0\u751f\u6210',
+                branching:'\u6b63\u5728\u521b\u5efa\u5206\u652f...',
+                branchFailed:'\u65e0\u6cd5\u521b\u5efa\u5206\u652f\u3002'
+              }
+            : {
+                share:'Share',
+                retry:'Regenerate',
+                branching:'Creating branch...',
+                branchFailed:'Could not create the branch.'
+              };
+
+    Object.assign(labels,extraLabels);
     const copyButton = buttons[0];
     const listenButton = buttons[1];
     const likeButton = buttons[2];
@@ -34854,8 +35140,54 @@ document.addEventListener("DOMContentLoaded",function(){
     dislikeButton.setAttribute('aria-label',labels.dislike);
 
     listenButton.classList.add('rox-gpt-hidden-action');
-    shareButton.classList.add('rox-gpt-hidden-action');
     downloadButton.classList.add('rox-gpt-hidden-action');
+
+    shareButton.classList.remove('rox-gpt-hidden-action');
+    shareButton.innerHTML = icon.share;
+    shareButton.title = labels.share;
+    shareButton.setAttribute('aria-label',labels.share);
+
+    const retryButton = document.createElement('button');
+    retryButton.type = 'button';
+    retryButton.className = 'msg-action rox-gpt-retry-button';
+    retryButton.innerHTML = icon.retry;
+    retryButton.title = labels.retry;
+    retryButton.setAttribute('aria-label',labels.retry);
+
+    retryButton.addEventListener('click',() => {
+      let previous = actions.previousElementSibling;
+
+      while (previous) {
+        if (
+          previous.classList?.contains('msg') &&
+          previous.classList.contains('user')
+        ) break;
+
+        previous = previous.previousElementSibling;
+      }
+
+      const text = String(
+        previous?.innerText||
+        previous?.textContent||
+        ''
+      ).trim();
+
+      const composer = document.querySelector(
+        '#feature-chat [data-feature="chat"]'
+      );
+
+      if (!text || !composer) return;
+
+      composer.value = text;
+      composer.dispatchEvent(
+        new Event('input',{bubbles:true})
+      );
+      composer.focus();
+
+      if (typeof sendMessage === 'function') {
+        sendMessage('chat');
+      }
+    });
 
     const wrap = document.createElement('div');
     wrap.className = 'rox-gpt-more-wrap';
@@ -34874,6 +35206,16 @@ document.addEventListener("DOMContentLoaded",function(){
     menu.setAttribute('role','menu');
     menu.hidden = true;
 
+    const message =
+      actions.previousElementSibling?.classList.contains('msg')
+        ? actions.previousElementSibling
+        : null;
+
+    const messageDate = new Date(
+      message?.dataset.zuvyrCreatedAt||
+      Date.now()
+    );
+
     const time = document.createElement('div');
     time.className = 'rox-gpt-more-time';
     time.textContent = new Intl.DateTimeFormat(
@@ -34884,12 +35226,7 @@ document.addEventListener("DOMContentLoaded",function(){
         hour:'numeric',
         minute:'2-digit'
       }
-    ).format(new Date());
-
-    const message =
-      actions.previousElementSibling?.classList.contains('msg')
-        ? actions.previousElementSibling
-        : null;
+    ).format(messageDate);
 
     const sourcesButton = makeMenuItem(
       icon.sources,
@@ -34898,6 +35235,26 @@ document.addEventListener("DOMContentLoaded",function(){
         const links = message
           ? Array.from(message.querySelectorAll('a[href]'))
           : [];
+
+        const metaSources = Array.isArray(
+          message?._zuvyrMeta?.sources
+        )
+          ? message._zuvyrMeta.sources
+          : [];
+
+        metaSources.forEach(source => {
+          const url = typeof source === 'string'
+            ? source
+            : source?.url;
+
+          if (!url) return;
+
+          const link = document.createElement('a');
+          link.href = url;
+          link.target = '_blank';
+          link.rel = 'noopener noreferrer';
+          links.push(link);
+        });
 
         menu.hidden = true;
         moreButton.setAttribute('aria-expanded','false');
@@ -34914,10 +35271,62 @@ document.addEventListener("DOMContentLoaded",function(){
     const branchButton = makeMenuItem(
       icon.branch,
       labels.branch,
-      () => {
+      async button => {
         menu.hidden = true;
         moreButton.setAttribute('aria-expanded','false');
-        showNote(actions,labels.branchLater);
+
+        const meta = message?._zuvyrMeta||{};
+        const conversationId =
+          meta.conversationId||
+          message?.dataset.zuvyrConversationId||
+          (
+            typeof activeRoxConversationIds !== 'undefined'
+              ? activeRoxConversationIds.chat
+              : null
+          );
+
+        if (!conversationId) {
+          showNote(actions,labels.branchFailed);
+          return;
+        }
+
+        button.disabled = true;
+        showNote(actions,labels.branching);
+
+        try {
+          const response = await authFetch(
+            '/api/conversations/'+
+            encodeURIComponent(conversationId)+
+            '/branch',
+            {
+              method:'POST',
+              body:JSON.stringify({
+                throughSequence:
+                  Number(meta.sequenceNo)||
+                  Number(message?.dataset.zuvyrSequenceNo)||
+                  undefined
+              })
+            }
+          );
+
+          const data = await response.json().catch(() => ({}));
+
+          if (!response.ok || !data.conversation) {
+            throw new Error(
+              data.message||
+              'conversation_branch_failed'
+            );
+          }
+
+          if (typeof openRoxHistoryItem === 'function') {
+            await openRoxHistoryItem(data.conversation);
+          }
+        } catch (error) {
+          console.error('ZUVYR branch failed:',error);
+          showNote(actions,labels.branchFailed);
+        } finally {
+          button.disabled = false;
+        }
       },
       false
     );
@@ -34935,6 +35344,7 @@ document.addEventListener("DOMContentLoaded",function(){
 
     menu.append(time,sourcesButton,branchButton,readButton);
     wrap.append(moreButton,menu);
+    actions.appendChild(retryButton);
     actions.appendChild(wrap);
 
     moreButton.addEventListener('click',event => {

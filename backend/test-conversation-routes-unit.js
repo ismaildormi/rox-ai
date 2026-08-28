@@ -10,6 +10,9 @@ const {
 const CONVERSATION_ID =
   '11111111-1111-4111-8111-111111111111';
 
+const BRANCH_ID =
+  '22222222-2222-4222-8222-222222222222';
+
 async function run() {
   assert.strictEqual(
     isConversationId(CONVERSATION_ID),
@@ -35,10 +38,15 @@ async function run() {
 
     async createConversation(input) {
       calls.push(['create', input]);
+      const createCount =
+        calls.filter(call => call[0] === 'create').length;
+
       return {
-        id: CONVERSATION_ID,
-        feature: input.feature,
-        title: input.title
+        id:createCount===1
+          ?CONVERSATION_ID
+          :BRANCH_ID,
+        feature:input.feature,
+        title:input.title
       };
     },
 
@@ -52,14 +60,35 @@ async function run() {
       };
     },
 
+    async requireOwnedConversation(conversationId,ownerId) {
+      calls.push(['require',{conversationId,ownerId}]);
+      return {
+        id:conversationId,
+        owner_id:ownerId,
+        feature:'chat',
+        title:'Original chat',
+        metadata:{}
+      };
+    },
+
+    async appendMessage(input) {
+      calls.push(['append',input]);
+      return {
+        id:'branched-message',
+        ...input
+      };
+    },
+
     async listMessages(input) {
-      calls.push(['messages', input]);
+      calls.push(['messages',input]);
       return [{
-        id: 'message-1',
-        sequence_no: 1,
-        role: 'user',
-        message_type: 'text',
-        plain_text: 'Hello Rox'
+        id:'message-1',
+        sequence_no:1,
+        role:'user',
+        message_type:'text',
+        plain_text:'Hello Rox',
+        content:{text:'Hello Rox'},
+        metadata:{}
       }];
     }
   };
@@ -163,6 +192,34 @@ async function run() {
 
     assert.strictEqual(body.messages.length, 1);
     assert.strictEqual(calls[3][1].ownerId, 'owner-123');
+
+    response = await fetch(
+      `${baseUrl}/${CONVERSATION_ID}/branch`,
+      {
+        method:'POST',
+        headers:{
+          'content-type':'application/json'
+        },
+        body:JSON.stringify({
+          throughSequence:1
+        })
+      }
+    );
+
+    assert.strictEqual(response.status,201);
+
+    body=await response.json();
+
+    assert.strictEqual(body.conversation.id,BRANCH_ID);
+    assert.strictEqual(body.copiedMessages,1);
+
+    const appendCall=
+      calls.find(call=>call[0]==='append');
+
+    assert.strictEqual(
+      appendCall[1].conversationId,
+      BRANCH_ID
+    );
 
     response = await fetch(
       `${baseUrl}/invalid-id/messages`
