@@ -804,10 +804,10 @@
       let outgoingText = text;
       if (feature === 'chat' && attachment?.kind === 'text') outgoingText = buildAttachedText(text,attachment);
       window.__zuvyrChatImageAttachment = feature === 'chat' && attachment?.kind === 'image' ? attachment : null;
+      if (feature === 'chat' && attachment && row) clearAttachment(row);
       try { return await original.call(this,feature,outgoingText,msgBox); }
       finally {
         window.__zuvyrChatImageAttachment = null;
-        if (feature === 'chat' && attachment && row) clearAttachment(row);
       }
     };
     wrapped.__zuvyrMultimodalV2 = true;
