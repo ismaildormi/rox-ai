@@ -167,7 +167,7 @@ app.use(ipRateLimit());
 // on purpose. A tighter, explicit limit means a huge-body request is
 // rejected by Express itself before it reaches any handler, on top of
 // the field-level checks in lib/inputValidation.js.
-app.use(express.json({ limit: '32kb' }));
+app.use(express.json({ limit: '2mb' }));
 // --- API versioning ---------------------------------------------------
 // New/future-feature endpoints are written directly under /api/v1 (see
 // src/api/v1/futureRoutes.js) ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â checked FIRST so they never fall into
@@ -414,7 +414,8 @@ app.post('/api/chat', requireAuth, rateLimit('chat'), validateChatBody, loadRoxU
     feature,
     aiPreferences = {},
     conversationId = null,
-    turnId = null
+    turnId = null,
+    attachment = null
   } = req.body; // feature: 'chat' | 'code'
   const userId = req.userId;
   const requestId = crypto.randomUUID();
@@ -601,6 +602,24 @@ app.post('/api/chat', requireAuth, rateLimit('chat'), validateChatBody, loadRoxU
       )
     ];
     // ROX AI PREFERENCES PROMPT END
+
+    if (attachment && attachment.kind === 'image') {
+      for (let index = routedMessages.length - 1; index >= 0; index -= 1) {
+        const message = routedMessages[index];
+        if (message.role !== 'user') continue;
+        message.content = [
+          {
+            type: 'text',
+            text: String(message.content || 'Analyze the attached image.')
+          },
+          {
+            type: 'image_url',
+            image_url: { url: attachment.dataUrl }
+          }
+        ];
+        break;
+      }
+    }
 
     const result = await routeRequest(feature || 'chat', routedMessages, { loadLevel, isPro });
 

@@ -1,4 +1,4 @@
-﻿// ROX AI â€” AI Router (hardened)
+// ROX AI â€” AI Router (hardened)
 //
 // The original router had no memory of model health at all: every
 // request walked the full Claude â†’ Qwen â†’ DeepSeek chain from scratch,
@@ -110,7 +110,13 @@ async function routeRequest(feature, messages, opts = {}) {
   const loadLevel = opts.loadLevel || 'normal';
   const isPro = opts.isPro !== false;
   const originalChain = ROUTES[feature] || ROUTES.chat;
-  const chain = getEffectiveChain(feature, loadLevel, isPro);
+  const hasImageInput = messages.some(message =>
+    Array.isArray(message?.content) &&
+    message.content.some(part => part?.type === 'image_url')
+  );
+  const chain = hasImageInput
+    ? [ROUTES.chat[ROUTES.chat.length - 1]]
+    : getEffectiveChain(feature, loadLevel, isPro);
   const chainReordered = chain[0]?.model !== originalChain[0]?.model;
 
   const timeoutMs =
