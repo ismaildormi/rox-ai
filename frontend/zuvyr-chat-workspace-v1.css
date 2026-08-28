@@ -906,3 +906,19 @@ body.zuvyr-ui #feature-chat .zuvyr-rate-pair svg:last-child{
   right:0!important;
   bottom:0!important;
 }
+/* ZUVYR CHATGPT RATE SVG V3 */
+body.zuvyr-ui #feature-chat .zuvyr-rate-combined{
+  position:static!important;
+  display:block!important;
+  width:27px!important;
+  height:22px!important;
+  margin:0!important;
+  overflow:visible!important;
+  fill:none!important;
+  stroke:currentColor!important;
+  stroke-width:1.8!important;
+  stroke-linecap:round!important;
+  stroke-linejoin:round!important;
+  transform:none!important;
+  pointer-events:none!important;
+}

@@ -1044,7 +1044,7 @@
     const ratingButton=document.createElement('button');
     ratingButton.type='button';
     ratingButton.className='msg-action zuvyr-rating-button';
-    ratingButton.innerHTML='<span class="zuvyr-rate-pair">'+like.innerHTML+dislike.innerHTML+'</span>';
+    ratingButton.innerHTML='<svg class="zuvyr-rate-combined" viewBox="0 0 30 23" aria-hidden="true"><g transform="translate(0 -1) scale(.72)"><path d="M7 10v10H4a2 2 0 0 1-2-2v-6a2 2 0 0 1 2-2h3Z"></path><path d="M7 20h9.3a2 2 0 0 0 1.9-1.4l2.2-7A2 2 0 0 0 18.5 9H14l.7-3.1A2.4 2.4 0 0 0 12.3 3L7 10Z"></path></g><g transform="translate(14 5) scale(.72)"><path d="M7 14V4H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h3Z"></path><path d="M7 4h9.3a2 2 0 0 1 1.9 1.4l2.2 7a2 2 0 0 1-1.9 2.6H14l.7 3.1a2.4 2.4 0 0 1-2.4 2.9L7 14Z"></path></g></svg>';
     ratingButton.title=text.rate;
     ratingButton.setAttribute('aria-label',text.rate);
     ratingButton.setAttribute('aria-haspopup','menu');
