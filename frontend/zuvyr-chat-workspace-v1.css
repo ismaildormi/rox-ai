@@ -1035,3 +1035,19 @@ body.zuvyr-ui #feature-chat .zuvyr-sidebar-recent-more svg{fill:currentColor;str
 .zuvyr-conversation-menu-divider{height:1px;margin:5px 4px;background:rgba(255,255,255,.11)}
 /* ZUVYR SIDEBAR CONVERSATION ACTIONS END */
 /* ZUVYR CHATGPT SIDEBAR PHASE 1 END */
+/* ZUVYR SIDEBAR BRAND + CHAT TOPBAR V1 */
+body.zuvyr-ui #feature-chat .zuvyr-chat-brand{
+  min-height:46px;
+  gap:10px;
+}
+body.zuvyr-ui #feature-chat .zuvyr-chat-brand img{
+  width:28px;
+  height:28px;
+  border-radius:7px;
+}
+body.zuvyr-ui #feature-chat .zuvyr-chat-brand>span{
+  font-size:17px;
+  font-weight:720;
+  letter-spacing:.09em;
+}
+/* ZUVYR SIDEBAR BRAND + CHAT TOPBAR V1 END */

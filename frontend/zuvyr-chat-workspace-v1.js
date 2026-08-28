@@ -181,7 +181,8 @@
       capabilities,
       sidebarBottom
     );
-    main.append(topbar, messages, composer);
+    topbar.remove();
+    main.append(messages, composer);
     screen.append(sidebar, main);
 
     enhanceWelcome(messages);
