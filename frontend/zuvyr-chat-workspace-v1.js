@@ -806,7 +806,7 @@
 
       const chip = document.createElement('div');
       chip.className = 'zuvyr-attachment-chip'; chip.hidden = true;
-      chip.innerHTML = `<img class="zuvyr-attachment-preview" alt="" hidden><span class="zuvyr-attachment-chip-copy"><span class="zuvyr-attachment-chip-name"></span><span class="zuvyr-attachment-chip-meta"></span></span><button type="button" class="zuvyr-attachment-remove" aria-label="Remove attached file">Ã—</button>`;
+      chip.innerHTML = `<img class="zuvyr-attachment-preview" alt="" hidden><span class="zuvyr-attachment-chip-copy"><span class="zuvyr-attachment-chip-name"></span><span class="zuvyr-attachment-chip-meta"></span></span><button type="button" class="zuvyr-attachment-remove" aria-label="Remove attached file">&times;</button>`;
       row.insertBefore(trigger,input); row.append(picker,menu,chip);
 
       const setOpen = open => { menu.hidden = !open; trigger.setAttribute('aria-expanded',open ? 'true' : 'false'); };
