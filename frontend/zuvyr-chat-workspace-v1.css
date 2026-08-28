@@ -657,3 +657,14 @@ body.zuvyr-ui #feature-chat .zuvyr-attachment-remove{display:grid;place-items:ce
 body.zuvyr-ui #feature-chat .zuvyr-attachment-remove:hover{background:rgba(255,91,24,.22)}
 body.zuvyr-ui #feature-chat .chat-input-row.zuvyr-voice-listening .zuvyr-attach-button,body.zuvyr-ui #feature-chat .chat-input-row.zuvyr-voice-listening .zuvyr-attachment-chip{display:none!important}
 @media(max-width:760px){body.zuvyr-ui #feature-chat .zuvyr-attach-button{width:42px;height:42px}body.zuvyr-ui #feature-chat .zuvyr-attach-menu{left:-1px;width:min(290px,calc(100vw - 24px))}}
+/* ZUVYR SENT IMAGE MESSAGE V1 */
+body.zuvyr-ui #feature-chat .chat-input-row[data-zuvyr-attachment-active="1"]{min-height:132px!important;padding-top:76px!important}
+body.zuvyr-ui #feature-chat .chat-input-row[data-zuvyr-attachment-active="1"] .zuvyr-attachment-chip{top:10px;bottom:auto;left:14px;width:58px;min-height:58px;padding:0;border:0;border-radius:12px;background:transparent;box-shadow:none}
+body.zuvyr-ui #feature-chat .chat-input-row[data-zuvyr-attachment-active="1"] .zuvyr-attachment-preview{width:58px;height:58px;margin:0;border-radius:12px}
+body.zuvyr-ui #feature-chat .chat-input-row[data-zuvyr-attachment-active="1"] .zuvyr-attachment-chip-copy{display:none}
+body.zuvyr-ui #feature-chat .chat-input-row[data-zuvyr-attachment-active="1"] .zuvyr-attachment-remove{position:absolute;top:-7px;right:-7px;width:23px;height:23px;margin:0;border:2px solid #1b1b1d;background:#3a3a3d;font-size:15px}
+body.zuvyr-ui #feature-chat #msgs-chat>.msg.user:has(.zuvyr-sent-image-message){width:min(78%,520px)!important;max-width:520px!important;padding:0!important;border:0!important;background:transparent!important}
+body.zuvyr-ui #feature-chat .zuvyr-sent-image-message{display:flex;width:100%;align-items:flex-end;flex-direction:column;gap:9px}
+body.zuvyr-ui #feature-chat .zuvyr-sent-image{display:block;width:100%;max-height:480px;border:1px solid rgba(255,255,255,.09);border-radius:20px;object-fit:contain;background:#111}
+body.zuvyr-ui #feature-chat .zuvyr-sent-image-caption{max-width:100%;padding:11px 15px;color:#fff;border:1px solid rgba(255,255,255,.08);border-radius:18px 18px 5px 18px;background:#1b1b1b;white-space:pre-wrap}
+@media(max-width:760px){body.zuvyr-ui #feature-chat #msgs-chat>.msg.user:has(.zuvyr-sent-image-message){width:min(88%,430px)!important;max-width:88%!important}body.zuvyr-ui #feature-chat .zuvyr-sent-image{max-height:390px;border-radius:16px}}

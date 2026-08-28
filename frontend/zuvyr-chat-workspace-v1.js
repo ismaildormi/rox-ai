@@ -763,6 +763,38 @@
     return `${userText}${header}${attachment.content.slice(0,Math.max(0,MAX_MESSAGE_CHARS-userText.length-header.length))}`.slice(0,MAX_MESSAGE_CHARS);
   };
 
+  const patchAppendMsg = () => {
+    if (typeof window.appendMsg !== 'function' || window.appendMsg.__zuvyrSentImageV1) return;
+    const original = window.appendMsg;
+    const wrapped = function(msgBox,cls,content,isNode,meta = {}) {
+      const isUser = String(cls || '').split(/\s+/).includes('user');
+      if (!isNode && isUser && msgBox?.id === 'msgs-chat') {
+        const row = document.querySelector('#feature-chat .chat-input-row[data-zuvyr-attachment-active="1"]');
+        const attachment = row?._zuvyrAttachment;
+        if (attachment?.kind === 'image' && attachment.dataUrl) {
+          const layout = document.createElement('div');
+          layout.className = 'zuvyr-sent-image-message';
+          const image = document.createElement('img');
+          image.className = 'zuvyr-sent-image';
+          image.src = attachment.dataUrl;
+          image.alt = attachment.name || 'Attached image';
+          layout.appendChild(image);
+          const userText = String(content || '').trim();
+          if (userText && userText !== 'Analyze the attached image.') {
+            const caption = document.createElement('div');
+            caption.className = 'zuvyr-sent-image-caption';
+            caption.textContent = userText;
+            layout.appendChild(caption);
+          }
+          return original.call(this,msgBox,cls,layout,true,meta);
+        }
+      }
+      return original.call(this,msgBox,cls,content,isNode,meta);
+    };
+    wrapped.__zuvyrSentImageV1 = true;
+    wrapped.__zuvyrOriginal = original;
+    window.appendMsg = wrapped;
+  };
   const patchSendChat = () => {
     if (typeof window.sendChat !== 'function' || window.sendChat.__zuvyrMultimodalV2) return;
     const original = window.sendChat;
@@ -784,6 +816,7 @@
   };
 
   const enhance = () => {
+    patchAppendMsg();
     patchSendChat();
     document.querySelectorAll('#feature-chat .chat-input-row').forEach(row => {
       if (row.dataset.zuvyrAttachMenu === '3') return;
