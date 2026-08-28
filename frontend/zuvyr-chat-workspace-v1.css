@@ -1015,4 +1015,23 @@ body.zuvyr-ui #feature-chat .zuvyr-sidebar-recent-title{min-width:0;overflow:hid
 body.zuvyr-ui #feature-chat .zuvyr-sidebar-recents-state{padding:10px 12px;color:#777;font-size:12px;line-height:1.4}
 body.zuvyr-ui #feature-chat .zuvyr-sidebar-collapsed .zuvyr-sidebar-recents{display:none!important}
 @media(max-width:760px){body.zuvyr-ui #feature-chat .zuvyr-sidebar-recents{display:none!important}}
+/* ZUVYR SIDEBAR CONVERSATION ACTIONS */
+body.zuvyr-ui #feature-chat .zuvyr-sidebar-recent{position:relative}
+body.zuvyr-ui #feature-chat .zuvyr-sidebar-recent-title{flex:1}
+body.zuvyr-ui #feature-chat .zuvyr-sidebar-recent-controls{display:flex;flex:0 0 auto;align-items:center;gap:1px;opacity:0;pointer-events:none}
+body.zuvyr-ui #feature-chat .zuvyr-sidebar-recent:hover .zuvyr-sidebar-recent-controls,body.zuvyr-ui #feature-chat .zuvyr-sidebar-recent:focus-within .zuvyr-sidebar-recent-controls{opacity:1;pointer-events:auto}
+body.zuvyr-ui #feature-chat .zuvyr-sidebar-recent-pin.is-pinned{opacity:1!important;pointer-events:auto!important}
+body.zuvyr-ui #feature-chat .zuvyr-sidebar-recent-pin,body.zuvyr-ui #feature-chat .zuvyr-sidebar-recent-more{display:grid;width:27px;height:27px;padding:0;place-items:center;color:#d6d6d6;border:0;border-radius:7px;background:transparent;cursor:pointer}
+body.zuvyr-ui #feature-chat .zuvyr-sidebar-recent-pin:hover,body.zuvyr-ui #feature-chat .zuvyr-sidebar-recent-more:hover{color:#fff;background:#383838}
+body.zuvyr-ui #feature-chat .zuvyr-sidebar-recent-pin svg,body.zuvyr-ui #feature-chat .zuvyr-sidebar-recent-more svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+body.zuvyr-ui #feature-chat .zuvyr-sidebar-recent-more svg{fill:currentColor;stroke:none}
+.zuvyr-conversation-menu{position:fixed;z-index:10000;width:220px;padding:7px;border:1px solid rgba(255,255,255,.11);border-radius:14px;background:#2f2f2f;color:#f5f5f5;box-shadow:0 18px 50px rgba(0,0,0,.55)}
+.zuvyr-conversation-menu[hidden]{display:none!important}
+.zuvyr-conversation-menu-item{display:flex;width:100%;min-height:42px;align-items:center;gap:11px;padding:0 10px;color:#f3f3f3;border:0;border-radius:9px;background:transparent;font:inherit;font-size:13px;text-align:left;cursor:pointer}
+.zuvyr-conversation-menu-item:hover{background:#424242}
+.zuvyr-conversation-menu-item:disabled{opacity:.55;cursor:wait}
+.zuvyr-conversation-menu-item svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.zuvyr-conversation-menu-item.is-danger{color:#ff6b5f}
+.zuvyr-conversation-menu-divider{height:1px;margin:5px 4px;background:rgba(255,255,255,.11)}
+/* ZUVYR SIDEBAR CONVERSATION ACTIONS END */
 /* ZUVYR CHATGPT SIDEBAR PHASE 1 END */
