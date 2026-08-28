@@ -922,3 +922,16 @@ body.zuvyr-ui #feature-chat .zuvyr-rate-combined{
   transform:none!important;
   pointer-events:none!important;
 }
+/* ZUVYR EXACT CHATGPT RATE ICON V4 */
+body.zuvyr-ui #feature-chat .zuvyr-rate-chatgpt-exact{
+  position:static!important;
+  display:block!important;
+  width:20px!important;
+  height:20px!important;
+  margin:0!important;
+  overflow:visible!important;
+  fill:currentColor!important;
+  stroke:none!important;
+  transform:none!important;
+  pointer-events:none!important;
+}
