@@ -662,7 +662,7 @@ function createConversationStore(db) {
 
 function getDefaultStore() {
   if (!lazyDefaultStore) {
-    const supabaseAdmin = require('./supabaseAdmin');
+    const { supabaseAdmin } = require('./supabaseAdmin');
     lazyDefaultStore = createConversationStore(supabaseAdmin);
   }
 
