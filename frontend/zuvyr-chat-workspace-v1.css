@@ -668,3 +668,7 @@ body.zuvyr-ui #feature-chat .zuvyr-sent-image-message{display:flex;width:100%;al
 body.zuvyr-ui #feature-chat .zuvyr-sent-image{display:block;width:100%;max-height:480px;border:1px solid rgba(255,255,255,.09);border-radius:20px;object-fit:contain;background:#111}
 body.zuvyr-ui #feature-chat .zuvyr-sent-image-caption{max-width:100%;padding:11px 15px;color:#fff;border:1px solid rgba(255,255,255,.08);border-radius:18px 18px 5px 18px;background:#1b1b1b;white-space:pre-wrap}
 @media(max-width:760px){body.zuvyr-ui #feature-chat #msgs-chat>.msg.user:has(.zuvyr-sent-image-message){width:min(88%,430px)!important;max-width:88%!important}body.zuvyr-ui #feature-chat .zuvyr-sent-image{max-height:390px;border-radius:16px}}
+/* ZUVYR SINGLE EDGE SCROLLBAR V1 */
+body.zuvyr-ui:has(#feature-chat.active){overflow:hidden!important}
+body.zuvyr-ui #feature-chat .zuvyr-chat-main>#msgs-chat{width:100%!important;max-width:none!important;box-sizing:border-box!important;padding-left:max(28px,calc((100% - 780px)/2 + 28px))!important;padding-right:max(28px,calc((100% - 780px)/2 + 28px))!important;scrollbar-gutter:stable}
+@media(max-width:760px){body.zuvyr-ui #feature-chat .zuvyr-chat-main>#msgs-chat{padding-left:17px!important;padding-right:17px!important}}
