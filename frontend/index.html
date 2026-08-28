@@ -14,8 +14,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>ZUVYR — Mobile</title>
 <link rel="icon" type="image/png" href="./zuvyr-app-icon-20260827.png?v=1">
-<link rel="stylesheet" href="./zuvyr-chat-workspace-v1.css?v=10">
-<script defer src="./zuvyr-chat-workspace-v1.js?v=11"><\/script>
+<link rel="stylesheet" href="./zuvyr-chat-workspace-v1.css?v=11">
+<script defer src="./zuvyr-chat-workspace-v1.js?v=12"><\/script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.110.8/dist/umd/supabase.js"><\/script>
@@ -3173,7 +3173,7 @@ html[dir="rtl"] .rox-gpt-menu-item{
       <div class="msg bot" data-i18n="features.chat.prompt">Hello! How can I help you today?</div>
     </div>
     <div class="chat-input-row">
-      <input type="text" placeholder="Ask your question..." data-i18n-placeholder="features.chat.placeholder" data-feature="chat">
+      <textarea rows="1" placeholder="Ask your question..." data-i18n-placeholder="features.chat.placeholder" data-feature="chat"></textarea>
       <div
         class="rox-voice-language"
         data-rox-voice-language="chat"
@@ -10301,7 +10301,7 @@ async function openRoxHistoryItem(item, row=null){
     msgBox.scrollTop=msgBox.scrollHeight;
 
     const input=document.querySelector(
-      'input[data-feature="'+feature+'"]'
+      '[data-feature="'+feature+'"]'
     );
 
     if(input){
@@ -12316,7 +12316,7 @@ function setupRoxNewChatButtons() {
       }
 
       const input = container.querySelector(
-        'input[data-feature="' + feature + '"]'
+        '[data-feature="' + feature + '"]'
       );
 
       if (input) {
@@ -12329,7 +12329,7 @@ function setupRoxNewChatButtons() {
 
 setupRoxNewChatButtons();
 function sendMessage(feature){
-  const input = document.querySelector('input[data-feature="'+feature+'"]');
+  const input = document.querySelector('[data-feature="'+feature+'"]');
   const text = input.value.trim();
   const attachmentRow = feature === 'chat'
     ? input.closest('.chat-input-row[data-zuvyr-attachment-active="1"]')
@@ -12350,8 +12350,8 @@ function sendMessage(feature){
 document.querySelectorAll('[data-send]').forEach(btn=>{
   btn.addEventListener('click', ()=>sendMessage(btn.dataset.send));
 });
-document.querySelectorAll('input[data-feature]').forEach(inp=>{
-  inp.addEventListener('keydown', e=>{ if(e.key==='Enter') sendMessage(inp.dataset.feature); });
+document.querySelectorAll('input[data-feature], textarea[data-feature]').forEach(inp=>{
+  inp.addEventListener('keydown', e=>{ if(e.key==='Enter' && !e.shiftKey){ e.preventDefault(); sendMessage(inp.dataset.feature); } });
 });
 
 // ROX VOICE INPUT LOGIC START
@@ -12989,7 +12989,7 @@ document.querySelectorAll('input[data-feature]').forEach(inp=>{
       const feature = button.dataset.voiceInput;
 
       const input = document.querySelector(
-        `input[data-feature="${feature}"]`
+        `[data-feature="${feature}"]`
       );
 
       if (!input) return;
@@ -14983,8 +14983,8 @@ initAuth();
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ZUVYR — Desktop</title>
 <link rel="icon" type="image/png" href="./zuvyr-app-icon-20260827.png?v=1">
-<link rel="stylesheet" href="./zuvyr-chat-workspace-v1.css?v=10">
-<script defer src="./zuvyr-chat-workspace-v1.js?v=11"><\/script>
+<link rel="stylesheet" href="./zuvyr-chat-workspace-v1.css?v=11">
+<script defer src="./zuvyr-chat-workspace-v1.js?v=12"><\/script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.110.8/dist/umd/supabase.js"><\/script>
@@ -22467,7 +22467,7 @@ document.addEventListener("DOMContentLoaded", function () {
       <div class="msg bot" data-i18n="features.chat.prompt">Hello! How can I help you today?</div>
     </div>
     <div class="chat-input-row">
-      <input type="text" placeholder="Ask your question..." data-i18n-placeholder="features.chat.placeholder" data-feature="chat">
+      <textarea rows="1" placeholder="Ask your question..." data-i18n-placeholder="features.chat.placeholder" data-feature="chat"></textarea>
       <div
         class="rox-voice-language"
         data-rox-voice-language="chat"
@@ -29689,7 +29689,7 @@ async function openRoxHistoryItem(item, row=null){
     msgBox.scrollTop=msgBox.scrollHeight;
 
     const input=document.querySelector(
-      'input[data-feature="'+feature+'"]'
+      '[data-feature="'+feature+'"]'
     );
 
     if(input){
@@ -31706,7 +31706,7 @@ function setupRoxNewChatButtons() {
       }
 
       const input = container.querySelector(
-        'input[data-feature="' + feature + '"]'
+        '[data-feature="' + feature + '"]'
       );
 
       if (input) {
@@ -31719,7 +31719,7 @@ function setupRoxNewChatButtons() {
 
 setupRoxNewChatButtons();
 function sendMessage(feature){
-  const input = document.querySelector('input[data-feature="'+feature+'"]');
+  const input = document.querySelector('[data-feature="'+feature+'"]');
   const text = input.value.trim();
   const attachmentRow = feature === 'chat'
     ? input.closest('.chat-input-row[data-zuvyr-attachment-active="1"]')
@@ -31740,8 +31740,8 @@ function sendMessage(feature){
 document.querySelectorAll('[data-send]').forEach(btn=>{
   btn.addEventListener('click', ()=>sendMessage(btn.dataset.send));
 });
-document.querySelectorAll('input[data-feature]').forEach(inp=>{
-  inp.addEventListener('keydown', e=>{ if(e.key==='Enter') sendMessage(inp.dataset.feature); });
+document.querySelectorAll('input[data-feature], textarea[data-feature]').forEach(inp=>{
+  inp.addEventListener('keydown', e=>{ if(e.key==='Enter' && !e.shiftKey){ e.preventDefault(); sendMessage(inp.dataset.feature); } });
 });
 
 // ── quick-send from the dashboard feature cards ─────────────────────
@@ -31757,7 +31757,7 @@ function quickSend(feature){
     if (lang) text = `[${lang.value}] ${text}`;
   }
   document.getElementById('feature-'+feature).classList.add('active');
-  const modalInput = document.querySelector('input[data-feature="'+feature+'"]');
+  const modalInput = document.querySelector('[data-feature="'+feature+'"]');
   modalInput.value = text;
   sendMessage(feature);
   if (cardInput) cardInput.value = '';
@@ -32404,7 +32404,7 @@ document.querySelectorAll('input[data-quickfeature]').forEach(inp=>{
       const feature = button.dataset.voiceInput;
 
       const input = document.querySelector(
-        `input[data-feature="${feature}"]`
+        `[data-feature="${feature}"]`
       );
 
       if (!input) return;

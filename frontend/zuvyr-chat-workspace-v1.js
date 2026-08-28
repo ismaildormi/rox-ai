@@ -250,7 +250,7 @@
 
         const row = button.closest('.chat-input-row');
         const input = row?.querySelector(
-          'input[data-feature="chat"]'
+          '[data-feature="chat"]'
         );
 
         if (!row || !input) return;
@@ -801,10 +801,14 @@
     const wrapped = async function(feature,text,msgBox) {
       const row = document.querySelector('#feature-chat .chat-input-row[data-zuvyr-attachment-active="1"]');
       const attachment = row?._zuvyrAttachment;
+      const composer = document.querySelector(
+        '#feature-chat .chat-input-row [data-feature="chat"]'
+      );
       let outgoingText = text;
       if (feature === 'chat' && attachment?.kind === 'text') outgoingText = buildAttachedText(text,attachment);
       window.__zuvyrChatImageAttachment = feature === 'chat' && attachment?.kind === 'image' ? attachment : null;
       if (feature === 'chat' && attachment && row) clearAttachment(row);
+      if (feature === 'chat' && composer) composer.style.height = '48px';
       try { return await original.call(this,feature,outgoingText,msgBox); }
       finally {
         window.__zuvyrChatImageAttachment = null;
@@ -820,9 +824,21 @@
     patchSendChat();
     document.querySelectorAll('#feature-chat .chat-input-row').forEach(row => {
       if (row.dataset.zuvyrAttachMenu === '3') return;
-      const input = row.querySelector('input[data-feature="chat"]');
+      const input = row.querySelector('[data-feature="chat"]');
       if (!input) return;
       row.dataset.zuvyrAttachMenu = '3';
+
+      if (input.tagName === 'TEXTAREA' && input.dataset.zuvyrAutosize !== '1') {
+        input.dataset.zuvyrAutosize = '1';
+
+        const resizeComposer = () => {
+          input.style.height = '48px';
+          input.style.height = Math.min(input.scrollHeight, 160) + 'px';
+        };
+
+        input.addEventListener('input', resizeComposer);
+        resizeComposer();
+      }
 
       const trigger = document.createElement('button');
       trigger.type = 'button'; trigger.className = 'zuvyr-attach-button';

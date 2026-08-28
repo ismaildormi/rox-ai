@@ -677,3 +677,8 @@ body.zuvyr-ui #feature-chat .zuvyr-chat-main>#msgs-chat{padding-right:0!importan
 body.zuvyr-ui #feature-chat #msgs-chat>.msg.bot{width:min(calc(100% - 56px),724px)!important;margin-right:auto!important;margin-left:auto!important}
 body.zuvyr-ui #feature-chat #msgs-chat>.msg.user{margin-right:max(28px,calc((100% - 780px)/2 + 28px))!important;margin-left:auto!important}
 @media(max-width:760px){body.zuvyr-ui #feature-chat .zuvyr-chat-main>#msgs-chat{padding-right:0!important;padding-bottom:150px!important;padding-left:0!important}body.zuvyr-ui #feature-chat #msgs-chat>.msg.bot{width:calc(100% - 34px)!important}body.zuvyr-ui #feature-chat #msgs-chat>.msg.user{margin-right:17px!important}}
+
+/* ZUVYR CHATGPT MULTILINE COMPOSER V1 */
+body.zuvyr-ui #feature-chat .zuvyr-chat-main>.chat-input-row textarea[data-feature="chat"]{flex:1;min-width:0;height:48px;min-height:48px;max-height:160px;padding:12px 8px!important;overflow-y:auto;color:#f4f4f5!important;border:0!important;outline:0!important;background:transparent!important;box-shadow:none!important;font:inherit;line-height:24px;resize:none;white-space:pre-wrap;overflow-wrap:anywhere}
+body.zuvyr-ui #feature-chat .zuvyr-chat-main>.chat-input-row textarea[data-feature="chat"]::placeholder{color:#77777c!important}
+body.zuvyr-ui #feature-chat .zuvyr-chat-main>.chat-input-row{align-items:flex-end!important}
