@@ -868,3 +868,19 @@ body.zuvyr-ui .zuvyr-action-toast{
     width:100vw;
   }
 }
+/* ZUVYR COMBINED RATE ICON V1 */
+body.zuvyr-ui #feature-chat .zuvyr-rate-pair{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:1px;
+  pointer-events:none;
+}
+body.zuvyr-ui #feature-chat .zuvyr-rate-pair svg{
+  width:15px!important;
+  height:15px!important;
+  flex:0 0 15px;
+}
+body.zuvyr-ui #feature-chat .zuvyr-rate-pair svg:last-child{
+  transform:translateY(2px);
+}

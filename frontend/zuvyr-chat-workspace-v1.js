@@ -1044,7 +1044,7 @@
     const ratingButton=document.createElement('button');
     ratingButton.type='button';
     ratingButton.className='msg-action zuvyr-rating-button';
-    ratingButton.innerHTML=rateIcon;
+    ratingButton.innerHTML='<span class="zuvyr-rate-pair">'+like.innerHTML+dislike.innerHTML+'</span>';
     ratingButton.title=text.rate;
     ratingButton.setAttribute('aria-label',text.rate);
     ratingButton.setAttribute('aria-haspopup','menu');
