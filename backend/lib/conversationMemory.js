@@ -201,7 +201,7 @@ function createConversationStore(db) {
     const { data, error } = await db
       .from('shared_conversations')
       .select(
-        'id, owner_id, title, feature, pinned, archived, ' +
+        'id, owner_id, title, feature, pinned, pinned_at, archived, ' +
         'message_count, memory_summary, memory_state, metadata, ' +
         'created_at, updated_at, last_message_at, content'
       )
@@ -251,7 +251,7 @@ function createConversationStore(db) {
         }
       })
       .select(
-        'id, title, feature, pinned, archived, message_count, ' +
+        'id, title, feature, pinned, pinned_at, archived, message_count, ' +
         'created_at, updated_at, last_message_at'
       )
       .single();
@@ -275,12 +275,13 @@ function createConversationStore(db) {
     let query = db
       .from('shared_conversations')
       .select(
-        'id, title, feature, pinned, archived, message_count, ' +
+        'id, title, feature, pinned, pinned_at, archived, message_count, ' +
         'metadata, created_at, updated_at, last_message_at'
       )
       .eq('owner_id', ownerId)
       .eq('archived', Boolean(archived))
       .order('pinned', { ascending: false })
+      .order('pinned_at', { ascending: false })
       .order('last_message_at', { ascending: false })
       .limit(clampListLimit(limit));
 
@@ -324,7 +325,9 @@ function createConversationStore(db) {
     }
 
     if (pinned !== undefined) {
-      patch.pinned = Boolean(pinned);
+      const nextPinned = Boolean(pinned);
+      patch.pinned = nextPinned;
+      patch.pinned_at = nextPinned ? new Date().toISOString() : null;
     }
 
     if (archived !== undefined) {
@@ -341,7 +344,7 @@ function createConversationStore(db) {
       .eq('id', conversationId)
       .eq('owner_id', ownerId)
       .select(
-        'id, title, feature, pinned, archived, message_count, ' +
+        'id, title, feature, pinned, pinned_at, archived, message_count, ' +
         'created_at, updated_at, last_message_at'
       )
       .single();

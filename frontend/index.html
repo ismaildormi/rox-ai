@@ -257,6 +257,17 @@
     color:#c4b5fd;
   }
 
+  .rox-history-section + .rox-history-section{
+    margin-top:18px;
+  }
+  .rox-history-section-title{
+    margin:0 4px 8px;
+    color:var(--text-dim);
+    font-size:12px;
+    font-weight:700;
+    letter-spacing:.02em;
+  }
+
   /* CORE METER — credits/usage gauge, jagged "crack" fill */
   .usage-card{background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:16px;margin:6px 0 4px;position:relative;overflow:hidden;}
   .usage-card::before{content:'';position:absolute;inset:0;background:radial-gradient(220px 100px at 100% 0%, rgba(139,92,246,.12), transparent 70%);pointer-events:none;}
@@ -10745,7 +10756,7 @@ async function loadRoxHistory(search=''){
         .replace(/"/g,'&quot;')
         .replace(/'/g,'&#039;');
 
-    const html=items.map(item=>{
+    const renderHistoryItems=list=>list.map(item=>{
       const feature=normalizeRoxConversationFeature(
         item.feature
       );
@@ -10830,6 +10841,34 @@ async function loadRoxHistory(search=''){
         '<div class="chev">›</div></div></div>'
       );
     }).join('');
+
+    const pinnedItems=items.filter(
+      item=>Boolean(item.pinned)
+    );
+    const recentItems=items.filter(
+      item=>!Boolean(item.pinned)
+    );
+
+    const buildHistorySection=(
+      title,
+      sectionItems
+    )=>{
+      if(!sectionItems.length)return '';
+
+      return (
+        '<section class="rox-history-section">'+
+        '<div class="rox-history-section-title">'+
+        escapeHtml(title)+
+        '</div>'+
+        renderHistoryItems(sectionItems)+
+        '</section>'
+      );
+    };
+
+    const html=archived
+      ? renderHistoryItems(items)
+      : buildHistorySection('Pinned',pinnedItems)+
+        buildHistorySection('Recents',recentItems);
 
     targets.forEach(target=>{
       target.innerHTML=html;
@@ -15721,6 +15760,17 @@ initAuth();
     border-color:rgba(139,92,246,.48);
     background:rgba(139,92,246,.14);
     color:#c4b5fd;
+  }
+
+  .rox-history-section + .rox-history-section{
+    margin-top:18px;
+  }
+  .rox-history-section-title{
+    margin:0 4px 8px;
+    color:var(--text-dim);
+    font-size:12px;
+    font-weight:700;
+    letter-spacing:.02em;
   }
 /* ROX SETTINGS DESIGN START */
 .rox-settings-body{
@@ -30338,7 +30388,7 @@ async function loadRoxHistory(search=''){
         .replace(/"/g,'&quot;')
         .replace(/'/g,'&#039;');
 
-    const html=items.map(item=>{
+    const renderHistoryItems=list=>list.map(item=>{
       const feature=normalizeRoxConversationFeature(
         item.feature
       );
@@ -30423,6 +30473,34 @@ async function loadRoxHistory(search=''){
         '<div class="chev">›</div></div></div>'
       );
     }).join('');
+
+    const pinnedItems=items.filter(
+      item=>Boolean(item.pinned)
+    );
+    const recentItems=items.filter(
+      item=>!Boolean(item.pinned)
+    );
+
+    const buildHistorySection=(
+      title,
+      sectionItems
+    )=>{
+      if(!sectionItems.length)return '';
+
+      return (
+        '<section class="rox-history-section">'+
+        '<div class="rox-history-section-title">'+
+        escapeHtml(title)+
+        '</div>'+
+        renderHistoryItems(sectionItems)+
+        '</section>'
+      );
+    };
+
+    const html=archived
+      ? renderHistoryItems(items)
+      : buildHistorySection('Pinned',pinnedItems)+
+        buildHistorySection('Recents',recentItems);
 
     targets.forEach(target=>{
       target.innerHTML=html;

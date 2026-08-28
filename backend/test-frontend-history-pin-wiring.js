@@ -76,6 +76,9 @@ const memory = readUtf8('backend/lib/conversationMemory.js');
 const migration = readUtf8(
   'backend/18_unified_conversation_memory.sql'
 );
+const pinnedOrderMigration = readUtf8(
+  'backend/19_history_pinned_order.sql'
+);
 
 const bindingStart =
   'function bindRoxHistoryRows(target, items){';
@@ -270,7 +273,7 @@ assert.strictEqual(
 assert.strictEqual(
   countLiteral(
     memory,
-    "if (pinned !== undefined) {\n      patch.pinned = Boolean(pinned);\n    }"
+    "if (pinned !== undefined) {\n      const nextPinned = Boolean(pinned);\n      patch.pinned = nextPinned;\n      patch.pinned_at = nextPinned ? new Date().toISOString() : null;\n    }"
   ),
   1,
   'Conversation memory must update pinned explicitly.'
@@ -283,6 +286,22 @@ assert.strictEqual(
   ),
   1,
   'Conversation history must list pinned conversations first.'
+);
+assert.strictEqual(
+  countLiteral(
+    memory,
+    ".order('pinned_at', { ascending: false })"
+  ),
+  1,
+  'Pinned conversations must be ordered by their pin time.'
+);
+assert.strictEqual(
+  countLiteral(
+    pinnedOrderMigration,
+    'add column if not exists pinned_at timestamptz'
+  ),
+  1,
+  'The pinned-order migration must define pinned_at.'
 );
 
 assert.strictEqual(
@@ -298,6 +317,33 @@ assert.strictEqual(
   countLiteral(frontend, 'data-rox-history-rename'),
   4,
   'Pin wiring must preserve both Rename buttons and hooks.'
+);
+
+assert.strictEqual(
+  countLiteral(
+    frontend,
+    "buildHistorySection('Pinned',pinnedItems)"
+  ),
+  2,
+  'Frontend must build two Pinned sections.'
+);
+
+assert.strictEqual(
+  countLiteral(
+    frontend,
+    "buildHistorySection('Recents',recentItems)"
+  ),
+  2,
+  'Frontend must build two Recents sections.'
+);
+
+assert.strictEqual(
+  countLiteral(
+    memory,
+    'patch.pinned_at = nextPinned ? new Date().toISOString() : null;'
+  ),
+  1,
+  'Pin updates must persist the latest pin time.'
 );
 
 console.log(
