@@ -631,7 +631,7 @@ body.zuvyr-ui #feature-chat
     padding: 0 3px !important;
   }
 }
-/* ZUVYR ATTACH MENU V1 */
+/* ZUVYR REAL FILE UPLOAD V1 */
 body.zuvyr-ui #feature-chat .zuvyr-chat-main > .chat-input-row {
   overflow: visible !important;
 }
@@ -649,7 +649,7 @@ body.zuvyr-ui #feature-chat .zuvyr-attach-button {
   border-radius: 50%;
   background: transparent;
   cursor: pointer;
-  transition: color .18s ease, background .18s ease, transform .18s ease;
+  transition: color .18s ease, background .18s ease;
 }
 
 body.zuvyr-ui #feature-chat .zuvyr-attach-button:hover,
@@ -679,7 +679,7 @@ body.zuvyr-ui #feature-chat .zuvyr-attach-menu {
   bottom: calc(100% + 12px);
   left: 0;
   z-index: 120;
-  width: min(286px, calc(100vw - 32px));
+  width: min(310px, calc(100vw - 32px));
   padding: 8px;
   color: #f4f4f5;
   border: 1px solid rgba(255,255,255,.12);
@@ -691,7 +691,13 @@ body.zuvyr-ui #feature-chat .zuvyr-attach-menu {
   animation: zuvyrAttachMenuIn .18s ease-out;
 }
 
-body.zuvyr-ui #feature-chat .zuvyr-attach-menu[hidden] {
+body.zuvyr-ui #feature-chat .chat-input-row[data-zuvyr-attachment-active="1"] .zuvyr-attach-menu {
+  bottom: calc(100% + 64px);
+}
+
+body.zuvyr-ui #feature-chat .zuvyr-attach-menu[hidden],
+body.zuvyr-ui #feature-chat .zuvyr-recent-files[hidden],
+body.zuvyr-ui #feature-chat .zuvyr-attachment-chip[hidden] {
   display: none !important;
 }
 
@@ -709,12 +715,13 @@ body.zuvyr-ui #feature-chat .zuvyr-attach-brand {
   text-transform: uppercase;
 }
 
-body.zuvyr-ui #feature-chat .zuvyr-attach-action {
+body.zuvyr-ui #feature-chat .zuvyr-attach-action,
+body.zuvyr-ui #feature-chat .zuvyr-recent-file {
   display: grid;
   grid-template-columns: 42px minmax(0,1fr) 18px;
   align-items: center;
   width: 100%;
-  min-height: 60px;
+  min-height: 58px;
   padding: 8px 10px;
   color: #f4f4f5;
   border: 0;
@@ -725,7 +732,8 @@ body.zuvyr-ui #feature-chat .zuvyr-attach-action {
   transition: background .16s ease, transform .16s ease;
 }
 
-body.zuvyr-ui #feature-chat .zuvyr-attach-action:hover {
+body.zuvyr-ui #feature-chat .zuvyr-attach-action:hover,
+body.zuvyr-ui #feature-chat .zuvyr-recent-file:hover {
   background: rgba(255,255,255,.09);
   transform: translateX(2px);
 }
@@ -745,22 +753,25 @@ body.zuvyr-ui #feature-chat .zuvyr-attach-action-icon svg {
   height: 22px;
 }
 
-body.zuvyr-ui #feature-chat .zuvyr-attach-action-copy { min-width: 0; }
-
-body.zuvyr-ui #feature-chat .zuvyr-attach-action-title {
+body.zuvyr-ui #feature-chat .zuvyr-attach-action-title,
+body.zuvyr-ui #feature-chat .zuvyr-recent-file-name {
   display: block;
+  overflow: hidden;
   color: #f7f7f8;
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 750;
   line-height: 1.2;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-body.zuvyr-ui #feature-chat .zuvyr-attach-action-subtitle {
+body.zuvyr-ui #feature-chat .zuvyr-attach-action-subtitle,
+body.zuvyr-ui #feature-chat .zuvyr-recent-file-meta {
   display: block;
   margin-top: 3px;
   overflow: hidden;
   color: #97979d;
-  font-size: 12px;
+  font-size: 11px;
   line-height: 1.25;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -772,7 +783,79 @@ body.zuvyr-ui #feature-chat .zuvyr-attach-action-chevron {
   line-height: 1;
 }
 
-body.zuvyr-ui #feature-chat .chat-input-row.zuvyr-voice-listening .zuvyr-attach-button {
+body.zuvyr-ui #feature-chat .zuvyr-recent-files {
+  max-height: 220px;
+  margin: 4px 0 2px;
+  padding-top: 4px;
+  overflow-y: auto;
+  border-top: 1px solid rgba(255,255,255,.08);
+}
+
+body.zuvyr-ui #feature-chat .zuvyr-recent-empty {
+  padding: 15px 12px;
+  color: #a0a0a6;
+  font-size: 12px;
+  text-align: center;
+}
+
+body.zuvyr-ui #feature-chat .zuvyr-attachment-chip {
+  position: absolute;
+  bottom: calc(100% + 10px);
+  left: 8px;
+  z-index: 110;
+  display: flex;
+  align-items: center;
+  max-width: min(380px,calc(100% - 16px));
+  min-height: 44px;
+  padding: 7px 8px 7px 12px;
+  border: 1px solid rgba(255,106,45,.45);
+  border-radius: 14px;
+  background: rgba(27,27,29,.98);
+  box-shadow: 0 12px 35px rgba(0,0,0,.38);
+}
+
+body.zuvyr-ui #feature-chat .zuvyr-attachment-chip-copy {
+  min-width: 0;
+  flex: 1;
+}
+
+body.zuvyr-ui #feature-chat .zuvyr-attachment-chip-name {
+  display: block;
+  overflow: hidden;
+  color: #f5f5f5;
+  font-size: 13px;
+  font-weight: 700;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+body.zuvyr-ui #feature-chat .zuvyr-attachment-chip-meta {
+  display: block;
+  margin-top: 2px;
+  color: #a0a0a6;
+  font-size: 10px;
+}
+
+body.zuvyr-ui #feature-chat .zuvyr-attachment-remove {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  margin-left: 8px;
+  padding: 0;
+  color: #f2f2f2;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(255,255,255,.08);
+  cursor: pointer;
+}
+
+body.zuvyr-ui #feature-chat .zuvyr-attachment-remove:hover {
+  background: rgba(255,91,24,.20);
+}
+
+body.zuvyr-ui #feature-chat .chat-input-row.zuvyr-voice-listening .zuvyr-attach-button,
+body.zuvyr-ui #feature-chat .chat-input-row.zuvyr-voice-listening .zuvyr-attachment-chip {
   display: none !important;
 }
 
@@ -783,8 +866,7 @@ body.zuvyr-ui #feature-chat .chat-input-row.zuvyr-voice-listening .zuvyr-attach-
   }
 
   body.zuvyr-ui #feature-chat .zuvyr-attach-menu {
-    bottom: calc(100% + 9px);
     left: -1px;
-    width: min(270px, calc(100vw - 24px));
+    width: min(290px,calc(100vw - 24px));
   }
 }
