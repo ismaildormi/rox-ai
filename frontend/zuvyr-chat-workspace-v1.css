@@ -682,3 +682,189 @@ body.zuvyr-ui #feature-chat #msgs-chat>.msg.user{margin-right:max(28px,calc((100
 body.zuvyr-ui #feature-chat .zuvyr-chat-main>.chat-input-row textarea[data-feature="chat"]{flex:1;min-width:0;height:48px;min-height:48px;max-height:160px;padding:12px 8px!important;overflow-y:auto;color:#f4f4f5!important;border:0!important;outline:0!important;background:transparent!important;box-shadow:none!important;font:inherit;line-height:24px;resize:none;white-space:pre-wrap;overflow-wrap:anywhere}
 body.zuvyr-ui #feature-chat .zuvyr-chat-main>.chat-input-row textarea[data-feature="chat"]::placeholder{color:#77777c!important}
 body.zuvyr-ui #feature-chat .zuvyr-chat-main>.chat-input-row{align-items:flex-end!important}
+
+/* ZUVYR CHATGPT ACTIONS V2 */
+body.zuvyr-ui #feature-chat #msgs-chat>.msg-actions.rox-gpt-actions{
+  align-self:center!important;
+  width:min(calc(100% - 56px),724px)!important;
+  margin:4px auto 18px!important;
+  padding:0!important;
+  gap:0!important;
+  background:transparent!important;
+}
+body.zuvyr-ui #feature-chat #msgs-chat>.msg-actions.rox-gpt-actions .msg-action{
+  width:32px!important;
+  min-width:32px!important;
+  height:32px!important;
+  padding:0!important;
+  border:0!important;
+  border-radius:8px!important;
+  background:transparent!important;
+  color:#b4b4b4!important;
+  box-shadow:none!important;
+}
+body.zuvyr-ui #feature-chat #msgs-chat>.msg-actions.rox-gpt-actions .msg-action:hover,
+body.zuvyr-ui #feature-chat #msgs-chat>.msg-actions.rox-gpt-actions .msg-action:focus-visible,
+body.zuvyr-ui #feature-chat #msgs-chat>.msg-actions.rox-gpt-actions .msg-action[aria-expanded="true"]{
+  color:#f5f5f5!important;
+  background:#2f2f2f!important;
+}
+body.zuvyr-ui #feature-chat .rox-gpt-more-menu,
+body.zuvyr-ui #feature-chat .zuvyr-rating-menu{
+  border:1px solid rgba(255,255,255,.10)!important;
+  background:#2f2f2f!important;
+  color:#f5f5f5!important;
+  box-shadow:0 16px 42px rgba(0,0,0,.46)!important;
+  backdrop-filter:none!important;
+}
+body.zuvyr-ui #feature-chat .rox-gpt-menu-item{
+  color:#f5f5f5!important;
+}
+body.zuvyr-ui #feature-chat .rox-gpt-menu-item:hover,
+body.zuvyr-ui #feature-chat .rox-gpt-menu-item:focus-visible{
+  background:#424242!important;
+}
+body.zuvyr-ui #feature-chat .rox-gpt-action-note{
+  border:1px solid rgba(255,255,255,.10)!important;
+  background:#2f2f2f!important;
+  color:#f5f5f5!important;
+}
+body.zuvyr-ui #feature-chat .zuvyr-original-rating-action{
+  display:none!important;
+}
+body.zuvyr-ui #feature-chat .zuvyr-rating-wrap{
+  position:relative;
+  display:flex;
+}
+body.zuvyr-ui #feature-chat .zuvyr-rating-menu{
+  position:absolute;
+  bottom:calc(100% + 8px);
+  left:0;
+  z-index:150;
+  width:210px;
+  padding:8px;
+  border-radius:14px;
+}
+body.zuvyr-ui #feature-chat .zuvyr-rating-menu[hidden]{
+  display:none!important;
+}
+body.zuvyr-ui #feature-chat .zuvyr-rating-option{
+  display:flex;
+  width:100%;
+  min-height:44px;
+  align-items:center;
+  gap:11px;
+  padding:0 11px;
+  color:#f5f5f5;
+  border:0;
+  border-radius:9px;
+  background:transparent;
+  font:inherit;
+  font-size:14px;
+  text-align:left;
+  cursor:pointer;
+}
+body.zuvyr-ui #feature-chat .zuvyr-rating-option:hover{
+  background:#424242;
+}
+body.zuvyr-ui #feature-chat .zuvyr-rating-option svg{
+  width:19px;
+  height:19px;
+  fill:none;
+  stroke:currentColor;
+  stroke-width:1.8;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+}
+body.zuvyr-ui .zuvyr-sources-backdrop{
+  position:fixed;
+  inset:0;
+  z-index:9998;
+  background:rgba(0,0,0,.28);
+}
+body.zuvyr-ui .zuvyr-sources-panel{
+  position:fixed;
+  top:0;
+  right:0;
+  bottom:0;
+  z-index:9999;
+  width:min(400px,100vw);
+  padding:18px;
+  overflow-y:auto;
+  color:#f5f5f5;
+  border-left:1px solid rgba(255,255,255,.10);
+  background:#171717;
+  box-shadow:-18px 0 50px rgba(0,0,0,.38);
+}
+body.zuvyr-ui .zuvyr-sources-header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:20px;
+  font-size:18px;
+  font-weight:700;
+}
+body.zuvyr-ui .zuvyr-sources-close{
+  display:grid;
+  width:34px;
+  height:34px;
+  place-items:center;
+  padding:0;
+  color:#f5f5f5;
+  border:0;
+  border-radius:9px;
+  background:transparent;
+  font-size:24px;
+  cursor:pointer;
+}
+body.zuvyr-ui .zuvyr-sources-close:hover{
+  background:#2f2f2f;
+}
+body.zuvyr-ui .zuvyr-source-card{
+  display:block;
+  margin-bottom:10px;
+  padding:13px;
+  color:#f5f5f5;
+  border:1px solid rgba(255,255,255,.09);
+  border-radius:12px;
+  background:#242424;
+  text-decoration:none;
+}
+body.zuvyr-ui .zuvyr-source-card:hover{
+  background:#303030;
+}
+body.zuvyr-ui .zuvyr-source-title{
+  display:block;
+  font-weight:650;
+}
+body.zuvyr-ui .zuvyr-source-url{
+  display:block;
+  margin-top:5px;
+  overflow:hidden;
+  color:#aaa;
+  font-size:11px;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+body.zuvyr-ui .zuvyr-action-toast{
+  position:fixed;
+  left:50%;
+  bottom:92px;
+  z-index:10020;
+  max-width:min(420px,calc(100vw - 32px));
+  padding:11px 15px;
+  color:#f5f5f5;
+  border:1px solid rgba(255,255,255,.10);
+  border-radius:12px;
+  background:#2f2f2f;
+  box-shadow:0 14px 38px rgba(0,0,0,.42);
+  transform:translateX(-50%);
+}
+@media(max-width:760px){
+  body.zuvyr-ui #feature-chat #msgs-chat>.msg-actions.rox-gpt-actions{
+    width:calc(100% - 34px)!important;
+  }
+  body.zuvyr-ui .zuvyr-sources-panel{
+    width:100vw;
+  }
+}
