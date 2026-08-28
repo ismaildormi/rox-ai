@@ -935,3 +935,72 @@ body.zuvyr-ui #feature-chat .zuvyr-rate-chatgpt-exact{
   transform:none!important;
   pointer-events:none!important;
 }
+/* ZUVYR CHATGPT SIDEBAR PHASE 1 */
+body.zuvyr-ui #feature-chat>.zuvyr-chat-workspace,
+body.zuvyr-ui #feature-chat.zuvyr-chat-workspace{position:relative!important;grid-template-columns:260px minmax(0,1fr)!important;transition:grid-template-columns .18s ease}
+body.zuvyr-ui #feature-chat .zuvyr-chat-sidebar{gap:8px;padding:12px 10px 14px;background:#171717;border-right:1px solid rgba(255,255,255,.07)}
+body.zuvyr-ui #feature-chat .zuvyr-chat-brand{min-height:44px;padding:0 4px 0 9px;gap:9px}
+body.zuvyr-ui #feature-chat .zuvyr-chat-brand img{width:26px;height:26px;border-radius:7px}
+body.zuvyr-ui #feature-chat .zuvyr-chat-brand>span{margin-right:auto;font-size:16px;font-weight:700;letter-spacing:.08em}
+body.zuvyr-ui #feature-chat .zuvyr-sidebar-head-action{display:grid;place-items:center;width:34px;height:34px;flex:0 0 34px;padding:0;color:#d8d8d8;border:0;border-radius:8px;background:transparent;cursor:pointer}
+body.zuvyr-ui #feature-chat .zuvyr-sidebar-head-action:hover,
+body.zuvyr-ui #feature-chat .zuvyr-sidebar-head-action:focus-visible{color:#fff;background:#2a2a2a;outline:0}
+body.zuvyr-ui #feature-chat .zuvyr-sidebar-head-action svg,
+body.zuvyr-ui #feature-chat .zuvyr-sidebar-nav-icon svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+body.zuvyr-ui #feature-chat .zuvyr-chat-primary{display:grid;gap:3px}
+body.zuvyr-ui #feature-chat .zuvyr-sidebar-search,
+body.zuvyr-ui #feature-chat .zuvyr-sidebar-new-chat{display:flex!important;width:100%!important;height:42px!important;min-height:42px!important;align-items:center!important;justify-content:flex-start!important;gap:12px!important;padding:0 11px!important;color:#ececec!important;border:0!important;border-radius:9px!important;background:transparent!important;box-shadow:none!important;font-size:14px!important;font-weight:500!important;cursor:pointer}
+body.zuvyr-ui #feature-chat .zuvyr-sidebar-search:hover,
+body.zuvyr-ui #feature-chat .zuvyr-sidebar-new-chat:hover{color:#fff!important;background:#2a2a2a!important}
+body.zuvyr-ui #feature-chat .zuvyr-sidebar-new-chat .rox-new-chat-symbol{display:grid;place-items:center;width:20px;height:20px;color:currentColor!important;font-size:0!important}
+body.zuvyr-ui #feature-chat .zuvyr-sidebar-new-chat .rox-new-chat-symbol svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+body.zuvyr-ui #feature-chat .zuvyr-sidebar-search-shortcut{margin-left:auto;color:#8e8e8e;font-size:11px}
+body.zuvyr-ui #feature-chat .zuvyr-chat-identity,
+body.zuvyr-ui #feature-chat .zuvyr-chat-capabilities{display:none!important}
+body.zuvyr-ui #feature-chat .zuvyr-chat-sidebar-bottom{margin-top:auto}
+body.zuvyr-ui #feature-chat .zuvyr-chat-back{min-height:40px!important;padding:0 11px!important}
+body.zuvyr-ui #feature-chat .zuvyr-chat-workspace.zuvyr-sidebar-collapsed{grid-template-columns:66px minmax(0,1fr)!important}
+body.zuvyr-ui #feature-chat .zuvyr-sidebar-collapsed .zuvyr-chat-brand{justify-content:center;padding:0}
+body.zuvyr-ui #feature-chat .zuvyr-sidebar-collapsed .zuvyr-chat-brand img,
+body.zuvyr-ui #feature-chat .zuvyr-sidebar-collapsed .zuvyr-chat-brand>span,
+body.zuvyr-ui #feature-chat .zuvyr-sidebar-collapsed .zuvyr-sidebar-search span,
+body.zuvyr-ui #feature-chat .zuvyr-sidebar-collapsed .zuvyr-sidebar-search-shortcut,
+body.zuvyr-ui #feature-chat .zuvyr-sidebar-collapsed .rox-new-chat-label,
+body.zuvyr-ui #feature-chat .zuvyr-sidebar-collapsed .zuvyr-chat-back b{display:none!important}
+body.zuvyr-ui #feature-chat .zuvyr-sidebar-collapsed .zuvyr-sidebar-search,
+body.zuvyr-ui #feature-chat .zuvyr-sidebar-collapsed .zuvyr-sidebar-new-chat,
+body.zuvyr-ui #feature-chat .zuvyr-sidebar-collapsed .zuvyr-chat-back{width:42px!important;padding:0!important;justify-content:center!important}
+body.zuvyr-ui #feature-chat .zuvyr-chat-search-layer{position:absolute;inset:0;z-index:250;display:grid;place-items:start center;padding:10vh 18px 18px;background:rgba(0,0,0,.62);backdrop-filter:blur(3px)}
+body.zuvyr-ui #feature-chat .zuvyr-chat-search-layer[hidden]{display:none!important}
+body.zuvyr-ui #feature-chat .zuvyr-chat-search-dialog{width:min(620px,calc(100vw - 36px));max-height:min(680px,78vh);overflow:hidden;color:#f4f4f4;border:1px solid rgba(255,255,255,.12);border-radius:16px;background:#212121;box-shadow:0 28px 80px rgba(0,0,0,.58)}
+body.zuvyr-ui #feature-chat .zuvyr-chat-search-field{display:flex;min-height:58px;align-items:center;gap:11px;padding:0 16px;border-bottom:1px solid rgba(255,255,255,.09)}
+body.zuvyr-ui #feature-chat .zuvyr-chat-search-field svg{width:21px;height:21px;flex:0 0 auto;fill:none;stroke:#b9b9b9;stroke-width:1.8;stroke-linecap:round}
+body.zuvyr-ui #feature-chat .zuvyr-chat-search-field input{width:100%;min-width:0;color:#fff;border:0;outline:0;background:transparent;font:inherit;font-size:15px}
+body.zuvyr-ui #feature-chat .zuvyr-chat-search-field input::placeholder{color:#8f8f8f}
+body.zuvyr-ui #feature-chat .zuvyr-chat-search-close{width:31px;height:31px;flex:0 0 31px;padding:0;color:#aaa;border:0;border-radius:8px;background:transparent;cursor:pointer}
+body.zuvyr-ui #feature-chat .zuvyr-chat-search-close:hover{color:#fff;background:#343434}
+body.zuvyr-ui #feature-chat .zuvyr-chat-search-results{max-height:calc(min(680px,78vh) - 59px);padding:8px;overflow:auto}
+body.zuvyr-ui #feature-chat .zuvyr-search-result{display:grid;grid-template-columns:36px minmax(0,1fr);width:100%;min-height:58px;align-items:center;gap:10px;padding:7px 10px;color:#eee;border:0;border-radius:10px;background:transparent;text-align:left;cursor:pointer}
+body.zuvyr-ui #feature-chat .zuvyr-search-result:hover,
+body.zuvyr-ui #feature-chat .zuvyr-search-result:focus-visible{background:#303030;outline:0}
+body.zuvyr-ui #feature-chat .zuvyr-search-result-icon{display:grid;place-items:center;width:32px;height:32px;color:#c9c9c9;border-radius:8px;background:#292929}
+body.zuvyr-ui #feature-chat .zuvyr-search-result-icon svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+body.zuvyr-ui #feature-chat .zuvyr-search-result-copy{min-width:0}
+body.zuvyr-ui #feature-chat .zuvyr-search-result-title{display:block;overflow:hidden;color:#f1f1f1;font-size:14px;font-weight:550;text-overflow:ellipsis;white-space:nowrap}
+body.zuvyr-ui #feature-chat .zuvyr-search-result-meta{display:block;margin-top:3px;color:#929292;font-size:11.5px}
+body.zuvyr-ui #feature-chat .zuvyr-search-state{padding:34px 18px;color:#a1a1a1;font-size:13px;text-align:center}
+@media(max-width:760px){
+body.zuvyr-ui #feature-chat>.zuvyr-chat-workspace,
+body.zuvyr-ui #feature-chat.zuvyr-chat-workspace,
+body.zuvyr-ui #feature-chat .zuvyr-chat-workspace.zuvyr-sidebar-collapsed{grid-template-columns:minmax(0,1fr)!important;grid-template-rows:58px minmax(0,1fr)!important}
+body.zuvyr-ui #feature-chat .zuvyr-chat-brand>span,
+body.zuvyr-ui #feature-chat .zuvyr-sidebar-search span,
+body.zuvyr-ui #feature-chat .zuvyr-sidebar-search-shortcut,
+body.zuvyr-ui #feature-chat .zuvyr-sidebar-collapse{display:none!important}
+body.zuvyr-ui #feature-chat .zuvyr-chat-primary{display:flex;margin-left:auto}
+body.zuvyr-ui #feature-chat .zuvyr-sidebar-search,
+body.zuvyr-ui #feature-chat .zuvyr-sidebar-new-chat{width:42px!important;padding:0!important;justify-content:center!important}
+body.zuvyr-ui #feature-chat .zuvyr-chat-search-layer{padding:66px 8px 8px}
+body.zuvyr-ui #feature-chat .zuvyr-chat-search-dialog{width:100%;max-height:calc(100dvh - 74px)}
+}
+/* ZUVYR CHATGPT SIDEBAR PHASE 1 END */

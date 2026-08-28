@@ -1227,3 +1227,88 @@
     });
   }).observe(document.documentElement,{childList:true,subtree:true});
 })();
+/* ZUVYR CHATGPT SIDEBAR PHASE 1 */
+(function(){
+  'use strict';
+  const searchIcon='<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m16.5 16.5 4 4"></path></svg>';
+  const collapseIcon='<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"></rect><path d="M9 4v16"></path></svg>';
+  const composeIcon='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h7"></path><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L11 15l-4 1 1-4 8.5-8.5Z"></path></svg>';
+  const chatIcon='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 15a3 3 0 0 1-3 3H9l-5 2 1.4-3.6A6 6 0 0 1 4 12.5V9a4 4 0 0 1 4-4h9a3 3 0 0 1 3 3v7Z"></path></svg>';
+  let searchTimer=0;
+  let requestSequence=0;
+
+  const safeDate=value=>{
+    if(!value)return '';
+    const date=new Date(value);
+    if(Number.isNaN(date.getTime()))return '';
+    return new Intl.DateTimeFormat(undefined,{month:'short',day:'numeric'}).format(date);
+  };
+
+  const buildSearchLayer=workspace=>{
+    let layer=workspace.querySelector(':scope > .zuvyr-chat-search-layer');
+    if(layer)return layer;
+    layer=document.createElement('div');
+    layer.className='zuvyr-chat-search-layer';
+    layer.hidden=true;
+    layer.innerHTML='<section class="zuvyr-chat-search-dialog" role="dialog" aria-modal="true" aria-label="Search chats"><div class="zuvyr-chat-search-field">'+searchIcon+'<input type="search" autocomplete="off" placeholder="Search chats" aria-label="Search chats"><button type="button" class="zuvyr-chat-search-close" aria-label="Close search">&#10005;</button></div><div class="zuvyr-chat-search-results"><div class="zuvyr-search-state">Type to search your chats.</div></div></section>';
+    workspace.appendChild(layer);
+    const input=layer.querySelector('input');
+    const results=layer.querySelector('.zuvyr-chat-search-results');
+    const close=()=>{layer.hidden=true;input.value='';clearTimeout(searchTimer)};
+    const state=text=>{results.replaceChildren();const node=document.createElement('div');node.className='zuvyr-search-state';node.textContent=text;results.appendChild(node)};
+    const render=items=>{
+      results.replaceChildren();
+      if(!items.length){state('No matching chats found.');return}
+      items.forEach(item=>{
+        const row=document.createElement('button');row.type='button';row.className='zuvyr-search-result';
+        const icon=document.createElement('span');icon.className='zuvyr-search-result-icon';icon.innerHTML=chatIcon;
+        const copy=document.createElement('span');copy.className='zuvyr-search-result-copy';
+        const title=document.createElement('span');title.className='zuvyr-search-result-title';title.textContent=String(item?.title||'New conversation');
+        const meta=document.createElement('span');meta.className='zuvyr-search-result-meta';meta.textContent=[String(item?.feature||'chat').toUpperCase(),safeDate(item?.last_message_at||item?.updated_at||item?.created_at)].filter(Boolean).join(' Â· ');
+        copy.append(title,meta);row.append(icon,copy);
+        row.addEventListener('click',async()=>{row.disabled=true;try{if(typeof openRoxHistoryItem!=='function')throw new Error('history_open_unavailable');await openRoxHistoryItem(item,null);close()}catch(error){console.error('[zuvyr-sidebar-search] open failed:',error);row.disabled=false}});
+        results.appendChild(row);
+      });
+    };
+    const search=async value=>{
+      const term=String(value||'').trim().slice(0,80);const sequence=++requestSequence;state(term?'Searching...':'Recent chats');
+      try{
+        const query='/api/conversations?limit=100&archived=false'+(term?'&search='+encodeURIComponent(term):'');
+        const response=await authFetch(query,{method:'GET'});const data=await response.json().catch(()=>({}));
+        if(sequence!==requestSequence)return;
+        if(!response.ok||data.status!=='success')throw new Error(data.message||('HTTP '+response.status));
+        render(Array.isArray(data.items)?data.items:[]);
+      }catch(error){if(sequence!==requestSequence)return;console.error('[zuvyr-sidebar-search] search failed:',error);state('Search could not be loaded.')}
+    };
+    const open=()=>{layer.hidden=false;input.focus();input.select();search(input.value)};
+    input.addEventListener('input',()=>{clearTimeout(searchTimer);searchTimer=setTimeout(()=>search(input.value),180)});
+    layer.querySelector('.zuvyr-chat-search-close').addEventListener('click',close);
+    layer.addEventListener('pointerdown',event=>{if(event.target===layer)close()});
+    layer.addEventListener('keydown',event=>{if(event.key==='Escape'){event.preventDefault();close()}});
+    layer._zuvyrOpenSearch=open;
+    return layer;
+  };
+
+  const enhance=sidebar=>{
+    if(!sidebar||sidebar.dataset.zuvyrSidebarPhase1==='1')return;
+    const workspace=sidebar.closest('.zuvyr-chat-workspace');
+    const brand=sidebar.querySelector('.zuvyr-chat-brand');
+    const primary=sidebar.querySelector('.zuvyr-chat-primary');
+    const newChat=sidebar.querySelector('.zuvyr-sidebar-new-chat');
+    if(!workspace||!brand||!primary||!newChat)return;
+    sidebar.dataset.zuvyrSidebarPhase1='1';
+    const layer=buildSearchLayer(workspace);
+    const search=document.createElement('button');search.type='button';search.className='zuvyr-sidebar-search';search.title='Search';search.setAttribute('aria-label','Search chats');search.innerHTML='<span class="zuvyr-sidebar-nav-icon">'+searchIcon+'</span><span>Search</span><small class="zuvyr-sidebar-search-shortcut">Ctrl K</small>';search.addEventListener('click',()=>layer._zuvyrOpenSearch?.());
+    const collapse=document.createElement('button');collapse.type='button';collapse.className='zuvyr-sidebar-head-action zuvyr-sidebar-collapse';collapse.title='Toggle sidebar';collapse.setAttribute('aria-label','Toggle sidebar');collapse.innerHTML=collapseIcon;collapse.addEventListener('click',()=>workspace.classList.toggle('zuvyr-sidebar-collapsed'));
+    brand.appendChild(collapse);primary.prepend(search);
+    const symbol=newChat.querySelector('.rox-new-chat-symbol');if(symbol)symbol.innerHTML=composeIcon;
+    newChat.title='New chat';newChat.setAttribute('aria-label','New chat');
+    const label=newChat.querySelector('.rox-new-chat-label');if(label){label.textContent='New chat';label.removeAttribute('data-i18n')}
+  };
+
+  const scan=root=>{if(root?.matches?.('.zuvyr-chat-sidebar'))enhance(root);root?.querySelectorAll?.('.zuvyr-chat-sidebar').forEach(enhance)};
+  document.addEventListener('keydown',event=>{if((event.ctrlKey||event.metaKey)&&String(event.key).toLowerCase()==='k'){const sidebar=document.querySelector('#feature-chat.active .zuvyr-chat-sidebar');if(!sidebar)return;event.preventDefault();enhance(sidebar);sidebar.closest('.zuvyr-chat-workspace')?.querySelector('.zuvyr-chat-search-layer')?._zuvyrOpenSearch?.()}});
+  scan(document);
+  new MutationObserver(records=>records.forEach(record=>record.addedNodes.forEach(node=>{if(node.nodeType===1)scan(node)}))).observe(document.documentElement,{childList:true,subtree:true});
+})();
+/* ZUVYR CHATGPT SIDEBAR PHASE 1 END */
