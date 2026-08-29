@@ -1061,3 +1061,149 @@ body.zuvyr-ui #feature-chat .zuvyr-chat-brand>span{
   letter-spacing:.09em;
 }
 /* ZUVYR SIDEBAR BRAND + CHAT TOPBAR V1 END */
+
+/* ZUVYR USER MESSAGE ACTIONS V1 */
+body.zuvyr-ui #feature-chat #msgs-chat>.msg.user{position:relative}
+body.zuvyr-ui #feature-chat .zuvyr-user-actions{
+  display:flex;
+  align-self:flex-end;
+  align-items:center;
+  gap:2px;
+  height:32px;
+  margin:-2px max(28px,calc((100% - 780px)/2 + 28px)) 10px 0;
+  opacity:0;
+  pointer-events:none;
+  transition:opacity .14s ease;
+}
+body.zuvyr-ui #feature-chat .zuvyr-user-action{
+  display:flex;
+  width:32px;
+  height:32px;
+  align-items:center;
+  justify-content:center;
+  padding:0;
+  color:#b4b4b4;
+  border:0;
+  border-radius:8px;
+  background:transparent;
+  cursor:pointer;
+}
+body.zuvyr-ui #feature-chat .zuvyr-user-action:hover,
+body.zuvyr-ui #feature-chat .zuvyr-user-action:focus-visible{
+  color:#fff;
+  background:#2f2f2f;
+}
+body.zuvyr-ui #feature-chat .zuvyr-user-action svg{
+  width:19px;
+  height:19px;
+  fill:none;
+  stroke:currentColor;
+  stroke-width:1.8;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+}
+body.zuvyr-ui #feature-chat .zuvyr-user-action-label{display:none}
+body.zuvyr-ui #feature-chat .zuvyr-user-actions[hidden]{display:none!important}
+body.zuvyr-ui #feature-chat .msg.user.is-zuvyr-editing{display:none!important}
+body.zuvyr-ui #feature-chat .zuvyr-user-editor{
+  display:flex;
+  width:min(78%,520px);
+  box-sizing:border-box;
+  align-self:flex-end;
+  flex-direction:column;
+  gap:12px;
+  margin:0 max(28px,calc((100% - 780px)/2 + 28px)) 10px 0;
+  padding:12px;
+  border:1px solid rgba(255,255,255,.11);
+  border-radius:18px;
+  background:#2f2f2f;
+}
+body.zuvyr-ui #feature-chat .zuvyr-user-editor textarea{
+  width:100%;
+  min-height:86px;
+  max-height:260px;
+  box-sizing:border-box;
+  padding:5px;
+  overflow:auto;
+  color:#f5f5f5;
+  border:0;
+  outline:0;
+  background:transparent;
+  font:inherit;
+  line-height:1.5;
+  resize:vertical;
+  direction:auto;
+}
+body.zuvyr-ui #feature-chat .zuvyr-user-editor-footer{
+  display:flex;
+  justify-content:flex-end;
+  gap:8px;
+}
+body.zuvyr-ui #feature-chat .zuvyr-user-editor-button{
+  min-height:36px;
+  padding:0 16px;
+  color:#f5f5f5;
+  border:1px solid rgba(255,255,255,.14);
+  border-radius:18px;
+  background:transparent;
+  font:inherit;
+  font-size:13px;
+  font-weight:650;
+  cursor:pointer;
+}
+body.zuvyr-ui #feature-chat .zuvyr-user-editor-button.is-send{
+  color:#111;
+  border-color:#fff;
+  background:#fff;
+}
+body.zuvyr-ui #feature-chat .zuvyr-user-editor-button:disabled{
+  opacity:.55;
+  cursor:wait;
+}
+@media(hover:hover) and (pointer:fine){
+  body.zuvyr-ui #feature-chat #msgs-chat>.msg.user:hover+.zuvyr-user-actions,
+  body.zuvyr-ui #feature-chat #msgs-chat>.msg.user:focus-within+.zuvyr-user-actions,
+  body.zuvyr-ui #feature-chat .zuvyr-user-actions:hover,
+  body.zuvyr-ui #feature-chat .zuvyr-user-actions:focus-within{
+    opacity:1;
+    pointer-events:auto;
+  }
+}
+@media(hover:none),(pointer:coarse){
+  body.zuvyr-ui #feature-chat #msgs-chat>.msg.user{
+    -webkit-touch-callout:none;
+    user-select:none;
+  }
+  body.zuvyr-ui #feature-chat .zuvyr-user-actions{
+    position:fixed;
+    z-index:10030;
+    display:none;
+    width:230px;
+    height:auto;
+    margin:0;
+    padding:7px;
+    flex-direction:column;
+    align-items:stretch;
+    gap:1px;
+    opacity:1;
+    pointer-events:auto;
+    border:1px solid rgba(255,255,255,.11);
+    border-radius:15px;
+    background:#2f2f2f;
+    box-shadow:0 18px 50px rgba(0,0,0,.55);
+  }
+  body.zuvyr-ui #feature-chat .zuvyr-user-actions.is-open{display:flex}
+  body.zuvyr-ui #feature-chat .zuvyr-user-action{
+    width:100%;
+    height:44px;
+    justify-content:flex-start;
+    gap:12px;
+    padding:0 12px;
+    border-radius:9px;
+  }
+  body.zuvyr-ui #feature-chat .zuvyr-user-action-label{display:inline}
+  body.zuvyr-ui #feature-chat .zuvyr-user-editor{
+    width:calc(100% - 34px);
+    margin-right:17px;
+  }
+}

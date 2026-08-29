@@ -1344,3 +1344,356 @@
   new MutationObserver(records=>records.forEach(record=>record.addedNodes.forEach(node=>{if(node.nodeType===1)scan(node)}))).observe(document.documentElement,{childList:true,subtree:true});
 })();
 /* ZUVYR CHATGPT SIDEBAR PHASE 1 END */
+
+/* ZUVYR USER MESSAGE ACTIONS V1 */
+(()=>{
+  'use strict';
+
+  const labels=()=>{
+    const lang=String(document.documentElement.lang||'en').toLowerCase();
+    if(lang.startsWith('ar'))return{
+      copy:'\u0646\u0633\u062e',
+      copied:'\u062a\u0645 \u0627\u0644\u0646\u0633\u062e',
+      share:'\u0645\u0634\u0627\u0631\u0643\u0629 \u0627\u0644\u0637\u0644\u0628',
+      edit:'\u062a\u0639\u062f\u064a\u0644 \u0627\u0644\u0646\u0635',
+      cancel:'\u0625\u0644\u063a\u0627\u0621',
+      send:'\u0625\u0631\u0633\u0627\u0644',
+      unavailable:'\u062a\u0639\u0630\u0631 \u062a\u0639\u062f\u064a\u0644 \u0647\u0630\u0647 \u0627\u0644\u0631\u0633\u0627\u0644\u0629.',
+      failed:'\u062a\u0639\u0630\u0631 \u0625\u0631\u0633\u0627\u0644 \u0627\u0644\u0646\u0635 \u0627\u0644\u0645\u0639\u062f\u0644.'
+    };
+    if(lang.startsWith('fr'))return{
+      copy:'Copier',copied:'Copie effectuee',share:'Partager le prompt',
+      edit:'Modifier le texte',cancel:'Annuler',send:'Envoyer',
+      unavailable:'Cette demande ne peut pas etre modifiee.',
+      failed:'Impossible d envoyer le texte modifie.'
+    };
+    if(lang.startsWith('es'))return{
+      copy:'Copiar',copied:'Copiado',share:'Compartir prompt',
+      edit:'Editar texto',cancel:'Cancelar',send:'Enviar',
+      unavailable:'No se puede editar este mensaje.',
+      failed:'No se pudo enviar el texto editado.'
+    };
+    return{
+      copy:'Copy',copied:'Copied',share:'Share prompt',
+      edit:'Edit text',cancel:'Cancel',send:'Send',
+      unavailable:'This message cannot be edited.',
+      failed:'Could not send the edited text.'
+    };
+  };
+
+  const icons={
+    copy:'<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="11" height="11" rx="2"></rect><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"></path></svg>',
+    share:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 16V4"></path><path d="m7 9 5-5 5 5"></path><path d="M5 14v4a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-4"></path></svg>',
+    edit:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m4 16-.8 4 4-.8L18.5 7.9a2.1 2.1 0 0 0-3-3Z"></path><path d="m14 6 4 4"></path></svg>'
+  };
+
+  const toast=value=>{
+    document.querySelector('.zuvyr-action-toast')?.remove();
+    const node=document.createElement('div');
+    node.className='zuvyr-action-toast';
+    node.textContent=value;
+    document.body.appendChild(node);
+    setTimeout(()=>node.remove(),2600);
+  };
+
+  const messageText=message=>String(
+    message.querySelector('.zuvyr-sent-image-caption')?.textContent||
+    message.textContent||
+    ''
+  ).trim();
+
+  const copyText=async value=>{
+    if(navigator.clipboard?.writeText){
+      await navigator.clipboard.writeText(value);
+      return;
+    }
+    const area=document.createElement('textarea');
+    area.value=value;
+    area.style.position='fixed';
+    area.style.opacity='0';
+    document.body.appendChild(area);
+    area.select();
+    document.execCommand('copy');
+    area.remove();
+  };
+
+  const closeMenus=except=>{
+    document.querySelectorAll('.zuvyr-user-actions.is-open').forEach(menu=>{
+      if(menu!==except)menu.classList.remove('is-open');
+    });
+  };
+
+  const closeEditors=()=>{
+    document.querySelectorAll('.zuvyr-user-editor').forEach(editor=>{
+      editor._message?.classList.remove('is-zuvyr-editing');
+      if(editor._actions)editor._actions.hidden=false;
+      editor.remove();
+    });
+  };
+
+  const openMobileMenu=(actions,x,y)=>{
+    closeMenus(actions);
+    actions.classList.add('is-open');
+    const width=230;
+    const left=Math.max(12,Math.min(x-width/2,window.innerWidth-width-12));
+    actions.style.left=left+'px';
+    const height=actions.offsetHeight||150;
+    actions.style.top=Math.max(12,Math.min(y+12,window.innerHeight-height-12))+'px';
+  };
+
+  const startEditor=(message,actions)=>{
+    const text=labels();
+    const original=messageText(message);
+    if(!original)return;
+
+    closeMenus();
+    closeEditors();
+
+    const editor=document.createElement('div');
+    editor.className='zuvyr-user-editor';
+    editor._message=message;
+    editor._actions=actions;
+
+    const input=document.createElement('textarea');
+    input.value=original;
+    input.setAttribute('aria-label',text.edit);
+
+    const footer=document.createElement('div');
+    footer.className='zuvyr-user-editor-footer';
+
+    const cancel=document.createElement('button');
+    cancel.type='button';
+    cancel.className='zuvyr-user-editor-button';
+    cancel.textContent=text.cancel;
+
+    const send=document.createElement('button');
+    send.type='button';
+    send.className='zuvyr-user-editor-button is-send';
+    send.textContent=text.send;
+
+    footer.append(cancel,send);
+    editor.append(input,footer);
+    message.classList.add('is-zuvyr-editing');
+    actions.hidden=true;
+    message.parentNode.insertBefore(editor,actions);
+
+    const restore=()=>{
+      message.classList.remove('is-zuvyr-editing');
+      actions.hidden=false;
+      editor.remove();
+    };
+
+    cancel.addEventListener('click',restore);
+
+    send.addEventListener('click',async()=>{
+      const value=input.value.trim();
+      if(!value)return;
+
+      const meta=message._zuvyrMeta||{};
+      const conversationId=String(
+        meta.conversationId||
+        message.dataset.zuvyrConversationId||
+        ''
+      );
+      const sequenceNo=Number(
+        meta.sequenceNo||
+        message.dataset.zuvyrSequenceNo
+      );
+
+      if(!conversationId||!Number.isInteger(sequenceNo)||sequenceNo<1){
+        toast(text.unavailable);
+        return;
+      }
+
+      send.disabled=true;
+      cancel.disabled=true;
+
+      try{
+        let response;
+
+        if(sequenceNo===1){
+          response=await authFetch('/api/conversations',{
+            method:'POST',
+            body:JSON.stringify({
+              feature:'chat',
+              title:value.replace(/\s+/g,' ').slice(0,80)
+            })
+          });
+        }else{
+          response=await authFetch(
+            '/api/conversations/'+encodeURIComponent(conversationId)+'/branch',
+            {
+              method:'POST',
+              body:JSON.stringify({
+                throughSequence:sequenceNo-1
+              })
+            }
+          );
+        }
+
+        const data=await response.json().catch(()=>({}));
+
+        if(!response.ok||!data.conversation){
+          throw new Error(data.message||'conversation_edit_branch_failed');
+        }
+
+        if(typeof openRoxHistoryItem!=='function'||typeof sendMessage!=='function'){
+          throw new Error('conversation_edit_ui_unavailable');
+        }
+
+        await openRoxHistoryItem(data.conversation,null);
+
+        const composer=document.querySelector(
+          '#feature-chat textarea[data-feature="chat"],'+
+          '#feature-chat input[data-feature="chat"]'
+        );
+
+        if(!composer)throw new Error('conversation_edit_composer_missing');
+
+        composer.value=value;
+        composer.dispatchEvent(new Event('input',{bubbles:true}));
+        sendMessage('chat');
+      }catch(error){
+        console.error('ZUVYR user message edit failed:',error);
+        toast(text.failed);
+        send.disabled=false;
+        cancel.disabled=false;
+      }
+    });
+
+    input.addEventListener('keydown',event=>{
+      if(event.key==='Enter'&&!event.shiftKey){
+        event.preventDefault();
+        send.click();
+      }
+      if(event.key==='Escape')cancel.click();
+    });
+
+    requestAnimationFrame(()=>{
+      input.focus();
+      input.setSelectionRange(input.value.length,input.value.length);
+    });
+  };
+
+  const makeButton=(name,label,handler)=>{
+    const button=document.createElement('button');
+    button.type='button';
+    button.className='zuvyr-user-action zuvyr-user-action-'+name;
+    button.title=label;
+    button.setAttribute('aria-label',label);
+    button.innerHTML=icons[name]+'<span class="zuvyr-user-action-label"></span>';
+    button.querySelector('.zuvyr-user-action-label').textContent=label;
+    button.addEventListener('click',event=>{
+      event.preventDefault();
+      event.stopPropagation();
+      closeMenus();
+      Promise.resolve(handler()).catch(error=>
+        console.error('ZUVYR user message action failed:',error)
+      );
+    });
+    return button;
+  };
+
+  const enhance=message=>{
+    if(
+      !message||
+      message.dataset.zuvyrUserActionsReady==='true'||
+      !message.matches('#feature-chat #msgs-chat>.msg.user')
+    )return;
+
+    message.dataset.zuvyrUserActionsReady='true';
+    const text=labels();
+    const actions=document.createElement('div');
+    actions.className='zuvyr-user-actions';
+
+    actions.append(
+      makeButton('copy',text.copy,async()=>{
+        const value=messageText(message);
+        if(!value)return;
+        await copyText(value);
+        toast(text.copied);
+      }),
+      makeButton('share',text.share,async()=>{
+        const value=messageText(message);
+        if(!value)return;
+        if(navigator.share){
+          try{
+            await navigator.share({title:'ZUVYR',text:value});
+          }catch(error){
+            if(error?.name!=='AbortError')throw error;
+          }
+        }else{
+          await copyText(value);
+          toast(text.copied);
+        }
+      }),
+      makeButton('edit',text.edit,()=>startEditor(message,actions))
+    );
+
+    message.insertAdjacentElement('afterend',actions);
+
+    let timer=null;
+    let startX=0;
+    let startY=0;
+
+    const clear=()=>{
+      if(timer){
+        clearTimeout(timer);
+        timer=null;
+      }
+    };
+
+    message.addEventListener('pointerdown',event=>{
+      if(!matchMedia('(hover:none),(pointer:coarse)').matches)return;
+      startX=event.clientX;
+      startY=event.clientY;
+      clear();
+      timer=setTimeout(()=>{
+        timer=null;
+        openMobileMenu(actions,startX,startY);
+      },500);
+    });
+
+    message.addEventListener('pointermove',event=>{
+      if(Math.hypot(event.clientX-startX,event.clientY-startY)>10)clear();
+    });
+
+    message.addEventListener('pointerup',clear);
+    message.addEventListener('pointercancel',clear);
+
+    message.addEventListener('contextmenu',event=>{
+      if(!matchMedia('(hover:none),(pointer:coarse)').matches)return;
+      event.preventDefault();
+      clear();
+      openMobileMenu(actions,event.clientX,event.clientY);
+    });
+  };
+
+  const scan=root=>{
+    if(root?.matches?.('#feature-chat #msgs-chat>.msg.user'))enhance(root);
+    root?.querySelectorAll?.('#feature-chat #msgs-chat>.msg.user').forEach(enhance);
+  };
+
+  const boot=()=>{
+    scan(document);
+    new MutationObserver(records=>{
+      records.forEach(record=>
+        record.addedNodes.forEach(node=>{
+          if(node.nodeType===1)scan(node);
+        })
+      );
+    }).observe(document.body,{childList:true,subtree:true});
+
+    document.addEventListener('pointerdown',event=>{
+      if(!event.target.closest('.zuvyr-user-actions,.msg.user')){
+        closeMenus();
+      }
+    });
+  };
+
+  if(document.readyState==='loading'){
+    document.addEventListener('DOMContentLoaded',boot,{once:true});
+  }else{
+    boot();
+  }
+})();

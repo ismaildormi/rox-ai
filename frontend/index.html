@@ -14,8 +14,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>ZUVYR — Mobile</title>
 <link rel="icon" type="image/png" href="./zuvyr-app-icon-20260827.png?v=1">
-<link rel="stylesheet" href="./zuvyr-chat-workspace-v1.css?v=23">
-<script defer src="./zuvyr-chat-workspace-v1.js?v=23"><\/script>
+<link rel="stylesheet" href="./zuvyr-chat-workspace-v1.css?v=24">
+<script defer src="./zuvyr-chat-workspace-v1.js?v=24"><\/script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.110.8/dist/umd/supabase.js"><\/script>
@@ -10256,7 +10256,7 @@ async function openRoxHistoryItem(item, row=null){
       if(!text)return;
 
       if(role==='user'){
-        appendMsg(msgBox,'user',text);
+        appendMsg(msgBox,'user',text,false,{conversationId:item.id,sequenceNo:message.sequence_no,createdAt:message.created_at});
         return;
       }
 
@@ -11958,7 +11958,7 @@ function createCodeArtifact(rawText) {
   /* ROX CODE STUDIO CLAUDE RENDERER JS END */
   return response;
 }
-async function sendChat(feature, text, msgBox) {
+async function sendChat(feature, text, msgBox, userMessage) {
   if (feature === 'code') appendMsg(msgBox, 'status', roxT('usage.estimatedCodeCost'));
   const typing = appendTyping(msgBox);
   // Send the stored history PLUS this new turn, but don't commit the new
@@ -12025,6 +12025,21 @@ async function sendChat(feature, text, msgBox) {
       return;
     }
     if (!res.ok) { appendMsg(msgBox, 'error', data.message || roxT('error.allModelsFailed')); return; }
+
+    if(userMessage&&feature==='chat'){
+      const userSequenceNo=Number(data.conversationMessageCount)-1;
+      if(Number.isInteger(userSequenceNo)&&userSequenceNo>=1){
+        userMessage._zuvyrMeta={
+          ...(userMessage._zuvyrMeta||{}),
+          conversationId:data.conversationId||conversationId,
+          sequenceNo:userSequenceNo,
+          createdAt:new Date().toISOString()
+        };
+        userMessage.dataset.zuvyrConversationId=String(data.conversationId||conversationId);
+        userMessage.dataset.zuvyrSequenceNo=String(userSequenceNo);
+        userMessage.dataset.zuvyrCreatedAt=userMessage._zuvyrMeta.createdAt;
+      }
+    }
 
     if (feature === 'code') {
   const artifact = createCodeArtifact(data.text);
@@ -12428,10 +12443,10 @@ function sendMessage(feature){
   const msgBox = document.getElementById('msgs-'+feature);
   const visibleText = text || 'Analyze the attached image.';
 
-  appendMsg(msgBox, 'user', visibleText);
+  const userMessage=appendMsg(msgBox,'user',visibleText);
   input.value = '';
 
-  if (feature === 'chat' || feature === 'code') sendChat(feature, visibleText, msgBox);
+  if (feature === 'chat' || feature === 'code') sendChat(feature,visibleText,msgBox,userMessage);
   else if (feature === 'images' || feature === 'videos') sendGeneration(feature, text, msgBox);
   else if (feature === 'roxip') sendRoxIpDemo(text, msgBox);
 }
@@ -15242,8 +15257,8 @@ initAuth();
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ZUVYR — Desktop</title>
 <link rel="icon" type="image/png" href="./zuvyr-app-icon-20260827.png?v=1">
-<link rel="stylesheet" href="./zuvyr-chat-workspace-v1.css?v=23">
-<script defer src="./zuvyr-chat-workspace-v1.js?v=23"><\/script>
+<link rel="stylesheet" href="./zuvyr-chat-workspace-v1.css?v=24">
+<script defer src="./zuvyr-chat-workspace-v1.js?v=24"><\/script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.110.8/dist/umd/supabase.js"><\/script>
@@ -29903,7 +29918,7 @@ async function openRoxHistoryItem(item, row=null){
       if(!text)return;
 
       if(role==='user'){
-        appendMsg(msgBox,'user',text);
+        appendMsg(msgBox,'user',text,false,{conversationId:item.id,sequenceNo:message.sequence_no,createdAt:message.created_at});
         return;
       }
 
@@ -31605,7 +31620,7 @@ function createCodeArtifact(rawText) {
   /* ROX CODE STUDIO CLAUDE RENDERER JS END */
   return response;
 }
-async function sendChat(feature, text, msgBox) {
+async function sendChat(feature, text, msgBox, userMessage) {
   if (feature === 'code') appendMsg(msgBox, 'status', roxT('usage.estimatedCodeCost'));
   const typing = appendTyping(msgBox);
   // Send the stored history PLUS this new turn, but don't commit the new
@@ -31672,6 +31687,21 @@ async function sendChat(feature, text, msgBox) {
       return;
     }
     if (!res.ok) { appendMsg(msgBox, 'error', data.message || roxT('error.allModelsFailed')); return; }
+
+    if(userMessage&&feature==='chat'){
+      const userSequenceNo=Number(data.conversationMessageCount)-1;
+      if(Number.isInteger(userSequenceNo)&&userSequenceNo>=1){
+        userMessage._zuvyrMeta={
+          ...(userMessage._zuvyrMeta||{}),
+          conversationId:data.conversationId||conversationId,
+          sequenceNo:userSequenceNo,
+          createdAt:new Date().toISOString()
+        };
+        userMessage.dataset.zuvyrConversationId=String(data.conversationId||conversationId);
+        userMessage.dataset.zuvyrSequenceNo=String(userSequenceNo);
+        userMessage.dataset.zuvyrCreatedAt=userMessage._zuvyrMeta.createdAt;
+      }
+    }
 
     if (feature === 'code') {
   const artifact = createCodeArtifact(data.text);
@@ -32077,10 +32107,10 @@ function sendMessage(feature){
   const msgBox = document.getElementById('msgs-'+feature);
   const visibleText = text || 'Analyze the attached image.';
 
-  appendMsg(msgBox, 'user', visibleText);
+  const userMessage=appendMsg(msgBox,'user',visibleText);
   input.value = '';
 
-  if (feature === 'chat' || feature === 'code') sendChat(feature, visibleText, msgBox);
+  if (feature === 'chat' || feature === 'code') sendChat(feature,visibleText,msgBox,userMessage);
   else if (feature === 'images' || feature === 'videos') sendGeneration(feature, text, msgBox);
   else if (feature === 'roxip') sendRoxIpDemo(text, msgBox);
 }
