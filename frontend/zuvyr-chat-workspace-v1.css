@@ -1024,10 +1024,10 @@ body.zuvyr-ui #feature-chat .zuvyr-sidebar-collapsed .zuvyr-sidebar-pinned{displ
 /* ZUVYR SIDEBAR CONVERSATION ACTIONS */
 body.zuvyr-ui #feature-chat .zuvyr-sidebar-recent{position:relative}
 body.zuvyr-ui #feature-chat .zuvyr-sidebar-recent-title{flex:1}
-body.zuvyr-ui #feature-chat .zuvyr-sidebar-recent-controls{display:flex;flex:0 0 auto;align-items:center;gap:1px;opacity:0;pointer-events:none}
-body.zuvyr-ui #feature-chat .zuvyr-sidebar-recent:hover .zuvyr-sidebar-recent-controls,body.zuvyr-ui #feature-chat .zuvyr-sidebar-recent:focus-within .zuvyr-sidebar-recent-controls{opacity:1;pointer-events:auto}
-body.zuvyr-ui #feature-chat .zuvyr-sidebar-recent-pin.is-pinned{opacity:1!important;pointer-events:auto!important}
-body.zuvyr-ui #feature-chat .zuvyr-sidebar-recent-pin,body.zuvyr-ui #feature-chat .zuvyr-sidebar-recent-more{display:grid;width:27px;height:27px;padding:0;place-items:center;color:#d6d6d6;border:0;border-radius:7px;background:transparent;cursor:pointer}
+body.zuvyr-ui #feature-chat .zuvyr-sidebar-recent-controls{display:flex;flex:0 0 auto;align-items:center;gap:1px}
+body.zuvyr-ui #feature-chat .zuvyr-sidebar-recent:hover .zuvyr-sidebar-recent-pin,body.zuvyr-ui #feature-chat .zuvyr-sidebar-recent:hover .zuvyr-sidebar-recent-more,body.zuvyr-ui #feature-chat .zuvyr-sidebar-recent:focus-within .zuvyr-sidebar-recent-pin,body.zuvyr-ui #feature-chat .zuvyr-sidebar-recent:focus-within .zuvyr-sidebar-recent-more{opacity:1;pointer-events:auto}
+body.zuvyr-ui #feature-chat .zuvyr-sidebar-recent-pin.is-pinned{opacity:1;pointer-events:auto;color:#c4b5fd;background:rgba(139,92,246,.14)}
+body.zuvyr-ui #feature-chat .zuvyr-sidebar-recent-pin,body.zuvyr-ui #feature-chat .zuvyr-sidebar-recent-more{display:grid;width:27px;height:27px;padding:0;place-items:center;color:#d6d6d6;border:0;border-radius:7px;background:transparent;cursor:pointer;opacity:0;pointer-events:none;transition:opacity .15s ease,color .15s ease,background .15s ease}
 body.zuvyr-ui #feature-chat .zuvyr-sidebar-recent-pin:hover,body.zuvyr-ui #feature-chat .zuvyr-sidebar-recent-more:hover{color:#fff;background:#383838}
 body.zuvyr-ui #feature-chat .zuvyr-sidebar-recent-pin svg,body.zuvyr-ui #feature-chat .zuvyr-sidebar-recent-more svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 body.zuvyr-ui #feature-chat .zuvyr-sidebar-recent-more svg{fill:currentColor;stroke:none}
