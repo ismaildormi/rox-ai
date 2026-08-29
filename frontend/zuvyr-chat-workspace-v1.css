@@ -1015,6 +1015,12 @@ body.zuvyr-ui #feature-chat .zuvyr-sidebar-recent-title{min-width:0;overflow:hid
 body.zuvyr-ui #feature-chat .zuvyr-sidebar-recents-state{padding:10px 12px;color:#777;font-size:12px;line-height:1.4}
 body.zuvyr-ui #feature-chat .zuvyr-sidebar-collapsed .zuvyr-sidebar-recents{display:none!important}
 @media(max-width:760px){body.zuvyr-ui #feature-chat .zuvyr-sidebar-recents{display:none!important}}
+body.zuvyr-ui #feature-chat .zuvyr-sidebar-pinned{display:flex;min-height:0;max-height:42%;flex:0 1 auto;flex-direction:column;gap:8px;overflow:hidden}
+body.zuvyr-ui #feature-chat .zuvyr-sidebar-pinned[hidden]{display:none!important}
+body.zuvyr-ui #feature-chat .zuvyr-sidebar-pinned-title{padding:5px 12px 2px;color:#8e8e8e;font-size:12px;font-weight:650}
+body.zuvyr-ui #feature-chat .zuvyr-sidebar-pinned-list{min-height:0;overflow-y:auto;scrollbar-width:thin;scrollbar-color:#424242 transparent}
+body.zuvyr-ui #feature-chat .zuvyr-sidebar-collapsed .zuvyr-sidebar-pinned{display:none!important}
+@media(max-width:760px){body.zuvyr-ui #feature-chat .zuvyr-sidebar-pinned{display:none!important}}
 /* ZUVYR SIDEBAR CONVERSATION ACTIONS */
 body.zuvyr-ui #feature-chat .zuvyr-sidebar-recent{position:relative}
 body.zuvyr-ui #feature-chat .zuvyr-sidebar-recent-title{flex:1}
