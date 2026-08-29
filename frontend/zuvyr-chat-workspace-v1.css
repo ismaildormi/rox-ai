@@ -1065,6 +1065,7 @@ body.zuvyr-ui #feature-chat .zuvyr-chat-brand>span{
 /* ZUVYR USER MESSAGE ACTIONS V1 */
 body.zuvyr-ui #feature-chat #msgs-chat>.msg.user{position:relative}
 body.zuvyr-ui #feature-chat .zuvyr-user-actions{
+  position:relative;
   display:flex;
   align-self:flex-end;
   align-items:center;
@@ -1072,7 +1073,7 @@ body.zuvyr-ui #feature-chat .zuvyr-user-actions{
   height:32px;
   margin:-2px max(28px,calc((100% - 780px)/2 + 28px)) 10px 0;
   opacity:0;
-  pointer-events:none;
+  pointer-events:auto;
   transition:opacity .14s ease;
 }
 body.zuvyr-ui #feature-chat .zuvyr-user-action{
@@ -1161,6 +1162,14 @@ body.zuvyr-ui #feature-chat .zuvyr-user-editor-button:disabled{
   cursor:wait;
 }
 @media(hover:hover) and (pointer:fine){
+  body.zuvyr-ui #feature-chat .zuvyr-user-actions::before{
+    content:"";
+    position:absolute;
+    right:0;
+    bottom:100%;
+    left:0;
+    height:14px;
+  }
   body.zuvyr-ui #feature-chat #msgs-chat>.msg.user:hover+.zuvyr-user-actions,
   body.zuvyr-ui #feature-chat #msgs-chat>.msg.user:focus-within+.zuvyr-user-actions,
   body.zuvyr-ui #feature-chat .zuvyr-user-actions:hover,

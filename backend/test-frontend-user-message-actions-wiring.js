@@ -38,7 +38,7 @@ assert.strictEqual(
   'Both frontend copies must attach the durable user sequence after success.'
 );
 
-assert.strictEqual(count(index,'zuvyr-chat-workspace-v1.css?v=24'),2);
+assert.strictEqual(count(index,'zuvyr-chat-workspace-v1.css?v=25'),2);
 assert.strictEqual(count(index,'zuvyr-chat-workspace-v1.js?v=24'),2);
 assert.strictEqual(count(css,'/* ZUVYR USER MESSAGE ACTIONS V1 */'),1);
 assert.strictEqual(count(js,'/* ZUVYR USER MESSAGE ACTIONS V1 */'),1);
@@ -54,5 +54,10 @@ assert.strictEqual(count(js,'/* ZUVYR USER MESSAGE ACTIONS V1 */'),1);
 ].forEach(marker=>{
   assert.ok(js.includes(marker),`Missing user-action marker: ${marker}`);
 });
+
+assert.ok(
+  css.includes('.zuvyr-user-actions::before'),
+  'Desktop user actions must include a hover bridge.'
+);
 
 console.log('PASS: ZUVYR user message Copy Share Edit wiring tests');
