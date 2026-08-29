@@ -14,8 +14,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>ZUVYR — Mobile</title>
 <link rel="icon" type="image/png" href="./zuvyr-app-icon-20260827.png?v=1">
-<link rel="stylesheet" href="./zuvyr-chat-workspace-v1.css?v=22">
-<script defer src="./zuvyr-chat-workspace-v1.js?v=22"><\/script>
+<link rel="stylesheet" href="./zuvyr-chat-workspace-v1.css?v=23">
+<script defer src="./zuvyr-chat-workspace-v1.js?v=23"><\/script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.110.8/dist/umd/supabase.js"><\/script>
@@ -10198,6 +10198,7 @@ async function openRoxHistoryItem(item, row=null){
       await loadAllRoxConversationMessages(item.id);
 
     setActiveRoxConversation(feature,item.id);
+    syncRoxConversationTitle(feature,item.title||'New conversation');
 
     if(conversations[feature]){
       conversations[feature]=messages
@@ -11044,6 +11045,17 @@ function createRoxClientUuid() {
   ].join('-');
 }
 
+function syncRoxConversationTitle(feature, title = '') {
+  window.dispatchEvent(
+    new CustomEvent('rox:conversation-title', {
+      detail: {
+        feature: String(feature || ''),
+        title: String(title || '')
+      }
+    })
+  );
+}
+
 function setActiveRoxConversation(feature, conversationId) {
   const normalizedFeature =
     normalizeRoxConversationFeature(feature);
@@ -11059,6 +11071,7 @@ function resetActiveRoxConversation(feature) {
     normalizeRoxConversationFeature(feature);
 
   activeRoxConversationIds[normalizedFeature] = null;
+  syncRoxConversationTitle(normalizedFeature, '');
   roxConversationCreationPromises[normalizedFeature] = null;
 
   if (conversations[normalizedFeature]) {
@@ -11133,10 +11146,12 @@ async function ensureRoxConversation(feature, firstText = '') {
       throw error;
     }
 
-    return setActiveRoxConversation(
+    const activeConversationId = setActiveRoxConversation(
       normalizedFeature,
       conversationId
     );
+    syncRoxConversationTitle(normalizedFeature, title);
+    return activeConversationId;
   })();
 
   roxConversationCreationPromises[normalizedFeature] =
@@ -15227,8 +15242,8 @@ initAuth();
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ZUVYR — Desktop</title>
 <link rel="icon" type="image/png" href="./zuvyr-app-icon-20260827.png?v=1">
-<link rel="stylesheet" href="./zuvyr-chat-workspace-v1.css?v=22">
-<script defer src="./zuvyr-chat-workspace-v1.js?v=22"><\/script>
+<link rel="stylesheet" href="./zuvyr-chat-workspace-v1.css?v=23">
+<script defer src="./zuvyr-chat-workspace-v1.js?v=23"><\/script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.110.8/dist/umd/supabase.js"><\/script>
@@ -29830,6 +29845,7 @@ async function openRoxHistoryItem(item, row=null){
       await loadAllRoxConversationMessages(item.id);
 
     setActiveRoxConversation(feature,item.id);
+    syncRoxConversationTitle(feature,item.title||'New conversation');
 
     if(conversations[feature]){
       conversations[feature]=messages
@@ -30676,6 +30692,17 @@ function createRoxClientUuid() {
   ].join('-');
 }
 
+function syncRoxConversationTitle(feature, title = '') {
+  window.dispatchEvent(
+    new CustomEvent('rox:conversation-title', {
+      detail: {
+        feature: String(feature || ''),
+        title: String(title || '')
+      }
+    })
+  );
+}
+
 function setActiveRoxConversation(feature, conversationId) {
   const normalizedFeature =
     normalizeRoxConversationFeature(feature);
@@ -30691,6 +30718,7 @@ function resetActiveRoxConversation(feature) {
     normalizeRoxConversationFeature(feature);
 
   activeRoxConversationIds[normalizedFeature] = null;
+  syncRoxConversationTitle(normalizedFeature, '');
   roxConversationCreationPromises[normalizedFeature] = null;
 
   if (conversations[normalizedFeature]) {
@@ -30765,10 +30793,12 @@ async function ensureRoxConversation(feature, firstText = '') {
       throw error;
     }
 
-    return setActiveRoxConversation(
+    const activeConversationId = setActiveRoxConversation(
       normalizedFeature,
       conversationId
     );
+    syncRoxConversationTitle(normalizedFeature, title);
+    return activeConversationId;
   })();
 
   roxConversationCreationPromises[normalizedFeature] =
