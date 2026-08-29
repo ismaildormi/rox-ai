@@ -14,8 +14,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>ZUVYR — Mobile</title>
 <link rel="icon" type="image/png" href="./zuvyr-app-icon-20260827.png?v=1">
-<link rel="stylesheet" href="./zuvyr-chat-workspace-v1.css?v=25">
-<script defer src="./zuvyr-chat-workspace-v1.js?v=24"><\/script>
+<link rel="stylesheet" href="./zuvyr-chat-workspace-v1.css?v=26">
+<script defer src="./zuvyr-chat-workspace-v1.js?v=25"><\/script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.110.8/dist/umd/supabase.js"><\/script>
@@ -11958,7 +11958,51 @@ function createCodeArtifact(rawText) {
   /* ROX CODE STUDIO CLAUDE RENDERER JS END */
   return response;
 }
+var roxActiveChatRequests = window.roxActiveChatRequests || new Map();
+window.roxActiveChatRequests=roxActiveChatRequests;
+
+function getRoxSendButton(feature){
+  return document.querySelector(
+    '#feature-'+feature+'.active [data-send="'+feature+'"]'
+  )||document.querySelector('[data-send="'+feature+'"]');
+}
+
+function setRoxChatSendingState(feature,controller){
+  const button=getRoxSendButton(feature);
+  if(!button)return;
+
+  if(controller){
+    if(!button.dataset.roxIdleHtml){
+      button.dataset.roxIdleHtml=button.innerHTML;
+      button.dataset.roxIdleTitle=button.getAttribute('title')||'';
+      button.dataset.roxIdleLabel=button.getAttribute('aria-label')||'';
+    }
+    button.classList.add('is-generating');
+    button.innerHTML='<span class="zuvyr-stop-square" aria-hidden="true"></span>';
+    button.title='Stop generating';
+    button.setAttribute('aria-label','Stop generating');
+    return;
+  }
+
+  button.classList.remove('is-generating');
+  if(button.dataset.roxIdleHtml)button.innerHTML=button.dataset.roxIdleHtml;
+  if(button.dataset.roxIdleTitle)button.title=button.dataset.roxIdleTitle;
+  else button.removeAttribute('title');
+  if(button.dataset.roxIdleLabel)button.setAttribute('aria-label',button.dataset.roxIdleLabel);
+  else button.removeAttribute('aria-label');
+}
+
+function stopRoxChatRequest(feature){
+  const controller=roxActiveChatRequests.get(feature);
+  if(!controller)return false;
+  controller.abort();
+  return true;
+}
+
 async function sendChat(feature, text, msgBox, userMessage) {
+  const controller=new AbortController();
+  roxActiveChatRequests.set(feature,controller);
+  setRoxChatSendingState(feature,controller);
   if (feature === 'code') appendMsg(msgBox, 'status', roxT('usage.estimatedCodeCost'));
   const typing = appendTyping(msgBox);
   // Send the stored history PLUS this new turn, but don't commit the new
@@ -11975,6 +12019,7 @@ async function sendChat(feature, text, msgBox, userMessage) {
 
     const res = await authFetch('/api/chat', {
       method: 'POST',
+      signal: controller.signal,
       body: JSON.stringify({
         messages: outgoing,
         feature,
@@ -12087,7 +12132,14 @@ async function sendChat(feature, text, msgBox, userMessage) {
     }
   } catch (err) {
     typing.remove();
-    if (err.message !== 'session_expired') appendMsg(msgBox, 'error', roxT('error.network'));
+    if (err?.name !== 'AbortError' && err.message !== 'session_expired') {
+      appendMsg(msgBox, 'error', roxT('error.network'));
+    }
+  } finally {
+    if(roxActiveChatRequests.get(feature)===controller){
+      roxActiveChatRequests.delete(feature);
+      setRoxChatSendingState(feature,null);
+    }
   }
 }
 
@@ -12433,6 +12485,7 @@ function setupRoxNewChatButtons() {
 
 setupRoxNewChatButtons();
 function sendMessage(feature){
+  if(roxActiveChatRequests.has(feature))return;
   const input = document.querySelector('[data-feature="'+feature+'"]');
   const text = input.value.trim();
   const attachmentRow = feature === 'chat'
@@ -12452,7 +12505,10 @@ function sendMessage(feature){
 }
 
 document.querySelectorAll('[data-send]').forEach(btn=>{
-  btn.addEventListener('click', ()=>sendMessage(btn.dataset.send));
+  btn.addEventListener('click',()=>{
+    if(stopRoxChatRequest(btn.dataset.send))return;
+    sendMessage(btn.dataset.send);
+  });
 });
 document.querySelectorAll('input[data-feature], textarea[data-feature]').forEach(inp=>{
   inp.addEventListener('keydown', e=>{ if(e.key==='Enter' && !e.shiftKey){ e.preventDefault(); sendMessage(inp.dataset.feature); } });
@@ -15257,8 +15313,8 @@ initAuth();
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ZUVYR — Desktop</title>
 <link rel="icon" type="image/png" href="./zuvyr-app-icon-20260827.png?v=1">
-<link rel="stylesheet" href="./zuvyr-chat-workspace-v1.css?v=25">
-<script defer src="./zuvyr-chat-workspace-v1.js?v=24"><\/script>
+<link rel="stylesheet" href="./zuvyr-chat-workspace-v1.css?v=26">
+<script defer src="./zuvyr-chat-workspace-v1.js?v=25"><\/script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.110.8/dist/umd/supabase.js"><\/script>
@@ -29702,6 +29758,7 @@ async function authFetch(path, options = {}) {
       },
     });
   } catch (networkErr) {
+    if(networkErr?.name==='AbortError')throw networkErr;
     // fetch() throws (TypeError: Failed to fetch) when the backend is
     // down/unreachable — surface that clearly instead of a generic error.
     console.error('[authFetch] backend unreachable:', networkErr.message);
@@ -31620,7 +31677,51 @@ function createCodeArtifact(rawText) {
   /* ROX CODE STUDIO CLAUDE RENDERER JS END */
   return response;
 }
+var roxActiveChatRequests = window.roxActiveChatRequests || new Map();
+window.roxActiveChatRequests=roxActiveChatRequests;
+
+function getRoxSendButton(feature){
+  return document.querySelector(
+    '#feature-'+feature+'.active [data-send="'+feature+'"]'
+  )||document.querySelector('[data-send="'+feature+'"]');
+}
+
+function setRoxChatSendingState(feature,controller){
+  const button=getRoxSendButton(feature);
+  if(!button)return;
+
+  if(controller){
+    if(!button.dataset.roxIdleHtml){
+      button.dataset.roxIdleHtml=button.innerHTML;
+      button.dataset.roxIdleTitle=button.getAttribute('title')||'';
+      button.dataset.roxIdleLabel=button.getAttribute('aria-label')||'';
+    }
+    button.classList.add('is-generating');
+    button.innerHTML='<span class="zuvyr-stop-square" aria-hidden="true"></span>';
+    button.title='Stop generating';
+    button.setAttribute('aria-label','Stop generating');
+    return;
+  }
+
+  button.classList.remove('is-generating');
+  if(button.dataset.roxIdleHtml)button.innerHTML=button.dataset.roxIdleHtml;
+  if(button.dataset.roxIdleTitle)button.title=button.dataset.roxIdleTitle;
+  else button.removeAttribute('title');
+  if(button.dataset.roxIdleLabel)button.setAttribute('aria-label',button.dataset.roxIdleLabel);
+  else button.removeAttribute('aria-label');
+}
+
+function stopRoxChatRequest(feature){
+  const controller=roxActiveChatRequests.get(feature);
+  if(!controller)return false;
+  controller.abort();
+  return true;
+}
+
 async function sendChat(feature, text, msgBox, userMessage) {
+  const controller=new AbortController();
+  roxActiveChatRequests.set(feature,controller);
+  setRoxChatSendingState(feature,controller);
   if (feature === 'code') appendMsg(msgBox, 'status', roxT('usage.estimatedCodeCost'));
   const typing = appendTyping(msgBox);
   // Send the stored history PLUS this new turn, but don't commit the new
@@ -31637,6 +31738,7 @@ async function sendChat(feature, text, msgBox, userMessage) {
 
     const res = await authFetch('/api/chat', {
       method: 'POST',
+      signal: controller.signal,
       body: JSON.stringify({
         messages: outgoing,
         feature,
@@ -31749,8 +31851,16 @@ async function sendChat(feature, text, msgBox, userMessage) {
     }
   } catch (err) {
     typing.remove();
+    if (err?.name === 'AbortError') {
+      return;
+    }
     if (err.message === 'backend_unavailable') appendMsg(msgBox, 'error', getBackendUnavailableMessage());
     else if (err.message !== 'session_expired') appendMsg(msgBox, 'error', roxT('error.network'));
+  } finally {
+    if(roxActiveChatRequests.get(feature)===controller){
+      roxActiveChatRequests.delete(feature);
+      setRoxChatSendingState(feature,null);
+    }
   }
 }
 
@@ -32097,6 +32207,7 @@ function setupRoxNewChatButtons() {
 
 setupRoxNewChatButtons();
 function sendMessage(feature){
+  if(roxActiveChatRequests.has(feature))return;
   const input = document.querySelector('[data-feature="'+feature+'"]');
   const text = input.value.trim();
   const attachmentRow = feature === 'chat'
@@ -32116,7 +32227,10 @@ function sendMessage(feature){
 }
 
 document.querySelectorAll('[data-send]').forEach(btn=>{
-  btn.addEventListener('click', ()=>sendMessage(btn.dataset.send));
+  btn.addEventListener('click',()=>{
+    if(stopRoxChatRequest(btn.dataset.send))return;
+    sendMessage(btn.dataset.send);
+  });
 });
 document.querySelectorAll('input[data-feature], textarea[data-feature]').forEach(inp=>{
   inp.addEventListener('keydown', e=>{ if(e.key==='Enter' && !e.shiftKey){ e.preventDefault(); sendMessage(inp.dataset.feature); } });

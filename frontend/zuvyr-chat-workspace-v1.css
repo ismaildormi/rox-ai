@@ -1216,3 +1216,20 @@ body.zuvyr-ui #feature-chat .zuvyr-user-editor-button:disabled{
     margin-right:17px;
   }
 }
+
+/* ZUVYR COPY CHECK + CHAT STOP V1 */
+body.zuvyr-ui #feature-chat .zuvyr-user-action-copy.is-copied{
+  opacity:1;
+  color:#fff;
+}
+body.zuvyr-ui #feature-chat button[data-send="chat"].is-generating{
+  display:grid;
+  place-items:center;
+}
+body.zuvyr-ui #feature-chat button[data-send="chat"] .zuvyr-stop-square{
+  display:block;
+  width:10px;
+  height:10px;
+  border-radius:2px;
+  background:currentColor;
+}

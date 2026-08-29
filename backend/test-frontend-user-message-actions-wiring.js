@@ -38,8 +38,8 @@ assert.strictEqual(
   'Both frontend copies must attach the durable user sequence after success.'
 );
 
-assert.strictEqual(count(index,'zuvyr-chat-workspace-v1.css?v=25'),2);
-assert.strictEqual(count(index,'zuvyr-chat-workspace-v1.js?v=24'),2);
+assert.strictEqual(count(index,'zuvyr-chat-workspace-v1.css?v=26'),2);
+assert.strictEqual(count(index,'zuvyr-chat-workspace-v1.js?v=25'),2);
 assert.strictEqual(count(css,'/* ZUVYR USER MESSAGE ACTIONS V1 */'),1);
 assert.strictEqual(count(js,'/* ZUVYR USER MESSAGE ACTIONS V1 */'),1);
 
@@ -58,6 +58,40 @@ assert.strictEqual(count(js,'/* ZUVYR USER MESSAGE ACTIONS V1 */'),1);
 assert.ok(
   css.includes('.zuvyr-user-actions::before'),
   'Desktop user actions must include a hover bridge.'
+);
+
+assert.strictEqual(
+  count(index,'var roxActiveChatRequests = window.roxActiveChatRequests || new Map();'),
+  2,
+  'Both frontend copies must track active chat requests.'
+);
+assert.strictEqual(
+  count(index,'signal: controller.signal,'),
+  2,
+  'Both frontend copies must pass an abort signal to chat.'
+);
+assert.strictEqual(
+  count(index,'if(stopRoxChatRequest(btn.dataset.send))return;'),
+  2,
+  'Both send buttons must stop an active request.'
+);
+assert.strictEqual(
+  count(js,'toast(text.copied);'),
+  1,
+  'Only the Share fallback may use the copied toast.'
+);
+assert.ok(js.includes("check:'<svg"),'Copy must include the check icon.');
+assert.ok(
+  js.includes('const wrapped = async function(feature,text,msgBox,userMessage)'),
+  'Attachment wrapper must preserve the user message.'
+);
+assert.ok(
+  js.includes('original.call(this,feature,outgoingText,msgBox,userMessage)'),
+  'Attachment wrapper must forward the user message.'
+);
+assert.ok(
+  css.includes('/* ZUVYR COPY CHECK + CHAT STOP V1 */'),
+  'Copy and Stop styles must exist.'
 );
 
 console.log('PASS: ZUVYR user message Copy Share Edit wiring tests');

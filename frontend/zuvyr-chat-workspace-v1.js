@@ -814,7 +814,7 @@
   const patchSendChat = () => {
     if (typeof window.sendChat !== 'function' || window.sendChat.__zuvyrMultimodalV2) return;
     const original = window.sendChat;
-    const wrapped = async function(feature,text,msgBox) {
+    const wrapped = async function(feature,text,msgBox,userMessage) {
       const row = document.querySelector('#feature-chat .chat-input-row[data-zuvyr-attachment-active="1"]');
       const attachment = row?._zuvyrAttachment;
       const composer = document.querySelector(
@@ -825,7 +825,7 @@
       window.__zuvyrChatImageAttachment = feature === 'chat' && attachment?.kind === 'image' ? attachment : null;
       if (feature === 'chat' && attachment && row) clearAttachment(row);
       if (feature === 'chat' && composer) composer.style.height = '48px';
-      try { return await original.call(this,feature,outgoingText,msgBox); }
+      try { return await original.call(this,feature,outgoingText,msgBox,userMessage); }
       finally {
         window.__zuvyrChatImageAttachment = null;
       }
@@ -1384,7 +1384,8 @@
   const icons={
     copy:'<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="11" height="11" rx="2"></rect><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"></path></svg>',
     share:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 16V4"></path><path d="m7 9 5-5 5 5"></path><path d="M5 14v4a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-4"></path></svg>',
-    edit:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m4 16-.8 4 4-.8L18.5 7.9a2.1 2.1 0 0 0-3-3Z"></path><path d="m14 6 4 4"></path></svg>'
+    edit:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m4 16-.8 4 4-.8L18.5 7.9a2.1 2.1 0 0 0-3-3Z"></path><path d="m14 6 4 4"></path></svg>',
+    check:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4L19 6"></path></svg>'
   };
 
   const toast=value=>{
@@ -1587,7 +1588,7 @@
       event.preventDefault();
       event.stopPropagation();
       closeMenus();
-      Promise.resolve(handler()).catch(error=>
+      Promise.resolve(handler(button)).catch(error=>
         console.error('ZUVYR user message action failed:',error)
       );
     });
@@ -1607,11 +1608,23 @@
     actions.className='zuvyr-user-actions';
 
     actions.append(
-      makeButton('copy',text.copy,async()=>{
+      makeButton('copy',text.copy,async button=>{
         const value=messageText(message);
         if(!value)return;
         await copyText(value);
-        toast(text.copied);
+        const idleHtml=button.innerHTML;
+        button.classList.add('is-copied');
+        button.innerHTML=icons.check+'<span class="zuvyr-user-action-label"></span>';
+        button.querySelector('.zuvyr-user-action-label').textContent=text.copied;
+        button.title=text.copied;
+        button.setAttribute('aria-label',text.copied);
+        setTimeout(()=>{
+          if(!button.isConnected)return;
+          button.classList.remove('is-copied');
+          button.innerHTML=idleHtml;
+          button.title=text.copy;
+          button.setAttribute('aria-label',text.copy);
+        },1600);
       }),
       makeButton('share',text.share,async()=>{
         const value=messageText(message);
