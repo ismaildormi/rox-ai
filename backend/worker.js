@@ -21,7 +21,7 @@ reportEnvironmentValidation(
   validateWorkerEnvironment(process.env),
   { component: 'worker' }
 );
-const { Worker } = require('bullmq');
+const { Worker, UnrecoverableError } = require('bullmq');
 const Replicate = require('replicate');
 const { generateImage } = require('./src/modules/ai/providers/imageProviders');
 const { connection } = require('./lib/queue');
@@ -32,11 +32,52 @@ const {
   completeGenerationConversation,
   failGenerationConversation
 } = require('./lib/conversationGeneration');
+const conversationMemory = require('./lib/conversationMemory');
+const {
+  createAttachmentJobProcessor
+} = require('./lib/attachmentWorker');
 
 const CONCURRENCY = Number(process.env.WORKER_CONCURRENCY || 2);
+const ATTACHMENT_WORKER_CONCURRENCY = Math.max(
+  1,
+  Number(process.env.ATTACHMENT_WORKER_CONCURRENCY || 1)
+);
 
 async function markJob(jobId, patch) {
   await supabaseAdmin.from('generation_jobs').update(patch).eq('id', jobId);
+}
+
+const baseAttachmentJobProcessor =
+  createAttachmentJobProcessor({
+    store: conversationMemory,
+    storage: supabaseAdmin.storage
+  });
+
+const NON_RETRYABLE_ATTACHMENT_ERRORS = new Set([
+  'dangerous_attachment_content',
+  'blocked_attachment_type',
+  'attachment_password_protected',
+  'attachment_size_mismatch',
+  'invalid_attachment_path'
+]);
+
+async function processAttachmentJob(job) {
+  try {
+    return await baseAttachmentJobProcessor(job);
+  } catch (error) {
+    if (
+      NON_RETRYABLE_ATTACHMENT_ERRORS.has(
+        String(error.code || error.message || '')
+      )
+    ) {
+      const fatal =
+        new UnrecoverableError(error.message);
+      fatal.code = error.code;
+      throw fatal;
+    }
+
+    throw error;
+  }
 }
 
 // Deliberately NOT pinning a specific version hash here. A pinned hash
@@ -172,6 +213,77 @@ const videoWorker = new Worker('rox-video-generation', processVideoJob, {
   concurrency: Math.max(1, Math.floor(CONCURRENCY / 2)), // video is heavier ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â fewer parallel jobs
 });
 
+const attachmentWorker = new Worker(
+  'zuvyr-attachment-processing',
+  processAttachmentJob,
+  {
+    connection,
+    concurrency: ATTACHMENT_WORKER_CONCURRENCY
+  }
+);
+
+async function handleAttachmentFailure(job, err) {
+  const attempts = Number(job.opts.attempts || 1);
+  const exhausted =
+    err.name === 'UnrecoverableError' ||
+    job.attemptsMade >= attempts;
+
+  if (!exhausted) return;
+
+  const {
+    assetId,
+    ownerId,
+    storageBucket,
+    storagePath,
+    creditRequestId
+  } = job.data;
+  const code = String(err.code || err.message || '');
+  const rejected =
+    code === 'dangerous_attachment_content' ||
+    code === 'blocked_attachment_type';
+
+  try {
+    await conversationMemory.updateAssetProcessing({
+      assetId,
+      ownerId,
+      scanStatus: rejected ? 'rejected' : 'failed',
+      extractionStatus: 'failed'
+    });
+  } catch (stateError) {
+    console.error(
+      '[attachment-worker] failure state save failed:',
+      stateError.message
+    );
+  }
+
+  if (rejected && storageBucket && storagePath) {
+    await supabaseAdmin.storage
+      .from(storageBucket)
+      .remove([storagePath])
+      .catch(() => null);
+  }
+
+  try {
+    await refundCredits(creditRequestId);
+    recordRefund('chat');
+  } catch (refundErr) {
+    await reportRefundFailure({
+      requestId: creditRequestId,
+      userId: ownerId,
+      feature: 'chat',
+      error: refundErr
+    });
+  }
+
+  await logCreditEvent({
+    userId: ownerId,
+    feature: 'chat',
+    status: 'error',
+    requestId: creditRequestId + ':detail',
+    errorMessage: err.message
+  });
+}
+
 // ---------- Failure handling: refund only once retries are exhausted ----------
 async function handleJobFailure(job, err, feature) {
   const {
@@ -245,6 +357,9 @@ async function handleJobFailure(job, err, feature) {
 
 imageWorker.on('failed', (job, err) => handleJobFailure(job, err, 'image'));
 videoWorker.on('failed', (job, err) => handleJobFailure(job, err, 'video'));
+attachmentWorker.on('failed', (job, err) =>
+  handleAttachmentFailure(job, err)
+);
 
-console.log(`ROX AI worker running (concurrency: image=${CONCURRENCY}, video=${Math.max(1, Math.floor(CONCURRENCY / 2))})`);
+console.log(`ROX AI worker running (concurrency: image=${CONCURRENCY}, video=${Math.max(1, Math.floor(CONCURRENCY / 2))}, attachment=${ATTACHMENT_WORKER_CONCURRENCY})`);
 

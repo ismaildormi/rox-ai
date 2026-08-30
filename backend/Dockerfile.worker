@@ -1,60 +1,55 @@
-# ROX AI — background worker (production image)
-#
-# Same base and dependency set as ./Dockerfile (the API server) — this
-# process runs `worker.js` instead of `server.js` and never listens on
-# a port, since it only consumes BullMQ jobs from Redis (see
-# lib/queue.js) and calls Replicate for image/video generation. See
-# ./Dockerfile's header comment for why this runs `node worker.js`
-# directly rather than through pm2.
-#
-# Kept as a separate Dockerfile (rather than one image + an overridden
-# CMD) so each service has its own, independently taggable/scannable
-# image and its own HEALTHCHECK — a worker has no HTTP endpoint to
-# probe, so "healthy" means something different here than for the API.
-#
-# Build:
-#   docker build -f Dockerfile.worker -t rox-ai-worker .
-# Run:
-#   docker run --env-file .env rox-ai-worker
+# ZUVYR attachment-processing worker image.
+# Kept separate from backend/Dockerfile so document tooling never bloats
+# or expands the attack surface of the public API service.
 
-# ---- deps stage --------------------------------------------------------
-# Uses `npm install` rather than `npm ci` — this repo has no
-# package-lock.json yet (see Phase 1's security-review notes); switch
-# to `npm ci` once one is committed, for fully reproducible installs.
-FROM node:20-alpine AS deps
+FROM node:22-alpine AS deps
 WORKDIR /app
 
 COPY package.json ./
 COPY package-lock.json* ./
 RUN npm install --omit=dev --no-audit --no-fund
 
-# ---- runtime stage ------------------------------------------------------
-FROM node:20-alpine AS runtime
+FROM node:22-alpine AS runtime
 WORKDIR /app
 
-RUN apk add --no-cache tini
+# Worker-only document stack:
+# - LibreOffice: isolated Office conversion to PDF
+# - Poppler: PDF metadata, bounded text extraction, page rendering/splitting
+# - Tesseract: OCR for scanned pages
+# - Explicit language data and fonts: English, Arabic, French
+RUN apk add --no-cache \
+    tini \
+    libreoffice-common \
+    libreoffice-writer \
+    libreoffice-calc \
+    libreoffice-impress \
+    poppler-utils \
+    tesseract-ocr \
+    tesseract-ocr-data-eng \
+    tesseract-ocr-data-ara \
+    tesseract-ocr-data-fra \
+    font-dejavu \
+    font-noto-arabic \
+  && soffice --version \
+  && pdftotext -v 2>&1 | head -n 1 \
+  && tesseract --version | head -n 1
 
-ENV NODE_ENV=production
+ENV NODE_ENV=production \
+    HOME=/tmp/zuvyr-worker-home \
+    ATTACHMENT_DOCUMENT_TOOLS_ENABLED=1 \
+    ATTACHMENT_OCR_LANGUAGES=eng+ara+fra
 
 COPY --from=deps --chown=node:node /app/node_modules ./node_modules
 COPY --chown=node:node . .
 
+RUN mkdir -p \
+      /tmp/zuvyr-worker-home \
+      /tmp/zuvyr-attachments \
+  && chown -R node:node \
+      /tmp/zuvyr-worker-home \
+      /tmp/zuvyr-attachments
+
 USER node
-
-# No EXPOSE — this process doesn't listen on any port.
-
-# There's no HTTP endpoint to probe. This isn't a real liveness check
-# of worker.js itself (it opens its OWN short-lived ioredis connection
-# rather than inspecting the running process's) — a worker can be
-# connected to Redis but still stuck for other reasons, and this
-# wouldn't catch that. It's a conservative first pass that at least
-# verifies the worker's one hard dependency (Redis) is reachable from
-# inside this container, which is meaningfully better than no
-# healthcheck at all and matches what `docker ps`/compose can act on
-# today without new app code. A deeper check (e.g. worker.js exposing
-# its own liveness state) is listed as remaining Phase 2 work.
-HEALTHCHECK --interval=30s --timeout=5s --start-period=15s --retries=3 \
-  CMD node -e "const IORedis = require('ioredis'); const c = new IORedis(process.env.REDIS_URL || 'redis://localhost:6379', { lazyConnect: true, maxRetriesPerRequest: 1 }); c.connect().then(() => c.ping()).then(() => { c.disconnect(); process.exit(0); }).catch(() => { c.disconnect(); process.exit(1); });"
 
 ENTRYPOINT ["/sbin/tini", "--"]
 CMD ["node", "worker.js"]

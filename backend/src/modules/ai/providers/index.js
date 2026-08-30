@@ -1,4 +1,4 @@
-﻿// ROX AI â€” src/modules/ai/providers
+// ROX AI â€” src/modules/ai/providers
 //
 // Makes the AI backend swappable: aiRouter.js should never again say
 // `if (route.provider === 'anthropic') ... else if (route.provider ===
@@ -104,7 +104,26 @@ registerProvider('openrouter', {
         'content-type': 'application/json',
         authorization: `Bearer ${apiKey}`,
       },
-      body: JSON.stringify({ model, messages, max_tokens: opts.maxOutputTokens }),
+      body: JSON.stringify({
+        model,
+        messages,
+        max_tokens: opts.maxOutputTokens,
+        ...(messages.some(message =>
+          Array.isArray(message?.content) &&
+          message.content.some(part => part?.type === 'file')
+        )
+          ? {
+              plugins: [
+                {
+                  id: 'file-parser',
+                  pdf: {
+                    engine: 'cloudflare-ai'
+                  }
+                }
+              ]
+            }
+          : {})
+      }),
     });
     if (!res.ok) throw new Error(`openrouter_${res.status}`);
     const data = await res.json();

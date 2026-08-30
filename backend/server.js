@@ -45,6 +45,8 @@ const loadGuard = require('./lib/loadGuard');
 const { CREDIT_PRICE_USD, marginUsd } = require('./lib/creditEconomics');
 const { quoteGeneration } = require('./lib/dynamicPricing');
 const CODE_RESERVATION_CREDITS = 10;
+const ATTACHMENT_ANALYSIS_RESERVATION_CREDITS =
+  Number(process.env.ATTACHMENT_ANALYSIS_RESERVATION_CREDITS || 25);
 const { checkAndIncrementDailyChat, peekDailyChat } = require('./lib/dailyChatLimit');
 const stripeWebhookRouter = require('./stripeWebhook');
 const createCheckoutSessionRouter = require('./createCheckoutSession');
@@ -65,6 +67,11 @@ const {
   failGenerationConversation
 } = require('./lib/conversationGeneration');
 const { featureCost } = require('./src/core/config');
+const {
+  attachmentQueryFromMessages,
+  buildConversationAttachmentContext,
+  applyAttachmentParts
+} = require('./lib/conversationAttachmentContext');
 // New, additive-only: stub routes for every not-yet-built feature (see
 // ARCHITECTURE.md). Each route is flag-gated and returns a clear
 // "not enabled" response until the feature is actually implemented ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â
@@ -415,7 +422,8 @@ app.post('/api/chat', requireAuth, rateLimit('chat'), validateChatBody, loadRoxU
     aiPreferences = {},
     conversationId = null,
     turnId = null,
-    attachment = null
+    attachment = null,
+    attachmentIds = []
   } = req.body; // feature: 'chat' | 'code'
   const userId = req.userId;
   const requestId = crypto.randomUUID();
@@ -425,6 +433,14 @@ app.post('/api/chat', requireAuth, rateLimit('chat'), validateChatBody, loadRoxU
   // Chat is free with a daily limit for every user.
   // Code is paid and consumes credits for every user.
   const isCode = feature === 'code';
+  const durableAttachmentIds =
+    Array.isArray(attachmentIds)
+      ? [...new Set(attachmentIds)]
+      : [];
+  const hasDurableAttachments =
+    durableAttachmentIds.length > 0;
+  const attachmentAnalysisRequestId =
+    `${requestId}:attachments`;
   let memoryConversation = null;
 
   if (conversationId) {
@@ -484,6 +500,8 @@ app.post('/api/chat', requireAuth, rateLimit('chat'), validateChatBody, loadRoxU
 
   let dailyStatus = null;
   let reservation = null;
+  let attachmentAnalysisReservation = null;
+  let attachmentAnalysisSettlement = null;
 
   if (isCode) {
     try {
@@ -520,6 +538,43 @@ app.post('/api/chat', requireAuth, rateLimit('chat'), validateChatBody, loadRoxU
     }
   }
 
+  if (hasDurableAttachments) {
+    try {
+      attachmentAnalysisReservation =
+        await reserveCredits({
+          userId,
+          requestId: attachmentAnalysisRequestId,
+          feature: 'chat',
+          modelUsed:
+            process.env.OPENROUTER_MULTIMODAL_MODEL ||
+            'google/gemini-2.5-flash',
+          creditsConsumed:
+            ATTACHMENT_ANALYSIS_RESERVATION_CREDITS
+        });
+    } catch (err) {
+      if (err.code === 'insufficient_credits') {
+        return res.status(402).json({
+          status: 'error',
+          code: 'insufficient_credits',
+          message:
+            'Insufficient credits for attachment analysis.'
+        });
+      }
+
+      console.error(
+        '[attachment-analysis] reserveCredits failed:',
+        err.message
+      );
+
+      return res.status(500).json({
+        status: 'error',
+        code: 'attachment_credit_reservation_failed',
+        message:
+          'Attachment analysis could not be started.'
+      });
+    }
+  }
+
 
   // Global demand signal (all users, this feature) ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â separate from the
   // per-user rate limit above. aiRouter uses it to decide whether to try
@@ -533,6 +588,12 @@ app.post('/api/chat', requireAuth, rateLimit('chat'), validateChatBody, loadRoxU
     let providerMessages = messages.filter(
       message => message.role !== 'system'
     );
+    let attachmentContext = {
+      attachmentIds: [],
+      parts: [],
+      sources: [],
+      systemContext: ''
+    };
 
     if (memoryConversation) {
       const preparedTurn = await prepareConversationTurn({
@@ -544,6 +605,23 @@ app.post('/api/chat', requireAuth, rateLimit('chat'), validateChatBody, loadRoxU
       });
 
       providerMessages = preparedTurn.providerMessages;
+    }
+
+    if (hasDurableAttachments) {
+      attachmentContext =
+        await buildConversationAttachmentContext({
+          conversationId,
+          ownerId: userId,
+          attachmentIds: durableAttachmentIds,
+          query: attachmentQueryFromMessages(messages),
+          storage: supabaseAdmin.storage
+        });
+
+      providerMessages =
+        applyAttachmentParts(
+          providerMessages,
+          attachmentContext
+        );
     }
 
     // ROX AI PREFERENCES PROMPT START
@@ -594,7 +672,8 @@ app.post('/api/chat', requireAuth, rateLimit('chat'), validateChatBody, loadRoxU
         role: 'system',
         content: [
           roxSystemPrompt,
-          durableMemoryInstructions
+          durableMemoryInstructions,
+          attachmentContext.systemContext
         ].filter(Boolean).join(' ')
       },
       ...providerMessages.filter(
@@ -627,12 +706,37 @@ app.post('/api/chat', requireAuth, rateLimit('chat'), validateChatBody, loadRoxU
     const finalCodeCredits = isCode
       ? Math.max(featureCost('code').credits, Math.ceil((result.cost_usd * 2) / CREDIT_PRICE_USD))
       : 0;
+    const finalAttachmentCredits =
+      hasDurableAttachments
+        ? Math.max(
+            1,
+            Math.ceil(
+              (result.cost_usd * 2) /
+              CREDIT_PRICE_USD
+            )
+          )
+        : 0;
 
     if (isCode) {
-      settlement = await settleCredits(requestId, finalCodeCredits);
+      settlement =
+        await settleCredits(
+          requestId,
+          finalCodeCredits
+        );
     }
 
-    const creditsChargedForMargin = finalCodeCredits;
+    if (hasDurableAttachments) {
+      attachmentAnalysisSettlement =
+        await settleCredits(
+          attachmentAnalysisRequestId,
+          finalAttachmentCredits
+        );
+    }
+
+    const creditsChargedForMargin =
+      isCode
+        ? finalCodeCredits
+        : finalAttachmentCredits;
     const margin = marginUsd(creditsChargedForMargin, result.cost_usd);
     recordCost(result.model, result.cost_usd);
     recordMargin(feature || 'chat', margin);
@@ -656,6 +760,12 @@ app.post('/api/chat', requireAuth, rateLimit('chat'), validateChatBody, loadRoxU
         margin_usd: margin,
         load_level: loadLevel,
         chain_reordered: result.chain_reordered,
+        attachment_ids:
+          attachmentContext.attachmentIds,
+        attachment_sources:
+          attachmentContext.sources,
+        attachment_analysis_credits:
+          finalAttachmentCredits,
       },
     });
 
@@ -732,8 +842,26 @@ app.post('/api/chat', requireAuth, rateLimit('chat'), validateChatBody, loadRoxU
           : undefined,
       dailyChatUsed: dailyStatus ? dailyStatus.current : undefined,
       dailyChatLimit: dailyStatus ? dailyStatus.limit : undefined,
-      newBalance: settlement ? settlement.new_balance : (reservation ? reservation.newBalance : undefined),
-      creditsCharged: isCode ? finalCodeCredits : 0,
+      newBalance:
+        attachmentAnalysisSettlement
+          ? attachmentAnalysisSettlement.new_balance
+          : settlement
+            ? settlement.new_balance
+            : reservation
+              ? reservation.newBalance
+              : undefined,
+      creditsCharged:
+        isCode
+          ? finalCodeCredits
+          : finalAttachmentCredits,
+      attachmentIds:
+        hasDurableAttachments
+          ? attachmentContext.attachmentIds
+          : undefined,
+      attachmentSources:
+        hasDurableAttachments
+          ? attachmentContext.sources
+          : undefined,
     });
   } catch (err) {
     // Only refund if this request actually charged credits (Pro path).
@@ -747,6 +875,23 @@ app.post('/api/chat', requireAuth, rateLimit('chat'), validateChatBody, loadRoxU
         await reportRefundFailure({ requestId, userId, feature: feature || 'chat', error: refundErr });
       }
     }
+
+    if (attachmentAnalysisReservation) {
+      try {
+        await refundCredits(
+          attachmentAnalysisRequestId
+        );
+      } catch (refundErr) {
+        await reportRefundFailure({
+          requestId:
+            attachmentAnalysisRequestId,
+          userId,
+          feature: 'chat',
+          error: refundErr
+        });
+      }
+    }
+
     await logCreditEvent({
       userId,
       feature: feature || 'chat',
@@ -756,7 +901,33 @@ app.post('/api/chat', requireAuth, rateLimit('chat'), validateChatBody, loadRoxU
       metadata: { attempts: err.attempts || [] },
     });
 
-    res.status(502).json({ status: 'error', message: 'All available AI models failed. Please try again.' });
+    const expectedStatus =
+      Number(err && err.statusCode);
+
+    if (
+      Number.isInteger(expectedStatus) &&
+      expectedStatus >= 400 &&
+      expectedStatus < 500
+    ) {
+      return res.status(expectedStatus).json({
+        status: 'error',
+        code:
+          String(
+            err.code ||
+            err.message ||
+            'attachment_analysis_failed'
+          ),
+        message:
+          err.message ||
+          'Attachment analysis could not be completed.'
+      });
+    }
+
+    res.status(502).json({
+      status: 'error',
+      message:
+        'All available AI models failed. Please try again.'
+    });
   }
 });
 
@@ -1151,7 +1322,7 @@ app.post('/api/generate-video', requireAuth, rateLimit('video'), validatePromptB
 app.get('/api/job-status/:jobId', requireAuth, async (req, res) => {
   const { data, error } = await supabaseAdmin
     .from('generation_jobs')
-    .select('status, result_url, error_message, feature, created_at, completed_at, user_id')
+    .select('status, result_url, error_message, feature, created_at, completed_at, response_message_id, user_id')
     .eq('id', req.params.jobId)
     .single();
 

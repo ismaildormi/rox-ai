@@ -20,6 +20,7 @@ const connection = new IORedis(process.env.REDIS_URL || 'redis://localhost:6379'
 
 const imageQueue = new Queue('rox-image-generation', { connection });
 const videoQueue = new Queue('rox-video-generation', { connection });
+const attachmentQueue = new Queue('zuvyr-attachment-processing', { connection });
 
 const defaultJobOptions = {
   attempts: 3,
@@ -28,4 +29,4 @@ const defaultJobOptions = {
   removeOnFail: 1000
 };
 
-module.exports = { connection, imageQueue, videoQueue, defaultJobOptions };
+module.exports = { connection, imageQueue, videoQueue, attachmentQueue, defaultJobOptions };

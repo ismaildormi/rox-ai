@@ -14,11 +14,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>ZUVYR — Mobile</title>
 <link rel="icon" type="image/png" href="./zuvyr-app-icon-20260827.png?v=1">
-<link rel="stylesheet" href="./zuvyr-chat-workspace-v1.css?v=26">
-<script defer src="./zuvyr-chat-workspace-v1.js?v=25"><\/script>
+<link rel="stylesheet" href="./zuvyr-chat-workspace-v1.css?v=28">
+<script defer src="./zuvyr-chat-workspace-v1.js?v=28"><\/script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.110.8/dist/umd/supabase.js"><\/script>
+<script src="https://cdn.jsdelivr.net/npm/tus-js-client@4.3.1/dist/tus.min.js"><\/script>
 <script src="./rox-config.js"><\/script>
 <script src="./rox-release-guard.js"><\/script>
 <style>
@@ -10247,7 +10248,23 @@ async function openRoxHistoryItem(item, row=null){
         );
 
         if(media){
-          appendMsg(msgBox,'bot',media,true);
+          appendMsg(msgBox,'bot',media,true,{
+            responseId:message.id||null,
+            conversationId:item.id,
+            sequenceNo:message.sequence_no,
+            createdAt:message.created_at,
+            feature,
+            outputs:[{
+              type:messageType,
+              url:String(content.url||''),
+              title:messageType==='image'
+                ?'Generated image'
+                :'Generated video',
+              mimeType:messageType==='image'
+                ?'image/*'
+                :'video/*'
+            }]
+          });
         }
 
         return;
@@ -12025,10 +12042,11 @@ async function sendChat(feature, text, msgBox, userMessage) {
         feature,
         conversationId,
         turnId,
-        attachment:
-          feature === 'chat'
-            ? (window.__zuvyrChatImageAttachment || undefined)
-            : undefined,
+        attachmentIds:
+          feature === 'chat' &&
+          Array.isArray(window.__zuvyrChatAttachmentIds)
+            ? window.__zuvyrChatAttachmentIds
+            : [],
         aiPreferences:
           getRoxAiPreferences()
       }),
@@ -12239,7 +12257,21 @@ async function pollJob(jobId, feature, msgBox, typing) {
         vid.controls = true;
         wrap.appendChild(vid);
       }
-      appendMsg(msgBox, 'bot', wrap, true);
+      const outputType = feature === 'images' ? 'image' : 'video';
+      appendMsg(msgBox, 'bot', wrap, true, {
+        responseId: data.response_message_id || null,
+        feature,
+        outputs: [{
+          type: outputType,
+          url: String(data.result_url || ''),
+          title: outputType === 'image'
+            ? 'Generated image'
+            : 'Generated video',
+          mimeType: outputType === 'image'
+            ? 'image/*'
+            : 'video/*'
+        }]
+      });
       return;
     }
     if (data.status === 'failed') {
@@ -12486,6 +12518,7 @@ function setupRoxNewChatButtons() {
 setupRoxNewChatButtons();
 function sendMessage(feature){
   if(roxActiveChatRequests.has(feature))return;
+  if(feature==='chat'&&window.__zuvyrAttachmentUploadActive)return;
   const input = document.querySelector('[data-feature="'+feature+'"]');
   const text = input.value.trim();
   const attachmentRow = feature === 'chat'
@@ -12494,7 +12527,7 @@ function sendMessage(feature){
   const hasAttachment = Boolean(attachmentRow && attachmentRow._zuvyrAttachment);
   if(!text && !hasAttachment) return;
   const msgBox = document.getElementById('msgs-'+feature);
-  const visibleText = text || 'Analyze the attached image.';
+  const visibleText = text || 'Analyze the attached files.';
 
   const userMessage=appendMsg(msgBox,'user',visibleText);
   input.value = '';
@@ -15313,11 +15346,12 @@ initAuth();
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ZUVYR — Desktop</title>
 <link rel="icon" type="image/png" href="./zuvyr-app-icon-20260827.png?v=1">
-<link rel="stylesheet" href="./zuvyr-chat-workspace-v1.css?v=26">
-<script defer src="./zuvyr-chat-workspace-v1.js?v=25"><\/script>
+<link rel="stylesheet" href="./zuvyr-chat-workspace-v1.css?v=28">
+<script defer src="./zuvyr-chat-workspace-v1.js?v=28"><\/script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.110.8/dist/umd/supabase.js"><\/script>
+<script src="https://cdn.jsdelivr.net/npm/tus-js-client@4.3.1/dist/tus.min.js"><\/script>
 <script src="./rox-config.js"><\/script>
 <script src="./rox-release-guard.js"><\/script>
 <style>
@@ -29966,7 +30000,23 @@ async function openRoxHistoryItem(item, row=null){
         );
 
         if(media){
-          appendMsg(msgBox,'bot',media,true);
+          appendMsg(msgBox,'bot',media,true,{
+            responseId:message.id||null,
+            conversationId:item.id,
+            sequenceNo:message.sequence_no,
+            createdAt:message.created_at,
+            feature,
+            outputs:[{
+              type:messageType,
+              url:String(content.url||''),
+              title:messageType==='image'
+                ?'Generated image'
+                :'Generated video',
+              mimeType:messageType==='image'
+                ?'image/*'
+                :'video/*'
+            }]
+          });
         }
 
         return;
@@ -31744,10 +31794,11 @@ async function sendChat(feature, text, msgBox, userMessage) {
         feature,
         conversationId,
         turnId,
-        attachment:
-          feature === 'chat'
-            ? (window.__zuvyrChatImageAttachment || undefined)
-            : undefined,
+        attachmentIds:
+          feature === 'chat' &&
+          Array.isArray(window.__zuvyrChatAttachmentIds)
+            ? window.__zuvyrChatAttachmentIds
+            : [],
         aiPreferences:
           getRoxAiPreferences()
       }),
@@ -31961,7 +32012,21 @@ async function pollJob(jobId, feature, msgBox, typing) {
         vid.controls = true;
         wrap.appendChild(vid);
       }
-      appendMsg(msgBox, 'bot', wrap, true);
+      const outputType = feature === 'images' ? 'image' : 'video';
+      appendMsg(msgBox, 'bot', wrap, true, {
+        responseId: data.response_message_id || null,
+        feature,
+        outputs: [{
+          type: outputType,
+          url: String(data.result_url || ''),
+          title: outputType === 'image'
+            ? 'Generated image'
+            : 'Generated video',
+          mimeType: outputType === 'image'
+            ? 'image/*'
+            : 'video/*'
+        }]
+      });
       return;
     }
     if (data.status === 'failed') {
@@ -32208,6 +32273,7 @@ function setupRoxNewChatButtons() {
 setupRoxNewChatButtons();
 function sendMessage(feature){
   if(roxActiveChatRequests.has(feature))return;
+  if(feature==='chat'&&window.__zuvyrAttachmentUploadActive)return;
   const input = document.querySelector('[data-feature="'+feature+'"]');
   const text = input.value.trim();
   const attachmentRow = feature === 'chat'
@@ -32216,7 +32282,7 @@ function sendMessage(feature){
   const hasAttachment = Boolean(attachmentRow && attachmentRow._zuvyrAttachment);
   if(!text && !hasAttachment) return;
   const msgBox = document.getElementById('msgs-'+feature);
-  const visibleText = text || 'Analyze the attached image.';
+  const visibleText = text || 'Analyze the attached files.';
 
   const userMessage=appendMsg(msgBox,'user',visibleText);
   input.value = '';

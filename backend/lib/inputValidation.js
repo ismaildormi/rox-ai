@@ -106,6 +106,71 @@ function validateImageAttachment(attachment, feature, res) {
   return true;
 }
 
+function validateAttachmentIds(body, feature, res) {
+  const value = body.attachmentIds;
+
+  if (value === undefined || value === null) {
+    return true;
+  }
+
+  if (feature !== 'chat') {
+    badRequest(
+      res,
+      'attachmentIds are supported in chat only.'
+    );
+    return false;
+  }
+
+  if (!Array.isArray(value)) {
+    badRequest(res, 'attachmentIds must be an array.');
+    return false;
+  }
+
+  if (value.length > 20) {
+    badRequest(
+      res,
+      'attachmentIds supports at most 20 files.'
+    );
+    return false;
+  }
+
+  const seen = new Set();
+
+  for (const raw of value) {
+    if (
+      typeof raw !== 'string' ||
+      !UUID_PATTERN.test(raw)
+    ) {
+      badRequest(
+        res,
+        'every attachment id must be a valid UUID.'
+      );
+      return false;
+    }
+
+    seen.add(raw);
+  }
+
+  const ids = [...seen];
+
+  if (ids.length && !body.conversationId) {
+    badRequest(
+      res,
+      'attachmentIds require conversationId.'
+    );
+    return false;
+  }
+
+  if (body.attachment && ids.length) {
+    badRequest(
+      res,
+      'legacy attachment and attachmentIds cannot be combined.'
+    );
+    return false;
+  }
+
+  return true;
+}
 /** Mount before gatekeeperMiddleware on POST /api/chat. */
 function validateChatBody(req, res, next) {
   const body = req.body || {};
@@ -120,6 +185,10 @@ function validateChatBody(req, res, next) {
   }
 
   if (!validateImageAttachment(body.attachment, feature, res)) {
+    return;
+  }
+
+  if (!validateAttachmentIds(body, feature, res)) {
     return;
   }
 
@@ -216,5 +285,6 @@ function validatePromptBody(req, res, next) {
 module.exports = {
   validateChatBody,
   validatePromptBody,
-  validateConversationReferences
+  validateConversationReferences,
+  validateAttachmentIds
 };

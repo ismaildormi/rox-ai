@@ -27,6 +27,8 @@ const PRIMARY_TIMEOUT_MS = 15000;
 // models faster so a traffic spike doesn't also mean a latency spike.
 const HIGH_LOAD_TIMEOUT_MS = 6000;
 const CODE_TIMEOUT_MS = Number(process.env.CODE_TIMEOUT_MS || 60000);
+const MULTIMODAL_TIMEOUT_MS =
+  Number(process.env.MULTIMODAL_TIMEOUT_MS || 120000);
 
 // Applies to EVERY model in the chain (previously only Claude had this
 // cap; see callOpenRouter below for why an uncapped model is a cost/DoS
@@ -43,6 +45,13 @@ const ROUTES = {
     { provider: 'openrouter', model: 'nvidia/nemotron-3-super-120b-a12b:free' },
     { provider: 'openrouter', model: 'openrouter/free' }
   ]
+};
+
+const MULTIMODAL_ROUTE = {
+  provider: 'openrouter',
+  model:
+    process.env.OPENROUTER_MULTIMODAL_MODEL ||
+    'google/gemini-2.5-flash'
 };
 
 // Previously the chain order was fixed: aiRouter only ever moved to a
@@ -110,23 +119,34 @@ async function routeRequest(feature, messages, opts = {}) {
   const loadLevel = opts.loadLevel || 'normal';
   const isPro = opts.isPro !== false;
   const originalChain = ROUTES[feature] || ROUTES.chat;
-  const hasImageInput = messages.some(message =>
+  const multimodalTypes =
+    new Set([
+      'image_url',
+      'input_audio',
+      'video_url',
+      'file'
+    ]);
+  const hasMultimodalInput = messages.some(message =>
     Array.isArray(message?.content) &&
-    message.content.some(part => part?.type === 'image_url')
+    message.content.some(
+      part => multimodalTypes.has(part?.type)
+    )
   );
-  const chain = hasImageInput
-    ? [ROUTES.chat[ROUTES.chat.length - 1]]
+  const chain = hasMultimodalInput
+    ? [MULTIMODAL_ROUTE]
     : getEffectiveChain(feature, loadLevel, isPro);
   const chainReordered = chain[0]?.model !== originalChain[0]?.model;
 
   const timeoutMs =
-    feature === 'code'
-      ? CODE_TIMEOUT_MS
-      : (
-          loadLevel === 'high'
-            ? HIGH_LOAD_TIMEOUT_MS
-            : PRIMARY_TIMEOUT_MS
-        );
+    hasMultimodalInput
+      ? MULTIMODAL_TIMEOUT_MS
+      : feature === 'code'
+        ? CODE_TIMEOUT_MS
+        : (
+            loadLevel === 'high'
+              ? HIGH_LOAD_TIMEOUT_MS
+              : PRIMARY_TIMEOUT_MS
+          );
   const attempts = [];
 
   for (let i = 0; i < chain.length; i++) {
@@ -165,11 +185,15 @@ async function routeRequest(feature, messages, opts = {}) {
       return {
         text: result.text,
         model: route.model,
+        provider: route.provider,
         fallback_triggered: isReliabilityFallback,
         chain_reordered: chainReordered,
         load_level: loadLevel,
         usage: result.usage,
-        cost_usd: estimateCostUsd(route.model, result.usage),
+        cost_usd:
+          Number.isFinite(Number(result.usage?.cost))
+            ? Number(result.usage.cost)
+            : estimateCostUsd(route.model, result.usage),
         attempts
       };
     } catch (err) {
@@ -203,7 +227,7 @@ async function routeRequest(feature, messages, opts = {}) {
   throw error;
 }
 
-module.exports = { routeRequest, ROUTES, getEffectiveChain };
+module.exports = { routeRequest, ROUTES, MULTIMODAL_ROUTE, getEffectiveChain };
 
 
 
