@@ -816,7 +816,7 @@
       remove.type = 'button';
       remove.className = 'zuvyr-attachment-remove';
       remove.setAttribute('aria-label',`Remove ${entry.name}`);
-      remove.textContent = 'Ã—';
+      remove.textContent = '\u00d7';
       remove.disabled = Boolean(window.__zuvyrAttachmentUploadActive);
       remove.addEventListener('click',() => {
         if (window.__zuvyrAttachmentUploadActive) return;

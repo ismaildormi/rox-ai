@@ -39,7 +39,7 @@ assert.strictEqual(
 );
 
 assert.strictEqual(count(index,'zuvyr-chat-workspace-v1.css?v=28'),2);
-assert.strictEqual(count(index,'zuvyr-chat-workspace-v1.js?v=28'),2);
+assert.strictEqual(count(index,'zuvyr-chat-workspace-v1.js?v=29'),2);
 assert.strictEqual(count(css,'/* ZUVYR USER MESSAGE ACTIONS V1 */'),1);
 assert.strictEqual(count(js,'/* ZUVYR USER MESSAGE ACTIONS V1 */'),1);
 
