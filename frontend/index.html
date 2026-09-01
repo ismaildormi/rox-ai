@@ -15,7 +15,7 @@
 <title>ZUVYR — Mobile</title>
 <link rel="icon" type="image/png" href="./zuvyr-app-icon-20260827.png?v=1">
 <link rel="stylesheet" href="./zuvyr-chat-workspace-v1.css?v=28">
-<script defer src="./zuvyr-chat-workspace-v1.js?v=29"><\/script>
+<script defer src="./zuvyr-chat-workspace-v1.js?v=30"><\/script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.110.8/dist/umd/supabase.js"><\/script>
@@ -10197,6 +10197,12 @@ async function openRoxHistoryItem(item, row=null){
   try{
     const messages=
       await loadAllRoxConversationMessages(item.id);
+    const historyAttachments =
+      feature==='chat'&&
+      typeof window.__zuvyrLoadHistoryAttachments==='function'
+        ? await window.__zuvyrLoadHistoryAttachments(item.id)
+            .catch(()=>new Map())
+        : new Map();
 
     setActiveRoxConversation(feature,item.id);
     syncRoxConversationTitle(feature,item.title||'New conversation');
@@ -10273,7 +10279,15 @@ async function openRoxHistoryItem(item, row=null){
       if(!text)return;
 
       if(role==='user'){
-        appendMsg(msgBox,'user',text,false,{conversationId:item.id,sequenceNo:message.sequence_no,createdAt:message.created_at});
+        const attachmentIds=
+          message.metadata&&
+          Array.isArray(message.metadata.attachment_ids)
+            ? message.metadata.attachment_ids
+            : [];
+        const attachments=attachmentIds
+          .map(id=>historyAttachments.get(String(id)))
+          .filter(Boolean);
+        appendMsg(msgBox,'user',text,false,{conversationId:item.id,sequenceNo:message.sequence_no,createdAt:message.created_at,attachments});
         return;
       }
 
@@ -15347,7 +15361,7 @@ initAuth();
 <title>ZUVYR — Desktop</title>
 <link rel="icon" type="image/png" href="./zuvyr-app-icon-20260827.png?v=1">
 <link rel="stylesheet" href="./zuvyr-chat-workspace-v1.css?v=28">
-<script defer src="./zuvyr-chat-workspace-v1.js?v=29"><\/script>
+<script defer src="./zuvyr-chat-workspace-v1.js?v=30"><\/script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.110.8/dist/umd/supabase.js"><\/script>
@@ -29949,6 +29963,12 @@ async function openRoxHistoryItem(item, row=null){
   try{
     const messages=
       await loadAllRoxConversationMessages(item.id);
+    const historyAttachments =
+      feature==='chat'&&
+      typeof window.__zuvyrLoadHistoryAttachments==='function'
+        ? await window.__zuvyrLoadHistoryAttachments(item.id)
+            .catch(()=>new Map())
+        : new Map();
 
     setActiveRoxConversation(feature,item.id);
     syncRoxConversationTitle(feature,item.title||'New conversation');
@@ -30025,7 +30045,15 @@ async function openRoxHistoryItem(item, row=null){
       if(!text)return;
 
       if(role==='user'){
-        appendMsg(msgBox,'user',text,false,{conversationId:item.id,sequenceNo:message.sequence_no,createdAt:message.created_at});
+        const attachmentIds=
+          message.metadata&&
+          Array.isArray(message.metadata.attachment_ids)
+            ? message.metadata.attachment_ids
+            : [];
+        const attachments=attachmentIds
+          .map(id=>historyAttachments.get(String(id)))
+          .filter(Boolean);
+        appendMsg(msgBox,'user',text,false,{conversationId:item.id,sequenceNo:message.sequence_no,createdAt:message.created_at,attachments});
         return;
       }
 

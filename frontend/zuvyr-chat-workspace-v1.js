@@ -1075,6 +1075,30 @@
     return Array.isArray(data.items) ? data.items : [];
   };
 
+  const historyEntryFromAsset = asset => {
+    const mimeType = String(asset?.mime_type || '');
+    const accessUrl = String(asset?.access_url || '');
+    return {
+      localId: `history-${String(asset?.id || '')}`,
+      assetId: String(asset?.id || ''),
+      previewUrl: mimeType.startsWith('image/') ? accessUrl : '',
+      name: String(asset?.original_name || 'Attachment'),
+      size: Number(asset?.file_size_bytes) || 0,
+      status: 'ready',
+      source: asset
+    };
+  };
+
+  window.__zuvyrLoadHistoryAttachments = async conversationId => {
+    const assets = await fetchReadyAssets(conversationId);
+    return new Map(
+      assets.map(asset => [
+        String(asset?.id || ''),
+        historyEntryFromAsset(asset)
+      ])
+    );
+  };
+
   const waitForReadyAssets = async (conversationId,entries) => {
     const wanted = new Set(entries.map(entry => String(entry.assetId)));
     const ready = new Map();
@@ -1114,12 +1138,17 @@
 
       if (!isNode && isUser && msgBox?.id === 'msgs-chat') {
         const row = document.querySelector('#feature-chat .chat-input-row[data-zuvyr-attachment-active="1"]');
+        const persisted = meta && Array.isArray(meta.attachments)
+          ? meta.attachments
+          : [];
         const pending = Array.isArray(window.__zuvyrSendingAttachmentEntries)
           ? window.__zuvyrSendingAttachmentEntries
           : [];
-        const entries = pending.length
-          ? pending.slice()
-          : entriesFor(row).slice();
+        const entries = persisted.length
+          ? persisted.slice()
+          : pending.length
+            ? pending.slice()
+            : entriesFor(row).slice();
         if (entries.length) {
           return original.call(
             this,msgBox,cls,

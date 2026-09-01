@@ -16,6 +16,9 @@ const CONVERSATION_ID =
 const TURN_ID =
   '22222222-2222-4222-8222-222222222222';
 
+const ATTACHMENT_ID =
+  '33333333-3333-4333-8333-333333333333';
+
 async function run() {
   assert.strictEqual(
     MAX_TURN_START_MESSAGE_COUNT,
@@ -110,6 +113,7 @@ async function run() {
         content: 'Latest question'
       }
     ],
+    attachmentIds: [ATTACHMENT_ID],
     requestKey: TURN_ID
   });
 
@@ -127,6 +131,10 @@ async function run() {
   assert.strictEqual(
     userAppend[1].requestId,
     `${TURN_ID}:user`
+  );
+  assert.deepStrictEqual(
+    userAppend[1].metadata.attachment_ids,
+    [ATTACHMENT_ID]
   );
 
   const completed = await completeConversationTurn({

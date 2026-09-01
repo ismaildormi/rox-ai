@@ -26,15 +26,17 @@ const count = (text,needle) => text.split(needle).length - 1;
   'waitForReadyAssets',
   'window.__zuvyrChatAttachmentIds',
   'window.__zuvyrSendingAttachmentEntries',
+  'window.__zuvyrLoadHistoryAttachments',
   'zuvyr-sent-attachments-message',
   'source.url?\'a\':\'div\''
 ].forEach(marker => assert.ok(js.includes(marker),`Missing JS marker: ${marker}`));
 
 assert.strictEqual(count(html,'attachmentIds:'),2);
+assert.strictEqual(count(html,'historyAttachments.get'),2);
 assert.strictEqual(count(html,'window.__zuvyrChatImageAttachment'),0);
 assert.strictEqual(count(html,'Analyze the attached files.'),2);
 assert.strictEqual(count(html,'zuvyr-chat-workspace-v1.css?v=28'),2);
-assert.strictEqual(count(html,'zuvyr-chat-workspace-v1.js?v=29'),2);
+assert.strictEqual(count(html,'zuvyr-chat-workspace-v1.js?v=30'),2);
 assert.strictEqual(count(html,'tus-js-client@4.3.1/dist/tus.min.js'),2);
 assert.strictEqual(count(html,'window.__zuvyrAttachmentUploadActive'),2);
 assert.strictEqual(count(css,'/* ZUVYR DURABLE MULTI-ATTACHMENTS V1 */'),1);

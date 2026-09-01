@@ -95,6 +95,7 @@ async function prepareConversationTurn({
   ownerId,
   feature,
   messages,
+  attachmentIds = [],
   requestKey,
   logger = console
 }) {
@@ -113,6 +114,13 @@ async function prepareConversationTurn({
   }
 
   const latestUser = getLatestUserMessage(messages);
+  const linkedAttachmentIds = Array.isArray(attachmentIds)
+    ? [...new Set(
+        attachmentIds
+          .map(value => String(value || '').trim())
+          .filter(Boolean)
+      )]
+    : [];
 
   const userMessage = await store.appendMessage({
     conversationId,
@@ -124,7 +132,8 @@ async function prepareConversationTurn({
       text: latestUser.content
     },
     metadata: {
-      turn_role: 'user'
+      turn_role: 'user',
+      attachment_ids: linkedAttachmentIds
     },
     requestId: `${requestKey}:user`
   });

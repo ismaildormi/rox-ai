@@ -601,6 +601,7 @@ app.post('/api/chat', requireAuth, rateLimit('chat'), validateChatBody, loadRoxU
         ownerId: userId,
         feature: feature || 'chat',
         messages,
+        attachmentIds: durableAttachmentIds,
         requestKey: memoryRequestKey
       });
 

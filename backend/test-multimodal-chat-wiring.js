@@ -19,6 +19,7 @@ const providers =
 
 for (const marker of [
   'attachmentIds = []',
+  'attachmentIds: durableAttachmentIds',
   'buildConversationAttachmentContext',
   'applyAttachmentParts',
   'ATTACHMENT_ANALYSIS_RESERVATION_CREDITS',
