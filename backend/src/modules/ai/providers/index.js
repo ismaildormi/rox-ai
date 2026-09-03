@@ -190,24 +190,7 @@ registerProvider('google', {
 });
 
 // Groq â€” OpenAI-compatible chat/completions API, same pattern as OpenAI.
-registerProvider('groq', {
-  label: 'Groq',
-  async call(model, messages, opts = {}) {
-    const apiKey = opts.apiKey || process.env.GROQ_API_KEY;
-    const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'content-type': 'application/json',
-        authorization: `Bearer ${apiKey}`,
-      },
-      body: JSON.stringify({ model, messages, max_tokens: opts.maxOutputTokens }),
-    });
-    if (!res.ok) throw new Error(`groq_${res.status}`);
-    const data = await res.json();
-    const text = data.choices?.[0]?.message?.content || '';
-    return { text, usage: data.usage || {} };
-  },
-});
+registerProvider('groq', require('./groqFree').createGroqFreeAdapter());
 
 // Local / self-hosted (Ollama, vLLM, LM Studio, etc.) â€” anything that
 // speaks the OpenAI-compatible /v1/chat/completions shape on a local or

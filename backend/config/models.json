@@ -1,6 +1,8 @@
 {
-  "_comment": "Provider pricing per model, USD per 1M tokens. Starting-point rates — keep in sync with real Anthropic/OpenRouter/Replicate billing dashboards manually. Wrong numbers here never affect real billing (credits already handle that), only the accuracy of margin metrics. Adding a new model or provider is a config edit here plus one entry in src/modules/ai/providers/ — see ARCHITECTURE.md.",
+  "_comment": "Rates are USD per 1M tokens and may affect usage settlement as well as metrics. GPT-OSS zero rates apply ONLY to the confirmed Groq free tier; the Groq adapter requires ZUVYR_GROQ_FREE_TIER_CONFIRMED=true. Reverify account pricing before activation or upgrade. Hosting and other services are not free.",
   "rates": {
+    "openai/gpt-oss-20b": { "input": 0, "output": 0 },
+    "openai/gpt-oss-120b": { "input": 0, "output": 0 },
     "claude-sonnet-5": {
       "input": 3.0,
       "output": 15.0
