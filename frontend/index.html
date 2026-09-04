@@ -12056,11 +12056,14 @@ async function sendChat(feature, text, msgBox, userMessage) {
         feature,
         conversationId,
         turnId,
-        attachmentIds:
-          feature === 'chat' &&
-          Array.isArray(window.__zuvyrChatAttachmentIds)
-            ? window.__zuvyrChatAttachmentIds
-            : [],
+        ...(feature === 'chat'
+          ? {
+              attachmentIds:
+                Array.isArray(window.__zuvyrChatAttachmentIds)
+                  ? window.__zuvyrChatAttachmentIds
+                  : []
+            }
+          : {}),
         aiPreferences:
           getRoxAiPreferences()
       }),
@@ -31822,11 +31825,14 @@ async function sendChat(feature, text, msgBox, userMessage) {
         feature,
         conversationId,
         turnId,
-        attachmentIds:
-          feature === 'chat' &&
-          Array.isArray(window.__zuvyrChatAttachmentIds)
-            ? window.__zuvyrChatAttachmentIds
-            : [],
+        ...(feature === 'chat'
+          ? {
+              attachmentIds:
+                Array.isArray(window.__zuvyrChatAttachmentIds)
+                  ? window.__zuvyrChatAttachmentIds
+                  : []
+            }
+          : {}),
         aiPreferences:
           getRoxAiPreferences()
       }),
