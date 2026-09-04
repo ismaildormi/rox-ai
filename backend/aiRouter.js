@@ -38,10 +38,14 @@ const CODE_MAX_OUTPUT_TOKENS = Number(process.env.CODE_MAX_OUTPUT_TOKENS || 8192
 
 const ROUTES = {
   chat: [
+    { provider: 'groq', model: 'openai/gpt-oss-20b' },
+    { provider: 'groq', model: 'openai/gpt-oss-120b' },
     { provider: 'openrouter', model: 'nvidia/nemotron-3-super-120b-a12b:free' },
     { provider: 'openrouter', model: 'openrouter/free' }
   ],
   code: [
+    { provider: 'groq', model: 'openai/gpt-oss-120b' },
+    { provider: 'groq', model: 'openai/gpt-oss-20b' },
     { provider: 'openrouter', model: 'nvidia/nemotron-3-super-120b-a12b:free' },
     { provider: 'openrouter', model: 'openrouter/free' }
   ]
@@ -54,30 +58,16 @@ const MULTIMODAL_ROUTE = {
     'google/gemini-2.5-flash'
 };
 
-// Previously the chain order was fixed: aiRouter only ever moved to a
-// cheaper model AFTER the primary failed or timed out (reliability
-// fallback). It never reacted to LOAD â€” a real traffic spike with every
-// model healthy would still bill 100% of requests at Claude's rate, so
-// cost kept climbing linearly with traffic instead of flattening out.
+// ZUVYR V1 text routing starts with the two models confirmed on the
+// organization's Groq free tier. Chat uses 20B first for speed, while
+// Code uses 120B first for stronger generation. The other Groq model
+// and the existing OpenRouter free routes remain reliability fallbacks.
 //
-// getEffectiveChain() adds a second, independent trigger: under 'high'
-// global load (see lib/loadGuard.js), for the 'chat' feature, the chain
-// is re-sorted cheapest-first. The primary model is NOT removed â€” it's
-// pushed to the end of the chain, so quality-sensitive requests still
-// get served by it if every free model also happens to be down. This is
-// a margin-protection measure, not a reliability one, so it only applies
-// to 'chat' (the 'code' chain already leads with the cheap model).
-// Free-tier chat is served ENTIRELY by the free OpenRouter models â€”
-// Claude Sonnet is not in the chain at all for non-pro users, so a free
-// chat message costs ~$0 in real API spend regardless of volume. Pro
-// users get the full chain led by Claude Sonnet. This only applies to
-// the 'chat' feature; 'code' is gated to pro-only upstream in server.js
-// so it never reaches this function for a free user.
+// getEffectiveChain() preserves load-aware ordering without excluding
+// Groq according to the legacy Pro flag. Subscription, unified usage,
+// quotas and credit top-ups are enforced upstream from this router.
 function getEffectiveChain(feature, loadLevel, isPro = true) {
   const chain = ROUTES[feature] || ROUTES.chat;
-  if (feature === 'chat' && !isPro) {
-    return chain.filter(route => route.provider === 'openrouter');
-  }
   if (feature !== 'chat' || loadLevel !== 'high') return chain;
   return [...chain].sort((a, b) => costTier(a.model) - costTier(b.model));
 }
