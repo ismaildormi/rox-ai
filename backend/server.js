@@ -68,6 +68,11 @@ const {
 } = require('./lib/conversationGeneration');
 const { featureCost } = require('./src/core/config');
 const {
+  normalizePlanId,
+  isPaidPlan,
+  planHasFeature
+} = require('./lib/planEntitlements');
+const {
   attachmentQueryFromMessages,
   buildConversationAttachmentContext,
   applyAttachmentParts
@@ -368,21 +373,32 @@ app.get('/api/usage-status', requireAuth, async (req, res) => {
     return res.status(404).json({ status: 'error', message: 'Profile not found.' });
   }
 
-  const isPro = user.subscription_status === 'pro';
-  if (isPro) {
+  const subscriptionPlan =
+    normalizePlanId(user.subscription_status);
+  const paidPlan = isPaidPlan(subscriptionPlan);
+
+  if (paidPlan) {
     const creditsUsed = Number(user.credits_used) || 0;
     const creditsTotal = Number(user.credits_total) || 0;
 
     return res.json({
       status: 'success',
+      plan: subscriptionPlan,
       isPro: true,
       creditsUsed,
       creditsTotal,
       creditsRemaining: Math.max(0, creditsTotal - creditsUsed),
     });
   }
+
   const daily = await peekDailyChat(req.userId);
-  res.json({ status: 'success', isPro: false, dailyChatUsed: daily.current, dailyChatLimit: daily.limit });
+  res.json({
+    status: 'success',
+    plan: subscriptionPlan,
+    isPro: false,
+    dailyChatUsed: daily.current,
+    dailyChatLimit: daily.limit
+  });
 });
 
 // --- Projects / History: authenticated user history ---
@@ -428,7 +444,9 @@ app.post('/api/chat', requireAuth, rateLimit('chat'), validateChatBody, loadRoxU
   const userId = req.userId;
   const requestId = crypto.randomUUID();
   const memoryRequestKey = turnId || requestId;
-  const isPro = req.roxUser && req.roxUser.subscription_status === 'pro';
+  const subscriptionPlan =
+    normalizePlanId(req.roxUser?.subscription_status);
+  const isPro = isPaidPlan(subscriptionPlan);
 
   // Chat is free with a daily limit for every user.
   // Code is paid and consumes credits for every user.
@@ -490,11 +508,15 @@ app.post('/api/chat', requireAuth, rateLimit('chat'), validateChatBody, loadRoxU
     }
   }
 
-  if (isCode && !isPro) {
+  if (
+    isCode &&
+    !planHasFeature(subscriptionPlan, 'code')
+  ) {
     return res.status(403).json({
       status: 'error',
-      message: 'Code Studio requires a Pro subscription.',
-      code: 'code_requires_pro',
+      message: 'Code Studio requires a Plus, Pro, Legend or Max plan.',
+      code: 'code_requires_plan',
+      requiredPlan: 'plus'
     });
   }
 

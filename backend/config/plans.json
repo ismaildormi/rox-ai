@@ -1,62 +1,121 @@
-﻿{
-    "_comment":  "Credit costs and limits, in one place. Changing a price/limit is now a config edit, not a code edit + redeploy of business logic. server.js reads this via src/core/config.js. Keep numeric env-var overrides (FREE_DAILY_CHAT_LIMIT etc.) working as a higher-priority override for ops-level tuning without a config-file commit.",
-    "tiers":  {
-                  "free":  {
-                               "creditsTotal":  0,
-                               "dailyChatLimit":  10
-                           },
-                  "pro":  {
-                              "creditsTotal":  500,
-                              "monthlyReset":  true
-                          },
-                  "team":  {
-                               "creditsTotal":  null,
-                               "seatsIncluded":  5
-                           },
-                  "org":  {
-                              "creditsTotal":  null,
-                              "seatsIncluded":  null
-                          },
-                  "enterprise":  {
-                                     "creditsTotal":  null,
-                                     "seatsIncluded":  null
-                                 }
-              },
-    "featureCosts":  {
-                         "chat_free":  {
-                                           "credits":  0,
-                                           "note":  "unmetered, abuse-capped by dailyChatLimit instead"
-                                       },
-                         "chat_pro":  {
-                                          "credits":  2
-                                      },
-                         "code":  {
-                                      "credits":  2
-                                  },
-                         "image":  {
-                                       "credits":  1
-                                   },
-                         "video":  {
-                                       "credits":  0,
-                                       "pricingMode":  "dynamic_required",
-                                       "note":  "Disabled until a verified provider cost is configured."
-                                   },
-                         "voice_ai":  {
-                                          "credits":  3,
-                                          "note":  "placeholder rate, tune before enabling the flag"
-                                      },
-                         "file_analysis":  {
-                                               "credits":  2,
-                                               "note":  "placeholder rate, tune before enabling the flag"
-                                           },
-                         "web_search":  {
-                                            "credits":  1,
-                                            "note":  "placeholder rate, tune before enabling the flag"
-                                        }
-                     },
-    "rateLimitsPerMinute":  {
-                                "chat":  20,
-                                "image":  10,
-                                "video":  4
-                            }
+{
+  "_comment": "ZUVYR V1 monthly plans and feature entitlements. Paid plans use a shared five-hour usage window; exact usage-unit allowances remain intentionally unset until real provider cost measurements are complete.",
+  "planOrder": [
+    "free",
+    "plus",
+    "pro",
+    "legend",
+    "max"
+  ],
+  "usagePolicy": {
+    "windowHours": 5,
+    "topupCreditsEnabled": true,
+    "topupCreditsExpireWithWindow": false,
+    "topupCreditsUnlockPlanFeatures": false,
+    "usageUnitsStatus": "pending_real_cost_measurement"
+  },
+  "tiers": {
+    "free": {
+      "monthlyPriceUsd": 0,
+      "dailyChatLimit": 10,
+      "priority": "standard",
+      "features": {
+        "chat": true,
+        "image": false,
+        "video": false,
+        "audio": false,
+        "code": false,
+        "ip": false
+      }
+    },
+    "plus": {
+      "monthlyPriceUsd": 10,
+      "usageUnitsPerWindow": null,
+      "priority": "standard",
+      "features": {
+        "chat": true,
+        "image": true,
+        "video": false,
+        "audio": true,
+        "code": true,
+        "ip": false
+      }
+    },
+    "pro": {
+      "monthlyPriceUsd": 20,
+      "usageUnitsPerWindow": null,
+      "priority": "high",
+      "features": {
+        "chat": true,
+        "image": true,
+        "video": true,
+        "audio": true,
+        "code": true,
+        "ip": false
+      }
+    },
+    "legend": {
+      "monthlyPriceUsd": 50,
+      "usageUnitsPerWindow": null,
+      "priority": "higher",
+      "features": {
+        "chat": true,
+        "image": true,
+        "video": true,
+        "audio": true,
+        "code": true,
+        "ip": true
+      }
+    },
+    "max": {
+      "monthlyPriceUsd": 100,
+      "usageUnitsPerWindow": null,
+      "priority": "highest",
+      "features": {
+        "chat": true,
+        "image": true,
+        "video": true,
+        "audio": true,
+        "code": true,
+        "ip": true
+      }
+    }
+  },
+  "featureCosts": {
+    "chat_free": {
+      "credits": 0,
+      "note": "Temporary legacy daily cap until the shared five-hour usage engine is activated."
+    },
+    "chat_pro": {
+      "credits": 2
+    },
+    "code": {
+      "credits": 2
+    },
+    "image": {
+      "credits": 1
+    },
+    "video": {
+      "credits": 0,
+      "pricingMode": "dynamic_required",
+      "note": "Disabled until a verified provider cost is configured."
+    },
+    "voice_ai": {
+      "credits": 3,
+      "note": "Placeholder rate; tune before enabling."
+    },
+    "file_analysis": {
+      "credits": 2,
+      "note": "Placeholder rate; tune before enabling."
+    },
+    "web_search": {
+      "credits": 1,
+      "note": "Placeholder rate; tune before enabling."
+    }
+  },
+  "rateLimitsPerMinute": {
+    "chat": 20,
+    "image": 10,
+    "video": 4
+  }
 }

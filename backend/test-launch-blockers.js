@@ -1,4 +1,4 @@
-﻿'use strict';
+'use strict';
 
 const assert = require('assert');
 const fs = require('fs');
@@ -73,8 +73,9 @@ assert.deepStrictEqual(
 assert(
   server.includes("requireProSubscription('image')") &&
     server.includes("requireProSubscription('video')") &&
-    server.includes("code: 'code_requires_pro'"),
-  'Pro-only services must be enforced server-side.'
+    server.includes("planHasFeature(subscriptionPlan, 'code')") &&
+    server.includes("code: 'code_requires_plan'"),
+  'Plan-gated services must be enforced server-side.'
 );
 
 console.log('ROX AI launch-blocker regression checks passed.');
