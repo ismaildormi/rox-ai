@@ -8,7 +8,8 @@ const {
   sendBillingUnavailable
 } = require('./lib/stripeClient');
 const {
-  getSubscriptionOffer
+  getSubscriptionOffer,
+  getSubscriptionOfferByPriceId
 } = require('./lib/billingCatalog');
 
 const router = express.Router();
@@ -34,6 +35,146 @@ function normalizeStripeId(value) {
   }
 
   return null;
+}
+
+const SUBSCRIPTION_LIFECYCLE_EVENTS = new Set([
+  'customer.subscription.created',
+  'customer.subscription.updated',
+  'customer.subscription.deleted',
+  'customer.subscription.paused',
+  'customer.subscription.resumed'
+]);
+
+const SUBSCRIPTION_STATUSES = new Set([
+  'trialing',
+  'active',
+  'past_due',
+  'unpaid',
+  'paused',
+  'canceled',
+  'incomplete',
+  'incomplete_expired'
+]);
+
+const UUID_PATTERN =
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+
+function stripeTimestamp(value) {
+  const seconds = Number(value);
+
+  if (!Number.isInteger(seconds) || seconds <= 0) {
+    return null;
+  }
+
+  const date = new Date(seconds * 1000);
+
+  return Number.isFinite(date.getTime())
+    ? date.toISOString()
+    : null;
+}
+
+function subscriptionLifecyclePayload(event) {
+  const subscription = event.data?.object;
+
+  if (
+    !subscription ||
+    subscription.object !== 'subscription'
+  ) {
+    throw processingError('invalid_subscription_object');
+  }
+
+  const subscriptionId = normalizeStripeId(subscription);
+  const customerId = normalizeStripeId(subscription.customer);
+  const eventCreatedAt = stripeTimestamp(event.created);
+
+  if (!subscriptionId) {
+    throw processingError('invalid_subscription_id');
+  }
+
+  if (!customerId) {
+    throw processingError('invalid_subscription_customer');
+  }
+
+  if (!eventCreatedAt) {
+    throw processingError('invalid_subscription_event_time');
+  }
+
+  const items = Array.isArray(subscription.items?.data)
+    ? subscription.items.data
+    : [];
+
+  if (items.length !== 1) {
+    throw processingError('invalid_subscription_items');
+  }
+
+  const item = items[0];
+  const priceId =
+    normalizeStripeId(item?.price) ||
+    normalizeStripeId(item?.plan);
+  const offer = getSubscriptionOfferByPriceId(priceId);
+
+  if (!priceId || !offer) {
+    throw processingError('unknown_subscription_price');
+  }
+
+  const periodStart = stripeTimestamp(
+    item?.current_period_start ??
+      subscription.current_period_start
+  );
+  const periodEnd = stripeTimestamp(
+    item?.current_period_end ??
+      subscription.current_period_end
+  );
+
+  let billingStatus =
+    typeof subscription.status === 'string'
+      ? subscription.status.trim().toLowerCase()
+      : '';
+
+  if (event.type === 'customer.subscription.deleted') {
+    billingStatus = 'canceled';
+  }
+
+  if (!SUBSCRIPTION_STATUSES.has(billingStatus)) {
+    throw processingError('invalid_subscription_status');
+  }
+
+  if (
+    billingStatus === 'active' ||
+    billingStatus === 'trialing' ||
+    billingStatus === 'past_due'
+  ) {
+    if (
+      !periodStart ||
+      !periodEnd ||
+      Date.parse(periodEnd) <= Date.parse(periodStart)
+    ) {
+      throw processingError('invalid_subscription_period');
+    }
+  }
+
+  const rawUserId =
+    typeof subscription.metadata?.userId === 'string'
+      ? subscription.metadata.userId.trim()
+      : '';
+
+  if (rawUserId && !UUID_PATTERN.test(rawUserId)) {
+    throw processingError('invalid_subscription_user_id');
+  }
+
+  return {
+    eventCreatedAt,
+    userId: rawUserId || null,
+    subscriptionId,
+    customerId,
+    priceId,
+    plan: offer.id,
+    billingStatus,
+    periodStart,
+    periodEnd,
+    cancelAtPeriodEnd:
+      subscription.cancel_at_period_end === true
+  };
 }
 
 function requireRpcSuccess(name, result) {
@@ -159,6 +300,44 @@ router.post(
     }
 
     try {
+      if (SUBSCRIPTION_LIFECYCLE_EVENTS.has(event.type)) {
+        const lifecycle = subscriptionLifecyclePayload(event);
+
+        const lifecycleResult = await supabaseAdmin.rpc(
+          'settle_stripe_subscription_lifecycle_event',
+          {
+            p_event_id: event.id,
+            p_event_created_at: lifecycle.eventCreatedAt,
+            p_user_id: lifecycle.userId,
+            p_subscription_id: lifecycle.subscriptionId,
+            p_customer_id: lifecycle.customerId,
+            p_price_id: lifecycle.priceId,
+            p_plan: lifecycle.plan,
+            p_billing_status: lifecycle.billingStatus,
+            p_period_start: lifecycle.periodStart,
+            p_period_end: lifecycle.periodEnd,
+            p_cancel_at_period_end:
+              lifecycle.cancelAtPeriodEnd
+          }
+        );
+
+        const settlement = requireRpcSuccess(
+          'subscription_lifecycle_settlement',
+          lifecycleResult
+        );
+
+        return res.json({
+          received: true,
+          processed: true,
+          subscriptionLifecycle: true,
+          eventType: event.type,
+          plan: lifecycle.plan,
+          billingStatus: lifecycle.billingStatus,
+          applied: settlement.applied !== false,
+          stale: settlement.stale === true
+        });
+      }
+
       if (event.type !== 'checkout.session.completed') {
         const completionResult = await supabaseAdmin.rpc(
           'complete_stripe_webhook_event',

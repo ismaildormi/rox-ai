@@ -58,6 +58,27 @@ function getSubscriptionOffer(value, env = process.env) {
   });
 }
 
+function getSubscriptionOfferByPriceId(value, env = process.env) {
+  const priceId =
+    typeof value === 'string'
+      ? value.trim()
+      : '';
+
+  if (!priceId) return null;
+
+  const matches = SUBSCRIPTION_PLAN_IDS
+    .map(planId => getSubscriptionOffer(planId, env))
+    .filter(offer => offer.stripePriceId === priceId);
+
+  if (matches.length > 1) {
+    throw new Error(
+      'Stripe price ID maps to multiple subscription plans.'
+    );
+  }
+
+  return matches[0] || null;
+}
+
 function missingSubscriptionPriceKeys(env = process.env) {
   return SUBSCRIPTION_PLAN_IDS
     .map(planId => SUBSCRIPTION_PRICE_ENV_KEYS[planId])
@@ -73,5 +94,6 @@ module.exports = {
   getSubscriptionPlan,
   getStripePriceId,
   getSubscriptionOffer,
+  getSubscriptionOfferByPriceId,
   missingSubscriptionPriceKeys
 };
