@@ -45,6 +45,17 @@ const SUBSCRIPTION_LIFECYCLE_EVENTS = new Set([
   'customer.subscription.resumed'
 ]);
 
+const SUBSCRIPTION_INVOICE_EVENTS = new Set([
+  'invoice.paid',
+  'invoice.payment_failed'
+]);
+
+const SUBSCRIPTION_INVOICE_BILLING_REASONS = new Set([
+  'subscription_create',
+  'subscription_cycle',
+  'subscription_update'
+]);
+
 const SUBSCRIPTION_STATUSES = new Set([
   'trialing',
   'active',
@@ -177,6 +188,90 @@ function subscriptionLifecyclePayload(event) {
   };
 }
 
+function subscriptionInvoiceReference(invoice) {
+  return normalizeStripeId(
+    invoice?.parent?.subscription_details?.subscription
+  ) || normalizeStripeId(invoice?.subscription);
+}
+
+function subscriptionInvoicePayload(event, subscription) {
+  const invoice = event.data?.object;
+
+  if (!invoice || invoice.object !== 'invoice') {
+    throw processingError('invalid_invoice_object');
+  }
+
+  const invoiceId = normalizeStripeId(invoice);
+  const subscriptionId = subscriptionInvoiceReference(invoice);
+  const invoiceCustomerId = normalizeStripeId(invoice.customer);
+
+  if (!invoiceId) {
+    throw processingError('invalid_invoice_id');
+  }
+
+  if (!subscriptionId) {
+    throw processingError('invalid_invoice_subscription');
+  }
+
+  if (!invoiceCustomerId) {
+    throw processingError('invalid_invoice_customer');
+  }
+
+  const lifecycle = subscriptionLifecyclePayload({
+    ...event,
+    type: 'customer.subscription.updated',
+    data: { object: subscription }
+  });
+
+  if (lifecycle.subscriptionId !== subscriptionId) {
+    throw processingError('invoice_subscription_mismatch');
+  }
+
+  if (lifecycle.customerId !== invoiceCustomerId) {
+    throw processingError('invoice_customer_mismatch');
+  }
+
+  const invoiceOutcome =
+    event.type === 'invoice.paid'
+      ? 'paid'
+      : 'payment_failed';
+  const amountCents = Number(
+    invoiceOutcome === 'paid'
+      ? invoice.amount_paid
+      : invoice.amount_due
+  );
+
+  if (!Number.isInteger(amountCents) || amountCents < 0) {
+    throw processingError('invalid_invoice_amount');
+  }
+
+  const currency =
+    typeof invoice.currency === 'string'
+      ? invoice.currency.trim().toLowerCase()
+      : '';
+
+  if (!/^[a-z]{3}$/.test(currency)) {
+    throw processingError('invalid_invoice_currency');
+  }
+
+  return {
+    ...lifecycle,
+    invoiceId,
+    invoiceOutcome,
+    billingReason: invoice.billing_reason,
+    amountUsd: amountCents / 100,
+    currency,
+    metadata: {
+      invoice_id: invoiceId,
+      billing_reason: invoice.billing_reason,
+      subscription_id: subscriptionId,
+      price_id: lifecycle.priceId,
+      plan: lifecycle.plan,
+      livemode: event.livemode === true
+    }
+  };
+}
+
 function requireRpcSuccess(name, result) {
   const error = result?.error;
   const data = result?.data;
@@ -215,6 +310,20 @@ async function markEventFailed(eventId, reason) {
       eventId
     );
   }
+}
+
+async function completeEvent(eventId) {
+  const completionResult = await supabaseAdmin.rpc(
+    'complete_stripe_webhook_event',
+    {
+      p_event_id: eventId
+    }
+  );
+
+  requireRpcSuccess(
+    'webhook_completion',
+    completionResult
+  );
 }
 
 router.post(
@@ -300,6 +409,134 @@ router.post(
     }
 
     try {
+      if (SUBSCRIPTION_INVOICE_EVENTS.has(event.type)) {
+        const invoice = event.data?.object;
+
+        if (!invoice || invoice.object !== 'invoice') {
+          throw processingError('invalid_invoice_object');
+        }
+
+        const billingReason =
+          typeof invoice.billing_reason === 'string'
+            ? invoice.billing_reason.trim().toLowerCase()
+            : '';
+
+        if (!SUBSCRIPTION_INVOICE_BILLING_REASONS.has(
+          billingReason
+        )) {
+          await completeEvent(event.id);
+
+          return res.json({
+            received: true,
+            ignored: true,
+            invoiceEvent: true,
+            reason: 'unsupported_invoice_billing_reason'
+          });
+        }
+
+        if (
+          event.type === 'invoice.paid' &&
+          billingReason === 'subscription_create'
+        ) {
+          await completeEvent(event.id);
+
+          return res.json({
+            received: true,
+            ignored: true,
+            invoiceEvent: true,
+            reason: 'initial_invoice_owned_by_checkout'
+          });
+        }
+
+        const subscriptionId =
+          subscriptionInvoiceReference(invoice);
+
+        if (!subscriptionId) {
+          throw processingError('invalid_invoice_subscription');
+        }
+
+        if (
+          !stripe.subscriptions ||
+          typeof stripe.subscriptions.retrieve !== 'function'
+        ) {
+          throw processingError(
+            'subscription_retrieval_unavailable'
+          );
+        }
+
+        let subscription;
+
+        try {
+          subscription = await stripe.subscriptions.retrieve(
+            subscriptionId
+          );
+        } catch {
+          throw processingError('subscription_retrieval_failed');
+        }
+
+        const invoicePayload = subscriptionInvoicePayload(
+          {
+            ...event,
+            data: {
+              object: {
+                ...invoice,
+                billing_reason: billingReason
+              }
+            }
+          },
+          subscription
+        );
+
+        const invoiceResult = await supabaseAdmin.rpc(
+          'settle_stripe_subscription_invoice_event',
+          {
+            p_event_id: event.id,
+            p_event_created_at:
+              invoicePayload.eventCreatedAt,
+            p_invoice_id: invoicePayload.invoiceId,
+            p_invoice_outcome:
+              invoicePayload.invoiceOutcome,
+            p_billing_reason:
+              invoicePayload.billingReason,
+            p_user_id: invoicePayload.userId,
+            p_subscription_id:
+              invoicePayload.subscriptionId,
+            p_customer_id: invoicePayload.customerId,
+            p_price_id: invoicePayload.priceId,
+            p_plan: invoicePayload.plan,
+            p_subscription_status:
+              invoicePayload.billingStatus,
+            p_period_start: invoicePayload.periodStart,
+            p_period_end: invoicePayload.periodEnd,
+            p_cancel_at_period_end:
+              invoicePayload.cancelAtPeriodEnd,
+            p_amount_usd: invoicePayload.amountUsd,
+            p_currency: invoicePayload.currency,
+            p_metadata: invoicePayload.metadata
+          }
+        );
+
+        const settlement = requireRpcSuccess(
+          'subscription_invoice_settlement',
+          invoiceResult
+        );
+
+        return res.json({
+          received: true,
+          processed: true,
+          subscriptionInvoice: true,
+          eventType: event.type,
+          invoiceOutcome: invoicePayload.invoiceOutcome,
+          billingReason,
+          plan: invoicePayload.plan,
+          billingStatus: invoicePayload.billingStatus,
+          applied: settlement.applied !== false,
+          stale: settlement.stale === true,
+          revenueRecorded:
+            settlement.revenue_recorded === true
+        });
+      }
+
       if (SUBSCRIPTION_LIFECYCLE_EVENTS.has(event.type)) {
         const lifecycle = subscriptionLifecyclePayload(event);
 
@@ -339,17 +576,7 @@ router.post(
       }
 
       if (event.type !== 'checkout.session.completed') {
-        const completionResult = await supabaseAdmin.rpc(
-          'complete_stripe_webhook_event',
-          {
-            p_event_id: event.id
-          }
-        );
-
-        requireRpcSuccess(
-          'webhook_completion',
-          completionResult
-        );
+        await completeEvent(event.id);
 
         return res.json({
           received: true,
