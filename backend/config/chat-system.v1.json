@@ -1,0 +1,18 @@
+{
+  "version": "pack-03.chat-system.v1",
+  "modes": {
+    "standard": { "enabledByDefault": true, "capability": "chat", "status": "live_existing" },
+    "web_search": { "enabledByDefault": false, "capability": "web_search", "status": "blocked_unpriced", "environmentVariable": "ZUVYR_WEB_SEARCH_ENABLED" },
+    "deep_research": { "enabledByDefault": false, "capability": "deep_research", "status": "blocked_unpriced", "environmentVariable": "ZUVYR_DEEP_RESEARCH_ENABLED" },
+    "shopping": { "enabledByDefault": false, "capability": "shopping", "status": "blocked_unpriced", "environmentVariable": "ZUVYR_SHOPPING_ENABLED" }
+  },
+  "sources": {
+    "maxPerResponse": 50,
+    "maxTitleCharacters": 240,
+    "maxSnippetCharacters": 1200,
+    "allowedUrlProtocols": ["https:"]
+  },
+  "webSearch": { "maxQueryCharacters": 500, "maxResults": 20, "timeoutMs": 15000 },
+  "deepResearch": { "maxRounds": 6, "maxQueriesPerRound": 5, "maxSources": 40, "minimumIndependentDomains": 2 },
+  "shopping": { "maxResults": 30, "supportedCurrencies": ["USD", "EUR", "MAD", "GBP"] }
+}

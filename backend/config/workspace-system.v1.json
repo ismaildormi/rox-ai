@@ -1,0 +1,64 @@
+{
+  "schemaVersion": 1,
+  "pack": 9,
+  "mode": "foundation_only",
+  "limits": {
+    "nameChars": 120,
+    "descriptionChars": 2000,
+    "contentChars": 200000,
+    "projectItems": 200,
+    "workflowSteps": 20,
+    "templateVariables": 50,
+    "scheduleTitleChars": 120,
+    "permissionScopes": 12
+  },
+  "itemKinds": ["chat", "file", "image", "video", "audio", "code", "document", "spreadsheet", "presentation", "task"],
+  "creationKinds": ["document", "spreadsheet", "presentation"],
+  "workflowCapabilities": ["chat", "image", "video", "audio", "code", "research", "document", "spreadsheet", "presentation", "export"],
+  "foundations": {
+    "library": true,
+    "projects": true,
+    "documents": true,
+    "spreadsheets": true,
+    "presentations": true,
+    "templates": true,
+    "scheduledTasks": true,
+    "plugins": true,
+    "googleDrive": true,
+    "workflows": true
+  },
+  "execution": {
+    "workspaceWritesEnabled": false,
+    "scheduledExecutionEnabled": false,
+    "workflowExecutionEnabled": false,
+    "pluginInstallEnabled": false,
+    "pluginRuntimeEnabled": false,
+    "driveOAuthEnabled": false,
+    "driveReadEnabled": false,
+    "driveWriteEnabled": false,
+    "externalExportsEnabled": false,
+    "automaticPublishingEnabled": false
+  },
+  "security": {
+    "wildcardScopesAllowed": false,
+    "explicitConsentRequired": true,
+    "externalWriteConfirmationRequired": true,
+    "oauthTokensStoredInWorkspaceRows": false,
+    "templateScriptsAllowed": false,
+    "spreadsheetFormulaExecutionAllowed": false,
+    "minimumScheduleIntervalMinutes": 60,
+    "maximumScheduleHorizonDays": 366
+  },
+  "integrations": {
+    "google_drive": {
+      "status": "blocked_no_oauth_security_review",
+      "allowedScopes": ["drive.file.read", "drive.file.write", "drive.export"],
+      "enabled": false
+    },
+    "plugins": {
+      "status": "blocked_no_marketplace_security_review",
+      "allowedScopes": ["workspace.items.read", "workspace.items.write", "projects.read", "projects.write", "exports.create"],
+      "enabled": false
+    }
+  }
+}

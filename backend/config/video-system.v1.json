@@ -1,0 +1,29 @@
+{
+  "version": "pack-05.video-system.v1",
+  "operations": {
+    "text_to_video": { "enabledByDefault": false, "status": "blocked_unpriced", "requiresPrompt": true, "requiresSourceImage": false, "requiresSourceVideo": false },
+    "image_to_video": { "enabledByDefault": false, "status": "blocked_unpriced", "requiresPrompt": true, "requiresSourceImage": true, "requiresSourceVideo": false },
+    "edit": { "enabledByDefault": false, "status": "blocked_unpriced", "requiresPrompt": false, "requiresSourceImage": false, "requiresSourceVideo": true },
+    "extend": { "enabledByDefault": false, "status": "blocked_unpriced", "requiresPrompt": true, "requiresSourceImage": false, "requiresSourceVideo": true },
+    "subtitles": { "enabledByDefault": false, "status": "blocked_unpriced", "requiresPrompt": false, "requiresSourceImage": false, "requiresSourceVideo": true },
+    "enhance": { "enabledByDefault": false, "status": "blocked_unpriced", "requiresPrompt": false, "requiresSourceImage": false, "requiresSourceVideo": true },
+    "export": { "enabledByDefault": false, "status": "blocked_unpriced", "requiresPrompt": false, "requiresSourceImage": false, "requiresSourceVideo": true }
+  },
+  "providers": {
+    "replicate": { "implementedOperations": ["text_to_video"], "status": "registered_unverified_price" }
+  },
+  "requestLimits": {
+    "maxPromptCharacters": 2000,
+    "allowedDurationSeconds": [5, 6, 8, 10],
+    "allowedRatios": ["16:9", "9:16", "1:1", "4:3", "3:4"],
+    "allowedResolutions": ["720p", "1080p"],
+    "allowedFps": [24, 30],
+    "allowedExportFormats": ["mp4", "webm", "mov", "srt", "vtt"]
+  },
+  "jobs": {
+    "states": ["queued", "processing", "done", "failed", "cancelled"],
+    "stages": ["queued", "validating", "provider", "processing", "preview", "export", "done", "failed", "cancelled"],
+    "maxProgressPercent": 100,
+    "cancelEnabledByDefault": false
+  }
+}

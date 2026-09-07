@@ -1,0 +1,62 @@
+{
+  "schemaVersion": 1,
+  "pack": 10,
+  "mode": "launch_readiness_foundation",
+  "interfaceOrder": [
+    "dashboard",
+    "chat",
+    "images",
+    "video",
+    "code",
+    "voice_audio",
+    "zuvyr_ip",
+    "library_projects",
+    "usage_billing",
+    "settings"
+  ],
+  "interfaces": {
+    "dashboard": { "sourceMarker": "screen-home", "status": "existing_partial", "productionVerified": false },
+    "chat": { "sourceMarker": "feature-chat", "status": "existing_partial", "productionVerified": false },
+    "images": { "sourceMarker": "feature-images", "status": "existing_partial", "productionVerified": false },
+    "video": { "sourceMarker": "feature-videos", "status": "existing_partial", "productionVerified": false },
+    "code": { "sourceMarker": "feature-code", "status": "existing_partial", "productionVerified": false },
+    "voice_audio": { "sourceMarker": null, "status": "backend_foundation_no_dedicated_surface", "productionVerified": false },
+    "zuvyr_ip": { "sourceMarker": "feature-roxip", "status": "demo_only", "productionVerified": false },
+    "library_projects": { "sourceMarker": "screen-projects", "status": "placeholder_foundation", "productionVerified": false },
+    "usage_billing": { "sourceMarker": "sidebarUsagePct", "status": "partial_legacy_usage_and_topup", "productionVerified": false },
+    "settings": { "sourceMarker": "feature-settings", "status": "existing_partial", "productionVerified": false }
+  },
+  "requiredUxStates": ["empty", "loading", "progress", "success", "error", "offline", "limit_exhausted", "payment_failed"],
+  "supportedLocalesForValidation": ["en", "ar", "fr", "es", "zh"],
+  "analyticsRangesDays": [7, 30],
+  "notificationTypes": ["job_completed", "limit_warning", "limit_exhausted", "payment_succeeded", "payment_failed", "scheduled_task", "security_alert"],
+  "qualityGates": {
+    "pricingVerified": false,
+    "usageMeteringVerified": false,
+    "billingSandboxVerified": true,
+    "billingProductionVerified": false,
+    "securityReviewPassed": false,
+    "privacyAndDataRightsPassed": false,
+    "legalPagesApproved": false,
+    "accessibilityAuditPassed": false,
+    "mobileLiveTestPassed": false,
+    "internationalizationAuditPassed": false,
+    "liveFeatureTestsPassed": false,
+    "productionValidationPassed": false,
+    "supportReady": false,
+    "monitoringAndAlertsReady": false
+  },
+  "platforms": {
+    "web": { "buildReady": false, "storeSubmissionAllowed": false },
+    "windows": { "buildReady": false, "storeSubmissionAllowed": false },
+    "android": { "buildReady": false, "storeSubmissionAllowed": false },
+    "ios": { "buildReady": false, "storeSubmissionAllowed": false }
+  },
+  "activation": {
+    "closedBetaAllowed": false,
+    "customerBillingAllowed": false,
+    "publicLaunchAllowed": false,
+    "storeSubmissionAllowed": false,
+    "automaticDeployAllowed": false
+  }
+}

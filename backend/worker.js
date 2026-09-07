@@ -22,8 +22,12 @@ reportEnvironmentValidation(
   { component: 'worker' }
 );
 const { Worker, UnrecoverableError } = require('bullmq');
-const Replicate = require('replicate');
 const { generateImage } = require('./src/modules/ai/providers/imageProviders');
+const { buildImageArtifact } = require('./lib/imageArtifactContract');
+const { generateVideo, DEFAULT_VIDEO_MODEL } = require('./lib/videoProvider');
+const { normalizeVideoRequest } = require('./lib/videoRequestContract');
+const { assertVideoRequestAvailable } = require('./lib/videoOperationRegistry');
+const { buildVideoArtifact } = require('./lib/videoArtifactContract');
 const { connection } = require('./lib/queue');
 const { supabaseAdmin } = require('./lib/supabaseAdmin');
 const { refundCredits, logCreditEvent, reportRefundFailure } = require('./gatekeeper');
@@ -90,7 +94,7 @@ async function processAttachmentJob(job) {
 // anything long-running. If you need a pinned version for reproducible
 // output, verify the exact hash on the model's Replicate page first.
 const IMAGE_MODEL = 'black-forest-labs/flux-schnell';
-const VIDEO_MODEL = process.env.REPLICATE_VIDEO_MODEL || 'wan-video/wan-2.2-t2v-fast'; // real text-to-video model ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â takes { prompt }, not an image
+const VIDEO_MODEL = process.env.REPLICATE_VIDEO_MODEL || DEFAULT_VIDEO_MODEL;
 
 async function processImageJob(job) {
   const {
@@ -99,7 +103,12 @@ async function processImageJob(job) {
     userId,
     prompt,
     conversationId = null,
-    memoryRequestKey = null
+    memoryRequestKey = null,
+    imageOperation = 'generate',
+    referenceAssetIds = [],
+    sourceAssetId = null,
+    maskAssetId = null,
+    imageOptions = {}
   } = job.data;
 
   await markJob(jobRowId, {
@@ -108,6 +117,16 @@ async function processImageJob(job) {
   });
 
   const result = await generateImage(prompt);
+  const artifact = buildImageArtifact({
+    url: result.url,
+    operation: imageOperation,
+    provider: result.provider || null,
+    model: result.model || null,
+    referenceAssetIds,
+    sourceAssetId,
+    maskAssetId,
+    options: imageOptions
+  });
   let memoryResult = null;
 
   if (conversationId) {
@@ -116,10 +135,15 @@ async function processImageJob(job) {
         conversationId,
         ownerId: userId,
         feature: 'image',
-        resultUrl: result.url,
+        resultUrl: artifact.url,
         requestKey: memoryRequestKey || requestId || jobRowId,
         provider: result.provider || null,
-        model: result.model || null
+        model: result.model || null,
+        operation: artifact.operation,
+        referenceAssetIds: artifact.lineage.referenceAssetIds,
+        sourceAssetId: artifact.lineage.sourceAssetId,
+        maskAssetId: artifact.lineage.maskAssetId,
+        imageOptions: artifact.options
       });
     } catch (memoryError) {
       console.error(
@@ -131,7 +155,7 @@ async function processImageJob(job) {
 
   await markJob(jobRowId, {
     status: 'done',
-    result_url: result.url,
+    result_url: artifact.url,
     response_message_id:
       memoryResult?.assistantMessage?.id || null,
     completed_at: new Date().toISOString()
@@ -147,31 +171,52 @@ async function processVideoJob(job) {
     userId,
     prompt,
     conversationId = null,
-    memoryRequestKey = null
+    memoryRequestKey = null,
+    videoOperation = 'text_to_video',
+    sourceImageAssetId = null,
+    sourceVideoAssetId = null,
+    startFrameAssetId = null,
+    endFrameAssetId = null,
+    videoOptions = {}
   } = job.data;
+
+  const videoRequest = normalizeVideoRequest({
+    prompt,
+    videoOperation,
+    sourceImageAssetId,
+    sourceVideoAssetId,
+    startFrameAssetId,
+    endFrameAssetId,
+    videoOptions
+  });
+  // Defence in depth: even a manually injected queue job cannot reach a paid
+  // provider while the operation is unpriced or disabled.
+  assertVideoRequestAvailable(videoRequest);
 
   await markJob(jobRowId, {
     status: 'processing',
+    progress_percent: 5,
+    job_stage: 'validating',
     started_at: new Date().toISOString()
   });
 
-  if (!process.env.REPLICATE_API_TOKEN) {
-    throw new Error('replicate_video_provider_not_configured');
-  }
-
-  const replicate = new Replicate({
-    auth: process.env.REPLICATE_API_TOKEN
+  await markJob(jobRowId, { progress_percent: 15, job_stage: 'provider' });
+  const result = await generateVideo(videoRequest, {
+    env: { ...process.env, REPLICATE_VIDEO_MODEL: VIDEO_MODEL }
+  });
+  const artifact = buildVideoArtifact({
+    url: result.url,
+    operation: videoRequest.operation,
+    provider: result.provider,
+    model: result.model,
+    sourceImageAssetId: videoRequest.sourceImageAssetId,
+    sourceVideoAssetId: videoRequest.sourceVideoAssetId,
+    startFrameAssetId: videoRequest.startFrameAssetId,
+    endFrameAssetId: videoRequest.endFrameAssetId,
+    options: videoRequest.options
   });
 
-  const output = await replicate.run(
-    VIDEO_MODEL,
-    { input: { prompt } }
-  );
-
-  const resultUrl =
-    Array.isArray(output)
-      ? output[0]
-      : output;
+  await markJob(jobRowId, { progress_percent: 90, job_stage: 'preview' });
 
   let memoryResult = null;
 
@@ -181,10 +226,16 @@ async function processVideoJob(job) {
         conversationId,
         ownerId: userId,
         feature: 'video',
-        resultUrl,
+        resultUrl: artifact.url,
         requestKey: memoryRequestKey || requestId || jobRowId,
         provider: 'replicate',
-        model: VIDEO_MODEL
+        model: VIDEO_MODEL,
+        operation: artifact.operation,
+        sourceImageAssetId: artifact.lineage.sourceImageAssetId,
+        sourceVideoAssetId: artifact.lineage.sourceVideoAssetId,
+        startFrameAssetId: artifact.lineage.startFrameAssetId,
+        endFrameAssetId: artifact.lineage.endFrameAssetId,
+        videoOptions: artifact.options
       });
     } catch (memoryError) {
       console.error(
@@ -196,7 +247,11 @@ async function processVideoJob(job) {
 
   await markJob(jobRowId, {
     status: 'done',
-    result_url: resultUrl,
+    result_url: artifact.url,
+    preview_url: artifact.previewUrl,
+    export_url: artifact.exportUrl,
+    progress_percent: 100,
+    job_stage: 'done',
     response_message_id:
       memoryResult?.assistantMessage?.id || null,
     completed_at: new Date().toISOString()
@@ -323,6 +378,10 @@ async function handleJobFailure(job, err, feature) {
 
   await markJob(jobRowId, {
     status: 'failed',
+    ...(feature === 'video' ? {
+      progress_percent: 0,
+      job_stage: 'failed'
+    } : {}),
     error_message: err.message,
     response_message_id: failureMessage?.id || null,
     completed_at: new Date().toISOString()
@@ -362,4 +421,3 @@ attachmentWorker.on('failed', (job, err) =>
 );
 
 console.log(`ROX AI worker running (concurrency: image=${CONCURRENCY}, video=${Math.max(1, Math.floor(CONCURRENCY / 2))}, attachment=${ATTACHMENT_WORKER_CONCURRENCY})`);
-

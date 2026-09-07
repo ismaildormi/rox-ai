@@ -1,0 +1,58 @@
+{
+  "version": "pack-01.v1",
+  "currency": "USD",
+  "enforcement": {
+    "enabledByDefault": false,
+    "environmentFlag": "ZUVYR_PACK01_ENFORCEMENT_ENABLED",
+    "eligibleBillingStatuses": [
+      "active",
+      "trialing",
+      "past_due"
+    ]
+  },
+  "economics": {
+    "creditValueMicroUsd": "10000",
+    "creditValueSource": "Existing TOPUP_PRICE_PER_CREDIT_USD default: 0.01 USD",
+    "targetGrossMarginBps": 5000,
+    "providerCostReserveBps": 1000,
+    "retryFailureReserveBps": 500,
+    "currencyChangeReserveBps": 500,
+    "infrastructureReserveMicroUsd": "2000",
+    "minimumChargeCredits": "1",
+    "rounding": "always_up"
+  },
+  "allowances": {
+    "fiveHourWindowHours": 5,
+    "weeklyWindowDays": 7,
+    "weeklyAnchorField": "subscription_current_period_start",
+    "topupFallbackRequiresExplicitPermission": true,
+    "topupCreditsExpire": false,
+    "consumptionOrder": [
+      "subscription_allowance",
+      "explicit_topup_credits",
+      "reject"
+    ],
+    "plans": {
+      "plus": {
+        "fiveHourUnits": null,
+        "weeklyUnits": null,
+        "status": "unconfigured"
+      },
+      "pro": {
+        "fiveHourUnits": null,
+        "weeklyUnits": null,
+        "status": "unconfigured"
+      },
+      "legend": {
+        "fiveHourUnits": null,
+        "weeklyUnits": null,
+        "status": "unconfigured"
+      },
+      "max": {
+        "fiveHourUnits": null,
+        "weeklyUnits": null,
+        "status": "unconfigured"
+      }
+    }
+  }
+}

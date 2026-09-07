@@ -14,6 +14,7 @@
 const { canRoute, reportOutcome } = require('./lib/modelHealth');
 const { recordFallback, recordModelLatency, recordModelOutcome } = require('./lib/metrics');
 const { estimateCostUsd, costTier } = require('./lib/modelCosts');
+const intelligenceRegistry = require('./lib/intelligenceRegistry');
 // Providers (anthropic/openrouter/openai/google/groq/local/custom) are no
 // longer called directly from this file â€” see src/modules/ai/providers.
 // This is what makes providers interchangeable: adding one, swapping one,
@@ -93,6 +94,17 @@ async function withTimeout(promise, ms) {
 // only moved the two functions into src/modules/ai/providers/index.js
 // as registered adapters instead of local functions.
 async function callModel(route, messages, maxOutputTokens = MAX_OUTPUT_TOKENS) {
+  if (intelligenceRegistry.isEnforcementEnabled()) {
+    const capability = route === MULTIMODAL_ROUTE
+      ? 'multimodal_chat'
+      : Object.entries(ROUTES).find(([, routes]) => routes.includes(route))?.[0] || 'chat';
+    intelligenceRegistry.assertRouteAllowed({
+      provider: route.provider,
+      model: route.model,
+      capability,
+      operationType: capability === 'multimodal_chat' ? 'multimodal_generation' : 'text_generation'
+    });
+  }
   return providers.call(route.provider, route.model, messages, { maxOutputTokens });
 }
 
@@ -218,6 +230,5 @@ async function routeRequest(feature, messages, opts = {}) {
 }
 
 module.exports = { routeRequest, ROUTES, MULTIMODAL_ROUTE, getEffectiveChain };
-
 
 

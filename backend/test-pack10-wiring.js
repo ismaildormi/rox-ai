@@ -1,0 +1,16 @@
+'use strict';
+const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const path = require('node:path');
+const read = relative => fs.readFileSync(path.join(__dirname, '..', relative), 'utf8');
+const routes = read('backend/lib/finalProductRoutes.js');
+const server = read('backend/server.js');
+const flags = JSON.parse(read('backend/config/feature-flags.json'));
+for (const marker of ["router.get('/readiness'","router.post('/usage/validate'","router.post('/analytics/validate'","router.post('/settings/validate'","router.post('/data-rights/validate'","router.post('/notifications/validate'","router.post('/apps/validate'","router.post('/launch/request'"]) assert(routes.includes(marker), `Missing route ${marker}`);
+for (const marker of ["'/api/final-product'","requireAuth","rateLimit('workspace')","createFinalProductRouter()"]) assert(server.includes(marker), `Missing server marker ${marker}`);
+for (const key of ['closed_beta','public_launch','customer_billing_activation','store_submission','notifications','analytics_dashboard','billing_dashboard','mobile_app','desktop_app']) assert.equal(flags[key].enabled, false, `${key} must remain disabled`);
+assert.equal(flags.final_product_readiness.status, 'foundation');
+assert(routes.includes('launched: false'));
+assert(routes.includes('billingActivated: false'));
+assert(routes.includes('storeSubmitted: false'));
+console.log('PASS: Pack 10 authenticated readiness routes and fail-closed launch flags are wired');

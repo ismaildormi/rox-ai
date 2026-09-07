@@ -1,0 +1,44 @@
+{
+  "version": "pack-06.code-studio.v1",
+  "capabilities": {
+    "assistant": { "enabledByDefault": true, "status": "live_existing", "requiresSandbox": false, "requiresConfirmation": false },
+    "files": { "enabledByDefault": true, "status": "foundation", "requiresSandbox": false, "requiresConfirmation": false },
+    "editor": { "enabledByDefault": true, "status": "foundation", "requiresSandbox": false, "requiresConfirmation": false },
+    "preview": { "enabledByDefault": true, "status": "foundation", "requiresSandbox": true, "requiresConfirmation": false },
+    "export_zip": { "enabledByDefault": true, "status": "foundation", "requiresSandbox": false, "requiresConfirmation": true },
+    "history": { "enabledByDefault": true, "status": "foundation", "requiresSandbox": false, "requiresConfirmation": false },
+    "terminal": { "enabledByDefault": false, "status": "blocked_no_sandbox", "requiresSandbox": true, "requiresConfirmation": true },
+    "run": { "enabledByDefault": false, "status": "blocked_no_sandbox", "requiresSandbox": true, "requiresConfirmation": true },
+    "dependencies": { "enabledByDefault": false, "status": "blocked_no_sandbox", "requiresSandbox": true, "requiresConfirmation": true },
+    "build": { "enabledByDefault": false, "status": "blocked_no_sandbox", "requiresSandbox": true, "requiresConfirmation": true },
+    "test": { "enabledByDefault": false, "status": "blocked_no_sandbox", "requiresSandbox": true, "requiresConfirmation": true },
+    "deploy": { "enabledByDefault": false, "status": "blocked_explicit_confirmation", "requiresSandbox": true, "requiresConfirmation": true }
+  },
+  "projectLimits": {
+    "maxFiles": 64,
+    "maxPathCharacters": 240,
+    "maxFileBytes": 524288,
+    "maxProjectBytes": 4194304,
+    "maxProjectNameCharacters": 120
+  },
+  "blockedFileNames": [
+    ".env", ".env.local", ".env.production", "credentials.json",
+    "service-account.json", "id_rsa", "id_ed25519", ".npmrc", ".pypirc"
+  ],
+  "blockedPathSegments": [".git", ".ssh", "node_modules", ".aws", ".azure", ".config"],
+  "preview": {
+    "entryFile": "index.html",
+    "allowedExtensions": ["html", "css", "js", "mjs", "json", "svg", "txt", "md"],
+    "sandboxTokens": ["allow-scripts"],
+    "networkEnabledByDefault": false,
+    "contentSecurityPolicy": "default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; img-src data: blob:; font-src data:; connect-src 'none'; media-src blob: data:; frame-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'"
+  },
+  "runtime": {
+    "executorConfigured": false,
+    "networkEnabledByDefault": false,
+    "secretsMountedByDefault": false,
+    "maxSeconds": 0,
+    "maxMemoryMb": 0,
+    "maxOutputBytes": 0
+  }
+}

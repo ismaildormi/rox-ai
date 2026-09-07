@@ -1,0 +1,50 @@
+{
+  "version": "pack-07.audio-system.v1",
+  "localCapabilities": {
+    "browser_dictation": { "enabledByDefault": true, "status": "existing_browser_capability", "costMode": "device" },
+    "browser_tts": { "enabledByDefault": true, "status": "existing_browser_capability", "costMode": "device" }
+  },
+  "operations": {
+    "transcription": { "enabledByDefault": false, "status": "blocked_unpriced", "unitType": "transcription_minutes", "requiresSourceAudio": true },
+    "text_to_speech": { "enabledByDefault": false, "status": "blocked_unpriced", "unitType": "speech_characters", "requiresText": true },
+    "voice_chat": { "enabledByDefault": false, "status": "blocked_unpriced", "unitType": "audio_seconds", "requiresConsent": true },
+    "music_generation": { "enabledByDefault": false, "status": "blocked_unpriced", "unitType": "music_seconds", "requiresPrompt": true },
+    "sound_effects": { "enabledByDefault": false, "status": "blocked_unpriced", "unitType": "audio_seconds", "requiresPrompt": true },
+    "audio_cleanup": { "enabledByDefault": false, "status": "blocked_unpriced", "unitType": "processing_operations", "requiresSourceAudio": true },
+    "remix": { "enabledByDefault": false, "status": "blocked_unpriced", "unitType": "processing_operations", "requiresSourceAudio": true },
+    "stem_separation": { "enabledByDefault": false, "status": "blocked_unpriced", "unitType": "processing_operations", "requiresSourceAudio": true },
+    "translate_dub": { "enabledByDefault": false, "status": "blocked_unpriced", "unitType": "audio_minutes", "requiresSourceAudio": true },
+    "audio_to_video": { "enabledByDefault": false, "status": "blocked_unpriced", "unitType": "video_seconds", "requiresSourceAudio": true }
+  },
+  "providers": {
+    "openai": { "status": "registered_unverified", "implementedOperations": [] },
+    "google": { "status": "registered_unverified", "implementedOperations": [] },
+    "fal": { "status": "registered_unverified", "implementedOperations": [] },
+    "replicate": { "status": "registered_unverified", "implementedOperations": [] }
+  },
+  "requestLimits": {
+    "maxPromptCharacters": 2000,
+    "maxSpeechCharacters": 5000,
+    "maxSourceAudioBytes": 52428800,
+    "maxDurationSeconds": 600,
+    "maxVoiceSessionSeconds": 900,
+    "maxVisualAssets": 20,
+    "allowedAudioFormats": ["mp3", "wav", "ogg", "flac", "m4a", "aac", "webm"],
+    "allowedOutputFormats": ["mp3", "wav", "ogg", "flac"],
+    "allowedVideoFormats": ["mp4", "webm"],
+    "allowedSampleRates": [16000, 24000, 44100, 48000]
+  },
+  "jobs": {
+    "states": ["blocked", "queued", "processing", "done", "failed", "cancelled"],
+    "stages": ["blocked", "validating", "provider", "processing", "rendering", "settling", "done", "failed", "cancelled"],
+    "cancelEnabledByDefault": false
+  },
+  "voicePrivacy": {
+    "continuousListeningEnabledByDefault": false,
+    "backgroundRecordingEnabledByDefault": false,
+    "storeRawAudioEnabledByDefault": false,
+    "explicitMicrophoneConsentRequired": true,
+    "visibleRecordingIndicatorRequired": true,
+    "stopControlRequired": true
+  }
+}

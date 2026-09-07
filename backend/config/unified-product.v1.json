@@ -1,0 +1,59 @@
+{
+  "version": "1.0.0",
+  "identity": {
+    "name": "ZUVYR Suite",
+    "theme": "ember-core",
+    "description": "One connected workspace for creation, research and delivery."
+  },
+  "sections": [
+    { "id": "dashboard", "label": "Dashboard", "icon": "grid", "status": "foundation" },
+    { "id": "images", "label": "Images", "icon": "image", "status": "provider_connection_required" },
+    { "id": "video", "label": "Video", "icon": "video", "status": "provider_connection_required" },
+    { "id": "code", "label": "Code Studio", "icon": "code", "status": "foundation" },
+    { "id": "voice", "label": "Voice", "icon": "mic", "status": "provider_connection_required" },
+    { "id": "music", "label": "Music", "icon": "music", "status": "provider_connection_required" },
+    { "id": "ip", "label": "ZUVYR IP", "icon": "spark", "status": "planning_only" },
+    { "id": "research", "label": "Research", "icon": "search", "status": "provider_connection_required" },
+    { "id": "library", "label": "Library", "icon": "library", "status": "foundation" },
+    { "id": "projects", "label": "Projects", "icon": "folder", "status": "foundation" },
+    { "id": "documents", "label": "Documents", "icon": "document", "status": "foundation" },
+    { "id": "spreadsheets", "label": "Spreadsheets", "icon": "table", "status": "foundation" },
+    { "id": "presentations", "label": "Presentations", "icon": "slides", "status": "foundation" },
+    { "id": "scheduled", "label": "Scheduled", "icon": "clock", "status": "execution_disabled" },
+    { "id": "plugins", "label": "Plugins", "icon": "plug", "status": "installation_disabled" },
+    { "id": "usage", "label": "Usage & Billing", "icon": "wallet", "status": "foundation" },
+    { "id": "analytics", "label": "Analytics", "icon": "chart", "status": "data_validation_only" },
+    { "id": "settings", "label": "Settings", "icon": "settings", "status": "foundation" }
+  ],
+  "capabilities": [
+    "chat", "images", "video", "audio", "code", "research", "library", "projects",
+    "documents", "spreadsheets", "presentations", "scheduled_tasks", "plugins"
+  ],
+  "connections": [
+    { "from": "research", "to": "code", "handoff": "sources_and_requirements" },
+    { "from": "images", "to": "code", "handoff": "approved_assets" },
+    { "from": "video", "to": "code", "handoff": "approved_assets" },
+    { "from": "audio", "to": "video", "handoff": "approved_audio" },
+    { "from": "library", "to": "projects", "handoff": "selected_assets" },
+    { "from": "documents", "to": "presentations", "handoff": "approved_outline" },
+    { "from": "spreadsheets", "to": "analytics", "handoff": "validated_dataset" }
+  ],
+  "orchestration": {
+    "planningEnabled": true,
+    "executionEnabled": false,
+    "maxGoalCharacters": 4000,
+    "maxOutputs": 8,
+    "additionalCreationConsentRequired": true,
+    "creditReservationRequired": true,
+    "unknownPricePolicy": "block_before_provider_call"
+  },
+  "zuvyrIp": {
+    "planningEnabled": true,
+    "toolExecutionEnabled": false,
+    "deviceControlEnabled": false,
+    "wildcardScopesAllowed": false,
+    "explicitConsentRequired": true,
+    "auditRequired": true,
+    "stopRequired": true
+  }
+}

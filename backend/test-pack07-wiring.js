@@ -1,0 +1,26 @@
+'use strict';
+const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const path = require('node:path');
+const read = relative => fs.readFileSync(path.join(__dirname, '..', relative), 'utf8');
+const server = read('backend/server.js');
+const routes = read('backend/lib/audioStudioRoutes.js');
+const flags = JSON.parse(read('backend/config/feature-flags.json'));
+const plans = JSON.parse(read('backend/config/plans.json'));
+const frontend = read('frontend/index.html');
+
+assert(server.includes("require('./lib/audioStudioRoutes')"));
+assert(server.includes("'/api/audio-studio'"));
+assert(routes.includes("router.get('/capabilities'"));
+assert(routes.includes("router.post('/requests/validate'"));
+assert(routes.includes("router.post('/jobs/request'"));
+assert(routes.includes("router.post('/voice/sessions/request'"));
+const jobRoute = routes.slice(routes.indexOf("router.post('/jobs/request'"));
+assert(jobRoute.indexOf('assertAudioOperationAvailable(request.operation)') < jobRoute.indexOf('const job = buildAudioJobSnapshot'));
+for (const key of ['voice_ai','audio_transcription','audio_text_to_speech','audio_voice_chat','audio_music_generation','audio_sound_effects','audio_cleanup','audio_remix','audio_stem_separation','audio_translate_dub','audio_to_video']) assert.equal(flags[key].enabled, false);
+assert.equal(plans.featureCosts.voice_ai.credits, 0);
+assert.equal(plans.featureCosts.voice_ai.pricingMode, 'dynamic_required');
+assert(frontend.includes('window.SpeechRecognition ||'));
+assert(frontend.includes("'speechSynthesis' in window"));
+assert(frontend.includes("'voice.allowMicrophone'"));
+console.log('PASS: Pack 07 authenticated routes, zero placeholder credit and existing browser voice regressions');

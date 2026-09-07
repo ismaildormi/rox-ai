@@ -19,6 +19,7 @@ const server = read('backend/server.js');
 const gatekeeper = read('backend/gatekeeper.js');
 const validation = read('backend/lib/inputValidation.js');
 const worker = read('backend/worker.js');
+const videoProvider = read('backend/lib/videoProvider.js');
 const router = read('backend/aiRouter.js');
 const models = JSON.parse(read('backend/config/models.json'));
 const frontend = read('frontend/index.html');
@@ -37,9 +38,10 @@ assert(
   'Chinese AI response preferences must be accepted by the backend.'
 );
 assert(
-  worker.includes("const Replicate = require('replicate');") &&
-    worker.includes('const replicate = new Replicate'),
-  'The video worker must instantiate the Replicate client.'
+  worker.includes("require('./lib/videoProvider')") &&
+    videoProvider.includes("const Replicate = require('replicate');") &&
+    videoProvider.includes('new Replicate({ auth: token })'),
+  'The video worker must use the isolated Replicate video provider adapter.'
 );
 assert(
   settlementSql.includes('create or replace function settle_credit_charge'),

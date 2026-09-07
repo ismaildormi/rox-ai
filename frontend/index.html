@@ -35773,6 +35773,16 @@ document.addEventListener("DOMContentLoaded",function(){
   var sourceEl = document.getElementById(sourceId);
   var fullHtml = unescapeScriptTags(sourceEl.textContent);
 
+  // Pack 11: load the additive ZUVYR Suite inside the selected mobile or
+  // desktop document. The existing AI Chat and device router stay intact.
+  var suiteHead = '<link rel="stylesheet" href="/zuvyr-suite-v1.css" data-zuvyr-suite="v1">';
+  var suiteBody = '<script src="/zuvyr-suite-v1.js" defer data-zuvyr-suite="v1"><' + '/script>';
+  if (/<\/head>/i.test(fullHtml)) {
+    fullHtml = fullHtml.replace(/<\/head>/i, suiteHead + '<' + '/head>');
+  } else {
+    fullHtml = suiteHead + fullHtml;
+  }
+
   // ── resize / rotation support ───────────────────────────────────
   // Appended into the chosen document right before its closing
   // </body> tag. If the viewport crosses the 768px breakpoint after
@@ -35802,9 +35812,9 @@ document.addEventListener("DOMContentLoaded",function(){
     '<' + '/script>';
 
   if (/<\/body>/i.test(fullHtml)) {
-    fullHtml = fullHtml.replace(/<\/body>(?![\s\S]*<\/body>)/i, deviceWatcher + '<' + '/body>');
+    fullHtml = fullHtml.replace(/<\/body>(?![\s\S]*<\/body>)/i, suiteBody + deviceWatcher + '<' + '/body>');
   } else {
-    fullHtml += deviceWatcher;
+    fullHtml += suiteBody + deviceWatcher;
   }
 
   document.open();
@@ -35815,7 +35825,6 @@ document.addEventListener("DOMContentLoaded",function(){
 
 </body>
 </html>
-
 
 
 

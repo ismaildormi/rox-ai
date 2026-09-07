@@ -1,0 +1,62 @@
+{
+  "version": "pack-08.zuvyr-ip.v1",
+  "execution": {
+    "enabledByDefault": false,
+    "status": "blocked_no_trusted_device_agent",
+    "sandboxConfigured": false,
+    "networkEnabledByDefault": false,
+    "secretsAvailableToAgent": false,
+    "maxSessionSeconds": 900,
+    "maxPlanActions": 50,
+    "maxActionSeconds": 30
+  },
+  "capabilities": {
+    "planning": { "enabledByDefault": true, "status": "foundation" },
+    "permission_validation": { "enabledByDefault": true, "status": "foundation" },
+    "confirmation_challenges": { "enabledByDefault": true, "status": "foundation" },
+    "audit_contract": { "enabledByDefault": true, "status": "foundation" },
+    "stop_contract": { "enabledByDefault": true, "status": "foundation" },
+    "undo_contract": { "enabledByDefault": true, "status": "foundation" },
+    "device_connection": { "enabledByDefault": false, "status": "blocked_no_trusted_device_agent" },
+    "screen_capture": { "enabledByDefault": false, "status": "blocked_no_trusted_device_agent" },
+    "pointer_control": { "enabledByDefault": false, "status": "blocked_no_trusted_device_agent" },
+    "keyboard_control": { "enabledByDefault": false, "status": "blocked_no_trusted_device_agent" },
+    "application_control": { "enabledByDefault": false, "status": "blocked_no_trusted_device_agent" },
+    "filesystem_control": { "enabledByDefault": false, "status": "blocked_no_trusted_device_agent" },
+    "shell_control": { "enabledByDefault": false, "status": "blocked_no_trusted_device_agent" }
+  },
+  "permissionScopes": {
+    "screen.view": { "risk": "low", "maxGrantSeconds": 900 },
+    "pointer.control": { "risk": "medium", "maxGrantSeconds": 900 },
+    "keyboard.type": { "risk": "high", "maxGrantSeconds": 600 },
+    "application.open": { "risk": "medium", "maxGrantSeconds": 900 },
+    "clipboard.read": { "risk": "high", "maxGrantSeconds": 300 },
+    "clipboard.write": { "risk": "high", "maxGrantSeconds": 300 },
+    "file.read": { "risk": "high", "maxGrantSeconds": 300 },
+    "file.write": { "risk": "critical", "maxGrantSeconds": 180 },
+    "shell.execute": { "risk": "critical", "maxGrantSeconds": 120 }
+  },
+  "actions": {
+    "observe_screen": { "scope": "screen.view", "risk": "low", "requiresConfirmation": false, "reversible": false },
+    "move_pointer": { "scope": "pointer.control", "risk": "low", "requiresConfirmation": false, "reversible": false },
+    "click": { "scope": "pointer.control", "risk": "medium", "requiresConfirmation": true, "reversible": false },
+    "type_text": { "scope": "keyboard.type", "risk": "high", "requiresConfirmation": true, "reversible": false },
+    "open_application": { "scope": "application.open", "risk": "medium", "requiresConfirmation": true, "reversible": false },
+    "read_clipboard": { "scope": "clipboard.read", "risk": "high", "requiresConfirmation": true, "reversible": false },
+    "write_clipboard": { "scope": "clipboard.write", "risk": "high", "requiresConfirmation": true, "reversible": false },
+    "read_file": { "scope": "file.read", "risk": "high", "requiresConfirmation": true, "reversible": false },
+    "write_file": { "scope": "file.write", "risk": "critical", "requiresConfirmation": true, "reversible": true },
+    "run_command": { "scope": "shell.execute", "risk": "critical", "requiresConfirmation": true, "reversible": false }
+  },
+  "confirmation": {
+    "challengeSeconds": 300,
+    "criticalPhrase": "CONFIRM EXACT ACTION",
+    "singleUseRequired": true,
+    "bindToActionDigest": true
+  },
+  "audit": {
+    "maxEventBytes": 16384,
+    "redactedKeyFragments": ["password", "secret", "token", "authorization", "cookie", "key", "credential"],
+    "eventTypes": ["plan_created", "permission_granted", "confirmation_requested", "confirmation_resolved", "action_blocked", "action_started", "action_completed", "action_failed", "stop_requested", "undo_requested", "undo_completed"]
+  }
+}

@@ -1,0 +1,18 @@
+'use strict';
+const assert = require('node:assert/strict');
+const { normalizeSettings, normalizeDataRightsRequest } = require('./lib/settingsPrivacyContract');
+const { normalizeNotification } = require('./lib/notificationContract');
+const settings = normalizeSettings({ language: 'ar', theme: 'dark', responseLength: 'detailed', memoryEnabled: true, trainingConsent: false });
+assert.equal(settings.memoryEnabled, true);
+assert.equal(settings.trainingConsent, false);
+assert.equal(settings.voiceContinuousListening, false);
+assert.equal(settings.visionContinuousCapture, false);
+assert.equal(settings.externalDataSharing, false);
+const request = normalizeDataRightsRequest({ type: 'export', confirmed: true });
+assert.equal(request.state, 'pending');
+assert.equal(request.executed, false);
+assert.throws(() => normalizeDataRightsRequest({ type: 'delete', confirmed: false }), /confirmation_required/);
+const notification = normalizeNotification({ type: 'payment_failed', title: 'Payment update', message: 'Please review your payment method.' });
+assert.equal(notification.deliveredExternally, false);
+assert.throws(() => normalizeNotification({ type: 'job_completed', title: 'Secret', message: 'Bearer hidden' }), /notification_sensitive_content/);
+console.log('PASS: Pack 10 privacy-first Settings, confirmed data rights and secret-safe Notifications contracts');

@@ -30,7 +30,7 @@ const { createCorsMiddleware } = require('./lib/cors');
 const { requireAuth } = require('./lib/auth');
 const { rateLimit } = require('./lib/rateLimit');
 const { ipRateLimit, ipBlockGuard } = require('./lib/ipGuard');
-const { validateChatBody, validatePromptBody } = require('./lib/inputValidation');
+const { validateChatBody, validatePromptBody, validateImageBody, validateVideoBody } = require('./lib/inputValidation');
 const { loadRoxUserMiddleware, gatekeeperMiddleware, reserveCredits, refundCredits, settleCredits, logCreditEvent, reportRefundFailure } = require('./gatekeeper');
 const { routeRequest } = require('./aiRouter');
 const { imageQueue, videoQueue, defaultJobOptions, connection: queueConnection } = require('./lib/queue');
@@ -58,6 +58,21 @@ const {
   createRoxIpRouter
 } = require('./lib/roxIpRoutes');
 const {
+  createCodeStudioRouter
+} = require('./lib/codeStudioRoutes');
+const {
+  createAudioStudioRouter
+} = require('./lib/audioStudioRoutes');
+const {
+  createWorkspaceRouter
+} = require('./lib/workspaceRoutes');
+const {
+  createFinalProductRouter
+} = require('./lib/finalProductRoutes');
+const {
+  createUnifiedProductRouter
+} = require('./lib/unifiedProductRoutes');
+const {
   inspectConversationTurn,
   prepareConversationTurn,
   completeConversationTurn
@@ -77,6 +92,13 @@ const {
   buildConversationAttachmentContext,
   applyAttachmentParts
 } = require('./lib/conversationAttachmentContext');
+const { assertChatModeAvailable } = require('./lib/chatCapabilities');
+const { attachmentSources } = require('./lib/sourceContract');
+const { normalizeImageRequest } = require('./lib/imageRequestContract');
+const { assertImageRequestAvailable } = require('./lib/imageOperationRegistry');
+const { normalizeVideoRequest } = require('./lib/videoRequestContract');
+const { assertVideoRequestAvailable } = require('./lib/videoOperationRegistry');
+const { buildVideoJobSnapshot } = require('./lib/videoJobContract');
 // New, additive-only: stub routes for every not-yet-built feature (see
 // ARCHITECTURE.md). Each route is flag-gated and returns a clear
 // "not enabled" response until the feature is actually implemented ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â
@@ -213,6 +235,36 @@ app.use(
   requireAuth,
   rateLimit('roxip'),
   createRoxIpRouter()
+);
+app.use(
+  '/api/code-studio',
+  requireAuth,
+  rateLimit('chat'),
+  createCodeStudioRouter()
+);
+app.use(
+  '/api/audio-studio',
+  requireAuth,
+  rateLimit('chat'),
+  createAudioStudioRouter()
+);
+app.use(
+  '/api/workspace',
+  requireAuth,
+  rateLimit('workspace'),
+  createWorkspaceRouter()
+);
+app.use(
+  '/api/final-product',
+  requireAuth,
+  rateLimit('workspace'),
+  createFinalProductRouter()
+);
+app.use(
+  '/api/unified-product',
+  requireAuth,
+  rateLimit('workspace'),
+  createUnifiedProductRouter()
 );
 
 app.get('/metrics', async (req, res) => {
@@ -439,7 +491,8 @@ app.post('/api/chat', requireAuth, rateLimit('chat'), validateChatBody, loadRoxU
     conversationId = null,
     turnId = null,
     attachment = null,
-    attachmentIds = []
+    attachmentIds = [],
+    chatMode = 'standard'
   } = req.body; // feature: 'chat' | 'code'
   const userId = req.userId;
   const requestId = crypto.randomUUID();
@@ -447,6 +500,17 @@ app.post('/api/chat', requireAuth, rateLimit('chat'), validateChatBody, loadRoxU
   const subscriptionPlan =
     normalizePlanId(req.roxUser?.subscription_status);
   const isPro = isPaidPlan(subscriptionPlan);
+
+  try {
+    assertChatModeAvailable(chatMode);
+  } catch (error) {
+    return res.status(error.code === 'unknown_chat_mode' ? 400 : 503).json({
+      status: 'error',
+      code: error.code || 'chat_mode_unavailable',
+      message: 'This Chat capability is not enabled yet.',
+      chatMode: error.mode || chatMode
+    });
+  }
 
   // Chat is free with a daily limit for every user.
   // Code is paid and consumes credits for every user.
@@ -724,6 +788,7 @@ app.post('/api/chat', requireAuth, rateLimit('chat'), validateChatBody, loadRoxU
     }
 
     const result = await routeRequest(feature || 'chat', routedMessages, { loadLevel, isPro });
+    const responseSources = attachmentSources(attachmentContext.sources);
 
     let settlement = null;
     const finalCodeCredits = isCode
@@ -804,6 +869,7 @@ app.post('/api/chat', requireAuth, rateLimit('chat'), validateChatBody, loadRoxU
           text: result.text,
           model: result.model,
           provider: result.provider || null,
+          sources: responseSources,
           responseId: requestId,
           requestKey: memoryRequestKey
         });
@@ -885,6 +951,8 @@ app.post('/api/chat', requireAuth, rateLimit('chat'), validateChatBody, loadRoxU
         hasDurableAttachments
           ? attachmentContext.sources
           : undefined,
+      sources: responseSources,
+      chatMode,
     });
   } catch (err) {
     // Only refund if this request actually charged credits (Pro path).
@@ -960,14 +1028,62 @@ async function handleGenerationRequest(req, res, { feature, queue }) {
     prompt,
     aiPreferences = {},
     conversationId = null,
-    turnId = null
+    turnId = null,
+    imageOperation = 'generate',
+    referenceAssetIds = [],
+    sourceAssetId = null,
+    maskAssetId = null,
+    imageOptions = {},
+    videoOperation = 'text_to_video',
+    sourceImageAssetId = null,
+    sourceVideoAssetId = null,
+    startFrameAssetId = null,
+    endFrameAssetId = null,
+    videoOptions = {}
   } = req.body;
+  const imageRequest = feature === 'image'
+    ? normalizeImageRequest({ imageOperation, referenceAssetIds, sourceAssetId, maskAssetId, imageOptions })
+    : null;
+  const videoRequest = feature === 'video'
+    ? normalizeVideoRequest({
+        prompt,
+        videoOperation,
+        sourceImageAssetId,
+        sourceVideoAssetId,
+        startFrameAssetId,
+        endFrameAssetId,
+        videoOptions
+      })
+    : null;
+
+  if (imageRequest) {
+    try {
+      assertImageRequestAvailable(imageRequest);
+    } catch (error) {
+      return res.status(error.code === 'unknown_image_operation' ? 400 : 503).json({
+        status: 'error', code: error.code || 'image_operation_unavailable',
+        message: 'This image operation is not enabled yet.', imageOperation: error.operation || imageRequest.operation
+      });
+    }
+  }
+  if (videoRequest) {
+    try {
+      assertVideoRequestAvailable(videoRequest);
+    } catch (error) {
+      return res.status(error.code === 'unknown_video_operation' ? 400 : 503).json({
+        status: 'error',
+        code: error.code || 'video_operation_unavailable',
+        message: 'This video operation is not enabled until its provider price is verified.',
+        videoOperation: error.operation || videoRequest.operation
+      });
+    }
+  }
   const normalizedAiPreferences =
     normalizeAiPreferences(aiPreferences);
 
   const generationPrompt =
     buildGenerationPrompt(
-      prompt,
+      videoRequest?.prompt ?? prompt,
       normalizedAiPreferences,
       feature
     );
@@ -1060,7 +1176,17 @@ async function handleGenerationRequest(req, res, { feature, queue }) {
         conversationId,
         ownerId: userId,
         feature,
-        prompt,
+        prompt: videoRequest?.prompt ?? prompt,
+        operation: imageRequest?.operation || videoRequest?.operation || 'generate',
+        referenceAssetIds: imageRequest?.referenceAssetIds || [],
+        sourceAssetId: imageRequest?.sourceAssetId || null,
+        maskAssetId: imageRequest?.maskAssetId || null,
+        imageOptions: imageRequest?.options || {},
+        sourceImageAssetId: videoRequest?.sourceImageAssetId || null,
+        sourceVideoAssetId: videoRequest?.sourceVideoAssetId || null,
+        startFrameAssetId: videoRequest?.startFrameAssetId || null,
+        endFrameAssetId: videoRequest?.endFrameAssetId || null,
+        videoOptions: videoRequest?.options || {},
         requestKey: memoryRequestKey
       });
     } catch (memoryError) {
@@ -1087,11 +1213,28 @@ async function handleGenerationRequest(req, res, { feature, queue }) {
       id: requestId,
       user_id: userId,
       feature,
-      prompt,
+      prompt: videoRequest?.prompt ?? prompt,
       status: 'queued',
       conversation_id: conversationId || null,
       request_message_id:
-        requestMessage ? requestMessage.id : null
+        requestMessage ? requestMessage.id : null,
+      ...(imageRequest ? {
+        image_operation: imageRequest.operation,
+        reference_asset_ids: imageRequest.referenceAssetIds,
+        source_asset_id: imageRequest.sourceAssetId,
+        mask_asset_id: imageRequest.maskAssetId,
+        image_options: imageRequest.options
+      } : {}),
+      ...(videoRequest ? {
+        video_operation: videoRequest.operation,
+        source_image_asset_id: videoRequest.sourceImageAssetId,
+        source_video_asset_id: videoRequest.sourceVideoAssetId,
+        start_frame_asset_id: videoRequest.startFrameAssetId,
+        end_frame_asset_id: videoRequest.endFrameAssetId,
+        video_options: videoRequest.options,
+        progress_percent: 0,
+        job_stage: 'queued'
+      } : {})
     }]);
 
   if (insertError) {
@@ -1124,14 +1267,25 @@ async function handleGenerationRequest(req, res, { feature, queue }) {
       requestId,
       userId,
       prompt: generationPrompt,
-      originalPrompt: prompt,
+      originalPrompt: videoRequest?.prompt ?? prompt,
       aiPreferences: normalizedAiPreferences,
       feature,
       creditsConsumed,
       conversationId: conversationId || null,
       requestMessageId:
         requestMessage ? requestMessage.id : null,
-      memoryRequestKey
+      memoryRequestKey,
+      imageOperation: imageRequest?.operation || 'generate',
+      referenceAssetIds: imageRequest?.referenceAssetIds || [],
+      sourceAssetId: imageRequest?.sourceAssetId || null,
+      maskAssetId: imageRequest?.maskAssetId || null,
+      imageOptions: imageRequest?.options || {},
+      videoOperation: videoRequest?.operation || 'text_to_video',
+      sourceImageAssetId: videoRequest?.sourceImageAssetId || null,
+      sourceVideoAssetId: videoRequest?.sourceVideoAssetId || null,
+      startFrameAssetId: videoRequest?.startFrameAssetId || null,
+      endFrameAssetId: videoRequest?.endFrameAssetId || null,
+      videoOptions: videoRequest?.options || {}
     }, {
       ...defaultJobOptions,
       jobId: requestId,
@@ -1177,6 +1331,8 @@ async function handleGenerationRequest(req, res, { feature, queue }) {
     requestMessageId:
       requestMessage ? requestMessage.id : undefined,
     creditsCharged: creditsConsumed,
+    imageOperation: imageRequest?.operation || undefined,
+    videoOperation: videoRequest?.operation || undefined,
     newBalance: reservation.newBalance,
   });
 }
@@ -1218,6 +1374,9 @@ app.get('/api/pricing', requireAuth, (req, res) => {
 
   for (const feature of ['image', 'video']) {
     try {
+      if (feature === 'video') {
+        assertVideoRequestAvailable({ operation: 'text_to_video' });
+      }
       const quote = quoteGeneration(feature);
 
       services[feature] = {
@@ -1333,11 +1492,11 @@ app.post('/api/chat-feedback', requireAuth, async (req, res) => {
   });
 });
 // ROX CHAT FEEDBACK API END
-app.post('/api/generate-image', requireAuth, rateLimit('image'), validatePromptBody, gatekeeperMiddleware, requireProSubscription('image'), (req, res) =>
+app.post('/api/generate-image', requireAuth, rateLimit('image'), validateImageBody, gatekeeperMiddleware, requireProSubscription('image'), (req, res) =>
   handleGenerationRequest(req, res, { feature: 'image', queue: imageQueue })
 );
 
-app.post('/api/generate-video', requireAuth, rateLimit('video'), validatePromptBody, gatekeeperMiddleware, requireProSubscription('video'), (req, res) =>
+app.post('/api/generate-video', requireAuth, rateLimit('video'), validateVideoBody, gatekeeperMiddleware, requireProSubscription('video'), (req, res) =>
   handleGenerationRequest(req, res, { feature: 'video', queue: videoQueue })
 );
 
@@ -1345,14 +1504,22 @@ app.post('/api/generate-video', requireAuth, rateLimit('video'), validatePromptB
 app.get('/api/job-status/:jobId', requireAuth, async (req, res) => {
   const { data, error } = await supabaseAdmin
     .from('generation_jobs')
-    .select('status, result_url, error_message, feature, created_at, completed_at, response_message_id, user_id')
+    .select('status, result_url, preview_url, export_url, error_message, feature, video_operation, progress_percent, job_stage, estimated_seconds, cancel_requested, created_at, completed_at, response_message_id, user_id')
     .eq('id', req.params.jobId)
     .single();
 
   if (error || !data) return res.status(404).json({ status: 'error', message: 'Generation job not found.' });
   if (data.user_id !== req.userId) return res.status(403).json({ status: 'error', message: 'Access denied.' });
 
-  res.json(data);
+  try {
+    res.json(data.feature === 'video' ? buildVideoJobSnapshot(data) : data);
+  } catch (snapshotError) {
+    res.status(500).json({
+      status: 'error',
+      code: snapshotError.code || 'invalid_video_job_snapshot',
+      message: 'Video job status is temporarily unavailable.'
+    });
+  }
 });
 
 // --- Queue depth -> metrics, polled periodically ---

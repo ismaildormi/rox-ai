@@ -101,8 +101,29 @@
       "note": "Disabled until a verified provider cost is configured."
     },
     "voice_ai": {
-      "credits": 3,
-      "note": "Placeholder rate; tune before enabling."
+      "credits": 0,
+      "pricingMode": "dynamic_required",
+      "note": "Disabled until provider price and measured usage settlement are verified."
+    },
+    "ip": {
+      "credits": 0,
+      "pricingMode": "dynamic_required",
+      "note": "Disabled until the trusted device agent, sandbox, action metering and safety review are verified."
+    },
+    "workspace_storage": {
+      "credits": 0,
+      "pricingMode": "dynamic_required",
+      "note": "Workspace metadata validation is available; storage writes stay disabled until storage and egress costs are measured."
+    },
+    "scheduled_tasks": {
+      "credits": 0,
+      "pricingMode": "dynamic_required",
+      "note": "Schedule validation only; background execution stays disabled until runtime and downstream tool costs are measured."
+    },
+    "workspace_integrations": {
+      "credits": 0,
+      "pricingMode": "dynamic_required",
+      "note": "Plugin installation, Google Drive connection and external writes remain disabled pending security and cost verification."
     },
     "file_analysis": {
       "credits": 2,
@@ -116,6 +137,7 @@
   "rateLimitsPerMinute": {
     "chat": 20,
     "image": 10,
-    "video": 4
+    "video": 4,
+    "workspace": 20
   }
 }

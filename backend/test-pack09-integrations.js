@@ -1,0 +1,14 @@
+'use strict';
+const assert = require('node:assert/strict');
+const { normalizeIntegrationRequest, assertNoCredentialMaterial } = require('./lib/workspaceIntegrationContract');
+const drive = normalizeIntegrationRequest({ integration: 'google_drive', displayName: 'My Drive', scopes: ['drive.file.read'], explicitConsent: true });
+assert.equal(drive.enabled, false);
+assert.equal(drive.confirmationRequired, false);
+assert.match(drive.requestDigest, /^[0-9a-f]{64}$/);
+const write = normalizeIntegrationRequest({ integration: 'plugins', displayName: 'Exporter', scopes: ['workspace.items.read','exports.create'], explicitConsent: true });
+assert.equal(write.externalWriteRequested, true);
+assert.equal(write.confirmationRequired, true);
+assert.throws(() => normalizeIntegrationRequest({ integration: 'google_drive', displayName: 'x', scopes: ['*'], explicitConsent: true }), /invalid_workspace_integration_scopes/);
+assert.throws(() => normalizeIntegrationRequest({ integration: 'plugins', displayName: 'x', scopes: ['projects.read'] }), /workspace_integration_consent_required/);
+assert.throws(() => assertNoCredentialMaterial({ request: { integration: 'google_drive' }, refreshToken: 'hidden' }), /workspace_credential_material_blocked/);
+console.log('PASS: Pack 09 exact-scope Plugin and Drive consent contracts reject credentials and external writes');

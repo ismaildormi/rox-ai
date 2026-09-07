@@ -165,6 +165,7 @@ async function completeConversationTurn({
   text,
   model,
   provider = null,
+  sources = [],
   responseId,
   requestKey,
   logger = console
@@ -184,10 +185,12 @@ async function completeConversationTurn({
     plainText: String(text || ''),
     content: {
       text: String(text || ''),
-      responseId: responseId || null
+      responseId: responseId || null,
+      sources: Array.isArray(sources) ? sources : []
     },
     metadata: {
-      turn_role: 'assistant'
+      turn_role: 'assistant',
+      source_count: Array.isArray(sources) ? sources.length : 0
     },
     provider,
     model: model || null,

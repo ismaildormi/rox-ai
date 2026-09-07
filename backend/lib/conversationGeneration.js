@@ -32,6 +32,16 @@ async function prepareGenerationConversation({
   ownerId,
   feature,
   prompt,
+  operation = 'generate',
+  referenceAssetIds = [],
+  sourceAssetId = null,
+  maskAssetId = null,
+  imageOptions = {},
+  sourceImageAssetId = null,
+  sourceVideoAssetId = null,
+  startFrameAssetId = null,
+  endFrameAssetId = null,
+  videoOptions = {},
   requestKey
 }) {
   if (!conversationId) return null;
@@ -54,7 +64,17 @@ async function prepareGenerationConversation({
     plainText: String(prompt || ''),
     content: {
       text: String(prompt || ''),
-      generationFeature: normalizedFeature
+      generationFeature: normalizedFeature,
+      operation,
+      referenceAssetIds,
+      sourceAssetId,
+      maskAssetId,
+      imageOptions,
+      sourceImageAssetId,
+      sourceVideoAssetId,
+      startFrameAssetId,
+      endFrameAssetId,
+      videoOptions
     },
     metadata: {
       turn_role: 'user',
@@ -73,6 +93,16 @@ async function completeGenerationConversation({
   requestKey,
   provider = null,
   model = null,
+  operation = 'generate',
+  referenceAssetIds = [],
+  sourceAssetId = null,
+  maskAssetId = null,
+  imageOptions = {},
+  sourceImageAssetId = null,
+  sourceVideoAssetId = null,
+  startFrameAssetId = null,
+  endFrameAssetId = null,
+  videoOptions = {},
   logger = console
 }) {
   if (!conversationId) return null;
@@ -95,7 +125,19 @@ async function completeGenerationConversation({
       content: {
         url: resultUrl,
         assetType,
-        generationStatus: 'done'
+        generationStatus: 'done',
+        operation,
+        lineage: {
+          referenceAssetIds,
+          sourceAssetId,
+          maskAssetId,
+          sourceImageAssetId,
+          sourceVideoAssetId,
+          startFrameAssetId,
+          endFrameAssetId
+        },
+        imageOptions,
+        videoOptions
       },
       metadata: {
         turn_role: 'assistant',
@@ -114,7 +156,17 @@ async function completeGenerationConversation({
     url: resultUrl,
     metadata: {
       generation_status: 'done',
-      request_key: requestKey
+      request_key: requestKey,
+      operation,
+      reference_asset_ids: referenceAssetIds,
+      source_asset_id: sourceAssetId,
+      mask_asset_id: maskAssetId,
+      image_options: imageOptions,
+      source_image_asset_id: sourceImageAssetId,
+      source_video_asset_id: sourceVideoAssetId,
+      start_frame_asset_id: startFrameAssetId,
+      end_frame_asset_id: endFrameAssetId,
+      video_options: videoOptions
     }
   });
 

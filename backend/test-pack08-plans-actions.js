@@ -1,0 +1,23 @@
+'use strict';
+const assert = require('node:assert/strict');
+const { normalizeIpPlan } = require('./lib/ipPlanContract');
+const { normalizeIpAction, actionDigest, buildConfirmationChallenge, assertIpActionExecutable } = require('./lib/ipActionPolicy');
+const { inspectIpActionSecurity } = require('./lib/ipSecurityPolicy');
+
+const plan = normalizeIpPlan({ goal: 'Open the editor and type a title', actions: [{ id: 'a1', type: 'open_application', target: 'Editor' }, { id: 'a2', type: 'type_text', input: 'Hello' }] });
+assert.equal(plan.executable, false);
+assert.deepEqual(plan.requiredScopes, ['application.open','keyboard.type']);
+assert.deepEqual(plan.confirmationActionIds, ['a1','a2']);
+const action = normalizeIpAction({ id: 'write-1', type: 'write_file', target: 'notes.txt', input: 'safe' });
+assert.equal(action.risk, 'critical');
+assert.equal(action.requiresConfirmation, true);
+assert.equal(action.reversible, true);
+assert.equal(actionDigest(action).length, 64);
+const challenge = buildConfirmationChallenge(action, { now: 0 });
+assert.equal(challenge.phraseRequired, 'CONFIRM EXACT ACTION');
+assert.equal(challenge.singleUse, true);
+assert.equal(inspectIpActionSecurity(action).safeForExecution, false);
+assert.throws(() => inspectIpActionSecurity({ target: '.ssh/id_rsa' }), { code: 'ip_sensitive_target_blocked' });
+assert.throws(() => assertIpActionExecutable({ action }), { code: 'roxip_execution_disabled' });
+assert.throws(() => normalizeIpPlan({ goal: 'x', actions: [{ id: 'same', type: 'click' }, { id: 'same', type: 'click' }] }), { code: 'duplicate_ip_action_id' });
+console.log('PASS: Pack 08 planning, action risk, confirmation binding and sensitive-target blocking');

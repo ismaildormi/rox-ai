@@ -1,0 +1,12 @@
+'use strict';
+const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const path = require('node:path');
+const read = relative => fs.readFileSync(path.join(__dirname, '..', relative), 'utf8');
+const routes = read('backend/lib/workspaceRoutes.js');
+const server = read('backend/server.js');
+for (const marker of ["router.get('/capabilities'","router.post('/library/items/validate'","router.post('/projects/validate'","router.post('/creations/validate'","router.post('/templates/validate'","router.post('/workflows/validate'","router.post('/schedules/validate'","router.post('/integrations/validate'","router.post('/workflows/execute'","router.post('/schedules/activate'","router.post('/plugins/install'","router.post('/drive/connect'","router.post('/exports/create'"]) assert(routes.includes(marker), `Missing route ${marker}`);
+for (const marker of ["'/api/workspace'","requireAuth","rateLimit('workspace')","createWorkspaceRouter()"]) assert(server.includes(marker), `Missing server marker ${marker}`);
+assert(routes.includes('externalWriteExecuted: false'));
+assert(routes.includes('executionEnabled: false'));
+console.log('PASS: Pack 09 authenticated Workspace validation routes and disabled execution endpoints are wired');

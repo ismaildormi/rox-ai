@@ -1,0 +1,13 @@
+'use strict';
+const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const path = require('node:path');
+const files = ['finalProductRegistry.js','launchReadinessGate.js','usagePresentationContract.js','analyticsPresentationContract.js','settingsPrivacyContract.js','notificationContract.js','appReadinessContract.js','finalProductRoutes.js'];
+const source = files.map(file => fs.readFileSync(path.join(__dirname, 'lib', file), 'utf8')).join('\n');
+for (const marker of ['fetch(','axios','child_process','spawn(','exec(','supabase','stripe','writeFile','unlink','rmSync','process.env']) assert(!source.includes(marker), `Activation marker present: ${marker}`);
+const config = require('./config/final-product.v1.json');
+assert(Object.values(config.activation).every(value => value === false));
+assert(Object.values(config.platforms).every(value => value.buildReady === false && value.storeSubmissionAllowed === false));
+assert.equal(config.qualityGates.billingProductionVerified, false);
+assert.equal(config.qualityGates.productionValidationPassed, false);
+console.log('PASS: Pack 10 performs no billing activation, deployment, store submission, external delivery, DB, provider or subprocess execution');

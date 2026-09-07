@@ -1,0 +1,22 @@
+'use strict';
+const assert = require('node:assert/strict');
+const { redact, buildIpAuditEvent } = require('./lib/ipAuditContract');
+const { buildStopSignal, normalizeUndoReceipt } = require('./lib/ipRecoveryContract');
+const sessionId = '22222222-2222-4222-8222-222222222222';
+const backupId = '33333333-3333-4333-8333-333333333333';
+
+const redacted = redact({ password: 'bad', nested: { apiKey: 'secret', visible: 'ok' } });
+assert.equal(redacted.password, '[REDACTED]');
+assert.equal(redacted.nested.apiKey, '[REDACTED]');
+assert.equal(redacted.nested.visible, 'ok');
+const event = buildIpAuditEvent({ sessionId, eventType: 'action_blocked', details: { authorization: 'Bearer hidden', reason: 'disabled' } }, { now: 0 });
+assert.equal(event.details.authorization, '[REDACTED]');
+const stop = buildStopSignal({ sessionId }, { now: 0 });
+assert.equal(stop.stopAccepted, true);
+assert.equal(stop.executionWasActive, false);
+assert.equal(stop.deviceCommandSent, false);
+const undo = normalizeUndoReceipt({ actionId: 'a1', actionType: 'write_file', backupArtifactId: backupId });
+assert.equal(undo.requiresConfirmation, true);
+assert.equal(undo.executable, false);
+assert.throws(() => normalizeUndoReceipt({ actionId: 'a2', actionType: 'click', backupArtifactId: backupId }), { code: 'ip_action_not_reversible' });
+console.log('PASS: Pack 08 redacted audit, immediate STOP contract and backup-bound Undo receipt');

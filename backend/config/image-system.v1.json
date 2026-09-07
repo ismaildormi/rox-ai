@@ -1,0 +1,24 @@
+{
+  "version": "pack-04.image-system.v1",
+  "operations": {
+    "generate": { "enabledByDefault": true, "status": "legacy_live", "requiresSource": false, "requiresMask": false },
+    "reference_generate": { "enabledByDefault": false, "status": "blocked_unpriced", "requiresSource": true, "requiresMask": false },
+    "edit": { "enabledByDefault": false, "status": "blocked_unpriced", "requiresSource": true, "requiresMask": false },
+    "variations": { "enabledByDefault": false, "status": "blocked_unpriced", "requiresSource": true, "requiresMask": false },
+    "remove_background": { "enabledByDefault": false, "status": "blocked_unpriced", "requiresSource": true, "requiresMask": false },
+    "upscale": { "enabledByDefault": false, "status": "blocked_unpriced", "requiresSource": true, "requiresMask": false },
+    "inpaint": { "enabledByDefault": false, "status": "blocked_unpriced", "requiresSource": true, "requiresMask": true },
+    "expand": { "enabledByDefault": false, "status": "blocked_unpriced", "requiresSource": true, "requiresMask": false }
+  },
+  "providers": {
+    "fal": { "implementedOperations": ["generate"], "status": "registered_unverified_price" },
+    "replicate": { "implementedOperations": ["generate"], "status": "registered_unverified_price" }
+  },
+  "requestLimits": {
+    "maxPromptCharacters": 2000,
+    "maxReferenceAssets": 4,
+    "maxQuantity": 4,
+    "allowedRatios": ["1:1", "16:9", "9:16", "4:3", "3:4", "5:2"],
+    "allowedResolutions": ["512", "768", "1024", "1536", "2048"]
+  }
+}

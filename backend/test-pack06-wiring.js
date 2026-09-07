@@ -1,0 +1,24 @@
+'use strict';
+const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const path = require('node:path');
+const read = relative => fs.readFileSync(path.join(__dirname, '..', relative), 'utf8');
+const server = read('backend/server.js');
+const routes = read('backend/lib/codeStudioRoutes.js');
+const flags = JSON.parse(read('backend/config/feature-flags.json'));
+const frontend = read('frontend/index.html');
+
+assert(server.includes("require('./lib/codeStudioRoutes')"));
+assert(server.includes("'/api/code-studio'"));
+assert(server.includes('requireAuth'));
+assert(routes.includes("router.get('/capabilities'"));
+assert(routes.includes("router.post('/projects/validate'"));
+assert(routes.includes("router.post('/runtime/request'"));
+assert(routes.includes("router.post('/deploy/request'"));
+assert(routes.includes('assertRuntimeRequestAllowed'));
+assert.equal(flags.code_assistant.enabled, true);
+for (const key of ['code_terminal', 'code_runtime', 'code_dependencies', 'code_build', 'code_test', 'code_deploy']) assert.equal(flags[key].enabled, false);
+assert(frontend.includes('function createCodeArtifact(rawText)'));
+assert(frontend.includes('sandbox="allow-scripts allow-forms allow-modals allow-downloads"'));
+assert(!frontend.includes('allow-same-origin'));
+console.log('PASS: Pack 06 authenticated Code routes, disabled runtime flags and existing preview wiring');

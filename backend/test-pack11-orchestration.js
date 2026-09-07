@@ -1,0 +1,12 @@
+'use strict';
+const assert = require('node:assert/strict');
+const { buildCrossFeaturePlan, approveCrossFeaturePlan } = require('./lib/crossFeatureOrchestration');
+assert.throws(() => buildCrossFeaturePlan({ goal: 'Build a site', requestedOutputs: ['images','code'] }), /additional_creation_consent_required/);
+const plan = buildCrossFeaturePlan({ goal: 'Build a premium site with visual storytelling', requestedOutputs: ['images','video','code','project'], additionalCreationConsent: true });
+assert.equal(plan.executionEnabled, false); assert.equal(plan.providerCallsMade, false); assert.equal(plan.creditsReserved, false);
+assert.deepEqual(plan.steps.map(step => step.capability), ['research','images','video','code','projects']);
+assert(plan.steps.find(step => step.capability === 'code').dependsOn.length === 3);
+assert.throws(() => approveCrossFeaturePlan({ plan, approved: true }), /explicit_plan_and_credit_approval_required/);
+const approved = approveCrossFeaturePlan({ plan, approved: true, confirmCreditReservation: true });
+assert.equal(approved.executionEnabled, false); assert.equal(approved.creditsReserved, false);
+console.log('PASS: Pack 11 cross-feature plans require media consent and remain fail-closed');

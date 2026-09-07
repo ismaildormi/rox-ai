@@ -9,6 +9,12 @@ const {
   MAX_ROXIP_RESPONSE_CHARS,
   recordRoxIpDemoTurn
 } = require('./conversationRoxIp');
+const { publicInventory, assertIpExecutionAvailable } = require('./ipCapabilityRegistry');
+const { normalizeIpPlan } = require('./ipPlanContract');
+const { normalizePermissionGrant } = require('./ipPermissionContract');
+const { normalizeIpAction, buildConfirmationChallenge } = require('./ipActionPolicy');
+const { inspectIpActionSecurity } = require('./ipSecurityPolicy');
+const { buildStopSignal, normalizeUndoReceipt } = require('./ipRecoveryContract');
 
 function sendValidationError(res, code, message) {
   return res.status(400).json({
@@ -77,6 +83,45 @@ function createRoxIpRouter({
   recordTurn = recordRoxIpDemoTurn
 } = {}) {
   const router = express.Router();
+
+  router.get('/capabilities', (_req, res) => res.json({ status: 'success', ...publicInventory(), demoOnly: true, deviceActionExecuted: false }));
+
+  router.post('/plans/validate', (req, res) => {
+    try { return res.json({ status: 'success', plan: normalizeIpPlan(req.body), demoOnly: true }); }
+    catch (error) { return sendValidationError(res, error.code || 'invalid_ip_plan', 'Invalid ZUVYR IP plan.'); }
+  });
+
+  router.post('/permissions/validate', (req, res) => {
+    try { return res.json({ status: 'success', grant: normalizePermissionGrant(req.body), executionEnabled: false }); }
+    catch (error) { return sendValidationError(res, error.code || 'invalid_ip_permission_grant', 'Invalid ZUVYR IP permission grant.'); }
+  });
+
+  router.post('/actions/validate', (req, res) => {
+    try {
+      const action = normalizeIpAction(req.body);
+      return res.json({ status: 'success', action, security: inspectIpActionSecurity(action), executionEnabled: false });
+    } catch (error) { return sendValidationError(res, error.code || 'invalid_ip_action', 'Invalid ZUVYR IP action.'); }
+  });
+
+  router.post('/confirmations/challenge', (req, res) => {
+    try { return res.json({ status: 'success', challenge: buildConfirmationChallenge(req.body), executionEnabled: false }); }
+    catch (error) { return sendValidationError(res, error.code || 'invalid_ip_confirmation', 'Confirmation challenge could not be created.'); }
+  });
+
+  router.post('/execute', (_req, res) => {
+    try { assertIpExecutionAvailable(); return res.status(501).json({ status: 'error', code: 'roxip_executor_unavailable' }); }
+    catch (error) { return res.status(503).json({ status: 'error', code: error.code || 'roxip_execution_disabled', message: 'ZUVYR IP computer control is not enabled.', deviceActionExecuted: false }); }
+  });
+
+  router.post('/stop', (req, res) => {
+    try { return res.json({ status: 'success', signal: buildStopSignal(req.body) }); }
+    catch (error) { return sendValidationError(res, error.code || 'invalid_ip_stop_session', 'Invalid STOP request.'); }
+  });
+
+  router.post('/undo/validate', (req, res) => {
+    try { return res.json({ status: 'success', receipt: normalizeUndoReceipt(req.body), executionEnabled: false }); }
+    catch (error) { return sendValidationError(res, error.code || 'invalid_ip_undo_receipt', 'Invalid Undo request.'); }
+  });
 
   router.post('/demo-turn', async (req, res) => {
     const body =

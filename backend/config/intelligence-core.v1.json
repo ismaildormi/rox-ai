@@ -1,0 +1,36 @@
+{
+  "version": "pack-02.intelligence-core.v1",
+  "enforcement": {
+    "enabledByDefault": false,
+    "environmentVariable": "ZUVYR_INTELLIGENCE_CORE_ENFORCEMENT"
+  },
+  "orchestration": {
+    "enabledByDefault": false,
+    "environmentVariable": "ZUVYR_TASK_ORCHESTRATION_ENABLED",
+    "maxSteps": 12,
+    "maxAttemptsPerStep": 3,
+    "maxPlanRuntimeMs": 900000
+  },
+  "providers": [
+    { "id": "groq", "kind": "text", "adapter": "ai.providers", "status": "conditional", "secretEnvironment": "GROQ_API_KEY" },
+    { "id": "openrouter", "kind": "text", "adapter": "ai.providers", "status": "registered_unverified", "secretEnvironment": "OPENROUTER_API_KEY" },
+    { "id": "anthropic", "kind": "text", "adapter": "ai.providers", "status": "registered_unverified", "secretEnvironment": "ANTHROPIC_API_KEY" },
+    { "id": "openai", "kind": "text", "adapter": "ai.providers", "status": "registered_unverified", "secretEnvironment": "OPENAI_API_KEY" },
+    { "id": "google", "kind": "text", "adapter": "ai.providers", "status": "registered_unverified", "secretEnvironment": "GOOGLE_AI_API_KEY" },
+    { "id": "local", "kind": "text", "adapter": "ai.providers", "status": "registered_unverified", "secretEnvironment": null },
+    { "id": "fal", "kind": "image", "adapter": "image.providers", "status": "registered_unverified", "secretEnvironment": "FAL_KEY" },
+    { "id": "replicate", "kind": "image_video", "adapter": "image.providers", "status": "registered_unverified", "secretEnvironment": "REPLICATE_API_TOKEN" }
+  ],
+  "models": [
+    { "id": "groq:gpt-oss-20b", "provider": "groq", "model": "openai/gpt-oss-20b", "capabilities": ["chat", "code"], "inputTypes": ["text"], "status": "conditional", "requiredEnvironment": { "name": "ZUVYR_GROQ_FREE_TIER_CONFIRMED", "value": "true" } },
+    { "id": "groq:gpt-oss-120b", "provider": "groq", "model": "openai/gpt-oss-120b", "capabilities": ["chat", "code"], "inputTypes": ["text"], "status": "conditional", "requiredEnvironment": { "name": "ZUVYR_GROQ_FREE_TIER_CONFIRMED", "value": "true" } },
+    { "id": "openrouter:nemotron-free", "provider": "openrouter", "model": "nvidia/nemotron-3-super-120b-a12b:free", "capabilities": ["chat", "code"], "inputTypes": ["text"], "status": "blocked_unverified_price" },
+    { "id": "openrouter:free", "provider": "openrouter", "model": "openrouter/free", "capabilities": ["chat", "code"], "inputTypes": ["text"], "status": "blocked_unverified_price" },
+    { "id": "openrouter:gemini-multimodal", "provider": "openrouter", "model": "google/gemini-2.5-flash", "capabilities": ["multimodal_chat"], "inputTypes": ["text", "image", "audio", "video", "file"], "status": "blocked_unverified_price" }
+  ],
+  "routes": {
+    "chat": ["groq:gpt-oss-20b", "groq:gpt-oss-120b", "openrouter:nemotron-free", "openrouter:free"],
+    "code": ["groq:gpt-oss-120b", "groq:gpt-oss-20b", "openrouter:nemotron-free", "openrouter:free"],
+    "multimodal_chat": ["openrouter:gemini-multimodal"]
+  }
+}

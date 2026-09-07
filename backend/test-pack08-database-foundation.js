@@ -1,0 +1,10 @@
+'use strict';
+const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const path = require('node:path');
+const sql = fs.readFileSync(path.join(__dirname, '35_zuvyr_ip_safety_foundation.sql'), 'utf8');
+for (const marker of ['public.ip_devices','public.ip_sessions','public.ip_permission_grants','public.ip_plans','public.ip_actions','public.ip_confirmations','public.ip_audit_events','public.ip_stop_signals','public.ip_undo_receipts','execution_enabled = false','device_action_executed = false','explicit_consent = true','enable row level security']) assert(sql.includes(marker), `Missing SQL marker: ${marker}`);
+assert(!/\b(drop table|truncate|delete from)\b/i.test(sql));
+assert(!/grant\s+.*\s+to\s+(anon|authenticated)/i.test(sql));
+assert(!/create\s+policy/i.test(sql));
+console.log('PASS: Pack 08 additive RLS IP permissions, confirmations, audit, STOP and Undo schema');

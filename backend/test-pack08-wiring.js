@@ -1,0 +1,21 @@
+'use strict';
+const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const path = require('node:path');
+const read = relative => fs.readFileSync(path.join(__dirname, '..', relative), 'utf8');
+const routes = read('backend/lib/roxIpRoutes.js');
+const server = read('backend/server.js');
+const frontend = read('frontend/index.html');
+const flags = JSON.parse(read('backend/config/feature-flags.json'));
+const plans = JSON.parse(read('backend/config/plans.json'));
+
+for (const marker of ["router.get('/capabilities'","router.post('/plans/validate'","router.post('/permissions/validate'","router.post('/actions/validate'","router.post('/confirmations/challenge'","router.post('/execute'","router.post('/stop'","router.post('/undo/validate'","router.post('/demo-turn'"]) assert(routes.includes(marker), `Missing route ${marker}`);
+assert(routes.includes('assertIpExecutionAvailable()'));
+assert(routes.includes('deviceActionExecuted: false'));
+assert(server.includes("rateLimit('roxip')"));
+assert(frontend.includes("'/api/roxip/demo-turn'"));
+assert(frontend.includes("data-i18n=\"features.roxip.subtitle\">Demo"));
+for (const key of ['zuvyr_ip_device_connection','zuvyr_ip_computer_control','zuvyr_ip_filesystem','zuvyr_ip_shell']) assert.equal(flags[key].enabled, false);
+assert.equal(plans.featureCosts.ip.credits, 0);
+assert.equal(plans.featureCosts.ip.pricingMode, 'dynamic_required');
+console.log('PASS: Pack 08 safety endpoints preserve the authenticated demo and disabled execution flags');

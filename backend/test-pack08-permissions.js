@@ -1,0 +1,14 @@
+'use strict';
+const assert = require('node:assert/strict');
+const { normalizePermissionGrant, assertScopeGranted } = require('./lib/ipPermissionContract');
+const deviceId = '11111111-1111-4111-8111-111111111111';
+const sessionId = '22222222-2222-4222-8222-222222222222';
+const now = Date.parse('2026-09-07T00:00:00.000Z');
+const grant = normalizePermissionGrant({ deviceId, sessionId, scopes: ['screen.view','pointer.control','screen.view'], explicitConsent: true, expiresAt: '2026-09-07T00:10:00.000Z' }, { now });
+assert.deepEqual(grant.scopes, ['screen.view','pointer.control']);
+assert.equal(assertScopeGranted(grant, 'screen.view', { now }), true);
+assert.throws(() => assertScopeGranted(grant, 'file.write', { now }), { code: 'ip_permission_scope_missing' });
+assert.throws(() => normalizePermissionGrant({ deviceId, sessionId, scopes: ['*'], explicitConsent: true, expiresAt: '2026-09-07T00:01:00.000Z' }, { now }), { code: 'unknown_ip_permission_scope' });
+assert.throws(() => normalizePermissionGrant({ deviceId, sessionId, scopes: ['screen.view'], explicitConsent: false, expiresAt: '2026-09-07T00:01:00.000Z' }, { now }), { code: 'ip_permission_consent_required' });
+assert.throws(() => normalizePermissionGrant({ deviceId, sessionId, scopes: ['shell.execute'], explicitConsent: true, expiresAt: '2026-09-07T00:03:00.000Z' }, { now }), { code: 'ip_permission_expiry_too_long' });
+console.log('PASS: Pack 08 exact, consented, expiring permission scopes with no wildcard');

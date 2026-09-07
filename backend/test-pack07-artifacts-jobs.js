@@ -1,0 +1,20 @@
+'use strict';
+const assert = require('node:assert/strict');
+const { normalizeAudioArtifact } = require('./lib/audioArtifactContract');
+const { buildAudioJobSnapshot, assertAudioJobTransition, publicAudioJob } = require('./lib/audioJobContract');
+const id = '11111111-1111-4111-8111-111111111111';
+
+const audio = normalizeAudioArtifact({ operation: 'text_to_speech', url: 'https://cdn.example/voice.mp3', mimeType: 'audio/mpeg', durationSeconds: 12 });
+assert.equal(audio.url, 'https://cdn.example/voice.mp3');
+const video = normalizeAudioArtifact({ operation: 'audio_to_video', url: 'https://cdn.example/video.mp4', mimeType: 'video/mp4', durationSeconds: 60 });
+assert.equal(video.mimeType, 'video/mp4');
+assert.throws(() => normalizeAudioArtifact({ operation: 'text_to_speech', url: 'http://bad.test/a.mp3', mimeType: 'audio/mpeg', durationSeconds: 1 }), { code: 'invalid_audio_artifact_url' });
+assert.throws(() => normalizeAudioArtifact({ operation: 'audio_to_video', url: 'https://cdn.example/a.mp3', mimeType: 'audio/mpeg', durationSeconds: 1 }), { code: 'invalid_audio_artifact_mime' });
+const job = buildAudioJobSnapshot({ userId: id, requestId: 'req-1', request: { operation: 'music_generation', prompt: 'calm', durationSeconds: 10 } });
+assert.equal(job.status, 'blocked');
+assert.equal(job.pricingStatus, 'unpriced');
+assert.equal(job.reservationId, null);
+assert.throws(() => assertAudioJobTransition('blocked', 'queued'), { code: 'invalid_audio_job_transition' });
+assert.equal(assertAudioJobTransition('queued', 'processing'), true);
+assert.equal(publicAudioJob({ id: job.id, operation: job.operation, status: 'blocked', stage: 'blocked', progressPercent: 0 }).status, 'blocked');
+console.log('PASS: Pack 07 HTTPS artifacts and blocked-before-reservation audio jobs');

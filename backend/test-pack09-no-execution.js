@@ -1,0 +1,13 @@
+'use strict';
+const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const path = require('node:path');
+const files = ['workspaceCapabilityRegistry.js','workspaceValidation.js','workspaceItemContract.js','workspaceProjectContract.js','workspaceCreationContract.js','workspaceTemplateContract.js','workspaceScheduleContract.js','workspaceIntegrationContract.js','workspaceWorkflowContract.js','workspaceRoutes.js'];
+const source = files.map(file => fs.readFileSync(path.join(__dirname, 'lib', file), 'utf8')).join('\n');
+for (const marker of ['fetch(','axios','child_process','spawn(','exec(','supabase','stripe','googleapis','writeFile','unlink','rmSync']) assert(!source.includes(marker), `Execution marker present: ${marker}`);
+const config = require('./config/workspace-system.v1.json');
+assert(Object.values(config.execution).every(value => value === false));
+assert.equal(config.security.oauthTokensStoredInWorkspaceRows, false);
+assert.equal(config.security.templateScriptsAllowed, false);
+assert.equal(config.security.spreadsheetFormulaExecutionAllowed, false);
+console.log('PASS: Pack 09 performs no storage, schedule, workflow, plugin, Drive, export, provider, database or subprocess execution');

@@ -17,6 +17,7 @@ const MAX_TOTAL_CHARS = Number(process.env.MAX_TOTAL_CHARS_PER_CHAT || 24000);
 const MAX_PROMPT_CHARS = Number(process.env.MAX_PROMPT_CHARS || 2000);
 
 const ALLOWED_FEATURES = new Set(['chat', 'code']);
+const ALLOWED_CHAT_MODES = new Set(['standard', 'web_search', 'deep_research', 'shopping']);
 const ALLOWED_ROLES = new Set(['user', 'assistant', 'system']);
 const UUID_PATTERN =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
@@ -174,7 +175,7 @@ function validateAttachmentIds(body, feature, res) {
 /** Mount before gatekeeperMiddleware on POST /api/chat. */
 function validateChatBody(req, res, next) {
   const body = req.body || {};
-  const { messages, feature, aiPreferences } = body;
+  const { messages, feature, aiPreferences, chatMode = 'standard' } = body;
 
   if (!validateConversationReferences(body, res)) {
     return;
@@ -182,6 +183,14 @@ function validateChatBody(req, res, next) {
 
   if (feature !== undefined && !ALLOWED_FEATURES.has(feature)) {
     return badRequest(res, `feature must be one of: ${[...ALLOWED_FEATURES].join(', ')}`);
+  }
+
+  if (!ALLOWED_CHAT_MODES.has(chatMode)) {
+    return badRequest(res, `chatMode must be one of: ${[...ALLOWED_CHAT_MODES].join(', ')}`);
+  }
+
+  if ((feature || 'chat') !== 'chat' && chatMode !== 'standard') {
+    return badRequest(res, 'non-standard chatMode is supported in chat only.');
   }
 
   if (!validateImageAttachment(body.attachment, feature, res)) {
@@ -282,9 +291,32 @@ function validatePromptBody(req, res, next) {
   next();
 }
 
+function validateImageBody(req, res, next) {
+  try {
+    require('./imageRequestContract').normalizeImageRequest(req.body || {});
+  } catch (error) {
+    return badRequest(res, error.code || 'invalid_image_request');
+  }
+  return validatePromptBody(req, res, next);
+}
+
+function validateVideoBody(req, res, next) {
+  const body = req.body || {};
+  if (!validateConversationReferences(body, res)) return;
+  try {
+    require('./videoRequestContract').normalizeVideoRequest(body);
+  } catch (error) {
+    return badRequest(res, error.code || 'invalid_video_request');
+  }
+  next();
+}
+
 module.exports = {
   validateChatBody,
   validatePromptBody,
+  validateImageBody,
+  validateVideoBody,
   validateConversationReferences,
-  validateAttachmentIds
+  validateAttachmentIds,
+  ALLOWED_CHAT_MODES
 };

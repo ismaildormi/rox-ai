@@ -1,0 +1,27 @@
+'use strict';
+const assert = require('node:assert/strict');
+const { normalizeWorkspaceItem } = require('./lib/workspaceItemContract');
+const { normalizeWorkspaceProject } = require('./lib/workspaceProjectContract');
+const { normalizeCreation } = require('./lib/workspaceCreationContract');
+const { normalizeTemplate } = require('./lib/workspaceTemplateContract');
+const id1 = '11111111-1111-4111-8111-111111111111';
+const id2 = '22222222-2222-4222-8222-222222222222';
+
+const item = normalizeWorkspaceItem({ id: id1, kind: 'document', name: ' Brief ', metadata: { language: 'en' } });
+assert.equal(item.name, 'Brief');
+assert.equal(item.archived, false);
+assert.throws(() => normalizeWorkspaceItem({ id: id1, kind: 'file', name: 'x', metadata: { accessToken: 'hidden' } }), /workspace_item_sensitive_metadata/);
+const project = normalizeWorkspaceProject({ name: 'Campaign', items: [item, { id: id2, kind: 'image', name: 'Cover' }], sharedContextEnabled: true });
+assert.equal(project.items.length, 2);
+assert.equal(project.externalSharingEnabled, false);
+assert.throws(() => normalizeWorkspaceProject({ name: 'x', items: [item, item] }), /duplicate_workspace_project_item/);
+const doc = normalizeCreation({ kind: 'document', title: 'Plan', content: 'Safe content' });
+assert.equal(doc.externalExportRequested, false);
+const sheet = normalizeCreation({ kind: 'spreadsheet', title: 'Budget', cells: [{ address: 'a1', value: 42 }, { address: 'B2', value: 'safe' }] });
+assert.deepEqual(sheet.cells.map(cell => cell.address), ['A1','B2']);
+assert.throws(() => normalizeCreation({ kind: 'spreadsheet', title: 'x', cells: [{ address: 'A1', value: '=IMPORTXML("https://example.test")' }] }), /spreadsheet_formula_execution_disabled/);
+const template = normalizeTemplate({ name: 'Launch', category: 'business', body: 'Hello {{name}}', variables: ['name'] });
+assert.equal(template.scriptsAllowed, false);
+assert.equal(template.communityPublished, false);
+assert.throws(() => normalizeTemplate({ name: 'x', category: 'x', body: '<script>alert(1)</script>' }), /workspace_template_script_blocked/);
+console.log('PASS: Pack 09 bounded Library, Project, Document, Sheet, Presentation and Template contracts');

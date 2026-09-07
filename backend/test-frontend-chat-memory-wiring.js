@@ -11,7 +11,7 @@ const frontend = fs.readFileSync(
 
 const senders = [
   ...frontend.matchAll(
-    /async function sendChat\(feature, text, msgBox\) \{([\s\S]*?)\r?\nasync function sendGeneration\(feature, text, msgBox\) \{/g
+    /async function sendChat\(feature, text, msgBox(?:, userMessage)?\) \{([\s\S]*?)\r?\nasync function sendGeneration\(feature, text, msgBox\) \{/g
   )
 ].map(match => match[1]);
 
