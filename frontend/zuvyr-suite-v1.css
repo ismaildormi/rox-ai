@@ -139,3 +139,82 @@
 }
 @media (max-width:480px) { .zs-checks,.zs-tool-grid{grid-template-columns:1fr}.zs-heading h1{font-size:28px}.zs-search{padding:0 10px}.zs-brand{padding-bottom:14px} }
 @media (prefers-reduced-motion:reduce) { .zuvyr-suite *, .zuvyr-suite-launcher{animation:none!important;transition:none!important;scroll-behavior:auto!important} }
+
+/* Native navigation 01: use the existing production shell and Ember palette.
+   No second sidebar, fixed workspace, alternate logo or floating launcher. */
+.zuvyr-suite.zuvyr-suite-native {
+  --zs-bg:#10100f;
+  --zs-panel:#151513;
+  --zs-panel-2:#1b1b18;
+  --zs-line:rgba(226,220,207,.19);
+  --zs-text:#f7f5ed;
+  --zs-muted:#b4b1a7;
+  --zs-blue:#ff6b16;
+  --zs-violet:#d64c0a;
+  --zs-cyan:#ffae72;
+  position:static;
+  inset:auto;
+  z-index:auto;
+  width:100%;
+  min-width:0;
+  min-height:0;
+  background:transparent;
+  color:var(--zs-text);
+  font-family:inherit;
+}
+.zuvyr-suite.zuvyr-suite-native[hidden] { display:none!important; }
+.zuvyr-suite.zuvyr-suite-native[data-open="true"] { display:block; }
+.zuvyr-suite-native .zs-main { overflow:visible; background:transparent; }
+.zuvyr-suite-native .zs-content { padding:12px 0 28px; }
+.zuvyr-suite-native .zs-heading { margin-top:22px; }
+.zuvyr-suite-native .zs-eyebrow { color:#ffa265; }
+.zuvyr-suite-native .zs-card,
+.zuvyr-suite-native .zs-tool { background:linear-gradient(145deg,#191815,#11110f); }
+.zuvyr-suite-native .zs-tool-icon { color:#ffae72; background:rgba(255,107,22,.1); }
+.zuvyr-suite-native .zs-banner { color:#ddd7c9; border-color:rgba(255,132,56,.25); background:rgba(255,107,22,.055); }
+.zuvyr-suite-native .zs-secondary { color:#f7f5ed; background:#191916; }
+.zuvyr-suite-native .zs-chip { color:#c9c5b9; }
+.zuvyr-suite-native .zs-progress { background:#302b23; }
+.zuvyr-suite-native .zs-kpi span,
+.zuvyr-suite-native .zs-note { color:#b4b1a7; }
+.zuvyr-suite-native .zs-status,
+.zuvyr-suite-native .zs-tool-state { color:#ffb97d; }
+.zuvyr-suite-native .zs-tool-state { text-transform:none; }
+.zuvyr-suite-native .zs-status::before { box-shadow:none; }
+.zuvyr-suite-native h1:focus { outline:none; }
+.zuvyr-suite-native button:focus-visible,
+.zuvyr-native-tools button:focus-visible,
+button.zuvyr-native-link:focus-visible { outline:2px solid #ff9a55!important; outline-offset:3px; }
+.zuvyr-native-tools { margin:24px 0; color:inherit; font-family:inherit; }
+.zuvyr-native-tools h2 { margin:0 0 14px; font-size:18px; }
+.zuvyr-native-tool-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; }
+.zuvyr-native-tool {
+  display:flex; align-items:center; gap:12px; min-height:64px;
+  padding:14px; border:1px solid rgba(226,220,207,.19); border-radius:12px;
+  background:linear-gradient(145deg,#191815,#11110f); color:#f7f5ed;
+  font-weight:600; font-size:13px; line-height:1.4; font-family:inherit; text-align:start; cursor:pointer;
+}
+.zuvyr-native-tool .ic { width:24px; height:24px; flex-shrink:0; color:#ffa265; }
+.zuvyr-native-tool .ic svg,
+button.zuvyr-native-link .ic svg { width:20px; height:20px; fill:none!important; stroke:currentColor!important; }
+.zuvyr-native-tool:hover,
+.zuvyr-native-tool.active { border-color:#d66a2b; background:#211a14; }
+button.zuvyr-native-link { font-family:inherit; font-size:inherit; text-align:start; cursor:pointer; color:inherit; }
+button.zuvyr-native-link.prow { width:100%; border:1px solid rgba(226,220,207,.19); background:#161612; margin:8px 0; padding:12px; }
+button.zuvyr-native-link.prow .ic { display:flex; margin-inline-end:12px; }
+body[data-zuvyr-native-navigation="true"] .sidebar .nav-list {
+  max-height:calc(100vh - 310px);
+  max-height:calc(100dvh - 310px);
+  min-height:160px;
+  overflow-y:auto;
+  scrollbar-width:thin;
+  scrollbar-color:#575047 transparent;
+}
+@media(max-width:768px){
+  .zuvyr-suite.zuvyr-suite-native { padding:0 14px 76px; }
+  .zuvyr-native-tool-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .zuvyr-native-tools { margin:22px 14px; }
+}
+@media(max-width:400px){
+  .zuvyr-native-tool-grid { grid-template-columns:1fr; }
+}
