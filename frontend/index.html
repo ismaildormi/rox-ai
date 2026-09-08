@@ -10066,6 +10066,9 @@ async function authFetch(path, options = {}) {
     showLogin();
     throw new Error('session_expired');
   }
+  if (res.status === 428 && path === '/api/chat' && typeof window.zuvyrChatConsent === 'function') {
+    return window.zuvyrChatConsent(res, path, options, authFetch);
+  }
   return res;
 }
 
@@ -12152,7 +12155,7 @@ async function sendChat(feature, text, msgBox, userMessage) {
   if (feature === 'chat') {
     maybeAutoReadRoxMessage(data.text);
   }
-  if (feature === 'code' && typeof data.creditsCharged === 'number') {
+  if ((feature === 'code' || data.meteredChat === true) && typeof data.creditsCharged === 'number') {
     appendMsg(msgBox, 'status', roxT('usage.finalCost', { credits: data.creditsCharged }));
   }
     pushHistory(feature, 'user', text);
@@ -29822,6 +29825,9 @@ async function authFetch(path, options = {}) {
     showLogin();
     throw new Error('session_expired');
   }
+  if (res.status === 428 && path === '/api/chat' && typeof window.zuvyrChatConsent === 'function') {
+    return window.zuvyrChatConsent(res, path, options, authFetch);
+  }
   return res;
 }
 
@@ -31921,7 +31927,7 @@ async function sendChat(feature, text, msgBox, userMessage) {
   if (feature === 'chat') {
     maybeAutoReadRoxMessage(data.text);
   }
-  if (feature === 'code' && typeof data.creditsCharged === 'number') {
+  if ((feature === 'code' || data.meteredChat === true) && typeof data.creditsCharged === 'number') {
     appendMsg(msgBox, 'status', roxT('usage.finalCost', { credits: data.creditsCharged }));
   }
     pushHistory(feature, 'user', text);
@@ -35776,7 +35782,7 @@ document.addEventListener("DOMContentLoaded",function(){
   // Pack 11: load the additive ZUVYR Suite inside the selected mobile or
   // desktop document. The existing AI Chat and device router stay intact.
   var suiteHead = '<link rel="stylesheet" href="/zuvyr-suite-v1.css" data-zuvyr-suite="v1">';
-  var suiteBody = '<script src="/zuvyr-suite-v1.js" defer data-zuvyr-suite="v1"><' + '/script>';
+  var suiteBody = '<script src="/zuvyr-chat-consent.js" defer><' + '/script>' + '<script src="/zuvyr-suite-v1.js" defer data-zuvyr-suite="v1"><' + '/script>';
   if (/<\/head>/i.test(fullHtml)) {
     fullHtml = fullHtml.replace(/<\/head>/i, suiteHead + '<' + '/head>');
   } else {

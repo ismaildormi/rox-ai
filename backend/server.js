@@ -483,6 +483,13 @@ app.get('/api/history', requireAuth, async (req, res) => {
   }
 });
 // --- Chat / Code: synchronous, routed through aiRouter's fallback chain ---
+// Chat Flow 07: a pilot uses the durable consent path before legacy billing.
+require('./lib/zuvyrChatFlowRoutes').mountZuvyrChatFlow(app, {
+  requireAuth, rateLimit, db: supabaseAdmin,
+  memory: require('./lib/conversationMemory'),
+  preferences: require('./lib/aiPreferences')
+});
+
 app.post('/api/chat', requireAuth, rateLimit('chat'), validateChatBody, loadRoxUserMiddleware, async (req, res) => {
   const {
     messages,
