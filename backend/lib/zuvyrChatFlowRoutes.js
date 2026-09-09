@@ -1,6 +1,7 @@
 'use strict';
 const { enabledFor, createService } = require('./zuvyrChatFlow');
 function mountZuvyrChatFlow(app, {requireAuth, rateLimit, db, memory, preferences, env = process.env}) {
+  require('./zuvyrUsageSummary').mountZuvyrUsageSummary(app,{requireAuth,db});
   const service = createService({db,memory,preferences,env});
   const limit = rateLimit('chat');
   if(env.ZUVYR_CHAT_FLOW_RECOVERY_ENABLED === 'true') {
