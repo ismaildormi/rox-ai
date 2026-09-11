@@ -13,7 +13,9 @@
     "test:hardening": "node test-hardening.js",
     "test:gatekeeper": "node test-gatekeeper-unit.js",
     "test:unit": "node test-gatekeeper-unit.js && node test-launch-blockers.js && node test-runtime-safety.js",
-    "test:launch": "node test-launch-blockers.js && node test-runtime-safety.js"
+    "test:launch": "node test-launch-blockers.js && node test-runtime-safety.js",
+    "maintenance:run": "node maintenanceRunner.js",
+    "test:maintenance": "node test-maintenance-strategy.js"
   },
   "dependencies": {
     "@fal-ai/client": "^1.10.1",

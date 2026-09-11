@@ -101,9 +101,48 @@ function runCors(req) {
     ALLOWED_ORIGINS: 'https://app.rox.ai',
     METRICS_TOKEN: 'metrics-token',
     CRON_SECRET: 'cron-secret',
+    MAINTENANCE_STRATEGY: 'railway_internal_route',
   });
 
   assert.deepStrictEqual(result.errors, []);
+}
+
+{
+  const result = validateServerEnvironment({
+    NODE_ENV: 'production',
+    SUPABASE_URL: 'https://example.supabase.co',
+    SUPABASE_SERVICE_ROLE_KEY: 'service-role',
+    REDIS_URL: 'redis://redis:6379',
+    OPENROUTER_API_KEY: 'openrouter-key',
+    ALLOWED_ORIGINS: 'https://app.rox.ai',
+    METRICS_TOKEN: 'metrics-token',
+    CRON_SECRET: 'cron-secret',
+  });
+
+  assert(
+    result.errors.includes(
+      'CRON_SECRET may only be enabled with MAINTENANCE_STRATEGY=railway_internal_route.'
+    )
+  );
+}
+
+{
+  const result = validateServerEnvironment({
+    NODE_ENV: 'production',
+    SUPABASE_URL: 'https://example.supabase.co',
+    SUPABASE_SERVICE_ROLE_KEY: 'service-role',
+    REDIS_URL: 'redis://redis:6379',
+    OPENROUTER_API_KEY: 'openrouter-key',
+    ALLOWED_ORIGINS: 'https://app.rox.ai',
+    METRICS_TOKEN: 'metrics-token',
+    MAINTENANCE_STRATEGY: 'railway_internal_route',
+  });
+
+  assert(
+    result.errors.includes(
+      'MAINTENANCE_STRATEGY is enabled but CRON_SECRET is missing.'
+    )
+  );
 }
 
 {
@@ -233,8 +272,11 @@ assert(
   !server.includes('req.query.token'),
   '/metrics must not accept secrets through the query string.'
 );
+const maintenanceOperatorRouteGuardOrder =
+  /app\.post\(\s*['"]\/internal\/maintenance\/run['"]\s*,\s*requireMaintenanceStrategy\s*,\s*requireCronAccess\s*,/m;
+
 assert(
-  server.includes("app.post('/internal/maintenance/run', requireCronAccess") &&
+  maintenanceOperatorRouteGuardOrder.test(server) &&
     server.includes("app.get('/internal/margin-summary', requireCronAccess") &&
     server.includes("app.post('/internal/advisor/run-daily', requireCronAccess") &&
     server.includes("app.post('/internal/disk/run-scan', requireCronAccess"),

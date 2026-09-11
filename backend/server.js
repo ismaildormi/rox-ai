@@ -42,6 +42,7 @@ const {
 const { supabaseAdmin } = require('./lib/supabaseAdmin');
 const { register, setQueueDepth, recordCost, recordMargin, recordLoadLevel } = require('./lib/metrics');
 const { createHeaderSecretGuard } = require('./lib/operatorAuth');
+const { runMaintenanceOnce, requireMaintenanceStrategy } = require('./lib/maintenanceCoordinator');
 const loadGuard = require('./lib/loadGuard');
 const { CREDIT_PRICE_USD, marginUsd } = require('./lib/creditEconomics');
 const { quoteGeneration } = require('./lib/dynamicPricing');
@@ -290,22 +291,32 @@ app.get('/metrics', requireMetricsAccess, async (req, res) => {
 // shouldn't reach this) ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â instead gated by a shared secret only your
 // scheduler knows. If CRON_SECRET isn't set, the route refuses to run
 // rather than being callable by anyone who finds the URL.
-app.post('/internal/maintenance/run', requireCronAccess, async (req, res) => {
+app.post(
+  '/internal/maintenance/run',
+  requireMaintenanceStrategy,
+  requireCronAccess,
+  async (req, res) => {
+    try {
+      const result = await runMaintenanceOnce({
+        redis: queueConnection,
+        supabaseAdmin,
+      });
 
-  const [mismatches, resets] = await Promise.all([
-    supabaseAdmin.rpc('check_credit_audit_mismatches'),
-    supabaseAdmin.rpc('reset_monthly_credits'),
-  ]);
+      if (result.status === 'success' || result.duplicate) {
+        return res.status(200).json(result);
+      }
 
-  if (mismatches.error) console.error('[maintenance] check_credit_audit_mismatches failed:', mismatches.error.message);
-  if (resets.error) console.error('[maintenance] reset_monthly_credits failed:', resets.error.message);
-
-  res.json({
-    status: 'success',
-    newAlertsRaised: mismatches.data ?? null,
-    accountsReset: resets.data ?? null,
-  });
-});
+      return res.status(500).json(result);
+    } catch (error) {
+      console.error('[maintenance] coordinator failed:', error.message);
+      return res.status(503).json({
+        status: 'error',
+        code: error.code || 'maintenance_unavailable',
+        message: 'Maintenance run could not be completed.',
+      });
+    }
+  }
+);
 
 // --- Margin summary: is traffic currently paying for itself? ---
 // Same auth posture as /internal/maintenance/run (shared secret, not a

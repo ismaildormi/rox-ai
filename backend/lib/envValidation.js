@@ -88,6 +88,31 @@ function validateServerEnvironment(env = process.env) {
     warnings.push('METRICS_TOKEN is not set. /metrics is fail-closed until M02 configures the operator token.');
   }
 
+  const maintenanceStrategy = String(env.MAINTENANCE_STRATEGY || '').trim();
+
+  if (
+    maintenanceStrategy &&
+    maintenanceStrategy !== 'railway_internal_route'
+  ) {
+    errors.push('MAINTENANCE_STRATEGY must be railway_internal_route when configured.');
+  }
+
+  if (
+    production &&
+    isNonEmpty(env.CRON_SECRET) &&
+    maintenanceStrategy !== 'railway_internal_route'
+  ) {
+    errors.push('CRON_SECRET may only be enabled with MAINTENANCE_STRATEGY=railway_internal_route.');
+  }
+
+  if (
+    production &&
+    maintenanceStrategy === 'railway_internal_route' &&
+    !isNonEmpty(env.CRON_SECRET)
+  ) {
+    errors.push('MAINTENANCE_STRATEGY is enabled but CRON_SECRET is missing.');
+  }
+
   if (production && !isNonEmpty(env.CRON_SECRET)) {
     warnings.push('CRON_SECRET is not set. Internal scheduled routes remain disabled.');
   }
