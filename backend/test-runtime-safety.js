@@ -11,6 +11,7 @@ const {
   validateServerEnvironment,
   validateWorkerEnvironment,
 } = require('./lib/envValidation');
+const { createHeaderSecretGuard } = require('./lib/operatorAuth');
 
 function mockResponse() {
   const headers = new Map();
@@ -123,6 +124,89 @@ function runCors(req) {
   assert(result.warnings.some(message => message.includes('Video jobs')));
 }
 
+
+function runHeaderGuard({ envName, headerName, expected, provided }) {
+  const previous = process.env[envName];
+  if (expected === undefined) delete process.env[envName];
+  else process.env[envName] = expected;
+
+  const headers = new Map();
+  const res = {
+    statusCode: null,
+    body: null,
+    setHeader(name, value) {
+      headers.set(name.toLowerCase(), String(value));
+    },
+    status(code) {
+      this.statusCode = code;
+      return this;
+    },
+    json(body) {
+      this.body = body;
+      return this;
+    },
+  };
+
+  let nextCalled = false;
+  const guard = createHeaderSecretGuard({
+    envName,
+    headerName,
+    disabledCode: 'test_not_configured',
+  });
+  guard(
+    { headers: provided === undefined ? {} : { [headerName.toLowerCase()]: provided } },
+    res,
+    () => { nextCalled = true; }
+  );
+
+  if (previous === undefined) delete process.env[envName];
+  else process.env[envName] = previous;
+
+  return { res, headers, nextCalled };
+}
+
+{
+  const result = runHeaderGuard({
+    envName: 'PACK004_TEST_SECRET',
+    headerName: 'x-test-secret',
+    expected: undefined,
+  });
+  assert.strictEqual(result.res.statusCode, 503);
+  assert.strictEqual(result.res.body.code, 'test_not_configured');
+  assert.strictEqual(result.nextCalled, false);
+  assert.strictEqual(result.headers.get('cache-control'), 'no-store');
+}
+
+{
+  const expected = 'pack-004-test-secret-0123456789abcdef';
+  const missing = runHeaderGuard({
+    envName: 'PACK004_TEST_SECRET',
+    headerName: 'x-test-secret',
+    expected,
+  });
+  assert.strictEqual(missing.res.statusCode, 401);
+  assert.strictEqual(missing.nextCalled, false);
+
+  const wrong = runHeaderGuard({
+    envName: 'PACK004_TEST_SECRET',
+    headerName: 'x-test-secret',
+    expected,
+    provided: expected + '-wrong',
+  });
+  assert.strictEqual(wrong.res.statusCode, 401);
+  assert.strictEqual(wrong.nextCalled, false);
+
+  const correct = runHeaderGuard({
+    envName: 'PACK004_TEST_SECRET',
+    headerName: 'x-test-secret',
+    expected,
+    provided: expected,
+  });
+  assert.strictEqual(correct.res.statusCode, null);
+  assert.strictEqual(correct.nextCalled, true);
+  assert.strictEqual(correct.headers.get('cache-control'), 'no-store');
+}
+
 const backendDir = __dirname;
 const read = name => fs.readFileSync(path.join(backendDir, name), 'utf8');
 const server = read('server.js');
@@ -137,8 +221,24 @@ assert.strictEqual(
 );
 assert.strictEqual(
   (server.match(/Access-Control-Allow-Origin/g) || []).length,
-  1,
-  'Only /metrics may set Access-Control-Allow-Origin directly.'
+  0,
+  'No backend route may bypass the single CORS policy with a direct Access-Control-Allow-Origin header.'
+);
+
+assert(
+  server.includes("app.get('/metrics', requireMetricsAccess"),
+  '/metrics must use the fail-closed metrics guard.'
+);
+assert(
+  !server.includes('req.query.token'),
+  '/metrics must not accept secrets through the query string.'
+);
+assert(
+  server.includes("app.post('/internal/maintenance/run', requireCronAccess") &&
+    server.includes("app.get('/internal/margin-summary', requireCronAccess") &&
+    server.includes("app.post('/internal/advisor/run-daily', requireCronAccess") &&
+    server.includes("app.post('/internal/disk/run-scan', requireCronAccess"),
+  'All operator routes must use the shared fail-closed cron guard.'
 );
 
 for (const [name, source] of [

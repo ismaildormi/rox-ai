@@ -41,6 +41,7 @@ const {
 } = require('./lib/aiPreferences');
 const { supabaseAdmin } = require('./lib/supabaseAdmin');
 const { register, setQueueDepth, recordCost, recordMargin, recordLoadLevel } = require('./lib/metrics');
+const { createHeaderSecretGuard } = require('./lib/operatorAuth');
 const loadGuard = require('./lib/loadGuard');
 const { CREDIT_PRICE_USD, marginUsd } = require('./lib/creditEconomics');
 const { quoteGeneration } = require('./lib/dynamicPricing');
@@ -114,6 +115,18 @@ const diskMonitorModule = require('./src/modules/diskMonitor');
 const diskMaintenanceModule = require('./src/modules/diskMonitor/maintenance');
 
 const app = express();
+
+const requireMetricsAccess = createHeaderSecretGuard({
+  envName: 'METRICS_TOKEN',
+  headerName: 'x-metrics-token',
+  disabledCode: 'metrics_not_configured',
+});
+
+const requireCronAccess = createHeaderSecretGuard({
+  envName: 'CRON_SECRET',
+  headerName: 'x-cron-secret',
+  disabledCode: 'operator_routes_disabled',
+});
 
 // Single CORS policy for browser clients.
 app.use(createCorsMiddleware());
@@ -267,26 +280,7 @@ app.use(
   createUnifiedProductRouter()
 );
 
-app.get('/metrics', async (req, res) => {
-  // Deliberately not gated by ALLOWED_ORIGINS above: this endpoint is
-  // read-only aggregate telemetry meant for a dashboard on another
-  // origin (including a browser-based one), so CORS is opened wide here
-  // on purpose ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â that part is fine.
-  //
-  // BUT: this payload includes real business numbers (rox_model_cost_usd_total,
-  // rox_margin_usd_last_request) ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â not just uptime/latency ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â so leaving
-  // it fully public would let anyone with the URL see your margins. If
-  // METRICS_TOKEN is set, require it (via `x-metrics-token` header or
-  // `?token=`, so a Prometheus scrape config or a browser dashboard can
-  // both supply it). Left unset, it stays open ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â same as before ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â so
-  // this doesn't silently break an existing scrape until you opt in.
-  if (process.env.METRICS_TOKEN) {
-    const provided = req.headers['x-metrics-token'] || req.query.token;
-    if (provided !== process.env.METRICS_TOKEN) {
-      return res.status(401).json({ status: 'error', message: 'Unauthorized.' });
-    }
-  }
-  res.setHeader('Access-Control-Allow-Origin', '*');
+app.get('/metrics', requireMetricsAccess, async (req, res) => {
   res.setHeader('Content-Type', register.contentType);
   res.end(await register.metrics());
 });
@@ -296,11 +290,7 @@ app.get('/metrics', async (req, res) => {
 // shouldn't reach this) ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â instead gated by a shared secret only your
 // scheduler knows. If CRON_SECRET isn't set, the route refuses to run
 // rather than being callable by anyone who finds the URL.
-app.post('/internal/maintenance/run', async (req, res) => {
-  const provided = req.headers['x-cron-secret'];
-  if (!process.env.CRON_SECRET || provided !== process.env.CRON_SECRET) {
-    return res.status(401).json({ status: 'error', message: 'Unauthorized.' });
-  }
+app.post('/internal/maintenance/run', requireCronAccess, async (req, res) => {
 
   const [mismatches, resets] = await Promise.all([
     supabaseAdmin.rpc('check_credit_audit_mismatches'),
@@ -324,11 +314,7 @@ app.post('/internal/maintenance/run', async (req, res) => {
 // the cost_usd/margin_usd fields logged into credit_audit_log.metadata
 // above. Point a scheduled Slack/email digest at this if you want a
 // daily "are we still profitable" ping instead of pulling it by hand.
-app.get('/internal/margin-summary', async (req, res) => {
-  const provided = req.headers['x-cron-secret'];
-  if (!process.env.CRON_SECRET || provided !== process.env.CRON_SECRET) {
-    return res.status(401).json({ status: 'error', message: 'Unauthorized.' });
-  }
+app.get('/internal/margin-summary', requireCronAccess, async (req, res) => {
 
   const { data, error } = await supabaseAdmin.from('rox_margin_last_24h').select('*');
   if (error) {
@@ -352,11 +338,7 @@ app.get('/internal/margin-summary', async (req, res) => {
 // optimizer's sweep over the recommendations this same run produced.
 // Manual mode: report is generated and recommendations sit there for an
 // admin to review; nothing is auto-applied.
-app.post('/internal/advisor/run-daily', async (req, res) => {
-  const provided = req.headers['x-cron-secret'];
-  if (!process.env.CRON_SECRET || provided !== process.env.CRON_SECRET) {
-    return res.status(401).json({ status: 'error', message: 'Unauthorized.' });
-  }
+app.post('/internal/advisor/run-daily', requireCronAccess, async (req, res) => {
 
   try {
     const report = await advisorModule.runDailyAnalysis();
@@ -387,11 +369,7 @@ app.post('/internal/advisor/run-daily', async (req, res) => {
 // Nothing touching an Ollama model, user uploads, or generated content
 // EVER runs from here, auto-fix or not ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â see maintenance.js's
 // NEVER_AUTO set and ARCHITECTURE.md ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â§14.
-app.post('/internal/disk/run-scan', async (req, res) => {
-  const provided = req.headers['x-cron-secret'];
-  if (!process.env.CRON_SECRET || provided !== process.env.CRON_SECRET) {
-    return res.status(401).json({ status: 'error', message: 'Unauthorized.' });
-  }
+app.post('/internal/disk/run-scan', requireCronAccess, async (req, res) => {
 
   try {
     const report = await diskMonitorModule.getFullReport();

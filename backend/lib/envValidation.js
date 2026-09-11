@@ -85,7 +85,7 @@ function validateServerEnvironment(env = process.env) {
   }
 
   if (production && !isNonEmpty(env.METRICS_TOKEN)) {
-    warnings.push('METRICS_TOKEN is not set. /metrics remains publicly readable.');
+    warnings.push('METRICS_TOKEN is not set. /metrics is fail-closed until M02 configures the operator token.');
   }
 
   if (production && !isNonEmpty(env.CRON_SECRET)) {
