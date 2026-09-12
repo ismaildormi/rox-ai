@@ -2,6 +2,7 @@
   "_comment": "ZUVYR V1 monthly plans and feature entitlements. Paid plans use a shared five-hour usage window; exact usage-unit allowances remain intentionally unset until real provider cost measurements are complete.",
   "planOrder": [
     "free",
+    "starter",
     "plus",
     "pro",
     "legend",
@@ -31,6 +32,26 @@
         "subscriptionEligible": false,
         "stripePriceEnvKey": null
       }
+    },
+    "starter": {
+      "displayName": "STARTER",
+      "monthlyPriceUsd": null,
+      "usageUnitsPerWindow": null,
+      "priority": "standard",
+      "entitlementStatus": "pending_economics",
+      "features": {
+        "chat": false,
+        "image": false,
+        "video": false,
+        "audio": false,
+        "code": false,
+        "ip": false
+      },
+      "billing": {
+        "subscriptionEligible": false,
+        "stripePriceEnvKey": null
+      },
+      "note": "Canonical V1 tier reserved fail-closed until price, capacity and feature economics are explicitly verified."
     },
     "plus": {
       "monthlyPriceUsd": 10,
@@ -160,7 +181,7 @@
     "video": 4,
     "workspace": 20
   },
-  "version": "pack-016.canonical-plans-entitlements.v1",
+  "version": "pack-016.canonical-plans-entitlements.v2",
   "defaultPlan": "free",
   "paidPlanOrder": [
     "plus",
@@ -175,6 +196,10 @@
       "subscriptionStatus",
       "plan"
     ],
-    "topupCreditsUnlockPlanFeatures": false
+    "topupCreditsUnlockPlanFeatures": false,
+    "pendingPlans": [
+      "starter"
+    ],
+    "starterActivationRequiresVerifiedEconomics": true
   }
 }

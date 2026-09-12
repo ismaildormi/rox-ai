@@ -38,7 +38,7 @@ for (const [name, raw] of [
 
 assert.deepStrictEqual(
   plans.planOrder,
-  ['free', 'plus', 'pro', 'legend', 'max']
+  ['free', 'starter', 'plus', 'pro', 'legend', 'max']
 );
 
 assert.strictEqual(plans.usagePolicy.windowHours, 5);
@@ -156,7 +156,7 @@ for (const forbidden of forbiddenDataChanges) {
 }
 
 console.log(
-  'PASS: five plans, Stripe state, five-hour window and persistent top-up wallet'
+  'PASS: six canonical plan identities with five Stripe-active billing plans, five-hour window and persistent top-up wallet'
 );
 console.log(
   'PASS: existing balances remain untouched and new billing fields are protected'

@@ -24,11 +24,11 @@ const {
   getSubscriptionOffer
 } = require('./lib/billingCatalog');
 
-assert.equal(plans.version, 'pack-016.canonical-plans-entitlements.v1');
+assert.equal(plans.version, 'pack-016.canonical-plans-entitlements.v2');
 assert.equal(plans.defaultPlan, 'free');
 assert.deepEqual(
   plans.planOrder,
-  ['free', 'plus', 'pro', 'legend', 'max']
+  ['free', 'starter', 'plus', 'pro', 'legend', 'max']
 );
 assert.deepEqual(
   plans.paidPlanOrder,
@@ -54,7 +54,7 @@ for (const planId of plans.planOrder) {
   assert.equal(plan.id, planId);
   assert.deepEqual(plan.features, plans.tiers[planId].features);
 
-  if (planId === 'free') {
+  if (planId === 'free' || planId === 'starter') {
     assert.equal(plan.billing.subscriptionEligible, false);
     assert.equal(plan.billing.stripePriceEnvKey, null);
   } else {

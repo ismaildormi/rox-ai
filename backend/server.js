@@ -87,7 +87,8 @@ const { featureCost } = require('./src/core/config');
 const {
   normalizePlanId,
   isPaidPlan,
-  planHasFeature
+  planHasFeature,
+  publicPlanCatalog
 } = require('./lib/planEntitlements');
 const {
   attachmentQueryFromMessages,
@@ -429,6 +430,12 @@ app.post('/internal/disk/run-scan', requireCronAccess, async (req, res) => {
   }
 });
 
+app.get('/api/plan-catalog', (req, res) => {
+  res.json({
+    status: 'success',
+    catalog: publicPlanCatalog()
+  });
+});
 app.get('/api/usage-status', requireAuth, async (req, res) => {
   const { data: user, error } = await supabaseAdmin
     .from('profiles')

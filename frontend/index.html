@@ -3821,6 +3821,7 @@ const supa = window.supabase.createClient(CONFIG.SUPABASE_URL, CONFIG.SUPABASE_A
 let session = null;
 let profile = null;
 let lastRoxUsage = null;
+let zuvyrPlanCatalog = null;
 
 // ── auth ─────────────────────────────────────────────────────────────
 async function initAuth() {
@@ -6242,8 +6243,23 @@ document
   );
 
 // ── profile / credits ───────────────────────────────────────────────
+async function loadZuvyrPlanCatalog() {
+  if (zuvyrPlanCatalog) return zuvyrPlanCatalog;
+  try {
+    const res = await authFetch('/api/plan-catalog', { method: 'GET' });
+    const data = await res.json();
+    if (res.ok && data.status === 'success' && data.catalog) {
+      zuvyrPlanCatalog = data.catalog;
+      return zuvyrPlanCatalog;
+    }
+  } catch (error) {
+    console.error('[plan-catalog] load failed:', error);
+  }
+  return null;
+}
 async function refreshProfile() {
   if (!session) return;
+  await loadZuvyrPlanCatalog();
   const { data, error } = await supa
     .from('profiles')
     .select('email, full_name, credits_used, credits_total, subscription_status')
@@ -23531,6 +23547,7 @@ const supa = window.supabase.createClient(CONFIG.SUPABASE_URL, CONFIG_MISSING ? 
 let session = null;
 let profile = null;
 let lastRoxUsage = null;
+let zuvyrPlanCatalog = null;
 
 // ── auth ─────────────────────────────────────────────────────────────
 async function initAuth() {
@@ -25960,8 +25977,23 @@ document
   );
 
 // ── profile / credits ───────────────────────────────────────────────
+async function loadZuvyrPlanCatalog() {
+  if (zuvyrPlanCatalog) return zuvyrPlanCatalog;
+  try {
+    const res = await authFetch('/api/plan-catalog', { method: 'GET' });
+    const data = await res.json();
+    if (res.ok && data.status === 'success' && data.catalog) {
+      zuvyrPlanCatalog = data.catalog;
+      return zuvyrPlanCatalog;
+    }
+  } catch (error) {
+    console.error('[plan-catalog] load failed:', error);
+  }
+  return null;
+}
 async function refreshProfile() {
   if (!session) return;
+  await loadZuvyrPlanCatalog();
   const { data, error } = await supa
     .from('profiles')
     .select('email, full_name, credits_used, credits_total, subscription_status')

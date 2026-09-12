@@ -13,7 +13,7 @@ const {
 
 assert.deepStrictEqual(
   PLAN_IDS,
-  ['free', 'plus', 'pro', 'legend', 'max']
+  ['free', 'starter', 'plus', 'pro', 'legend', 'max']
 );
 
 assert.strictEqual(normalizePlanId(' PLUS '), 'plus');

@@ -106,6 +106,45 @@ function getPlanEntitlements(value) {
   });
 }
 
+function publicPlanCatalog() {
+  const tiers = {};
+
+  for (const planId of PLAN_IDS) {
+    const plan = getPlan(planId);
+
+    tiers[planId] = Object.freeze({
+      id: plan.id,
+      displayName:
+        typeof plan.displayName === 'string' && plan.displayName.trim()
+          ? plan.displayName.trim()
+          : plan.id.toUpperCase(),
+      monthlyPriceUsd:
+        plan.monthlyPriceUsd === null ||
+        plan.monthlyPriceUsd === undefined
+          ? null
+          : Number.isFinite(Number(plan.monthlyPriceUsd))
+            ? Number(plan.monthlyPriceUsd)
+            : null,
+      priority: plan.priority || 'standard',
+      entitlementStatus:
+        plan.entitlementStatus || 'active',
+      subscriptionEligible:
+        plan.billing?.subscriptionEligible === true,
+      features: Object.freeze({ ...(plan.features || {}) })
+    });
+  }
+
+  return Object.freeze({
+    version: plans.version,
+    defaultPlan: DEFAULT_PLAN,
+    planOrder: Object.freeze([...PLAN_IDS]),
+    paidPlanOrder: Object.freeze([...PAID_PLAN_IDS]),
+    topupCreditsUnlockPlanFeatures:
+      plans.entitlementPolicy?.topupCreditsUnlockPlanFeatures === true,
+    tiers: Object.freeze(tiers)
+  });
+}
+
 module.exports = {
   DEFAULT_PLAN,
   PLAN_IDS,
@@ -114,6 +153,7 @@ module.exports = {
   canonicalPlanIdFromProfile,
   getPlan,
   getPlanEntitlements,
+  publicPlanCatalog,
   isPaidPlan,
   planHasFeature,
   minimumPlanForFeature
