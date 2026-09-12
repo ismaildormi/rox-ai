@@ -1,0 +1,49 @@
+{
+    "schema_version":  "1.0",
+    "verified_at":  "2026-09-12T07:26:36.1568586+01:00",
+    "github":  {
+                   "owner":  "ismaildormi",
+                   "repo":  "rox-ai",
+                   "origin":  "https://github.com/ismaildormi/rox-ai.git",
+                   "branch":  "main",
+                   "head":  "235240a3a5c9345928797487b1da0934ab358227",
+                   "remote_main":  "235240a3a5c9345928797487b1da0934ab358227"
+               },
+    "railway":  {
+                    "project_id":  "ba460cdb-cc55-4203-bdd0-711846b7564c",
+                    "project_name":  "intuitive-cat",
+                    "environment_id":  "5f533b47-378a-4098-baec-a34c4ddfdf01",
+                    "environment_name":  "production",
+                    "backend_service_id":  "65161b7e-7b83-4adf-bb57-290df3963de1",
+                    "backend_domain":  "rox-ai-production.up.railway.app",
+                    "backend_port":  8080,
+                    "worker_service_id":  "8b9b895c-24f5-4973-bd05-a1791c6f5714",
+                    "worker_domain":  "loving-harmony-production-e0e1.up.railway.app",
+                    "redis_service_id":  "8100b487-8d9b-4e43-9397-df8115bb84be",
+                    "deployed_commit":  "235240a3a5c9345928797487b1da0934ab358227"
+                },
+    "supabase":  {
+                     "project_ref":  "tqoqsgaymygmqrzddvtu",
+                     "api_origin":  "https://tqoqsgaymygmqrzddvtu.supabase.co",
+                     "detected_refs":  [
+                                           "tqoqsgaymygmqrzddvtu"
+                                       ]
+                 },
+    "vercel":  {
+                   "project_id":  "prj_P6VddfynJKniiK29clC6Epr9byPk",
+                   "org_id":  "team_3PYlTi0Euf7SDg7T2NRzGx3q",
+                   "project_name":  "rox-ai",
+                   "production_url":  "https://rox-ai-sepia.vercel.app/",
+                   "production_host":  "rox-ai-sepia.vercel.app",
+                   "public_probe_status":  200,
+                   "x_vercel_id":  "cdg1::9t7td-1789160758718-4e66576d63e8"
+               },
+    "rejected_production_targets":  [
+                                        "Railway project 16cbcb6d-2090-4422-bbf1-d39fdee5327c (desirable-inspiration)",
+                                        "Any Supabase ref other than tqoqsgaymygmqrzddvtu",
+                                        "Any Vercel projectId other than prj_P6VddfynJKniiK29clC6Epr9byPk",
+                                        "Any GitHub repo/branch other than ismaildormi/rox-ai:main"
+                                    ],
+    "checkpoint_a_status":  "VERIFIED",
+    "checkpoint_a_verified_at":  "2026-09-12T07:26:36.1568586+01:00"
+}

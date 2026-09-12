@@ -1,0 +1,49 @@
+{
+    "checkpoint":  "A",
+    "pack":  "010",
+    "verified_at":  "2026-09-12T07:26:36.1568586+01:00",
+    "status":  "VERIFIED",
+    "source_commit":  "235240a3a5c9345928797487b1da0934ab358227",
+    "p0_infrastructure_blockers":  0,
+    "baseline":  {
+                     "head":  "235240a3a5c9345928797487b1da0934ab358227",
+                     "origin_main":  "235240a3a5c9345928797487b1da0934ab358227",
+                     "match":  true
+                 },
+    "backup_restore_smoke":  "PASS",
+    "live_health":  {
+                        "frontend_http":  200,
+                        "healthz_http":  200,
+                        "readyz_http":  200,
+                        "livez_http":  200,
+                        "redis":  "ok",
+                        "supabase":  "ok"
+                    },
+    "auth":  {
+                 "metrics_anonymous_http":  401,
+                 "metrics_anonymous_denied":  true
+             },
+    "tests":  {
+                  "unit":  "PASS",
+                  "maintenance":  "PASS",
+                  "gatekeeper_tests":  14,
+                  "gatekeeper_failures":  0
+              },
+    "log_redaction":  {
+                          "runtime_secret_log_findings":  0,
+                          "status":  "PASS"
+                      },
+    "rollback":  {
+                     "source_reverse_apply_check":  "PASS",
+                     "rollback_patch_bytes":  12942,
+                     "rollback_patch_sha256":  "F8254C0FCF1F7E08A1A4EC652F9A396F26F3EB95806862DFE40094CCC9F1F71A"
+                 },
+    "external_gates":  {
+                           "M01":  "VERIFIED",
+                           "M02":  "VERIFIED",
+                           "M03":  "VERIFIED",
+                           "M04":  "VERIFIED",
+                           "M05":  "VERIFIED",
+                           "M06":  "VERIFIED"
+                       }
+}

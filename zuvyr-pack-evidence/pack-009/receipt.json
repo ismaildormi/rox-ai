@@ -1,0 +1,36 @@
+{
+    "pack":  "009",
+    "fix":  null,
+    "title":  "Supabase Security Corrections",
+    "finalized_at":  "2026-09-12T07:26:36.1568586+01:00",
+    "status":  "VERIFIED",
+    "source_commit":  "235240a3a5c9345928797487b1da0934ab358227",
+    "production_project_ref":  "tqoqsgaymygmqrzddvtu",
+    "migration":  {
+                      "file":  "backend/42_zuvyr_supabase_security_corrections.sql",
+                      "sha256":  "E8679BE64CA2664DB7290D056ECDECA27B350F16608261730AA91F1D21396BC3",
+                      "applied_to_production":  true
+                  },
+    "verified_postconditions":  {
+                                    "profiles_is_admin":  true,
+                                    "revenue_events_rls":  true,
+                                    "shared_conversations_rls":  true,
+                                    "browser_finance_access_revoked":  true,
+                                    "credit_audit_view_security_invoker":  true,
+                                    "internal_security_definer_execute_restricted":  true,
+                                    "privileged_function_search_path_hardened":  true,
+                                    "deduct_unused_variable_removed":  true,
+                                    "public_default_privileges_hardened":  true,
+                                    "supabase_db_lint":  "PASS_NO_SCHEMA_ERRORS"
+                                },
+    "security_advisor":  {
+                             "pack008_target_findings_resolved":  true,
+                             "rls_no_policy_info":  "INTENTIONAL_SERVER_ONLY_DENY_CLIENT",
+                             "leaked_password_protection":  "UNAVAILABLE_ON_CURRENT_SUPABASE_PLAN_HTTP_402_NON_P0"
+                         },
+    "production_changes_applied":  true,
+    "customer_content_extracted":  false,
+    "local_dirty_preserved":  true,
+    "external_gate_M06":  "VERIFIED",
+    "next_pack":  "010"
+}

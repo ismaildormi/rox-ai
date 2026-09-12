@@ -1,0 +1,35 @@
+{
+    "pack":  "010",
+    "fix":  null,
+    "title":  "Infrastructure Checkpoint A",
+    "finalized_at":  "2026-09-12T07:26:36.1568586+01:00",
+    "status":  "VERIFIED",
+    "source_commit":  "235240a3a5c9345928797487b1da0934ab358227",
+    "checkpoint_a":  {
+                         "file":  "zuvyr-pack-evidence/pack-010/CHECKPOINT_A.json",
+                         "sha256":  "4BFD1484DFD6D9D830852EEA65465C2587281268F1289D89E3B0F01D561ACA41",
+                         "p0_infrastructure_blockers":  0
+                     },
+    "verified_scope":  [
+                           "Production source identity",
+                           "Backup and restore smoke",
+                           "Frontend/backend health",
+                           "Redis and Supabase readiness",
+                           "Anonymous operator endpoint denial",
+                           "Unit and maintenance regression suite",
+                           "Runtime secret-log redaction scan",
+                           "Pack 009 source rollback proof",
+                           "External gates M01-M06"
+                       ],
+    "external_gates":  {
+                           "M01":  "VERIFIED",
+                           "M02":  "VERIFIED",
+                           "M03":  "VERIFIED",
+                           "M04":  "VERIFIED",
+                           "M05":  "VERIFIED",
+                           "M06":  "VERIFIED"
+                       },
+    "local_dirty_preserved":  true,
+    "next_pack_allowed":  true,
+    "next_pack":  "011 - Canonical Database Foundations"
+}
