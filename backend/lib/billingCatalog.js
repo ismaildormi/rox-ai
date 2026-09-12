@@ -1,32 +1,54 @@
 'use strict';
 
 const {
+  PAID_PLAN_IDS,
   getPlan,
   normalizePlanId
 } = require('./planEntitlements');
 
-const SUBSCRIPTION_PRICE_ENV_KEYS = Object.freeze({
-  plus: 'STRIPE_PLUS_PRICE_ID',
-  pro: 'STRIPE_PRO_PRICE_ID',
-  legend: 'STRIPE_LEGEND_PRICE_ID',
-  max: 'STRIPE_MAX_PRICE_ID'
-});
+const SUBSCRIPTION_PLAN_IDS = Object.freeze([...PAID_PLAN_IDS]);
 
-const SUBSCRIPTION_PLAN_IDS = Object.freeze(
-  Object.keys(SUBSCRIPTION_PRICE_ENV_KEYS)
+const SUBSCRIPTION_PRICE_ENV_KEYS = Object.freeze(
+  Object.fromEntries(
+    SUBSCRIPTION_PLAN_IDS.map(planId => {
+      const plan = getPlan(planId);
+      const key = plan.billing?.stripePriceEnvKey;
+
+      if (
+        plan.billing?.subscriptionEligible !== true ||
+        typeof key !== 'string' ||
+        !key.trim()
+      ) {
+        throw new Error(
+          'Missing canonical Stripe price environment key for plan: ' + planId
+        );
+      }
+
+      return [planId, key.trim()];
+    })
+  )
 );
+
+if (
+  new Set(Object.values(SUBSCRIPTION_PRICE_ENV_KEYS)).size !==
+  SUBSCRIPTION_PLAN_IDS.length
+) {
+  throw new Error('Canonical Stripe price environment keys must be unique.');
+}
 
 function getSubscriptionPlan(value) {
   const planId = normalizePlanId(value);
-  const priceEnvKey = SUBSCRIPTION_PRICE_ENV_KEYS[planId];
 
-  if (!priceEnvKey) return null;
+  if (!SUBSCRIPTION_PLAN_IDS.includes(planId)) {
+    return null;
+  }
 
   const plan = getPlan(planId);
   const monthlyPriceUsd = Number(plan.monthlyPriceUsd);
+  const priceEnvKey = SUBSCRIPTION_PRICE_ENV_KEYS[planId];
 
   if (!Number.isFinite(monthlyPriceUsd) || monthlyPriceUsd <= 0) {
-    throw new Error(`Invalid monthly price for plan: ${planId}`);
+    throw new Error('Invalid monthly price for plan: ' + planId);
   }
 
   return Object.freeze({

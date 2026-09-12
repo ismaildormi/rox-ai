@@ -26,6 +26,10 @@
         "audio": false,
         "code": false,
         "ip": false
+      },
+      "billing": {
+        "subscriptionEligible": false,
+        "stripePriceEnvKey": null
       }
     },
     "plus": {
@@ -39,6 +43,10 @@
         "audio": true,
         "code": true,
         "ip": false
+      },
+      "billing": {
+        "subscriptionEligible": true,
+        "stripePriceEnvKey": "STRIPE_PLUS_PRICE_ID"
       }
     },
     "pro": {
@@ -52,6 +60,10 @@
         "audio": true,
         "code": true,
         "ip": false
+      },
+      "billing": {
+        "subscriptionEligible": true,
+        "stripePriceEnvKey": "STRIPE_PRO_PRICE_ID"
       }
     },
     "legend": {
@@ -65,6 +77,10 @@
         "audio": true,
         "code": true,
         "ip": true
+      },
+      "billing": {
+        "subscriptionEligible": true,
+        "stripePriceEnvKey": "STRIPE_LEGEND_PRICE_ID"
       }
     },
     "max": {
@@ -78,6 +94,10 @@
         "audio": true,
         "code": true,
         "ip": true
+      },
+      "billing": {
+        "subscriptionEligible": true,
+        "stripePriceEnvKey": "STRIPE_MAX_PRICE_ID"
       }
     }
   },
@@ -139,5 +159,22 @@
     "image": 10,
     "video": 4,
     "workspace": 20
+  },
+  "version": "pack-016.canonical-plans-entitlements.v1",
+  "defaultPlan": "free",
+  "paidPlanOrder": [
+    "plus",
+    "pro",
+    "legend",
+    "max"
+  ],
+  "entitlementPolicy": {
+    "unknownPlanFallback": "free",
+    "canonicalProfileField": "subscription_status",
+    "acceptedCompatibilityFields": [
+      "subscriptionStatus",
+      "plan"
+    ],
+    "topupCreditsUnlockPlanFeatures": false
   }
 }

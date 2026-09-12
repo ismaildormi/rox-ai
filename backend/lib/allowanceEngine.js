@@ -1,15 +1,14 @@
 'use strict';
 
 const policy = require('../config/usage-policy.v1.json');
+const {
+  PAID_PLAN_IDS,
+  canonicalPlanIdFromProfile
+} = require('./planEntitlements');
 
 const HOUR_MS = 60 * 60 * 1000;
 const DAY_MS = 24 * HOUR_MS;
-const PAID_PLANS = Object.freeze([
-  'plus',
-  'pro',
-  'legend',
-  'max'
-]);
+const PAID_PLANS = Object.freeze([...PAID_PLAN_IDS]);
 
 function allowanceError(code) {
   const error = new Error(code);
@@ -215,11 +214,13 @@ function evaluateAllowance({
     };
   }
 
-  const planId = typeof profile.plan === 'string'
-    ? profile.plan.trim().toLowerCase()
-    : 'free';
+  const planId = canonicalPlanIdFromProfile(profile);
+  const billingStatus =
+    typeof profile.billingStatus === 'string'
+      ? profile.billingStatus
+      : profile.billing_status;
   const eligibleStatus = value.enforcement.eligibleBillingStatuses.includes(
-    profile.billingStatus
+    billingStatus
   );
   const topupPermitted = allowTopupFallback === true;
 
