@@ -7,7 +7,7 @@ const path = require('path');
 const server = fs.readFileSync(
   path.join(__dirname, 'server.js'),
   'utf8'
-);
+).replace(/\r\n/g, '\n');
 
 function count(text) {
   return server.split(text).length - 1;
