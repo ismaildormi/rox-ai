@@ -83,51 +83,273 @@
     var scopes=['chat.read','images.propose','video.propose','audio.propose','code.propose','research.propose','library.read','projects.propose','documents.propose','spreadsheets.propose','presentations.propose','scheduled_tasks.propose','plugins.read'];
     return heading('ip')+'<div class="zs-grid"><div class="zs-card wide"><h2>Permission-scoped tool plan</h2><p>Select exactly what ZUVYR IP may include. Wildcards, shell, filesystem writes and device control are unavailable.</p><form data-zs-ip-form><div class="zs-field"><label for="zs-ip-goal">Goal</label><textarea id="zs-ip-goal" name="goal" placeholder="Plan a multi-step project across ZUVYR"></textarea></div><div class="zs-checks">'+scopes.map(function(s){return '<label class="zs-check"><input type="checkbox" name="scopes" value="'+s+'"> '+s+'</label>';}).join('')+'</div><label class="zs-consent"><input type="checkbox" name="consent"> I approve these exact planning scopes. This does not approve device control, provider calls or spending.</label><div class="zs-actions"><button class="zs-primary" type="submit">Create IP plan</button><span class="zs-hint">Audit + STOP required</span></div></form><div class="zs-result" data-zs-ip-result></div></div><div class="zs-card"><h2>Safety core</h2><div class="zs-chip-row"><span class="zs-chip">Exact scopes</span><span class="zs-chip">Confirmation</span><span class="zs-chip">Live audit</span><span class="zs-chip">STOP</span><span class="zs-chip">Undo plan</span></div><p class="zs-note">Computer control remains disabled until a trusted device agent and rollback evidence exist.</p></div></div>';
   }
-  // Usage UI 10: authenticated, read-only data; no payment or generation actions.
-  var usageData=null, usageState='idle', usageSequence=0, usageController=null;
-  var usageCopy={
-    en:{title:'Usage & Billing',intro:'Your balance and subscription limits.',loading:'Loading…',live:'Updated',error:'Could not load your balance. Please retry.',refresh:'Refresh',five:'5-hour limit',week:'Weekly limit',topup:'Top-up credits',unconfigured:'Not configured',unavailable:'Unavailable',not_started:'Not started',expired:'Window ended',active:'Active window',remaining:'remaining',used:'Used / limit',ends:'Window ends',units:'credits',note:'Available balance after reservations. Top-up spending requires your permission.',windowNote:'Usage can include amounts reserved for unfinished tasks. Ended windows are not renewed by opening this page.',history:'Latest 10 metered Chat requests',empty:'No metered Chat requests yet.',historyError:'Recent requests could not be loaded.',complete:'Completed',quoted:'Awaiting approval',running:'In progress',result_ready:'Settlement pending',refund_ready:'Refund pending',refunded:'Refunded',cancelled:'Cancelled',charge:'Final charge',pending:'Not final',subscription:'Subscription',billing:'Purchasing and plan changes are not available on this page.'},
-    ar:{title:'الاستخدام والفوترة',intro:'رصيدك وحدود اشتراكك.',loading:'جارٍ التحميل…',live:'تم التحديث',error:'تعذّر تحميل الرصيد. حاول مجدداً.',refresh:'تحديث',five:'حد 5 ساعات',week:'الحد الأسبوعي',topup:'رصيد التعبئة',unconfigured:'غير مهيّأ',unavailable:'غير متاح',not_started:'لم تبدأ بعد',expired:'انتهت الفترة',active:'الفترة الحالية',remaining:'متبقي',used:'المستهلك / الحد',ends:'نهاية الفترة',units:'كريديت',note:'الرصيد المتاح بعد الحجوزات. استعمال رصيد التعبئة يحتاج موافقتك.',windowNote:'قد يشمل الاستهلاك رصيداً محجوزاً لمهام لم تنتهِ. فتح الصفحة لا يجدّد الفترات المنتهية.',history:'آخر 10 طلبات Chat باستهلاك محسوب',empty:'لا توجد طلبات Chat باستهلاك محسوب بعد.',historyError:'تعذّر تحميل آخر الطلبات.',complete:'مكتمل',quoted:'بانتظار الموافقة',running:'قيد التنفيذ',result_ready:'بانتظار التسوية',refund_ready:'بانتظار الاسترجاع',refunded:'تم الاسترجاع',cancelled:'ملغى',charge:'الاستهلاك النهائي',pending:'غير نهائي',subscription:'الاشتراك',billing:'شراء الرصيد وتغيير الاشتراك غير متاحين من هذه الصفحة.'},
-    fr:{title:'Utilisation et facturation',intro:'Votre solde et les limites de votre abonnement.',loading:'Chargement…',live:'Actualisé',error:'Impossible de charger le solde. Réessayez.',refresh:'Actualiser',five:'Limite de 5 heures',week:'Limite hebdomadaire',topup:'Crédits supplémentaires',unconfigured:'Non configuré',unavailable:'Indisponible',not_started:'Pas encore commencé',expired:'Période terminée',active:'Période active',remaining:'restants',used:'Utilisés / limite',ends:'Fin de période',units:'crédits',note:'Solde disponible après réservations. Les crédits supplémentaires nécessitent votre accord.',windowNote:'L’utilisation peut inclure des réservations pour des tâches en cours. Ouvrir cette page ne renouvelle pas les périodes terminées.',history:'Les 10 dernières demandes Chat à consommation mesurée',empty:'Aucune demande Chat mesurée.',historyError:'Impossible de charger les dernières demandes.',complete:'Terminé',quoted:'En attente d’accord',running:'En cours',result_ready:'Règlement en attente',refund_ready:'Remboursement en attente',refunded:'Remboursé',cancelled:'Annulé',charge:'Débit final',pending:'Non définitif',subscription:'Abonnement',billing:'Les achats et changements d’abonnement ne sont pas disponibles sur cette page.'}
-  };
-  function usageWords(){return usageCopy[(document.documentElement.lang||'en').split('-')[0]]||usageCopy.en;}
-  function usageNumber(n){return Number.isSafeInteger(n)&&n>=0?String(n):'—';}
-  function usageDate(value){var d=new Date(value);return value&&Number.isFinite(d.getTime())?d.toLocaleString(language()):'—';}
-  function usageWindow(label,w,t){
-    w=w||{};
-    return '<div class="zs-card"><h2>'+esc(label)+'</h2><div class="zs-kpi"><strong>'+usageNumber(w.remaining)+'</strong><span>'+esc(t.remaining)+'</span></div><p>'+esc(t[w.state]||t.unavailable)+'</p><p>'+esc(t.used)+': '+usageNumber(w.used)+' / '+usageNumber(w.total)+'</p>'+(w.endsAt?'<p>'+esc(t.ends)+': '+esc(usageDate(w.endsAt))+'</p>':'')+'</div>';
+  // Usage UI 18: the Usage/Billing surface shares the exact same account source as the sidebar.
+  let usageState='idle', usageData=null, usageRequest=0, usageOwner=null;
+
+  function usageView() {
+    return suite.querySelector('[data-zs-view="usage"]');
   }
-  function usageView(){
-    var t=usageWords();
-    return '<div class="zs-heading"><div><div class="zs-eyebrow">ZUVYR</div><h1>'+esc(t.title)+'</h1><p>'+esc(t.intro)+'</p></div><button class="zs-secondary" type="button" data-zs-usage-refresh>'+esc(t.refresh)+'</button></div><div data-zs-usage-content role="status" aria-live="polite">'+esc(t.loading)+'</div>';
+
+  function usageWindowLabel(windowValue) {
+    if (!windowValue || windowValue.state === 'unavailable') return 'Unavailable';
+    if (windowValue.state === 'unconfigured') return 'Not configured';
+    if (windowValue.state === 'expired') return 'Renewing';
+    if (windowValue.state === 'not_started') return 'Not started';
+    if (
+      windowValue.state === 'active' &&
+      Number.isSafeInteger(windowValue.remaining) &&
+      Number.isSafeInteger(windowValue.total)
+    ) {
+      return `${windowValue.remaining} / ${windowValue.total} remaining`;
+    }
+    return 'Unavailable';
   }
-  function renderUsage(){
-    var view=suite.querySelector('[data-zs-view="usage"]');if(!view)return;
-    var t=usageWords(),box=view.querySelector('[data-zs-usage-content]'),button=view.querySelector('[data-zs-usage-refresh]');
-    view.querySelector('h1').textContent=t.title;view.querySelector('.zs-heading p').textContent=t.intro;
-    button.textContent=t.refresh;button.disabled=usageState==='loading';
-    if(usageState!=='loaded'||!usageData){box.textContent=usageState==='error'?t.error:t.loading;return;}
-    var d=usageData;
-    box.innerHTML='<p>'+esc(t.live)+': '+esc(usageDate(d.checkedAt))+'</p><div class="zs-grid">'+usageWindow(t.five,d.fiveHour,t)+usageWindow(t.week,d.weekly,t)+'<div class="zs-card"><h2>'+esc(t.topup)+'</h2><div class="zs-kpi"><strong>'+usageNumber(d.topupCredits)+'</strong><span>'+esc(t.units)+'</span></div><p>'+esc(t.note)+'</p></div><div class="zs-card full"><p>'+esc(t.windowNote)+'</p><h2>'+esc(t.history)+'</h2><div>'+(!d.recentChatAvailable?esc(t.historyError):!d.recentChat.length?esc(t.empty):d.recentChat.map(function(r){var final=r.state==='complete'||r.state==='refunded'||r.state==='cancelled';return '<article class="zs-tool"><strong>'+esc(t[r.state]||t.unavailable)+'</strong><p>'+esc(usageDate(r.createdAt))+'</p><p>'+esc(t.charge)+': '+(final?usageNumber(r.creditsCharged)+' '+esc(t.units):esc(t.pending))+'</p>'+(r.fundingSource?'<p>'+esc(r.fundingSource==='topup'?t.topup:r.fundingSource==='subscription'?t.subscription:t.unavailable)+'</p>':'')+'</article>';}).join(''))+'</div><p>'+esc(t.billing)+'</p></div></div>';
+
+  function usagePlanLabel(data) {
+    const plan = String(data?.plan || 'free').trim().toUpperCase();
+    return plan || 'FREE';
   }
-  function usageOwner(){return typeof session!=='undefined'&&session&&session.user?session.user.id:null;}
-  function clearUsage(){usageSequence++;if(usageController)usageController.abort();usageController=null;usageData=null;usageState='idle';renderUsage();}
-  async function loadUsage(){
-    var sequence=++usageSequence,owner=usageOwner();
-    if(usageController)usageController.abort();
-    var controller=new AbortController();usageController=controller;
-    usageData=null;usageState='loading';renderUsage();
-    var timeout=setTimeout(function(){controller.abort();},15000);
-    try{
-      if(!owner||typeof window.authFetch!=='function')throw new Error('authentication_required');
-      var response=await window.authFetch('/api/zuvyr-usage-summary',{method:'GET',cache:'no-store',signal:controller.signal});
-      var data=await response.json();
-      if(!response.ok||data.status!=='success'||data.version!=='usage-ui-10.v1')throw new Error('usage_unavailable');
-      if(sequence!==usageSequence||owner!==usageOwner())return;
-      usageData=data;usageState='loaded';renderUsage();
-    }catch(_){if(sequence===usageSequence){usageData=null;usageState='error';renderUsage();}}
-    finally{clearTimeout(timeout);if(sequence===usageSequence)usageController=null;}
+
+  function usageWarningLines(data) {
+    const warnings = data?.warnings || {};
+    const lines = [];
+
+    if (
+      Number.isSafeInteger(
+        warnings.fiveHourRemainingPercentThreshold
+      )
+    ) {
+      lines.push(
+        `5H capacity is at or below ${warnings.fiveHourRemainingPercentThreshold}% remaining.`
+      );
+    }
+
+    if (
+      Number.isSafeInteger(
+        warnings.weeklyRemainingPercentThreshold
+      )
+    ) {
+      lines.push(
+        `Weekly protection is at or below ${warnings.weeklyRemainingPercentThreshold}% remaining.`
+      );
+    }
+
+    return lines;
   }
+
+  function usageHistoryHtml(data) {
+    const items = Array.isArray(data?.recentRequests)
+      ? data.recentRequests
+      : Array.isArray(data?.recentChat)
+        ? data.recentChat
+        : [];
+
+    if (!items.length) {
+      return '<div class="zs-muted">No recent metered requests.</div>';
+    }
+
+    return items.slice(0, 10).map(item => {
+      const capability = esc(
+        String(item.capability || 'request').toUpperCase()
+      );
+      const state = esc(
+        String(item.state || 'unknown')
+      );
+      const funding = esc(
+        String(item.fundingSource || '—')
+      );
+      const credits =
+        Number.isSafeInteger(item.creditsCharged)
+          ? `${item.creditsCharged} credits`
+          : 'Pending';
+      const created = item.createdAt
+        ? new Date(item.createdAt).toLocaleString()
+        : '—';
+
+      return `
+        <div style="display:grid;grid-template-columns:minmax(80px,1fr) minmax(70px,.8fr) minmax(80px,1fr);gap:8px;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.08)">
+          <span><strong>${capability}</strong><br><small>${esc(created)}</small></span>
+          <span>${state}<br><small>${funding}</small></span>
+          <span style="text-align:right">${esc(credits)}</span>
+        </div>`;
+    }).join('');
+  }
+
+  function bindUsageActions(box) {
+    if (!box || typeof box.querySelector !== 'function') return;
+
+    const upgrade = box.querySelector(
+      '[data-zs-usage-upgrade]'
+    );
+    const topup = box.querySelector(
+      '[data-zs-usage-topup]'
+    );
+
+    if (upgrade) {
+      upgrade.onclick = () => {
+        const button =
+          document.getElementById?.('upgradeBtn') ||
+          document.getElementById?.('settingsUpgradeBtn');
+        button?.click?.();
+      };
+    }
+
+    if (topup) {
+      topup.onclick = () => {
+        document.getElementById?.('topupBtn')?.click?.();
+      };
+    }
+  }
+
+  function renderUsage() {
+    const view = usageView();
+    if (!view) return;
+
+    const box =
+      view.querySelector('[data-zs-usage-content]');
+    const refresh =
+      view.querySelector('[data-zs-usage-refresh]');
+    const title =
+      view.querySelector('h1');
+    const intro =
+      view.querySelector('[data-zs-usage-intro]') ||
+      view.querySelector('p');
+
+    if (title) title.textContent = 'Usage & Billing';
+    if (intro) {
+      intro.textContent =
+        'One live source for your plan, included capacity, purchased credits and metered request history.';
+    }
+
+    if (refresh) {
+      refresh.onclick = () => loadUsage(true);
+      refresh.disabled = usageState === 'loading';
+    }
+
+    if (!box) return;
+
+    if (usageState === 'loading') {
+      box.textContent = 'Loading current usage…';
+      return;
+    }
+
+    if (usageState === 'error') {
+      box.textContent =
+        'Could not load usage. Retry to get current account values.';
+      return;
+    }
+
+    if (usageState !== 'loaded' || !usageData) {
+      box.textContent = 'Usage is not loaded yet.';
+      return;
+    }
+
+    const warnings = usageWarningLines(usageData);
+    const topup =
+      Number.isSafeInteger(usageData.topupCredits)
+        ? usageData.topupCredits
+        : 'Unavailable';
+
+    box.innerHTML = `
+      <div data-zs-usage-source="zuvyr-usage-summary" style="display:grid;gap:14px">
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px">
+          <div class="zs-card"><small>Plan</small><br><strong>${esc(usagePlanLabel(usageData))}</strong></div>
+          <div class="zs-card"><small>5H capacity</small><br><strong>${esc(usageWindowLabel(usageData.fiveHour))}</strong></div>
+          <div class="zs-card"><small>Weekly protection</small><br><strong>${esc(usageWindowLabel(usageData.weekly))}</strong></div>
+          <div class="zs-card"><small>Top-up balance</small><br><strong>${esc(String(topup))}</strong></div>
+        </div>
+        ${
+          warnings.length
+            ? `<div role="status" style="padding:10px 12px;border:1px solid rgba(245,184,0,.35);border-radius:12px">${warnings.map(line => `<div>⚠ ${esc(line)}</div>`).join('')}</div>`
+            : '<div class="zs-muted">No capacity warning right now.</div>'
+        }
+        <div style="display:flex;flex-wrap:wrap;gap:8px">
+          <button type="button" data-zs-usage-upgrade>Upgrade plan</button>
+          <button type="button" data-zs-usage-topup>Buy top-up credits</button>
+          <button type="button" data-zs-usage-refresh>Refresh</button>
+        </div>
+        <div>
+          <strong>Recent requests</strong>
+          <div style="margin-top:6px">${usageHistoryHtml(usageData)}</div>
+        </div>
+      </div>`;
+
+    bindUsageActions(box);
+  }
+
+  async function fetchUnifiedUsage(force = false) {
+    if (
+      typeof window.getZuvyrUnifiedUsageSummary === 'function'
+    ) {
+      return window.getZuvyrUnifiedUsageSummary({ force });
+    }
+
+    const res = await window.authFetch(
+      '/api/zuvyr-usage-summary',
+      {
+        method: 'GET',
+        cache: 'no-store'
+      }
+    );
+    const data = await res.json();
+
+    if (!res.ok || data.status !== 'success') {
+      throw new Error(
+        data?.code || 'usage_unavailable'
+      );
+    }
+
+    return data;
+  }
+
+  async function loadUsage(force = false) {
+    const owner = session?.user?.id || null;
+    const request = ++usageRequest;
+
+    if (!owner) {
+      clearUsage();
+      renderUsage();
+      return;
+    }
+
+    usageOwner = owner;
+    usageState = 'loading';
+    renderUsage();
+
+    try {
+      const data = await fetchUnifiedUsage(force);
+
+      if (
+        request !== usageRequest ||
+        owner !== session?.user?.id
+      ) {
+        return;
+      }
+
+      usageData = data;
+      usageState = 'loaded';
+    } catch (_) {
+      if (
+        request !== usageRequest ||
+        owner !== session?.user?.id
+      ) {
+        return;
+      }
+
+      usageData = null;
+      usageState = 'error';
+    }
+
+    renderUsage();
+  }
+
+  function clearUsage() {
+    usageRequest += 1;
+    usageOwner = null;
+    usageData = null;
+    usageState = 'idle';
+  }
+
   function genericView(id) {
     var state=sections.find(function(s){return s[0]===id;})[3];
     var extra=id==='code'?orchestrator('code'):toolCards(id);

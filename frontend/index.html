@@ -3822,6 +3822,9 @@ let session = null;
 let profile = null;
 let lastRoxUsage = null;
 let zuvyrPlanCatalog = null;
+let zuvyrUnifiedUsageSummary = null;
+let zuvyrUnifiedUsageOwner = null;
+let zuvyrUnifiedUsagePromise = null;
 
 // ── auth ─────────────────────────────────────────────────────────────
 async function initAuth() {
@@ -6257,6 +6260,268 @@ async function loadZuvyrPlanCatalog() {
   }
   return null;
 }
+// PACK018 UNIFIED USAGE SOURCE START
+function zuvyrUsageWindowText(windowValue) {
+  if (!windowValue || windowValue.state === 'unavailable') return 'Unavailable';
+  if (windowValue.state === 'unconfigured') return 'Not configured';
+  if (windowValue.state === 'expired') return 'Renewing';
+  if (windowValue.state === 'not_started') return 'Not started';
+
+  if (
+    windowValue.state === 'active' &&
+    Number.isSafeInteger(windowValue.remaining) &&
+    Number.isSafeInteger(windowValue.total)
+  ) {
+    return `${windowValue.remaining}/${windowValue.total}`;
+  }
+
+  return 'Unavailable';
+}
+
+function zuvyrUsageWarningText(summary) {
+  const warnings = summary?.warnings || {};
+  const labels = [];
+
+  if (
+    Number.isSafeInteger(
+      warnings.fiveHourRemainingPercentThreshold
+    )
+  ) {
+    labels.push(
+      `5H ≤${warnings.fiveHourRemainingPercentThreshold}%`
+    );
+  }
+
+  if (
+    Number.isSafeInteger(
+      warnings.weeklyRemainingPercentThreshold
+    )
+  ) {
+    labels.push(
+      `Weekly ≤${warnings.weeklyRemainingPercentThreshold}%`
+    );
+  }
+
+  return labels.join(' · ');
+}
+
+function zuvyrUsagePlanName(summary) {
+  const planId = String(
+    summary?.plan || profile?.subscription_status || 'free'
+  ).trim().toLowerCase();
+
+  const catalogPlan =
+    zuvyrPlanCatalog?.tiers?.[planId];
+
+  return (
+    catalogPlan?.displayName ||
+    planId.toUpperCase() ||
+    'FREE'
+  );
+}
+
+function renderZuvyrUnifiedUsageSummary(summary) {
+  if (!summary || summary.status !== 'success') return;
+
+  lastRoxUsage = {
+    type: 'unified',
+    source: 'zuvyr-usage-summary',
+    data: summary
+  };
+
+  const planName = zuvyrUsagePlanName(summary);
+  const five = summary.fiveHour || {};
+  const weekly = summary.weekly || {};
+  const topup =
+    Number.isSafeInteger(summary.topupCredits)
+      ? summary.topupCredits
+      : null;
+
+  let pct = 0;
+
+  if (
+    five.state === 'active' &&
+    Number.isSafeInteger(five.total) &&
+    Number.isSafeInteger(five.remaining) &&
+    five.total > 0
+  ) {
+    pct = Math.min(
+      100,
+      Math.max(
+        0,
+        Math.round(
+          ((five.total - five.remaining) / five.total) * 100
+        )
+      )
+    );
+  }
+
+  const pctNode =
+    document.getElementById('sidebarUsagePct');
+  const fillNode =
+    document.getElementById('sidebarUsageFill');
+  const creditsNode =
+    document.getElementById('sidebarCreditsNum');
+  const settingsNode =
+    document.getElementById('settingsSummary');
+  const topupButton =
+    document.getElementById('topupBtn');
+  const upgradeButton =
+    document.getElementById('upgradeBtn');
+  const settingsUpgradeButton =
+    document.getElementById('settingsUpgradeBtn');
+  const topbarPlan =
+    document.getElementById('topbarUserPlan');
+  const sidebarPlan =
+    document.getElementById('sidebarProfilePlan');
+
+  const fiveText =
+    zuvyrUsageWindowText(five);
+  const weeklyText =
+    zuvyrUsageWindowText(weekly);
+  const warningText =
+    zuvyrUsageWarningText(summary);
+  const topupText =
+    topup === null
+      ? 'Unavailable'
+      : String(topup);
+
+  if (pctNode) {
+    pctNode.textContent =
+      five.state === 'active'
+        ? `${pct}%`
+        : '—';
+  }
+
+  if (fillNode) {
+    fillNode.style.width = `${pct}%`;
+  }
+
+  if (creditsNode) {
+    creditsNode.textContent =
+      `${planName} · 5H ${fiveText} · Top-up ${topupText}` +
+      (warningText ? ` · ⚠ ${warningText}` : '');
+  }
+
+  if (settingsNode) {
+    settingsNode.textContent =
+      `Plan: ${planName} · 5H: ${fiveText} · Weekly: ${weeklyText} · Top-up: ${topupText}` +
+      (warningText ? ` · Warning: ${warningText}` : '');
+  }
+
+  if (topbarPlan) {
+    topbarPlan.textContent = planName;
+  }
+
+  if (sidebarPlan) {
+    sidebarPlan.textContent = planName;
+  }
+
+  if (topupButton) {
+    topupButton.style.display = 'block';
+  }
+
+  const isHighestPlan =
+    String(summary.plan || '')
+      .trim()
+      .toLowerCase() === 'max';
+
+  if (upgradeButton) {
+    upgradeButton.style.display =
+      isHighestPlan ? 'none' : 'block';
+  }
+
+  if (settingsUpgradeButton) {
+    settingsUpgradeButton.style.display =
+      isHighestPlan ? 'none' : 'block';
+  }
+}
+
+async function getZuvyrUnifiedUsageSummary(
+  { force = false } = {}
+) {
+  if (!session?.user?.id) {
+    throw new Error('not_authenticated');
+  }
+
+  const owner = session.user.id;
+
+  if (zuvyrUnifiedUsageOwner !== owner) {
+    zuvyrUnifiedUsageOwner = owner;
+    zuvyrUnifiedUsageSummary = null;
+    zuvyrUnifiedUsagePromise = null;
+  }
+
+  if (!force && zuvyrUnifiedUsageSummary) {
+    return zuvyrUnifiedUsageSummary;
+  }
+
+  if (!force && zuvyrUnifiedUsagePromise) {
+    return zuvyrUnifiedUsagePromise;
+  }
+
+  const request = (async () => {
+    const res = await authFetch(
+      '/api/zuvyr-usage-summary',
+      {
+        method: 'GET',
+        cache: 'no-store'
+      }
+    );
+    const data = await res.json();
+
+    if (!res.ok || data.status !== 'success') {
+      throw new Error(
+        data?.code || 'usage_unavailable'
+      );
+    }
+
+    if (owner !== session?.user?.id) {
+      throw new Error('usage_owner_changed');
+    }
+
+    zuvyrUnifiedUsageSummary = data;
+    return data;
+  })();
+
+  zuvyrUnifiedUsagePromise = request;
+
+  try {
+    return await request;
+  } finally {
+    if (zuvyrUnifiedUsagePromise === request) {
+      zuvyrUnifiedUsagePromise = null;
+    }
+  }
+}
+
+async function refreshZuvyrUnifiedUsageSummary(
+  { force = true } = {}
+) {
+  const summary =
+    await getZuvyrUnifiedUsageSummary({ force });
+
+  renderZuvyrUnifiedUsageSummary(summary);
+
+  try {
+    window.dispatchEvent(
+      new CustomEvent(
+        'zuvyr:usage-updated',
+        { detail: summary }
+      )
+    );
+  } catch (_) {}
+
+  return summary;
+}
+
+window.getZuvyrUnifiedUsageSummary =
+  getZuvyrUnifiedUsageSummary;
+window.refreshZuvyrUnifiedUsageSummary =
+  refreshZuvyrUnifiedUsageSummary;
+// PACK018 UNIFIED USAGE SOURCE END
+
+
 async function refreshProfile() {
   if (!session) return;
   await loadZuvyrPlanCatalog();
@@ -6269,20 +6534,11 @@ async function refreshProfile() {
   profile = data;
   renderProfile();
 
-  // Always fetch from the backend (not just the raw Supabase row) —
-  // /api/usage-status is what actually matches what the server enforces
-  // for both tiers now that Pro also draws from a real 500-credit/month
-  // pool (no more unconditional 'pro' bypass — see gatekeeper.js).
   try {
-    const res = await authFetch('/api/usage-status', { method: 'GET' });
-    const usage = await res.json();
-    if (usage.status !== 'success') return;
-    if (usage.isPro) {
-      renderProUsage(usage.creditsUsed, usage.creditsTotal, usage.creditsRemaining);
-    } else {
-      renderDailyUsage(usage.dailyChatUsed, usage.dailyChatLimit);
-    }
-  } catch (e) { console.error('[usage-status] load failed:', e); }
+    await refreshZuvyrUnifiedUsageSummary({ force: true });
+  } catch (error) {
+    console.error('[unified-usage] load failed:', error);
+  }
 }
 
 function renderDailyUsage(used, limit) {
@@ -12180,9 +12436,9 @@ async function sendChat(feature, text, msgBox, userMessage) {
       renderDailyUsage(data.dailyChatUsed, data.dailyChatLimit);
     }
     if (typeof data.newBalance === 'number' && profile) {
-      const total = profile.credits_total || 500;
-      const used = total - data.newBalance;
-      renderProUsage(used, total, data.newBalance);
+      refreshZuvyrUnifiedUsageSummary({ force: true }).catch(error => {
+        console.error('[unified-usage] refresh after metered request failed:', error);
+      });
     }
   } catch (err) {
     typing.remove();
@@ -12254,8 +12510,9 @@ async function sendGeneration(feature, text, msgBox) {
     if (!res.ok || !data.jobId) { typing.remove(); appendMsg(msgBox, 'error', data.message || roxT('error.jobCreate')); return; }
 
     if (typeof data.newBalance === 'number' && profile) {
-      const total = profile.credits_total || 500;
-      renderProUsage(total - data.newBalance, total, data.newBalance);
+      refreshZuvyrUnifiedUsageSummary({ force: true }).catch(error => {
+        console.error('[unified-usage] refresh after metered request failed:', error);
+      });
     }
 
     await pollJob(data.jobId, feature, msgBox, typing);
@@ -23548,6 +23805,9 @@ let session = null;
 let profile = null;
 let lastRoxUsage = null;
 let zuvyrPlanCatalog = null;
+let zuvyrUnifiedUsageSummary = null;
+let zuvyrUnifiedUsageOwner = null;
+let zuvyrUnifiedUsagePromise = null;
 
 // ── auth ─────────────────────────────────────────────────────────────
 async function initAuth() {
@@ -25991,6 +26251,268 @@ async function loadZuvyrPlanCatalog() {
   }
   return null;
 }
+// PACK018 UNIFIED USAGE SOURCE START
+function zuvyrUsageWindowText(windowValue) {
+  if (!windowValue || windowValue.state === 'unavailable') return 'Unavailable';
+  if (windowValue.state === 'unconfigured') return 'Not configured';
+  if (windowValue.state === 'expired') return 'Renewing';
+  if (windowValue.state === 'not_started') return 'Not started';
+
+  if (
+    windowValue.state === 'active' &&
+    Number.isSafeInteger(windowValue.remaining) &&
+    Number.isSafeInteger(windowValue.total)
+  ) {
+    return `${windowValue.remaining}/${windowValue.total}`;
+  }
+
+  return 'Unavailable';
+}
+
+function zuvyrUsageWarningText(summary) {
+  const warnings = summary?.warnings || {};
+  const labels = [];
+
+  if (
+    Number.isSafeInteger(
+      warnings.fiveHourRemainingPercentThreshold
+    )
+  ) {
+    labels.push(
+      `5H ≤${warnings.fiveHourRemainingPercentThreshold}%`
+    );
+  }
+
+  if (
+    Number.isSafeInteger(
+      warnings.weeklyRemainingPercentThreshold
+    )
+  ) {
+    labels.push(
+      `Weekly ≤${warnings.weeklyRemainingPercentThreshold}%`
+    );
+  }
+
+  return labels.join(' · ');
+}
+
+function zuvyrUsagePlanName(summary) {
+  const planId = String(
+    summary?.plan || profile?.subscription_status || 'free'
+  ).trim().toLowerCase();
+
+  const catalogPlan =
+    zuvyrPlanCatalog?.tiers?.[planId];
+
+  return (
+    catalogPlan?.displayName ||
+    planId.toUpperCase() ||
+    'FREE'
+  );
+}
+
+function renderZuvyrUnifiedUsageSummary(summary) {
+  if (!summary || summary.status !== 'success') return;
+
+  lastRoxUsage = {
+    type: 'unified',
+    source: 'zuvyr-usage-summary',
+    data: summary
+  };
+
+  const planName = zuvyrUsagePlanName(summary);
+  const five = summary.fiveHour || {};
+  const weekly = summary.weekly || {};
+  const topup =
+    Number.isSafeInteger(summary.topupCredits)
+      ? summary.topupCredits
+      : null;
+
+  let pct = 0;
+
+  if (
+    five.state === 'active' &&
+    Number.isSafeInteger(five.total) &&
+    Number.isSafeInteger(five.remaining) &&
+    five.total > 0
+  ) {
+    pct = Math.min(
+      100,
+      Math.max(
+        0,
+        Math.round(
+          ((five.total - five.remaining) / five.total) * 100
+        )
+      )
+    );
+  }
+
+  const pctNode =
+    document.getElementById('sidebarUsagePct');
+  const fillNode =
+    document.getElementById('sidebarUsageFill');
+  const creditsNode =
+    document.getElementById('sidebarCreditsNum');
+  const settingsNode =
+    document.getElementById('settingsSummary');
+  const topupButton =
+    document.getElementById('topupBtn');
+  const upgradeButton =
+    document.getElementById('upgradeBtn');
+  const settingsUpgradeButton =
+    document.getElementById('settingsUpgradeBtn');
+  const topbarPlan =
+    document.getElementById('topbarUserPlan');
+  const sidebarPlan =
+    document.getElementById('sidebarProfilePlan');
+
+  const fiveText =
+    zuvyrUsageWindowText(five);
+  const weeklyText =
+    zuvyrUsageWindowText(weekly);
+  const warningText =
+    zuvyrUsageWarningText(summary);
+  const topupText =
+    topup === null
+      ? 'Unavailable'
+      : String(topup);
+
+  if (pctNode) {
+    pctNode.textContent =
+      five.state === 'active'
+        ? `${pct}%`
+        : '—';
+  }
+
+  if (fillNode) {
+    fillNode.style.width = `${pct}%`;
+  }
+
+  if (creditsNode) {
+    creditsNode.textContent =
+      `${planName} · 5H ${fiveText} · Top-up ${topupText}` +
+      (warningText ? ` · ⚠ ${warningText}` : '');
+  }
+
+  if (settingsNode) {
+    settingsNode.textContent =
+      `Plan: ${planName} · 5H: ${fiveText} · Weekly: ${weeklyText} · Top-up: ${topupText}` +
+      (warningText ? ` · Warning: ${warningText}` : '');
+  }
+
+  if (topbarPlan) {
+    topbarPlan.textContent = planName;
+  }
+
+  if (sidebarPlan) {
+    sidebarPlan.textContent = planName;
+  }
+
+  if (topupButton) {
+    topupButton.style.display = 'block';
+  }
+
+  const isHighestPlan =
+    String(summary.plan || '')
+      .trim()
+      .toLowerCase() === 'max';
+
+  if (upgradeButton) {
+    upgradeButton.style.display =
+      isHighestPlan ? 'none' : 'block';
+  }
+
+  if (settingsUpgradeButton) {
+    settingsUpgradeButton.style.display =
+      isHighestPlan ? 'none' : 'block';
+  }
+}
+
+async function getZuvyrUnifiedUsageSummary(
+  { force = false } = {}
+) {
+  if (!session?.user?.id) {
+    throw new Error('not_authenticated');
+  }
+
+  const owner = session.user.id;
+
+  if (zuvyrUnifiedUsageOwner !== owner) {
+    zuvyrUnifiedUsageOwner = owner;
+    zuvyrUnifiedUsageSummary = null;
+    zuvyrUnifiedUsagePromise = null;
+  }
+
+  if (!force && zuvyrUnifiedUsageSummary) {
+    return zuvyrUnifiedUsageSummary;
+  }
+
+  if (!force && zuvyrUnifiedUsagePromise) {
+    return zuvyrUnifiedUsagePromise;
+  }
+
+  const request = (async () => {
+    const res = await authFetch(
+      '/api/zuvyr-usage-summary',
+      {
+        method: 'GET',
+        cache: 'no-store'
+      }
+    );
+    const data = await res.json();
+
+    if (!res.ok || data.status !== 'success') {
+      throw new Error(
+        data?.code || 'usage_unavailable'
+      );
+    }
+
+    if (owner !== session?.user?.id) {
+      throw new Error('usage_owner_changed');
+    }
+
+    zuvyrUnifiedUsageSummary = data;
+    return data;
+  })();
+
+  zuvyrUnifiedUsagePromise = request;
+
+  try {
+    return await request;
+  } finally {
+    if (zuvyrUnifiedUsagePromise === request) {
+      zuvyrUnifiedUsagePromise = null;
+    }
+  }
+}
+
+async function refreshZuvyrUnifiedUsageSummary(
+  { force = true } = {}
+) {
+  const summary =
+    await getZuvyrUnifiedUsageSummary({ force });
+
+  renderZuvyrUnifiedUsageSummary(summary);
+
+  try {
+    window.dispatchEvent(
+      new CustomEvent(
+        'zuvyr:usage-updated',
+        { detail: summary }
+      )
+    );
+  } catch (_) {}
+
+  return summary;
+}
+
+window.getZuvyrUnifiedUsageSummary =
+  getZuvyrUnifiedUsageSummary;
+window.refreshZuvyrUnifiedUsageSummary =
+  refreshZuvyrUnifiedUsageSummary;
+// PACK018 UNIFIED USAGE SOURCE END
+
+
 async function refreshProfile() {
   if (!session) return;
   await loadZuvyrPlanCatalog();
@@ -26003,20 +26525,11 @@ async function refreshProfile() {
   profile = data;
   renderProfile();
 
-  // Always fetch from the backend (not just the raw Supabase row) —
-  // /api/usage-status is what actually matches what the server enforces
-  // for both tiers now that Pro also draws from a real 500-credit/month
-  // pool (no more unconditional 'pro' bypass — see gatekeeper.js).
   try {
-    const res = await authFetch('/api/usage-status', { method: 'GET' });
-    const usage = await res.json();
-    if (usage.status !== 'success') return;
-    if (usage.isPro) {
-      renderProUsage(usage.creditsUsed, usage.creditsTotal, usage.creditsRemaining);
-    } else {
-      renderDailyUsage(usage.dailyChatUsed, usage.dailyChatLimit);
-    }
-  } catch (e) { console.error('[usage-status] load failed:', e); }
+    await refreshZuvyrUnifiedUsageSummary({ force: true });
+  } catch (error) {
+    console.error('[unified-usage] load failed:', error);
+  }
 }
 
 function renderDailyUsage(used, limit) {
@@ -31968,9 +32481,9 @@ async function sendChat(feature, text, msgBox, userMessage) {
       renderDailyUsage(data.dailyChatUsed, data.dailyChatLimit);
     }
     if (typeof data.newBalance === 'number' && profile) {
-      const total = profile.credits_total || 500;
-      const used = total - data.newBalance;
-      renderProUsage(used, total, data.newBalance);
+      refreshZuvyrUnifiedUsageSummary({ force: true }).catch(error => {
+        console.error('[unified-usage] refresh after metered request failed:', error);
+      });
     }
   } catch (err) {
     typing.remove();
@@ -32044,8 +32557,9 @@ async function sendGeneration(feature, text, msgBox) {
     if (!res.ok || !data.jobId) { typing.remove(); appendMsg(msgBox, 'error', data.message || roxT('error.jobCreate')); return; }
 
     if (typeof data.newBalance === 'number' && profile) {
-      const total = profile.credits_total || 500;
-      renderProUsage(total - data.newBalance, total, data.newBalance);
+      refreshZuvyrUnifiedUsageSummary({ force: true }).catch(error => {
+        console.error('[unified-usage] refresh after metered request failed:', error);
+      });
     }
 
     await pollJob(data.jobId, feature, msgBox, typing);
