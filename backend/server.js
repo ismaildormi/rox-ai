@@ -280,7 +280,7 @@ app.use(
   '/api/code-studio',
   requireAuth,
   rateLimit('chat'),
-  createCodeStudioRouter()
+  createCodeStudioRouter({ creditApi: { reserveCredits, settleCredits, refundCredits } })
 );
 app.use(
   '/api/audio-studio',
