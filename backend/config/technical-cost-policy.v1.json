@@ -1,0 +1,86 @@
+{
+  "version": "pack-015.full-technical-cost-model.v1",
+  "currency": "USD",
+  "amountUnit": "micro_usd_integer_string",
+  "decisionMath": "integer_only",
+  "unknownCostMode": "fail_closed",
+  "componentKinds": [
+    "provider",
+    "infrastructure",
+    "storage",
+    "bandwidth",
+    "retry",
+    "sandbox",
+    "browser",
+    "media",
+    "preview_startup",
+    "preview_build",
+    "preview_hmr",
+    "active_runtime",
+    "idle_runtime",
+    "proxy",
+    "egress",
+    "cleanup"
+  ],
+  "codeStudioLivePreviewMeasurementContract": {
+    "startup": {
+      "componentKind": "preview_startup",
+      "usageKind": "preview_runtime",
+      "registryUnit": "preview_seconds",
+      "pricingState": "blocked_until_verified"
+    },
+    "build": {
+      "componentKind": "preview_build",
+      "usageKind": "build_job",
+      "registryUnit": "build_jobs",
+      "pricingState": "blocked_until_verified"
+    },
+    "hmr": {
+      "componentKind": "preview_hmr",
+      "usageKind": "preview_runtime",
+      "registryUnit": "preview_seconds",
+      "pricingState": "blocked_until_verified"
+    },
+    "activeRuntime": {
+      "componentKind": "active_runtime",
+      "usageKind": "preview_runtime",
+      "registryUnit": "preview_seconds",
+      "pricingState": "blocked_until_verified"
+    },
+    "idleRuntime": {
+      "componentKind": "idle_runtime",
+      "usageKind": "idle_session",
+      "registryUnit": "idle_session_seconds",
+      "pricingState": "blocked_until_verified"
+    },
+    "proxy": {
+      "componentKind": "proxy",
+      "usageKind": "preview_egress",
+      "registryUnit": "egress_bytes",
+      "pricingState": "blocked_until_verified"
+    },
+    "egress": {
+      "componentKind": "egress",
+      "usageKind": "preview_egress",
+      "registryUnit": "egress_bytes",
+      "pricingState": "blocked_until_verified"
+    },
+    "cleanup": {
+      "componentKind": "cleanup",
+      "usageKind": "sandbox_runtime",
+      "registryUnit": "runtime_seconds",
+      "pricingState": "blocked_until_verified"
+    },
+    "retry": {
+      "componentKind": "retry",
+      "usageKind": "sandbox_runtime",
+      "registryUnit": "runtime_seconds",
+      "pricingState": "blocked_until_verified"
+    }
+  },
+  "notes": [
+    "This policy defines exact accounting dimensions and never invents unverified provider or infrastructure prices.",
+    "A component may enter a billable quote only when costKnown=true, verified=true and an integer micro-USD amount with source evidence is supplied.",
+    "Blocked Code Studio registry contracts remain blocked until a verified executor and verified unit prices exist."
+  ]
+}

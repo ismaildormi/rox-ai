@@ -47,11 +47,66 @@ function addBasisPointReserve(amount, reserveBps) {
   return ceilDiv(amount * (BPS_SCALE + reserve), BPS_SCALE);
 }
 
-function calculateCharge({ providerCostMicroUsd, policy }) {
+function normalizeTechnicalCostComponents(components = []) {
+  if (!Array.isArray(components)) {
+    throw financialError('invalid_technical_cost_components');
+  }
+
+  return components.map((component, index) => {
+    if (!component || typeof component !== 'object') {
+      throw financialError(`invalid_technical_cost_component_${index}`);
+    }
+
+    const kind = String(component.kind || '').trim();
+    if (!/^[a-z][a-z0-9_]{0,63}$/.test(kind)) {
+      throw financialError(`invalid_technical_cost_component_kind_${index}`);
+    }
+    if (component.costKnown !== true) {
+      throw financialError(`technical_cost_unknown_${kind}`);
+    }
+    if (component.verified !== true) {
+      throw financialError(`technical_cost_unverified_${kind}`);
+    }
+
+    const amount = integer(
+      component.microUsd,
+      `technical_cost_${kind}_micro_usd`
+    );
+
+    return Object.freeze({
+      kind,
+      microUsd: amount.toString(),
+      costKnown: true,
+      verified: true,
+      source: component.source == null ? null : String(component.source)
+    });
+  });
+}
+
+function sumTechnicalCostComponents(components = []) {
+  const normalized = normalizeTechnicalCostComponents(components);
+  const total = normalized.reduce(
+    (sum, component) => sum + BigInt(component.microUsd),
+    0n
+  );
+
+  return Object.freeze({
+    components: normalized,
+    totalMicroUsd: total.toString()
+  });
+}
+
+function calculateCharge({
+  providerCostMicroUsd,
+  technicalCostComponents = [],
+  policy
+}) {
   const providerCost = integer(
     providerCostMicroUsd,
     'provider_cost_micro_usd'
   );
+  const technical = sumTechnicalCostComponents(technicalCostComponents);
+  const measuredTechnicalCost = BigInt(technical.totalMicroUsd);
   const creditValue = integer(
     policy.creditValueMicroUsd,
     'credit_value_micro_usd',
@@ -98,8 +153,12 @@ function calculateCharge({ providerCostMicroUsd, policy }) {
     providerCost,
     combinedReserve
   );
+  const rawTechnicalCost =
+    providerCost + infrastructureReserve + measuredTechnicalCost;
   const safeguardedCost =
-    safeguardedProviderCost + infrastructureReserve;
+    safeguardedProviderCost +
+    infrastructureReserve +
+    measuredTechnicalCost;
   const minimumRevenue = ceilDiv(
     safeguardedCost * BPS_SCALE,
     BPS_SCALE - targetMargin
@@ -125,6 +184,9 @@ function calculateCharge({ providerCostMicroUsd, policy }) {
       safeguardedProviderCost.toString(),
     infrastructureReserveMicroUsd:
       infrastructureReserve.toString(),
+    measuredTechnicalCostMicroUsd: measuredTechnicalCost.toString(),
+    rawTechnicalCostMicroUsd: rawTechnicalCost.toString(),
+    technicalCostComponents: technical.components,
     safeguardedCostMicroUsd: safeguardedCost.toString(),
     minimumRevenueMicroUsd: minimumRevenue.toString(),
     chargedCredits: chargedCredits.toString(),
@@ -142,5 +204,7 @@ module.exports = {
   basisPoints,
   ceilDiv,
   addBasisPointReserve,
+  normalizeTechnicalCostComponents,
+  sumTechnicalCostComponents,
   calculateCharge
 };
