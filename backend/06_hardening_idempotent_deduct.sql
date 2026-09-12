@@ -37,7 +37,6 @@ create or replace function deduct_credit_and_log(
 )
 returns json as $$
 declare
-  v_existing credit_audit_log%rowtype;
   v_available integer;
   v_new_balance integer;
 begin
@@ -47,7 +46,7 @@ begin
   -- are informational and don't move the balance, so replaying them
   -- isn't a correctness issue, but we still short-circuit for safety.)
   if p_request_id is not null then
-    select * into v_existing from credit_audit_log where request_id = p_request_id and status = 'success';
+    perform 1 from credit_audit_log where request_id = p_request_id and status = 'success';
     if found then
       select credits_total - credits_used into v_new_balance
       from profiles where id = p_user_id;

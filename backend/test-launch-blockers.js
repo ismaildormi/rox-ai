@@ -24,6 +24,7 @@ const router = read('backend/aiRouter.js');
 const models = JSON.parse(read('backend/config/models.json'));
 const frontend = read('frontend/index.html');
 const settlementSql = read('backend/16_settle_credit_charge.sql');
+const securityCorrectionsSql = read('backend/42_zuvyr_supabase_security_corrections.sql');
 
 assert(
   server.includes("validateChatBody, loadRoxUserMiddleware, async"),
@@ -78,6 +79,37 @@ assert(
     server.includes("planHasFeature(subscriptionPlan, 'code')") &&
     server.includes("code: 'code_requires_plan'"),
   'Plan-gated services must be enforced server-side.'
+);
+
+assert(
+  securityCorrectionsSql.includes('alter table public.revenue_events enable row level security') &&
+    securityCorrectionsSql.includes('alter table public.shared_conversations enable row level security'),
+  'Pack 009 must keep revenue_events and shared_conversations behind RLS.'
+);
+assert(
+  securityCorrectionsSql.includes('alter view public.credit_audit_mismatches') &&
+    securityCorrectionsSql.includes('security_invoker = true'),
+  'The credit audit mismatch view must remain SECURITY INVOKER.'
+);
+assert(
+  securityCorrectionsSql.includes('from public, anon, authenticated') &&
+    securityCorrectionsSql.includes('to service_role'),
+  'Privileged Pack 009 database objects must preserve browser-role lockdown.'
+);
+assert(
+  securityCorrectionsSql.includes('set search_path = pg_catalog, public, pg_temp'),
+  'Privileged/internal database functions must use a fixed safe search_path.'
+);
+assert(
+  securityCorrectionsSql.includes('alter default privileges for role postgres in schema public') &&
+    !securityCorrectionsSql.includes('storage.'),
+  'Public default privileges must be hardened without modifying managed storage defaults.'
+);
+assert(
+  !/\bdrop\s+table\b/i.test(securityCorrectionsSql) &&
+    !/\btruncate\b/i.test(securityCorrectionsSql) &&
+    !/\bdelete\s+from\b/i.test(securityCorrectionsSql),
+  'Pack 009 security migration must remain non-destructive.'
 );
 
 console.log('ROX AI launch-blocker regression checks passed.');
