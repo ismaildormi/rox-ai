@@ -88,10 +88,26 @@ async function gatekeeperMiddleware(req, res, next) {
  * retry with the same requestId will never double-charge.
  * Throws with err.code = 'insufficient_credits' | 'user_not_found' on failure.
  */
-async function reserveCredits({ userId, requestId, feature, modelUsed = 'pending', creditsConsumed = 1 }) {
+async function reserveCredits({ userId, requestId, feature, modelUsed = 'pending', creditsConsumed = 1, projectId = null, taskId = null, stepId = 'root', usageKind = null }) {
   if (!requestId) {
     throw new Error('reserveCredits requires a requestId for idempotency');
   }
+
+  const normalizedUsageKind = usageKind ||
+    (feature === 'code'
+      ? 'ai_code_edit'
+      : feature === 'image' || feature === 'video'
+        ? 'generation'
+        : feature === 'chat'
+          ? 'chat_request'
+          : 'request');
+
+  const ledgerMetadata = {
+    project_id: projectId == null ? null : String(projectId).trim() || null,
+    task_id: taskId == null ? requestId : String(taskId).trim() || requestId,
+    step_id: stepId == null ? 'root' : String(stepId).trim() || 'root',
+    usage_kind: String(normalizedUsageKind).trim() || 'request',
+  };
 
   const { data, error } = await supabaseAdmin.rpc('deduct_credit_and_log', {
     p_user_id: userId,
@@ -101,6 +117,7 @@ async function reserveCredits({ userId, requestId, feature, modelUsed = 'pending
     p_credits_consumed: creditsConsumed,
     p_status: 'success',
     p_request_id: requestId,
+    p_metadata: ledgerMetadata,
   });
 
   if (error) throw error;
