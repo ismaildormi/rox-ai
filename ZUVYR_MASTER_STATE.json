@@ -1,13 +1,13 @@
 {
     "schema_version":  "1.0",
     "source_fix":  "005-FIX6",
-    "generated_at":  "2026-09-12T07:44:22.8766430+01:00",
+    "generated_at":  "2026-09-12T08:07:26.3221213+01:00",
     "selected_strategy":  "railway_internal_route",
     "previous_pack":  {
-                          "pack_id":  "010",
+                          "pack_id":  "011",
                           "status":  "VERIFIED"
                       },
-    "commit":  "722593fd1c872590a8226b736c877bbd05e3744a",
+    "commit":  "02f5d3624441666daa021a539e6ed8f44b865a8e",
     "tests":  {
                   "maintenance":  "PASS",
                   "runtime_safety":  "PASS",
@@ -28,7 +28,12 @@
                   "pack011_source_foundation":  "PASS",
                   "pack011_fix1":  "PASS",
                   "pack011_full_regression":  "PASS",
-                  "pack011_live_schema_reconciliation":  "PASS"
+                  "pack011_live_schema_reconciliation":  "PASS",
+                  "pack012_source_audit":  "PASS",
+                  "pack012_fix1":  "PASS",
+                  "pack012_unit_regression":  "PASS",
+                  "pack012_financial_regression":  "PASS",
+                  "pack012_production_postconditions":  "PASS"
               },
     "live_checks":  {
                         "healthz":  200,
@@ -61,7 +66,9 @@
                         "checkpoint_a_sha256":  "4BFD1484DFD6D9D830852EEA65465C2587281268F1289D89E3B0F01D561ACA41",
                         "pack011_foundation_tables_expected":  44,
                         "pack011_foundation_tables_present":  44,
-                        "pack011_reconciliation_sha256":  "96CF19F7BEC5F4D39E80B7699758410D7FB338B0EDBC33209B5953038E057284"
+                        "pack011_reconciliation_sha256":  "96CF19F7BEC5F4D39E80B7699758410D7FB338B0EDBC33209B5953038E057284",
+                        "pack012_migration_sha256":  "389802A07E2D3A57A10CF897A6D28B70780A1B12B36B8503BBD3C8E244A32BE4",
+                        "pack012_postconditions_sha256":  "8973BD190F527C13EA7219622D4706487A1254208E6221D25DF4D3A6890042CC"
                     },
     "idempotency":  {
                         "redis_lock":  true,
@@ -78,14 +85,14 @@
                            "M06":  "VERIFIED",
                            "M07":  "VERIFIED_NO_MIGRATION_REQUIRED"
                        },
-    "pack_id":  "011",
-    "pack_title":  "Canonical Database Foundations",
+    "pack_id":  "012",
+    "pack_title":  "Financial RPC Invariants",
     "status":  "VERIFIED",
     "pack_fix":  "FIX1",
-    "source_commit":  "722593fd1c872590a8226b736c877bbd05e3744a",
-    "finalized_at":  "2026-09-12T07:44:22.8766430+01:00",
+    "source_commit":  "02f5d3624441666daa021a539e6ed8f44b865a8e",
+    "finalized_at":  "2026-09-12T08:07:26.3221213+01:00",
     "next_pack_allowed":  true,
-    "next_pack":  "012 - Financial RPC Invariants",
+    "next_pack":  "013 - Unified Usage Ledger",
     "checkpoint_a":  {
                          "status":  "VERIFIED",
                          "p0_infrastructure_blockers":  0,
@@ -99,5 +106,15 @@
                     "migration_required":  false,
                     "receipt_sha256":  "B47CE1D2BB2A696B30C6A99E07F74B806EEE756E7B486B65617F2C2FF98A46A6",
                     "reconciliation_sha256":  "96CF19F7BEC5F4D39E80B7699758410D7FB338B0EDBC33209B5953038E057284"
+                },
+    "pack012":  {
+                    "status":  "VERIFIED",
+                    "fix1":  "VERIFIED",
+                    "migration_applied":  true,
+                    "production_postconditions":  "PASS",
+                    "duplicate_charge_path":  false,
+                    "duplicate_refund_path":  false,
+                    "receipt_sha256":  "8BE98A8D1A3FE742D81FFFB0AA8F258EDFAAFDBE5B095B909E37C7600BFA57E9",
+                    "postconditions_sha256":  "8973BD190F527C13EA7219622D4706487A1254208E6221D25DF4D3A6890042CC"
                 }
 }

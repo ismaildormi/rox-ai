@@ -1,0 +1,65 @@
+{
+    "pack":  "012",
+    "audited_at":  "2026-09-12T08:07:26.3221213+01:00",
+    "production_project_ref":  "tqoqsgaymygmqrzddvtu",
+    "source_commit":  "02f5d3624441666daa021a539e6ed8f44b865a8e",
+    "migration":  {
+                      "name":  "pack012_financial_rpc_invariants",
+                      "file":  "backend/43_pack012_financial_rpc_invariants.sql",
+                      "sha256":  "389802A07E2D3A57A10CF897A6D28B70780A1B12B36B8503BBD3C8E244A32BE4",
+                      "apply_result":  "SUCCESS"
+                  },
+    "schema":  {
+                   "reserved_credits_present":  true,
+                   "settled_final_credits_present":  true,
+                   "reserved_credits_constraint_validated":  true,
+                   "settled_final_credits_constraint_validated":  true
+               },
+    "legacy_rpc_invariants":  {
+                                  "deduct_advisory_lock":  true,
+                                  "deduct_negative_guard":  true,
+                                  "deduct_refunded_terminal_guard":  true,
+                                  "refund_advisory_lock":  true,
+                                  "refund_balance_conflict_guard":  true,
+                                  "settle_advisory_lock":  true,
+                                  "settle_conflict_guard":  true,
+                                  "settle_null_and_negative_guard":  true,
+                                  "client_execute_denied":  true,
+                                  "service_role_execute_allowed":  true
+                              },
+    "canonical_usage_rpc_invariants":  {
+                                           "reserve_service_role_only":  true,
+                                           "settle_service_role_only":  true,
+                                           "refund_service_role_only":  true,
+                                           "request_id_unique":  true,
+                                           "idempotency_key_unique":  true,
+                                           "settlement_conflict_guard":  true
+                                       },
+    "stripe_invariants":  {
+                              "checkout_atomic":  true,
+                              "lifecycle_ordered":  true,
+                              "invoice_exactly_once":  true,
+                              "revenue_event_uniqueness":  true,
+                              "webhook_event_uniqueness":  true
+                          },
+    "anomaly_counts":  {
+                           "negative_reserved_rows":  0,
+                           "negative_consumption_rows":  0,
+                           "negative_settled_final_rows":  0,
+                           "settled_marker_without_final":  0,
+                           "duplicate_success_request_groups":  0,
+                           "refunded_positive_request_recharge_candidates":  0,
+                           "invalid_usage_credit_rows":  0,
+                           "duplicate_usage_request_groups":  0,
+                           "duplicate_usage_idempotency_groups":  0,
+                           "negative_profile_balance_rows":  0,
+                           "duplicate_revenue_event_groups":  0,
+                           "duplicate_stripe_event_groups":  0,
+                           "invalid_webhook_status_rows":  0,
+                           "invalid_webhook_attempt_rows":  0
+                       },
+    "profile_financial_protection_trigger":  "ENABLED",
+    "customer_content_extracted":  false,
+    "customer_balances_manually_modified":  false,
+    "result":  "PASS"
+}

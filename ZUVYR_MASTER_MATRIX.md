@@ -29,7 +29,7 @@ Generated: 2026-09-12T00:04:43.9660425+01:00
 Pack 006 remains locked until M03 proves legacy database cron is absent/disabled and exactly one Railway maintenance scheduler is activated and live-verified.
 
 <!-- ZUVYR_PACK_005_FINALIZER_BEGIN -->
-## Pack 005 ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â Single Maintenance Strategy
+## Pack 005 ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚Â Single Maintenance Strategy
 
 Finalized: 2026-09-12T03:49:47.3520262+01:00
 
@@ -60,7 +60,7 @@ Railway evidence SHA256: $ExpectedEvidenceSha
 <!-- ZUVYR_PACK_005_FINALIZER_END -->
 
 <!-- ZUVYR_PACK_006_FINALIZER_BEGIN -->
-## Pack 006 ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â Readiness & Railway Health Gates
+## Pack 006 ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬ÃƒÂ¢Ã¢â€šÂ¬Ã‚Â Readiness & Railway Health Gates
 
 Finalized: 2026-09-12T04:23:48.6339920+01:00
 
@@ -86,7 +86,7 @@ Railway evidence SHA256: $ExpectedEvidenceSha
 <!-- ZUVYR_PACK_006_FINALIZER_END -->
 
 <!-- ZUVYR_PACK_007_FINALIZER_BEGIN -->
-## Pack 007 Ã¢â‚¬â€ CI / Release Quality Gate
+## Pack 007 ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â CI / Release Quality Gate
 
 - Status: VERIFIED
 - Source commit: 30dfc2c3b7b0f2df992787ba05ede8fcd0234898
@@ -95,12 +95,12 @@ Railway evidence SHA256: $ExpectedEvidenceSha
 - Backend Quality: PASS
 - Exact commit checkout: VERIFIED
 - Next pack allowed: YES
-- Next pack: 008 Ã¢â‚¬â€ Supabase Canonical Read-Only Audit
+- Next pack: 008 ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â Supabase Canonical Read-Only Audit
 - Finalized: 2026-09-12T06:15:13.6118212+01:00
 <!-- ZUVYR_PACK_007_FINALIZER_END -->
 
 <!-- ZUVYR_PACK_008_FINALIZER_BEGIN -->
-## Pack 008 Ã¢â‚¬â€ Supabase Canonical Read-Only Audit
+## Pack 008 ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â Supabase Canonical Read-Only Audit
 
 - Status: VERIFIED_WITH_FIXES_REQUIRED
 - Production Supabase ref: tqoqsgaymygmqrzddvtu
@@ -116,12 +116,12 @@ Railway evidence SHA256: $ExpectedEvidenceSha
 - Customer content extracted: NO
 - Pack 009 required: YES
 - Next pack allowed: YES
-- Next pack: 009 Ã¢â‚¬â€ Supabase Security Corrections
+- Next pack: 009 ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â Supabase Security Corrections
 - Finalized: 2026-09-12T06:20:48.6146061+01:00
 <!-- ZUVYR_PACK_008_FINALIZER_END -->
 
 <!-- ZUVYR_PACK_009_FINALIZER_BEGIN -->
-## Pack 009 â€” Supabase Security Corrections
+## Pack 009 Ã¢â‚¬â€ Supabase Security Corrections
 - Status: VERIFIED
 - Source commit: 235240a3a5c9345928797487b1da0934ab358227
 - Production Supabase: tqoqsgaymygmqrzddvtu
@@ -135,7 +135,7 @@ Railway evidence SHA256: $ExpectedEvidenceSha
 - Finalized: 2026-09-12T07:26:36.1568586+01:00
 <!-- ZUVYR_PACK_009_FINALIZER_END -->
 <!-- ZUVYR_PACK_010_FINALIZER_BEGIN -->
-## Pack 010 â€” Infrastructure Checkpoint A
+## Pack 010 Ã¢â‚¬â€ Infrastructure Checkpoint A
 - Status: VERIFIED
 - Source commit: 235240a3a5c9345928797487b1da0934ab358227
 - P0 infrastructure blockers: 0
@@ -156,11 +156,11 @@ Railway evidence SHA256: $ExpectedEvidenceSha
 - M06: VERIFIED
 - CHECKPOINT_A SHA256: 4BFD1484DFD6D9D830852EEA65465C2587281268F1289D89E3B0F01D561ACA41
 - Next pack allowed: YES
-- Next pack: 011 â€” Canonical Database Foundations
+- Next pack: 011 Ã¢â‚¬â€ Canonical Database Foundations
 - Finalized: 2026-09-12T07:26:36.1568586+01:00
 <!-- ZUVYR_PACK_010_FINALIZER_END -->
 <!-- ZUVYR_PACK_011_FINALIZER_BEGIN -->
-## Pack 011 — Canonical Database Foundations
+## Pack 011 â€” Canonical Database Foundations
 - Status: VERIFIED
 - Fix: FIX1 VERIFIED
 - Runtime source commit: 722593fd1c872590a8226b736c877bbd05e3744a
@@ -174,10 +174,35 @@ Railway evidence SHA256: $ExpectedEvidenceSha
 - Generation metadata reconciliation: PASS
 - Production schema mutation required: NO
 - Customer rows modified: NO
-- M07: VERIFIED — NO MIGRATION REQUIRED
+- M07: VERIFIED â€” NO MIGRATION REQUIRED
 - Receipt SHA256: B47CE1D2BB2A696B30C6A99E07F74B806EEE756E7B486B65617F2C2FF98A46A6
 - Reconciliation SHA256: 96CF19F7BEC5F4D39E80B7699758410D7FB338B0EDBC33209B5953038E057284
 - Next pack allowed: YES
-- Next pack: 012 — Financial RPC Invariants
+- Next pack: 012 â€” Financial RPC Invariants
 - Finalized: 2026-09-12T07:44:22.8766430+01:00
 <!-- ZUVYR_PACK_011_FINALIZER_END -->
+<!-- ZUVYR_PACK_012_FINALIZER_BEGIN -->
+## Pack 012 — Financial RPC Invariants
+- Status: VERIFIED
+- Fix: FIX1 VERIFIED
+- Runtime source commit: 02f5d3624441666daa021a539e6ed8f44b865a8e
+- Migration: backend/43_pack012_financial_rpc_invariants.sql
+- Migration SHA256: 389802A07E2D3A57A10CF897A6D28B70780A1B12B36B8503BBD3C8E244A32BE4
+- Production migration apply: PASS
+- Concurrency / request serialization: PASS
+- Idempotent replay: PASS
+- Immutable settlement conflict guard: PASS
+- Negative balance guards: PASS
+- Refund underflow guard: PASS
+- Stripe settlement compatibility: PASS
+- Browser-role RPC execution: DENIED
+- Service-role RPC execution: ALLOWED
+- Duplicate charge path: NONE FOUND
+- Duplicate refund path: NONE FOUND
+- Production financial anomalies: 0
+- Receipt SHA256: 8BE98A8D1A3FE742D81FFFB0AA8F258EDFAAFDBE5B095B909E37C7600BFA57E9
+- Postconditions SHA256: 8973BD190F527C13EA7219622D4706487A1254208E6221D25DF4D3A6890042CC
+- Next pack allowed: YES
+- Next pack: 013 — Unified Usage Ledger
+- Finalized: 2026-09-12T08:07:26.3221213+01:00
+<!-- ZUVYR_PACK_012_FINALIZER_END -->

@@ -1,0 +1,37 @@
+{
+    "pack":  "012",
+    "title":  "Financial RPC Invariants",
+    "status":  "VERIFIED",
+    "finalized_at":  "2026-09-12T08:07:26.3221213+01:00",
+    "source_commit":  "02f5d3624441666daa021a539e6ed8f44b865a8e",
+    "production_project_ref":  "tqoqsgaymygmqrzddvtu",
+    "migration":  {
+                      "file":  "backend/43_pack012_financial_rpc_invariants.sql",
+                      "sha256":  "389802A07E2D3A57A10CF897A6D28B70780A1B12B36B8503BBD3C8E244A32BE4",
+                      "applied":  true,
+                      "production_result":  "SUCCESS"
+                  },
+    "fix1":  {
+                 "status":  "VERIFIED",
+                 "receipt":  "zuvyr-pack-evidence/pack-012/fix1-receipt.json",
+                 "sha256":  "0AAB8BA00C4A51C9F752444DA1396B7849E0F7E8F028D281EBCE09A01BC4EC36"
+             },
+    "production_postconditions":  {
+                                      "status":  "PASS",
+                                      "file":  "zuvyr-pack-evidence/pack-012/production-postconditions.json",
+                                      "sha256":  "8973BD190F527C13EA7219622D4706487A1254208E6221D25DF4D3A6890042CC"
+                                  },
+    "done_gate":  {
+                      "concurrency":  "PASS",
+                      "replay":  "PASS",
+                      "negative_balance":  "PASS",
+                      "partial_failure":  "PASS",
+                      "service_role_permissions":  "PASS",
+                      "duplicate_charge_path":  false,
+                      "duplicate_refund_path":  false
+                  },
+    "customer_rows_preserved":  true,
+    "local_dirty_preserved":  true,
+    "next_pack_allowed":  true,
+    "next_pack":  "013 - Unified Usage Ledger"
+}

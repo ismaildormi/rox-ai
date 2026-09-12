@@ -1,0 +1,32 @@
+{
+    "pack":  "012",
+    "fix":  "FIX1",
+    "title":  "Financial RPC invariant hardening",
+    "status":  "VERIFIED",
+    "finalized_at":  "2026-09-12T08:07:26.3221213+01:00",
+    "source_commit":  "02f5d3624441666daa021a539e6ed8f44b865a8e",
+    "migration_file":  "backend/43_pack012_financial_rpc_invariants.sql",
+    "migration_sha256":  "389802A07E2D3A57A10CF897A6D28B70780A1B12B36B8503BBD3C8E244A32BE4",
+    "changes":  {
+                    "legacy_request_serialization":  true,
+                    "negative_credit_guard":  true,
+                    "refunded_request_terminal_guard":  true,
+                    "immutable_settlement_guard":  true,
+                    "refund_underflow_guard":  true,
+                    "service_role_only":  true,
+                    "reserved_credits_metadata":  true,
+                    "settled_final_credits_metadata":  true
+                },
+    "verification":  {
+                         "pack012_test":  "PASS",
+                         "unit_test":  "PASS",
+                         "financial_regression":  "PASS",
+                         "destructive_sql_gate":  "PASS",
+                         "git_push":  "PASS",
+                         "github_quality_gate":  "PASS",
+                         "github_quality_run_id":  34679435689,
+                         "deploy_contexts":  "PASS",
+                         "live_before_db_apply":  "PASS"
+                     },
+    "local_dirty_preserved":  true
+}
