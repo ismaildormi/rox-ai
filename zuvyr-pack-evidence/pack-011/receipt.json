@@ -1,0 +1,36 @@
+{
+    "pack":  "011",
+    "fix":  null,
+    "title":  "Canonical Database Foundations",
+    "status":  "VERIFIED",
+    "finalized_at":  "2026-09-12T07:44:22.8766430+01:00",
+    "source_commit":  "722593fd1c872590a8226b736c877bbd05e3744a",
+    "production_project_ref":  "tqoqsgaymygmqrzddvtu",
+    "source_foundation_gate":  "PASS",
+    "fix1":  {
+                 "status":  "VERIFIED",
+                 "receipt":  "zuvyr-pack-evidence/pack-011/fix1-receipt.json",
+                 "sha256":  "60CADC87F37E8D8E757ACDA5D219A1EE15503FEBD3328140D7557EAF40116489"
+             },
+    "live_reconciliation":  {
+                                "status":  "PASS",
+                                "file":  "zuvyr-pack-evidence/pack-011/live-schema-reconciliation.json",
+                                "sha256":  "96CF19F7BEC5F4D39E80B7699758410D7FB338B0EDBC33209B5953038E057284",
+                                "expected_tables":  44,
+                                "present_tables":  44,
+                                "missing_tables":  0,
+                                "rls_disabled":  0,
+                                "unexpected_client_dml":  0,
+                                "migration_required":  false
+                            },
+    "external_gate":  {
+                          "M07":  "VERIFIED_NO_MIGRATION_REQUIRED",
+                          "reason":  "Live reconciliation proved no additive schema correction was necessary."
+                      },
+    "production_schema_changes_applied":  false,
+    "customer_rows_preserved":  true,
+    "customer_content_extracted":  false,
+    "local_dirty_preserved":  true,
+    "next_pack_allowed":  true,
+    "next_pack":  "012 - Financial RPC Invariants"
+}

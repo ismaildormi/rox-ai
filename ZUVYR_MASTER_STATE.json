@@ -1,13 +1,13 @@
 {
     "schema_version":  "1.0",
     "source_fix":  "005-FIX6",
-    "generated_at":  "2026-09-12T07:26:36.1568586+01:00",
+    "generated_at":  "2026-09-12T07:44:22.8766430+01:00",
     "selected_strategy":  "railway_internal_route",
     "previous_pack":  {
-                          "pack_id":  "009",
+                          "pack_id":  "010",
                           "status":  "VERIFIED"
                       },
-    "commit":  "235240a3a5c9345928797487b1da0934ab358227",
+    "commit":  "722593fd1c872590a8226b736c877bbd05e3744a",
     "tests":  {
                   "maintenance":  "PASS",
                   "runtime_safety":  "PASS",
@@ -24,7 +24,11 @@
                   "backup_restore_smoke":  "PASS",
                   "log_redaction":  "PASS",
                   "rollback_source_proof":  "PASS",
-                  "checkpoint_a":  "PASS"
+                  "checkpoint_a":  "PASS",
+                  "pack011_source_foundation":  "PASS",
+                  "pack011_fix1":  "PASS",
+                  "pack011_full_regression":  "PASS",
+                  "pack011_live_schema_reconciliation":  "PASS"
               },
     "live_checks":  {
                         "healthz":  200,
@@ -54,7 +58,10 @@
                         "graceful_shutdown_source":  "VERIFIED",
                         "railway_evidence_sha256":  "32BDB14E7D007DFCF67A5AE1353785F51945BE8F26E8E8E55245163E185BBB30",
                         "metrics_unauth_http":  401,
-                        "checkpoint_a_sha256":  "4BFD1484DFD6D9D830852EEA65465C2587281268F1289D89E3B0F01D561ACA41"
+                        "checkpoint_a_sha256":  "4BFD1484DFD6D9D830852EEA65465C2587281268F1289D89E3B0F01D561ACA41",
+                        "pack011_foundation_tables_expected":  44,
+                        "pack011_foundation_tables_present":  44,
+                        "pack011_reconciliation_sha256":  "96CF19F7BEC5F4D39E80B7699758410D7FB338B0EDBC33209B5953038E057284"
                     },
     "idempotency":  {
                         "redis_lock":  true,
@@ -68,20 +75,29 @@
                            "M03":  "VERIFIED",
                            "M04":  "VERIFIED",
                            "M05":  "VERIFIED",
-                           "M06":  "VERIFIED"
+                           "M06":  "VERIFIED",
+                           "M07":  "VERIFIED_NO_MIGRATION_REQUIRED"
                        },
-    "pack_id":  "010",
-    "pack_title":  "Infrastructure Checkpoint A",
+    "pack_id":  "011",
+    "pack_title":  "Canonical Database Foundations",
     "status":  "VERIFIED",
-    "pack_fix":  null,
-    "source_commit":  "235240a3a5c9345928797487b1da0934ab358227",
-    "finalized_at":  "2026-09-12T07:26:36.1568586+01:00",
+    "pack_fix":  "FIX1",
+    "source_commit":  "722593fd1c872590a8226b736c877bbd05e3744a",
+    "finalized_at":  "2026-09-12T07:44:22.8766430+01:00",
     "next_pack_allowed":  true,
-    "next_pack":  "011 - Canonical Database Foundations",
+    "next_pack":  "012 - Financial RPC Invariants",
     "checkpoint_a":  {
                          "status":  "VERIFIED",
                          "p0_infrastructure_blockers":  0,
                          "receipt_sha256":  "EEA7E5312EF60C88731BAFD38A9D3E6FB05991D524045A5710FAE669B7210959",
                          "evidence_sha256":  "4BFD1484DFD6D9D830852EEA65465C2587281268F1289D89E3B0F01D561ACA41"
-                     }
+                     },
+    "pack011":  {
+                    "status":  "VERIFIED",
+                    "fix1":  "VERIFIED",
+                    "live_reconciliation":  "PASS",
+                    "migration_required":  false,
+                    "receipt_sha256":  "B47CE1D2BB2A696B30C6A99E07F74B806EEE756E7B486B65617F2C2FF98A46A6",
+                    "reconciliation_sha256":  "96CF19F7BEC5F4D39E80B7699758410D7FB338B0EDBC33209B5953038E057284"
+                }
 }

@@ -1,0 +1,29 @@
+{
+    "pack":  "011",
+    "fix":  "FIX1",
+    "title":  "Rox IP wiring test line-ending compatibility",
+    "status":  "VERIFIED",
+    "finalized_at":  "2026-09-12T07:44:22.8766430+01:00",
+    "source_commit":  "722593fd1c872590a8226b736c877bbd05e3744a",
+    "issue":  "test-roxip-server-wiring.js compared a multiline LF literal against a Windows CRLF server.js working copy",
+    "production_code_defect":  false,
+    "correction":  {
+                       "file":  "backend/test-roxip-server-wiring.js",
+                       "behavior_change":  "Normalize CRLF to LF in test input before structural wiring assertions",
+                       "production_runtime_changed":  false
+                   },
+    "verification":  {
+                         "roxip_wiring_test":  "PASS",
+                         "pack11_full_test":  "PASS",
+                         "database_foundation_regression":  "PASS",
+                         "source_diff_check":  "PASS",
+                         "github_quality_gate":  "PASS",
+                         "github_quality_run_id":  34678713256,
+                         "deployment":  "PASS",
+                         "frontend_http":  200,
+                         "healthz_http":  200,
+                         "readyz_http":  200,
+                         "livez_http":  200
+                     },
+    "local_dirty_preserved":  true
+}

@@ -1,13 +1,13 @@
 {
     "schema_version":  "1.0",
-    "verified_at":  "2026-09-12T07:26:36.1568586+01:00",
+    "verified_at":  "2026-09-12T07:44:22.8766430+01:00",
     "github":  {
                    "owner":  "ismaildormi",
                    "repo":  "rox-ai",
                    "origin":  "https://github.com/ismaildormi/rox-ai.git",
                    "branch":  "main",
-                   "head":  "235240a3a5c9345928797487b1da0934ab358227",
-                   "remote_main":  "235240a3a5c9345928797487b1da0934ab358227"
+                   "head":  "722593fd1c872590a8226b736c877bbd05e3744a",
+                   "remote_main":  "722593fd1c872590a8226b736c877bbd05e3744a"
                },
     "railway":  {
                     "project_id":  "ba460cdb-cc55-4203-bdd0-711846b7564c",
@@ -20,7 +20,7 @@
                     "worker_service_id":  "8b9b895c-24f5-4973-bd05-a1791c6f5714",
                     "worker_domain":  "loving-harmony-production-e0e1.up.railway.app",
                     "redis_service_id":  "8100b487-8d9b-4e43-9397-df8115bb84be",
-                    "deployed_commit":  "235240a3a5c9345928797487b1da0934ab358227"
+                    "deployed_commit":  "722593fd1c872590a8226b736c877bbd05e3744a"
                 },
     "supabase":  {
                      "project_ref":  "tqoqsgaymygmqrzddvtu",

@@ -1,0 +1,140 @@
+{
+    "pack":  "011",
+    "title":  "Canonical Database Foundations",
+    "audited_at":  "2026-09-12T07:44:22.8766430+01:00",
+    "production_project_ref":  "tqoqsgaymygmqrzddvtu",
+    "mode":  "READ_ONLY_METADATA_RECONCILIATION",
+    "source_commit":  "722593fd1c872590a8226b736c877bbd05e3744a",
+    "migration_sources":  {
+                              "29_zuvyr_intelligence_task_foundation.sql":  "7EAE5EA24BA2C8DB38D6B690FC367A275D4295B6B3A714B1666040ED17B2FB81",
+                              "30_zuvyr_chat_sources_research_foundation.sql":  "B6DD550A7847EA71D6849AAF97566978BBA8A50FA75167EA52505B9667030660",
+                              "31_zuvyr_image_operations_history_foundation.sql":  "E8BB06E13FE73E7ADDE2B1993D767059E1505B768B297AAEB992B98B3B1D60E4",
+                              "32_zuvyr_video_jobs_operations_foundation.sql":  "9E1BFA30067A915CB8D062BC5E3329B4D13F95AA2846DB825B3145997CC00579",
+                              "33_zuvyr_code_studio_foundation.sql":  "CBA25739C176FB90A4D1ABC2A55049F9367A318E864C1E42F70B9DD52D1F8355",
+                              "34_zuvyr_voice_music_audio_foundation.sql":  "76DF5F106F520DB899A00273183A95CF90B5A96B1EE9126A302546CE1CB36D2D",
+                              "35_zuvyr_ip_safety_foundation.sql":  "06147104D6F0CA0A0F0C73407CC5470FAE8280AD59EC1BF73C871F50B9BA3593",
+                              "36_zuvyr_workspace_foundation.sql":  "0430BEB64411F80CC7780A17D5B799BC6E73C1D15D8E18C759A09E179C2F0BB3",
+                              "37_zuvyr_final_product_readiness.sql":  "D2E73F0998FE5357F30E0BF291140C54544784CF07E3C5824BF41C4D4178A5F3",
+                              "38_zuvyr_unified_product_orchestration.sql":  "E0ECD4D3D6F047D87928C4517E3FD0A9AD770AF987062F4C645B3B623C016081"
+                          },
+    "expected_foundation_table_count":  44,
+    "present_foundation_table_count":  44,
+    "expected_tables":  [
+                            "zuvyr_task_runs",
+                            "zuvyr_task_steps",
+                            "conversation_sources",
+                            "zuvyr_chat_capability_runs",
+                            "code_deploy_requests",
+                            "code_project_files",
+                            "code_project_versions",
+                            "code_projects",
+                            "code_runtime_jobs",
+                            "audio_artifacts",
+                            "audio_jobs",
+                            "voice_sessions",
+                            "ip_actions",
+                            "ip_audit_events",
+                            "ip_confirmations",
+                            "ip_devices",
+                            "ip_permission_grants",
+                            "ip_plans",
+                            "ip_sessions",
+                            "ip_stop_signals",
+                            "ip_undo_receipts",
+                            "workspace_audit_events",
+                            "workspace_creations",
+                            "workspace_integration_connections",
+                            "workspace_items",
+                            "workspace_plugin_connections",
+                            "workspace_project_items",
+                            "workspace_projects",
+                            "workspace_schedules",
+                            "workspace_templates",
+                            "workspace_workflow_steps",
+                            "workspace_workflows",
+                            "zuvyr_app_release_candidates",
+                            "zuvyr_data_rights_requests",
+                            "zuvyr_financial_daily_rollups",
+                            "zuvyr_notifications",
+                            "zuvyr_release_validations",
+                            "zuvyr_usage_daily_rollups",
+                            "zuvyr_user_preferences",
+                            "zuvyr_capability_handoffs",
+                            "zuvyr_ip_tool_grants",
+                            "zuvyr_orchestration_approvals",
+                            "zuvyr_orchestration_proposals",
+                            "zuvyr_orchestration_steps"
+                        ],
+    "missing_tables":  [
+
+                       ],
+    "rls_disabled":  [
+
+                     ],
+    "unexpected_client_dml":  [
+
+                              ],
+    "missing_service_role_dml":  [
+
+                                 ],
+    "generation_jobs":  {
+                            "rls":  true,
+                            "own_row_select_policy":  {
+                                                          "name":  "select_own_jobs",
+                                                          "command":  "SELECT",
+                                                          "condition":  "auth.uid() = user_id"
+                                                      },
+                            "required_columns":  [
+                                                     "image_operation",
+                                                     "reference_asset_ids",
+                                                     "source_asset_id",
+                                                     "mask_asset_id",
+                                                     "image_options",
+                                                     "video_operation",
+                                                     "source_image_asset_id",
+                                                     "source_video_asset_id",
+                                                     "start_frame_asset_id",
+                                                     "end_frame_asset_id",
+                                                     "video_options",
+                                                     "progress_percent",
+                                                     "job_stage",
+                                                     "estimated_seconds",
+                                                     "cancel_requested",
+                                                     "preview_url",
+                                                     "export_url"
+                                                 ],
+                            "missing_required_columns":  [
+
+                                                         ],
+                            "required_indexes":  [
+                                                     "generation_jobs_image_operation_state_idx",
+                                                     "generation_jobs_user_image_history_idx",
+                                                     "generation_jobs_user_video_history_idx",
+                                                     "generation_jobs_video_cancel_queue_idx",
+                                                     "generation_jobs_video_operation_state_idx"
+                                                 ],
+                            "missing_required_indexes":  [
+
+                                                         ],
+                            "required_constraints":  [
+                                                         "generation_jobs_estimate_valid",
+                                                         "generation_jobs_image_operation_allowed",
+                                                         "generation_jobs_image_options_object",
+                                                         "generation_jobs_progress_valid",
+                                                         "generation_jobs_reference_assets_array",
+                                                         "generation_jobs_stage_allowed",
+                                                         "generation_jobs_video_operation_allowed",
+                                                         "generation_jobs_video_options_object",
+                                                         "generation_jobs_video_urls_https"
+                                                     ],
+                            "missing_required_constraints":  [
+
+                                                             ]
+                        },
+    "customer_rows_modified":  false,
+    "customer_content_extracted":  false,
+    "production_schema_changes_applied":  false,
+    "reconciliation_migration_required":  false,
+    "M07":  "VERIFIED_NO_MIGRATION_REQUIRED",
+    "result":  "PASS"
+}
