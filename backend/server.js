@@ -164,6 +164,12 @@ app.use((req, res, next) => {
 // "is this process able to reach its two hard dependencies right now."
 // Redis and Supabase are checked with a short timeout each so one slow
 // dependency can't make the health check itself hang indefinitely.
+let shuttingDown = false;
+
+app.get('/livez', (req, res) => {
+  res.status(200).json({ status: 'alive', uptimeSeconds: Math.round(process.uptime()) });
+});
+
 async function checkHardDependencies() {
   const checks = {};
   let ready = true;
@@ -210,6 +216,10 @@ app.get('/healthz', async (req, res) => {
 });
 
 app.get('/readyz', async (req, res) => {
+  if (shuttingDown) {
+    return res.status(503).json({ status: 'not_ready', reason: 'shutting_down' });
+  }
+
   const { ready, checks } = await checkHardDependencies();
 
   res.status(ready ? 200 : 503).json({
@@ -1543,7 +1553,34 @@ async function reportQueueDepths() {
   setQueueDepth('rox-image-generation', imgWaiting);
   setQueueDepth('rox-video-generation', vidWaiting);
 }
-setInterval(reportQueueDepths, 10_000);
+const queueDepthInterval = setInterval(reportQueueDepths, 10_000);
 
 const PORT = process.env.PORT || 3001;
-app.listen(PORT, () => console.log(`ROX AI backend listening on port ${PORT}`));
+const server = app.listen(PORT, () => console.log(`ROX AI backend listening on port ${PORT}`));
+
+const SHUTDOWN_TIMEOUT_MS = 10_000;
+let shutdownStarted = false;
+
+function beginGracefulShutdown(signal) {
+  if (shutdownStarted) return;
+  shutdownStarted = true;
+  shuttingDown = true;
+
+  console.log(`[shutdown] ${signal} received; stopping new traffic.`);
+  clearInterval(queueDepthInterval);
+
+  const forceExitTimer = setTimeout(() => {
+    console.error('[shutdown] graceful timeout exceeded; forcing exit.');
+    process.exit(1);
+  }, SHUTDOWN_TIMEOUT_MS);
+  if (typeof forceExitTimer.unref === 'function') forceExitTimer.unref();
+
+  server.close(() => {
+    clearTimeout(forceExitTimer);
+    console.log('[shutdown] HTTP server closed cleanly.');
+    process.exit(0);
+  });
+}
+
+process.on('SIGTERM', () => beginGracefulShutdown('SIGTERM'));
+process.on('SIGINT', () => beginGracefulShutdown('SIGINT'));
