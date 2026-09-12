@@ -34,11 +34,20 @@ function walk(dir) {
   return output;
 }
 
+function isHistoricalSourceSnapshot(file) {
+  const base = path.basename(file);
+  return (
+    /\.before-[^/\\]*\.js$/i.test(base) ||
+    /\.backup-before-[^/\\]*\.js$/i.test(base) ||
+    /\.bak\.js$/i.test(base)
+  );
+}
+
 function checkNodeSyntax() {
   const files = [
     ...walk(path.join(root, 'backend')),
     ...walk(path.join(root, 'cli')),
-  ].filter(file => file.endsWith('.js'));
+  ].filter(file => file.endsWith('.js') && !isHistoricalSourceSnapshot(file));
 
   for (const file of files) {
     const result = spawnSync(process.execPath, ['--check', file], {
@@ -61,7 +70,7 @@ function checkJson() {
     try {
       JSON.parse(fs.readFileSync(file, 'utf8').replace(/^\uFEFF/, ''));
     } catch (error) {
-      fail(`JSON parse: ${path.relative(root, file)} ΓÇö ${error.message}`);
+      fail(`JSON parse: ${path.relative(root, file)} Î“Ã‡Ã¶ ${error.message}`);
       return;
     }
   }
@@ -135,7 +144,7 @@ function checkEmbeddedScripts(documents) {
       });
       pass(`${name} embedded JavaScript (${scripts.length} scripts)`);
     } catch (error) {
-      fail(`${name} embedded JavaScript ΓÇö ${error.message}`);
+      fail(`${name} embedded JavaScript Î“Ã‡Ã¶ ${error.message}`);
     }
   }
 }
@@ -171,7 +180,7 @@ function checkI18n(wrapper) {
   try {
     objects = extractI18nObjects(wrapper);
   } catch (error) {
-    fail(`i18n parse ΓÇö ${error.message}`);
+    fail(`i18n parse Î“Ã‡Ã¶ ${error.message}`);
     return;
   }
 
@@ -206,7 +215,7 @@ function checkI18n(wrapper) {
     return;
   }
 
-  pass(`i18n synchronization (${firstKeys.length} keys ├ù 5 languages ├ù 2 copies)`);
+  pass(`i18n synchronization (${firstKeys.length} keys â”œÃ¹ 5 languages â”œÃ¹ 2 copies)`);
 }
 
 function checkFrontendContracts(wrapper) {
@@ -239,7 +248,7 @@ function main() {
     const documents = extractEmbeddedDocuments(wrapper);
     checkEmbeddedScripts(documents);
   } catch (error) {
-    fail(`Embedded document extraction ΓÇö ${error.message}`);
+    fail(`Embedded document extraction Î“Ã‡Ã¶ ${error.message}`);
   }
 
   checkI18n(wrapper);

@@ -1,0 +1,78 @@
+name: ZUVYR Release Quality Gate
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: zuvyr-release-quality-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  release-quality:
+    name: Release Quality
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout exact commit
+        uses: actions/checkout@v4
+
+      - name: Use Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: package-lock.json
+
+      - name: Install root dependencies
+        run: npm ci
+
+      - name: Verify validator scope
+        run: node tools/test-release-validator-scope.js
+
+      - name: Validate release contracts
+        run: npm run validate:release
+
+      - name: Verify CI gate contract
+        run: node tools/test-ci-release-gate.js
+
+  backend-quality:
+    name: Backend Quality
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - name: Checkout exact commit
+        uses: actions/checkout@v4
+
+      - name: Use Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: backend/package-lock.json
+
+      - name: Install backend dependencies
+        run: npm ci
+
+      - name: Run backend unit and safety tests
+        run: npm run test:unit
+
+      - name: Run maintenance strategy tests
+        run: npm run test:maintenance
+
+      - name: Verify readiness gate source
+        run: node test-readiness-gates.js
+
+      - name: Verify liveness and shutdown source
+        run: node test-readiness-lifecycle.js
