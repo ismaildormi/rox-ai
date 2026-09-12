@@ -91,6 +91,7 @@ const {
   publicPlanCatalog
 } = require('./lib/planEntitlements');
 const { publicCapacityContract } = require('./lib/capacityProtection');
+const { publicStripeCatalog } = require('./lib/stripeCanonicalCatalog');
 const {
   attachmentQueryFromMessages,
   buildConversationAttachmentContext,
@@ -435,6 +436,12 @@ app.get('/api/plan-catalog', (req, res) => {
   res.json({
     status: 'success',
     catalog: publicPlanCatalog()
+  });
+});
+app.get('/api/stripe-catalog', (req, res) => {
+  res.json({
+    status: 'success',
+    catalog: publicStripeCatalog()
   });
 });
 app.get('/api/capacity-contract', (req, res) => {

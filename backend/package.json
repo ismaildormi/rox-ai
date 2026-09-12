@@ -12,7 +12,7 @@
     "worker": "node worker.js",
     "test:hardening": "node test-hardening.js",
     "test:gatekeeper": "node test-gatekeeper-unit.js",
-    "test:unit": "node test-gatekeeper-unit.js && node test-launch-blockers.js && node test-runtime-safety.js && node test-pack012-financial-rpc-invariants.js && node test-pack013-unified-usage-ledger.js && node test-pack013-rev11-code-studio-usage.js && node test-pack014-single-cost-registry.js && node test-pack015-full-technical-cost-model.js && node test-pack016-canonical-plans-entitlements.js && node test-pack016-repair-starter-shared-catalog.js && node test-pack017-capacity-weekly-protection.js && node test-pack018-unified-usage-billing-ux.js",
+    "test:unit": "node test-gatekeeper-unit.js && node test-launch-blockers.js && node test-runtime-safety.js && node test-pack012-financial-rpc-invariants.js && node test-pack013-unified-usage-ledger.js && node test-pack013-rev11-code-studio-usage.js && node test-pack014-single-cost-registry.js && node test-pack015-full-technical-cost-model.js && node test-pack016-canonical-plans-entitlements.js && node test-pack016-repair-starter-shared-catalog.js && node test-pack017-capacity-weekly-protection.js && node test-pack018-unified-usage-billing-ux.js && node test-pack019-stripe-canonical-catalog-lifecycle.js && node test-pack019-topup-canonical-checkout.js",
     "test:launch": "node test-launch-blockers.js && node test-runtime-safety.js",
     "maintenance:run": "node maintenanceRunner.js",
     "test:maintenance": "node test-maintenance-strategy.js"

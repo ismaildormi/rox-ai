@@ -1,0 +1,51 @@
+{
+  "version": "pack-019.stripe-canonical-catalog.v1",
+  "canonicalModeEnvKey": "ZUVYR_STRIPE_CANONICAL_CATALOG_ACTIVE",
+  "subscriptions": {
+    "source": "backend/config/plans.json",
+    "planIds": [
+      "plus",
+      "pro",
+      "legend",
+      "max"
+    ],
+    "billingMode": "subscription",
+    "interval": "month"
+  },
+  "topups": {
+    "billingMode": "payment",
+    "minCredits": 1000,
+    "maxCredits": 10000,
+    "tiers": [
+      {
+        "id": "standard",
+        "minCredits": 1000,
+        "maxCredits": 4999,
+        "unitPriceMicrousd": 10000,
+        "priceEnvKey": "STRIPE_TOPUP_STANDARD_PRICE_ID"
+      },
+      {
+        "id": "bulk",
+        "minCredits": 5000,
+        "maxCredits": 10000,
+        "unitPriceMicrousd": 8000,
+        "priceEnvKey": "STRIPE_TOPUP_BULK_PRICE_ID"
+      }
+    ],
+    "legacyCompatibility": {
+      "mode": "dynamic_price_data",
+      "enabledWhenCanonicalModeOff": true,
+      "preserveExistingCheckoutMetadata": true
+    }
+  },
+  "webhook": {
+    "secretEnvKey": "STRIPE_WEBHOOK_SECRET",
+    "requiredSettlementRpcs": [
+      "settle_stripe_checkout_event",
+      "settle_stripe_subscription_lifecycle_event",
+      "settle_stripe_subscription_invoice_event"
+    ]
+  },
+  "externalGate": "M08",
+  "secretsEmbedded": false
+}
