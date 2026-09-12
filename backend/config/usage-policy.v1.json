@@ -54,5 +54,17 @@
         "status": "unconfigured"
       }
     }
+  },
+  "capacityProtection": {
+    "version": "pack-017.capacity-protection.v1",
+    "warningRemainingPercentThresholds": [
+      20,
+      10,
+      5
+    ],
+    "fiveHourStartRule": "first_subscription_funded_use_after_expiry",
+    "weeklyRenewalRule": "seven_day_boundaries_from_subscription_period_start",
+    "purchasedTopupPolicy": "persistent_non_expiring",
+    "productionEnforcementDefault": false
   }
 }

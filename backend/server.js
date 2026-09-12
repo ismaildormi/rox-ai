@@ -90,6 +90,7 @@ const {
   planHasFeature,
   publicPlanCatalog
 } = require('./lib/planEntitlements');
+const { publicCapacityContract } = require('./lib/capacityProtection');
 const {
   attachmentQueryFromMessages,
   buildConversationAttachmentContext,
@@ -434,6 +435,12 @@ app.get('/api/plan-catalog', (req, res) => {
   res.json({
     status: 'success',
     catalog: publicPlanCatalog()
+  });
+});
+app.get('/api/capacity-contract', (req, res) => {
+  res.json({
+    status: 'success',
+    contract: publicCapacityContract()
   });
 });
 app.get('/api/usage-status', requireAuth, async (req, res) => {

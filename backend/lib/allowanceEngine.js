@@ -5,6 +5,7 @@ const {
   PAID_PLAN_IDS,
   canonicalPlanIdFromProfile
 } = require('./planEntitlements');
+const { buildCapacityWarnings } = require('./capacityProtection');
 
 const HOUR_MS = 60 * 60 * 1000;
 const DAY_MS = 24 * HOUR_MS;
@@ -279,8 +280,22 @@ function evaluateAllowance({
   if (weeklyRemaining < units) exhaustedLimit = exhaustedLimit || 'weekly';
 
   if (exhaustedLimit) {
+    const warnings = buildCapacityWarnings({
+      fiveHourTotal: fiveTotal,
+      fiveHourRemaining: fiveRemaining,
+      weeklyTotal,
+      weeklyRemaining
+    }, value);
+
     return topupPermitted
-      ? topupDecision({ requestedUnits: units, profile, exhaustedLimit })
+      ? {
+          ...topupDecision({
+            requestedUnits: units,
+            profile,
+            exhaustedLimit
+          }),
+          warnings
+        }
       : {
           allowed: false,
           code: `${exhaustedLimit}_allowance_exhausted`,
@@ -289,6 +304,7 @@ function evaluateAllowance({
           fiveHourResetAt: fiveHour.endsAt,
           weeklyRemaining,
           weeklyResetAt: weekly.endsAt,
+          warnings,
           topupCreditsBalance: wholeUnits(
             profile.topupCreditsBalance || 0,
             'topup_credits_balance'
@@ -315,6 +331,12 @@ function evaluateAllowance({
       usedAfterReservation: weekly.used + units,
       remainingAfterReservation: weeklyRemaining - units
     },
+    warnings: buildCapacityWarnings({
+      fiveHourTotal: fiveTotal,
+      fiveHourRemaining: fiveRemaining - units,
+      weeklyTotal,
+      weeklyRemaining: weeklyRemaining - units
+    }, value),
     topupCreditsBalance: wholeUnits(
       profile.topupCreditsBalance || 0,
       'topup_credits_balance'
