@@ -1,26 +1,16 @@
 {
-  "version": "groq-text-standard-2026-09-08",
+  "version": "pack-014.groq-text-limits.v1",
   "provider": "groq",
-  "currency": "USD",
   "serviceTier": "on_demand",
-  "verifiedAt": "2026-09-08T00:00:00Z",
-  "reviewBefore": "2026-09-15T00:00:00Z",
-  "unitScale": "1000000",
-  "representation": "integer_micro_usd_per_million_tokens",
-  "scope": "Uncached published-rate upper bound for text tokens only. Not an invoice or a customer credit quote.",
-  "customerBillingReady": false,
-  "accountFreeTierVerified": false,
+  "authoritativeCostRegistry": "cost-registry.v1.json",
+  "limitsVerifiedAt": "2026-09-08T00:00:00Z",
   "models": {
     "openai/gpt-oss-20b": {
-      "inputPriceMicroUsd": "75000",
-      "outputPriceMicroUsd": "300000",
       "maxContextTokens": 131072,
       "maxOutputTokens": 65536,
       "source": "https://console.groq.com/docs/model/openai/gpt-oss-20b"
     },
     "openai/gpt-oss-120b": {
-      "inputPriceMicroUsd": "150000",
-      "outputPriceMicroUsd": "600000",
       "maxContextTokens": 131072,
       "maxOutputTokens": 65536,
       "source": "https://console.groq.com/docs/model/openai/gpt-oss-120b"

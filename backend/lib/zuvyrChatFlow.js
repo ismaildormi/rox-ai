@@ -61,7 +61,7 @@ function makeQuote(messages, now = Date.now()) {
   return { version:VERSION, model:MODEL, maxOutput:OUTPUT, maxContext:context, messages,
     pricingVersion:estimate.pricingVersion, policyHash:policyHash(), economics:policy.economics,
     maxCredits:charges.credits, providerBound:estimate.providerCostUpperBoundMicroUsd,
-    createdAt:new Date(now).toISOString(), expiresAt:new Date(Math.min(now + 300000, Date.parse(catalog.reviewBefore))).toISOString() };
+    createdAt:new Date(now).toISOString(), expiresAt:new Date(Math.min(now + 300000, Date.parse(estimate.reviewBefore))).toISOString() };
 }
 function measure(data, quote) {
   if (!data || data.model !== quote.model || !['on_demand','default'].includes(data.service_tier) || !Array.isArray(data.choices) || data.choices.length !== 1) fail('provider_response_unverified', 502);

@@ -1,6 +1,7 @@
 'use strict';
 
-const published = require('../config/groq-text-pricing.verified.v1.json');
+const limits = require('../config/groq-text-pricing.verified.v1.json');
+const { resolveCostQuote } = require('./costRegistry');
 
 function fail(code) {
   const error = new Error(code);
@@ -19,62 +20,60 @@ function nonnegativeInteger(value, field) {
   fail('invalid_' + field);
 }
 
-function ceilDiv(numerator, denominator) {
-  return (numerator + denominator - 1n) / denominator;
-}
-
-// Pure arithmetic: no provider, wallet, network or environment access.
-// For a reservation use a SERVER-VERIFIED input-token upper bound and the
-// full completion-token cap (including reasoning), not a client token count.
-// No discount is assumed for cache hits or an unverified account free tier.
 function estimateGroqTextProviderUpperBound({
   model,
   inputTokens,
   outputTokens,
   serviceTier = 'on_demand',
   toolsUsed = false
-} = {}, { now = Date.now(), catalog = published } = {}) {
-  if (!catalog || typeof catalog.version !== 'string' || !catalog.version.trim() ||
-      catalog.provider !== 'groq' || catalog.currency !== 'USD' ||
-      catalog.unitScale !== '1000000' || catalog.serviceTier !== 'on_demand') {
+} = {}, {
+  now = Date.now(),
+  env = process.env,
+  catalog = limits
+} = {}) {
+  if (!catalog || catalog.provider !== 'groq' || catalog.serviceTier !== 'on_demand' ||
+      catalog.authoritativeCostRegistry !== 'cost-registry.v1.json' || !catalog.models) {
     fail('invalid_pricing_catalog');
   }
-  const checkedAt = Date.parse(catalog.verifiedAt);
-  const reviewBefore = Date.parse(catalog.reviewBefore);
-  if (!Number.isFinite(now) || !Number.isFinite(checkedAt) ||
-      !Number.isFinite(reviewBefore) || reviewBefore <= checkedAt ||
-      now < checkedAt || now >= reviewBefore) {
-    fail('pricing_review_required');
-  }
+
   if (serviceTier !== 'on_demand' || toolsUsed !== false) {
     fail('unsupported_pricing_scope');
   }
-  if (typeof model !== 'string' || !catalog.models ||
-      !Object.prototype.hasOwnProperty.call(catalog.models, model)) {
+
+  if (typeof model !== 'string' || !Object.prototype.hasOwnProperty.call(catalog.models, model)) {
     fail('unknown_priced_model');
   }
-  const entry = catalog.models[model];
+
+  const definition = catalog.models[model];
   const input = nonnegativeInteger(inputTokens, 'input_tokens');
   const output = nonnegativeInteger(outputTokens, 'output_tokens');
-  const maxContext = nonnegativeInteger(entry.maxContextTokens, 'context_limit');
-  const maxOutput = nonnegativeInteger(entry.maxOutputTokens, 'output_limit');
-  const inputRate = nonnegativeInteger(entry.inputPriceMicroUsd, 'input_price');
-  const outputRate = nonnegativeInteger(entry.outputPriceMicroUsd, 'output_price');
-  if (inputRate === 0n || outputRate === 0n) fail('unverified_zero_price');
-  if (maxContext === 0n || maxOutput === 0n ||
-      output > maxOutput || input + output > maxContext) {
+  const maxContext = nonnegativeInteger(definition.maxContextTokens, 'context_limit');
+  const maxOutput = nonnegativeInteger(definition.maxOutputTokens, 'output_limit');
+
+  if (maxContext === 0n || maxOutput === 0n || output > maxOutput || input + output > maxContext) {
     fail('model_token_limit_exceeded');
   }
-  // One rounding operation for the combined cost avoids per-token rounding.
-  const cost = ceilDiv(input * inputRate + output * outputRate, 1000000n);
+
+  const quote = resolveCostQuote({
+    provider: 'groq',
+    modelToolId: model,
+    capability: 'chat',
+    operationType: 'text_generation'
+  }, {
+    inputUnits: input.toString(),
+    outputUnits: output.toString()
+  }, { now, env });
+
   return Object.freeze({
-    pricingVersion: catalog.version,
+    pricingVersion: quote.pricingVersion,
+    costEntryId: quote.costEntryId,
+    reviewBefore: quote.reviewBefore,
     provider: 'groq',
     model,
     inputTokens: input.toString(),
     outputTokens: output.toString(),
-    providerCostUpperBoundMicroUsd: cost.toString(),
-    kind: 'published_uncached_text_rate_upper_bound',
+    providerCostUpperBoundMicroUsd: quote.providerCostMicroUsd,
+    kind: 'authoritative_registry_text_rate_upper_bound',
     customerCreditQuoteReady: false,
     accountActualCostVerified: false
   });

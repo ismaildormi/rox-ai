@@ -1,5 +1,5 @@
 {
-  "version": "pack-01.costs.v1",
+  "version": "pack-014.single-cost-registry.v1",
   "currency": "USD",
   "priceRepresentation": "integer_micro_usd",
   "entries": [
@@ -12,25 +12,24 @@
       "unitType": "tokens",
       "unitScale": "1000000",
       "currency": "USD",
-      "inputUnitPriceMicroUsd": "0",
-      "outputUnitPriceMicroUsd": "0",
+      "inputUnitPriceMicroUsd": "75000",
+      "outputUnitPriceMicroUsd": "300000",
       "cachedUnitPriceMicroUsd": null,
-      "fixedOperationPriceMicroUsd": "0",
-      "minimumBillableMicroUsd": "0",
-      "pricingSourceUrl": null,
-      "pricingEffectiveDate": "2026-09-06",
-      "verificationStatus": "conditional_repository_verified",
-      "verificationEvidence": "backend/config/models.json and ZUVYR_GROQ_FREE_TIER_CONFIRMED=true",
-      "requiredEnvironment": {
-        "name": "ZUVYR_GROQ_FREE_TIER_CONFIRMED",
-        "value": "true"
-      },
-      "enabledState": "conditional",
+      "fixedOperationPriceMicroUsd": null,
+      "minimumBillableMicroUsd": null,
+      "pricingSourceUrl": "https://console.groq.com/docs/model/openai/gpt-oss-20b",
+      "pricingEffectiveDate": "2026-09-08T00:00:00Z",
+      "verificationStatus": "verified",
+      "verificationEvidence": "Groq published on-demand uncached text pricing, consolidated into the Pack 014 authoritative registry.",
+      "requiredEnvironment": null,
+      "enabledState": "enabled",
       "safetyReserveBps": 0,
       "infrastructureReserveMicroUsd": "0",
       "currencyChangeReserveBps": 0,
       "targetGrossMarginBps": 5000,
-      "creditConversionResult": null
+      "creditConversionResult": null,
+      "pricingSource": "provider_published_url",
+      "pricingReviewBefore": "2026-09-15T00:00:00Z"
     },
     {
       "id": "groq-gpt-oss-120b-chat",
@@ -41,25 +40,24 @@
       "unitType": "tokens",
       "unitScale": "1000000",
       "currency": "USD",
-      "inputUnitPriceMicroUsd": "0",
-      "outputUnitPriceMicroUsd": "0",
+      "inputUnitPriceMicroUsd": "150000",
+      "outputUnitPriceMicroUsd": "600000",
       "cachedUnitPriceMicroUsd": null,
-      "fixedOperationPriceMicroUsd": "0",
-      "minimumBillableMicroUsd": "0",
-      "pricingSourceUrl": null,
-      "pricingEffectiveDate": "2026-09-06",
-      "verificationStatus": "conditional_repository_verified",
-      "verificationEvidence": "backend/config/models.json and ZUVYR_GROQ_FREE_TIER_CONFIRMED=true",
-      "requiredEnvironment": {
-        "name": "ZUVYR_GROQ_FREE_TIER_CONFIRMED",
-        "value": "true"
-      },
-      "enabledState": "conditional",
+      "fixedOperationPriceMicroUsd": null,
+      "minimumBillableMicroUsd": null,
+      "pricingSourceUrl": "https://console.groq.com/docs/model/openai/gpt-oss-120b",
+      "pricingEffectiveDate": "2026-09-08T00:00:00Z",
+      "verificationStatus": "verified",
+      "verificationEvidence": "Groq published on-demand uncached text pricing, consolidated into the Pack 014 authoritative registry.",
+      "requiredEnvironment": null,
+      "enabledState": "enabled",
       "safetyReserveBps": 0,
       "infrastructureReserveMicroUsd": "0",
       "currencyChangeReserveBps": 0,
       "targetGrossMarginBps": 5000,
-      "creditConversionResult": null
+      "creditConversionResult": null,
+      "pricingSource": "provider_published_url",
+      "pricingReviewBefore": "2026-09-15T00:00:00Z"
     },
     {
       "id": "groq-gpt-oss-120b-code",
@@ -70,25 +68,24 @@
       "unitType": "tokens",
       "unitScale": "1000000",
       "currency": "USD",
-      "inputUnitPriceMicroUsd": "0",
-      "outputUnitPriceMicroUsd": "0",
+      "inputUnitPriceMicroUsd": "150000",
+      "outputUnitPriceMicroUsd": "600000",
       "cachedUnitPriceMicroUsd": null,
-      "fixedOperationPriceMicroUsd": "0",
-      "minimumBillableMicroUsd": "0",
-      "pricingSourceUrl": null,
-      "pricingEffectiveDate": "2026-09-06",
-      "verificationStatus": "conditional_repository_verified",
-      "verificationEvidence": "backend/config/models.json and ZUVYR_GROQ_FREE_TIER_CONFIRMED=true",
-      "requiredEnvironment": {
-        "name": "ZUVYR_GROQ_FREE_TIER_CONFIRMED",
-        "value": "true"
-      },
-      "enabledState": "conditional",
+      "fixedOperationPriceMicroUsd": null,
+      "minimumBillableMicroUsd": null,
+      "pricingSourceUrl": "https://console.groq.com/docs/model/openai/gpt-oss-120b",
+      "pricingEffectiveDate": "2026-09-08T00:00:00Z",
+      "verificationStatus": "verified",
+      "verificationEvidence": "Groq published on-demand uncached text pricing, consolidated into the Pack 014 authoritative registry.",
+      "requiredEnvironment": null,
+      "enabledState": "enabled",
       "safetyReserveBps": 0,
       "infrastructureReserveMicroUsd": "0",
       "currencyChangeReserveBps": 0,
       "targetGrossMarginBps": 5000,
-      "creditConversionResult": null
+      "creditConversionResult": null,
+      "pricingSource": "provider_published_url",
+      "pricingReviewBefore": "2026-09-15T00:00:00Z"
     },
     {
       "id": "groq-gpt-oss-20b-code",
@@ -99,25 +96,24 @@
       "unitType": "tokens",
       "unitScale": "1000000",
       "currency": "USD",
-      "inputUnitPriceMicroUsd": "0",
-      "outputUnitPriceMicroUsd": "0",
+      "inputUnitPriceMicroUsd": "75000",
+      "outputUnitPriceMicroUsd": "300000",
       "cachedUnitPriceMicroUsd": null,
-      "fixedOperationPriceMicroUsd": "0",
-      "minimumBillableMicroUsd": "0",
-      "pricingSourceUrl": null,
-      "pricingEffectiveDate": "2026-09-06",
-      "verificationStatus": "conditional_repository_verified",
-      "verificationEvidence": "backend/config/models.json and ZUVYR_GROQ_FREE_TIER_CONFIRMED=true",
-      "requiredEnvironment": {
-        "name": "ZUVYR_GROQ_FREE_TIER_CONFIRMED",
-        "value": "true"
-      },
-      "enabledState": "conditional",
+      "fixedOperationPriceMicroUsd": null,
+      "minimumBillableMicroUsd": null,
+      "pricingSourceUrl": "https://console.groq.com/docs/model/openai/gpt-oss-20b",
+      "pricingEffectiveDate": "2026-09-08T00:00:00Z",
+      "verificationStatus": "verified",
+      "verificationEvidence": "Groq published on-demand uncached text pricing, consolidated into the Pack 014 authoritative registry.",
+      "requiredEnvironment": null,
+      "enabledState": "enabled",
       "safetyReserveBps": 0,
       "infrastructureReserveMicroUsd": "0",
       "currencyChangeReserveBps": 0,
       "targetGrossMarginBps": 5000,
-      "creditConversionResult": null
+      "creditConversionResult": null,
+      "pricingSource": "provider_published_url",
+      "pricingReviewBefore": "2026-09-15T00:00:00Z"
     },
     {
       "id": "openrouter-nemotron-free-chat",
@@ -143,7 +139,9 @@
       "infrastructureReserveMicroUsd": "0",
       "currencyChangeReserveBps": 0,
       "targetGrossMarginBps": 5000,
-      "creditConversionResult": null
+      "creditConversionResult": null,
+      "pricingSource": "unverified",
+      "pricingReviewBefore": null
     },
     {
       "id": "openrouter-free-router-chat",
@@ -169,7 +167,9 @@
       "infrastructureReserveMicroUsd": "0",
       "currencyChangeReserveBps": 0,
       "targetGrossMarginBps": 5000,
-      "creditConversionResult": null
+      "creditConversionResult": null,
+      "pricingSource": "unverified",
+      "pricingReviewBefore": null
     },
     {
       "id": "openrouter-gemini-multimodal",
@@ -195,7 +195,9 @@
       "infrastructureReserveMicroUsd": "0",
       "currencyChangeReserveBps": 0,
       "targetGrossMarginBps": 5000,
-      "creditConversionResult": null
+      "creditConversionResult": null,
+      "pricingSource": "unverified",
+      "pricingReviewBefore": null
     },
     {
       "id": "fal-image-generation",
@@ -212,16 +214,21 @@
       "fixedOperationPriceMicroUsd": null,
       "minimumBillableMicroUsd": null,
       "pricingSourceUrl": null,
-      "pricingEffectiveDate": null,
-      "verificationStatus": "unverified",
-      "verificationEvidence": "Existing FAL_IMAGE_COST_USD is operator-supplied and not verified in the snapshot",
+      "pricingEffectiveDate": "2026-09-12T00:00:00Z",
+      "verificationStatus": "conditional_operator_configured",
+      "verificationEvidence": "Pack 014 compatibility price is resolved only through costRegistry from FAL_IMAGE_COST_USD; missing, malformed or expired configuration fails closed.",
       "requiredEnvironment": null,
-      "enabledState": "blocked",
+      "enabledState": "conditional",
       "safetyReserveBps": 0,
       "infrastructureReserveMicroUsd": "0",
       "currencyChangeReserveBps": 0,
       "targetGrossMarginBps": 5000,
-      "creditConversionResult": null
+      "creditConversionResult": null,
+      "pricingSource": "operator_environment",
+      "pricingReviewBefore": "2026-10-12T00:00:00Z",
+      "runtimePriceEnvironment": "FAL_IMAGE_COST_USD",
+      "providerCredentialEnvironment": "FAL_KEY",
+      "legacyGenerationDefault": true
     },
     {
       "id": "replicate-image-generation",
@@ -238,16 +245,21 @@
       "fixedOperationPriceMicroUsd": null,
       "minimumBillableMicroUsd": null,
       "pricingSourceUrl": null,
-      "pricingEffectiveDate": null,
-      "verificationStatus": "unverified",
-      "verificationEvidence": "Existing REPLICATE_IMAGE_COST_USD is operator-supplied and not verified in the snapshot",
+      "pricingEffectiveDate": "2026-09-12T00:00:00Z",
+      "verificationStatus": "conditional_operator_configured",
+      "verificationEvidence": "Pack 014 compatibility price is resolved only through costRegistry from REPLICATE_IMAGE_COST_USD; missing, malformed or expired configuration fails closed.",
       "requiredEnvironment": null,
-      "enabledState": "blocked",
+      "enabledState": "conditional",
       "safetyReserveBps": 0,
       "infrastructureReserveMicroUsd": "0",
       "currencyChangeReserveBps": 0,
       "targetGrossMarginBps": 5000,
-      "creditConversionResult": null
+      "creditConversionResult": null,
+      "pricingSource": "operator_environment",
+      "pricingReviewBefore": "2026-10-12T00:00:00Z",
+      "runtimePriceEnvironment": "REPLICATE_IMAGE_COST_USD",
+      "providerCredentialEnvironment": "REPLICATE_API_TOKEN",
+      "legacyGenerationDefault": true
     },
     {
       "id": "replicate-video-generation",
@@ -264,16 +276,21 @@
       "fixedOperationPriceMicroUsd": null,
       "minimumBillableMicroUsd": null,
       "pricingSourceUrl": null,
-      "pricingEffectiveDate": null,
-      "verificationStatus": "unverified",
-      "verificationEvidence": "Existing REPLICATE_VIDEO_COST_USD is operator-supplied and not verified in the snapshot",
+      "pricingEffectiveDate": "2026-09-12T00:00:00Z",
+      "verificationStatus": "conditional_operator_configured",
+      "verificationEvidence": "Pack 014 compatibility price is resolved only through costRegistry from REPLICATE_VIDEO_COST_USD; missing, malformed or expired configuration fails closed.",
       "requiredEnvironment": null,
-      "enabledState": "blocked",
+      "enabledState": "conditional",
       "safetyReserveBps": 0,
       "infrastructureReserveMicroUsd": "0",
       "currencyChangeReserveBps": 0,
       "targetGrossMarginBps": 5000,
-      "creditConversionResult": null
+      "creditConversionResult": null,
+      "pricingSource": "operator_environment",
+      "pricingReviewBefore": "2026-10-12T00:00:00Z",
+      "runtimePriceEnvironment": "REPLICATE_VIDEO_COST_USD",
+      "providerCredentialEnvironment": "REPLICATE_API_TOKEN",
+      "legacyGenerationDefault": true
     },
     {
       "id": "unassigned-audio-transcription",
@@ -299,7 +316,9 @@
       "infrastructureReserveMicroUsd": "0",
       "currencyChangeReserveBps": 0,
       "targetGrossMarginBps": 5000,
-      "creditConversionResult": null
+      "creditConversionResult": null,
+      "pricingSource": "unverified",
+      "pricingReviewBefore": null
     },
     {
       "id": "unassigned-audio-text-to-speech",
@@ -325,7 +344,9 @@
       "infrastructureReserveMicroUsd": "0",
       "currencyChangeReserveBps": 0,
       "targetGrossMarginBps": 5000,
-      "creditConversionResult": null
+      "creditConversionResult": null,
+      "pricingSource": "unverified",
+      "pricingReviewBefore": null
     },
     {
       "id": "unassigned-voice-chat",
@@ -351,7 +372,9 @@
       "infrastructureReserveMicroUsd": "0",
       "currencyChangeReserveBps": 0,
       "targetGrossMarginBps": 5000,
-      "creditConversionResult": null
+      "creditConversionResult": null,
+      "pricingSource": "unverified",
+      "pricingReviewBefore": null
     },
     {
       "id": "unassigned-music-generation",
@@ -377,7 +400,9 @@
       "infrastructureReserveMicroUsd": "0",
       "currencyChangeReserveBps": 0,
       "targetGrossMarginBps": 5000,
-      "creditConversionResult": null
+      "creditConversionResult": null,
+      "pricingSource": "unverified",
+      "pricingReviewBefore": null
     },
     {
       "id": "unassigned-audio-processing",
@@ -403,7 +428,9 @@
       "infrastructureReserveMicroUsd": "0",
       "currencyChangeReserveBps": 0,
       "targetGrossMarginBps": 5000,
-      "creditConversionResult": null
+      "creditConversionResult": null,
+      "pricingSource": "unverified",
+      "pricingReviewBefore": null
     },
     {
       "id": "unassigned-audio-to-video",
@@ -429,7 +456,9 @@
       "infrastructureReserveMicroUsd": "0",
       "currencyChangeReserveBps": 0,
       "targetGrossMarginBps": 5000,
-      "creditConversionResult": null
+      "creditConversionResult": null,
+      "pricingSource": "unverified",
+      "pricingReviewBefore": null
     },
     {
       "id": "unassigned-computer-control-actions",
@@ -455,7 +484,9 @@
       "infrastructureReserveMicroUsd": "0",
       "currencyChangeReserveBps": 0,
       "targetGrossMarginBps": 5000,
-      "creditConversionResult": null
+      "creditConversionResult": null,
+      "pricingSource": "unverified",
+      "pricingReviewBefore": null
     },
     {
       "id": "unassigned-computer-control-time",
@@ -481,7 +512,9 @@
       "infrastructureReserveMicroUsd": "0",
       "currencyChangeReserveBps": 0,
       "targetGrossMarginBps": 5000,
-      "creditConversionResult": null
+      "creditConversionResult": null,
+      "pricingSource": "unverified",
+      "pricingReviewBefore": null
     },
     {
       "id": "unassigned-workspace-storage",
@@ -507,7 +540,9 @@
       "infrastructureReserveMicroUsd": "0",
       "currencyChangeReserveBps": 0,
       "targetGrossMarginBps": 5000,
-      "creditConversionResult": null
+      "creditConversionResult": null,
+      "pricingSource": "unverified",
+      "pricingReviewBefore": null
     },
     {
       "id": "unassigned-scheduled-runtime",
@@ -533,7 +568,9 @@
       "infrastructureReserveMicroUsd": "0",
       "currencyChangeReserveBps": 0,
       "targetGrossMarginBps": 5000,
-      "creditConversionResult": null
+      "creditConversionResult": null,
+      "pricingSource": "unverified",
+      "pricingReviewBefore": null
     },
     {
       "id": "unassigned-workspace-integrations",
@@ -559,7 +596,9 @@
       "infrastructureReserveMicroUsd": "0",
       "currencyChangeReserveBps": 0,
       "targetGrossMarginBps": 5000,
-      "creditConversionResult": null
+      "creditConversionResult": null,
+      "pricingSource": "unverified",
+      "pricingReviewBefore": null
     },
     {
       "id": "conversation-file-processing",
@@ -585,7 +624,151 @@
       "infrastructureReserveMicroUsd": "0",
       "currencyChangeReserveBps": 0,
       "targetGrossMarginBps": 5000,
+      "creditConversionResult": null,
+      "pricingSource": "unverified",
+      "pricingReviewBefore": null
+    },
+    {
+      "id": "unassigned-code-build-job",
+      "provider": "unassigned",
+      "modelToolId": "code-studio-runtime",
+      "capability": "code",
+      "operationType": "build_job",
+      "unitType": "build_jobs",
+      "unitScale": "1",
+      "currency": "USD",
+      "inputUnitPriceMicroUsd": null,
+      "outputUnitPriceMicroUsd": null,
+      "cachedUnitPriceMicroUsd": null,
+      "fixedOperationPriceMicroUsd": null,
+      "minimumBillableMicroUsd": null,
+      "pricingSource": "unverified",
+      "pricingSourceUrl": null,
+      "pricingEffectiveDate": null,
+      "pricingReviewBefore": null,
+      "verificationStatus": "unverified",
+      "verificationEvidence": "Code Studio build-job provider and compute price are not verified.",
+      "requiredEnvironment": null,
+      "enabledState": "blocked",
+      "safetyReserveBps": 0,
+      "infrastructureReserveMicroUsd": "0",
+      "currencyChangeReserveBps": 0,
+      "targetGrossMarginBps": 5000,
+      "creditConversionResult": null
+    },
+    {
+      "id": "unassigned-code-sandbox-runtime",
+      "provider": "unassigned",
+      "modelToolId": "code-studio-runtime",
+      "capability": "code",
+      "operationType": "sandbox_runtime",
+      "unitType": "runtime_seconds",
+      "unitScale": "1",
+      "currency": "USD",
+      "inputUnitPriceMicroUsd": null,
+      "outputUnitPriceMicroUsd": null,
+      "cachedUnitPriceMicroUsd": null,
+      "fixedOperationPriceMicroUsd": null,
+      "minimumBillableMicroUsd": null,
+      "pricingSource": "unverified",
+      "pricingSourceUrl": null,
+      "pricingEffectiveDate": null,
+      "pricingReviewBefore": null,
+      "verificationStatus": "unverified",
+      "verificationEvidence": "Code Studio sandbox/runtime compute price is not verified.",
+      "requiredEnvironment": null,
+      "enabledState": "blocked",
+      "safetyReserveBps": 0,
+      "infrastructureReserveMicroUsd": "0",
+      "currencyChangeReserveBps": 0,
+      "targetGrossMarginBps": 5000,
+      "creditConversionResult": null
+    },
+    {
+      "id": "unassigned-code-preview-runtime",
+      "provider": "unassigned",
+      "modelToolId": "code-studio-runtime",
+      "capability": "code",
+      "operationType": "preview_runtime",
+      "unitType": "preview_seconds",
+      "unitScale": "1",
+      "currency": "USD",
+      "inputUnitPriceMicroUsd": null,
+      "outputUnitPriceMicroUsd": null,
+      "cachedUnitPriceMicroUsd": null,
+      "fixedOperationPriceMicroUsd": null,
+      "minimumBillableMicroUsd": null,
+      "pricingSource": "unverified",
+      "pricingSourceUrl": null,
+      "pricingEffectiveDate": null,
+      "pricingReviewBefore": null,
+      "verificationStatus": "unverified",
+      "verificationEvidence": "Code Studio preview runtime duration price is not verified.",
+      "requiredEnvironment": null,
+      "enabledState": "blocked",
+      "safetyReserveBps": 0,
+      "infrastructureReserveMicroUsd": "0",
+      "currencyChangeReserveBps": 0,
+      "targetGrossMarginBps": 5000,
+      "creditConversionResult": null
+    },
+    {
+      "id": "unassigned-code-preview-egress",
+      "provider": "unassigned",
+      "modelToolId": "code-studio-runtime",
+      "capability": "code",
+      "operationType": "preview_egress",
+      "unitType": "egress_bytes",
+      "unitScale": "1",
+      "currency": "USD",
+      "inputUnitPriceMicroUsd": null,
+      "outputUnitPriceMicroUsd": null,
+      "cachedUnitPriceMicroUsd": null,
+      "fixedOperationPriceMicroUsd": null,
+      "minimumBillableMicroUsd": null,
+      "pricingSource": "unverified",
+      "pricingSourceUrl": null,
+      "pricingEffectiveDate": null,
+      "pricingReviewBefore": null,
+      "verificationStatus": "unverified",
+      "verificationEvidence": "Code Studio preview transport/bandwidth/egress price is not verified.",
+      "requiredEnvironment": null,
+      "enabledState": "blocked",
+      "safetyReserveBps": 0,
+      "infrastructureReserveMicroUsd": "0",
+      "currencyChangeReserveBps": 0,
+      "targetGrossMarginBps": 5000,
+      "creditConversionResult": null
+    },
+    {
+      "id": "unassigned-code-idle-session",
+      "provider": "unassigned",
+      "modelToolId": "code-studio-runtime",
+      "capability": "code",
+      "operationType": "idle_session",
+      "unitType": "idle_session_seconds",
+      "unitScale": "1",
+      "currency": "USD",
+      "inputUnitPriceMicroUsd": null,
+      "outputUnitPriceMicroUsd": null,
+      "cachedUnitPriceMicroUsd": null,
+      "fixedOperationPriceMicroUsd": null,
+      "minimumBillableMicroUsd": null,
+      "pricingSource": "unverified",
+      "pricingSourceUrl": null,
+      "pricingEffectiveDate": null,
+      "pricingReviewBefore": null,
+      "verificationStatus": "unverified",
+      "verificationEvidence": "Code Studio idle-session billing policy and price are not verified.",
+      "requiredEnvironment": null,
+      "enabledState": "blocked",
+      "safetyReserveBps": 0,
+      "infrastructureReserveMicroUsd": "0",
+      "currencyChangeReserveBps": 0,
+      "targetGrossMarginBps": 5000,
       "creditConversionResult": null
     }
-  ]
+  ],
+  "schemaVersion": 2,
+  "authoritativeLookup": "backend/lib/costRegistry.js"
 }

@@ -70,7 +70,7 @@ const MULTIMODAL_ROUTE = {
 function getEffectiveChain(feature, loadLevel, isPro = true) {
   const chain = ROUTES[feature] || ROUTES.chat;
   if (feature !== 'chat' || loadLevel !== 'high') return chain;
-  return [...chain].sort((a, b) => costTier(a.model) - costTier(b.model));
+  return [...chain].filter(route => Number.isFinite(costTier(route.model, { provider: route.provider }))).sort((a, b) => costTier(a.model, { provider: a.provider }) - costTier(b.model, { provider: b.provider }));
 }
 
 async function withTimeout(promise, ms) {
@@ -195,7 +195,7 @@ async function routeRequest(feature, messages, opts = {}) {
         cost_usd:
           Number.isFinite(Number(result.usage?.cost))
             ? Number(result.usage.cost)
-            : estimateCostUsd(route.model, result.usage),
+            : estimateCostUsd(route.model, result.usage, { provider: route.provider }),
         attempts
       };
     } catch (err) {

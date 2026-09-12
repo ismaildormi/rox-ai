@@ -1,58 +1,91 @@
-// ROX AI — lib/modelCosts.js
-//
-// Turns raw token usage (returned by both callAnthropic and callOpenRouter
-// in aiRouter.js) into an estimated USD cost per call. This is what lets
-// the rest of the system reason about margin instead of just "credits
-// consumed" — two requests can cost the same 1 credit but a wildly
-// different real amount depending on which model actually answered.
-//
-// IMPORTANT: these are STARTING-POINT rates, not fetched live from any
-// provider. Provider pricing changes over time and by tier/promo — treat
-// this object as a config file to keep in sync with your Anthropic /
-// OpenRouter billing dashboards, not a permanent source of truth. Wrong
-// numbers here don't affect billing (credits are still what's charged to
-// the user) — they only affect how accurate your margin metrics are.
+'use strict';
 
-// Rates now live in config/models.json (not inline here) so pricing
-// updates and new models are a config edit, not a code edit — see
-// src/core/config.js and ARCHITECTURE.md "Configuration strategy".
-const { models } = require('../src/core/config');
-const MODEL_COSTS_USD_PER_MILLION_TOKENS = models.rates;
+// Pack 014 compatibility shim for router ordering and metrics.
+// No price table lives here: every usable price comes from costRegistry.
+const {
+  registry,
+  findCostEntries,
+  resolveCostEntry,
+  estimateProviderCostMicroUsd
+} = require('./costRegistry');
 
-// Fail-safe default for any model not listed above: assume the most
-// expensive known rate rather than 0, so an unlisted/new model can never
-// silently look "free" in the margin metrics.
-const DEFAULT_RATE = models.defaultRate;
-
-function rateFor(model) {
-  return MODEL_COSTS_USD_PER_MILLION_TOKENS[model] || DEFAULT_RATE;
+function modelCostError(code, model) {
+  const error = new Error(code);
+  error.code = code;
+  error.model = model;
+  return error;
 }
 
-/**
- * @param {string} model
- * @param {object} usage - Anthropic shape {input_tokens, output_tokens} or
- *                          OpenAI/OpenRouter shape {prompt_tokens, completion_tokens}
- * @returns {number} estimated USD cost of this single call
- */
-function estimateCostUsd(model, usage = {}) {
-  const rate = rateFor(model);
-  const inputTokens = usage.input_tokens ?? usage.prompt_tokens ?? 0;
-  const outputTokens = usage.output_tokens ?? usage.completion_tokens ?? 0;
-  const cost =
-    (inputTokens / 1_000_000) * rate.input +
-    (outputTokens / 1_000_000) * rate.output;
-  return Number(cost.toFixed(6));
+function candidateEntries(model, provider) {
+  let matches = findCostEntries({
+    modelToolId: model,
+    operationType: 'text_generation',
+    ...(provider ? { provider } : {})
+  });
+
+  if (matches.length === 0 && provider) {
+    matches = findCostEntries({ modelToolId: model, operationType: 'text_generation' });
+  }
+
+  return matches;
 }
 
-/**
- * A single comparable number per model, used to sort a fallback chain
- * from cheapest to priciest under load (see aiRouter.js). Just the sum
- * of input+output rates — good enough for ordering, not meant as a
- * precise per-call estimate on its own.
- */
-function costTier(model) {
-  const rate = rateFor(model);
-  return rate.input + rate.output;
+function resolvedEntries(model, {
+  provider = null,
+  env = process.env,
+  now = Date.now()
+} = {}) {
+  const output = [];
+  for (const entry of candidateEntries(model, provider)) {
+    try {
+      output.push(resolveCostEntry({
+        provider: entry.provider,
+        modelToolId: entry.modelToolId,
+        capability: entry.capability,
+        operationType: entry.operationType
+      }, { env, now }));
+    } catch (_) {
+      // Unverified, blocked, missing, not-yet-effective and expired prices are
+      // intentionally not usable by the router.
+    }
+  }
+  return output;
 }
 
-module.exports = { MODEL_COSTS_USD_PER_MILLION_TOKENS, estimateCostUsd, costTier };
+function estimateCostMicroUsd(model, usage = {}, options = {}) {
+  const entries = resolvedEntries(model, options);
+  if (entries.length === 0) throw modelCostError('model_cost_unavailable', model);
+
+  let highest = 0n;
+  for (const entry of entries) {
+    const cost = BigInt(estimateProviderCostMicroUsd(entry, usage));
+    if (cost > highest) highest = cost;
+  }
+  return highest.toString();
+}
+
+function estimateCostUsd(model, usage = {}, options = {}) {
+  return Number(estimateCostMicroUsd(model, usage, options)) / 1000000;
+}
+
+function costTier(model, options = {}) {
+  try {
+    return Number(estimateCostMicroUsd(model, {
+      input_tokens: 1000000,
+      output_tokens: 1000000
+    }, options)) / 1000000;
+  } catch (_) {
+    return Number.POSITIVE_INFINITY;
+  }
+}
+
+// Retained only so a legacy import does not crash. It is deliberately empty:
+// the authoritative rates live in cost-registry.v1.json.
+const MODEL_COSTS_USD_PER_MILLION_TOKENS = Object.freeze({});
+
+module.exports = {
+  MODEL_COSTS_USD_PER_MILLION_TOKENS,
+  estimateCostMicroUsd,
+  estimateCostUsd,
+  costTier
+};
