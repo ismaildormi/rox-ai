@@ -1,13 +1,11 @@
-{
+﻿{
     "schema_version":  "1.0",
     "source_fix":  "005-FIX6",
-    "generated_at":  "2026-09-12T08:07:26.3221213+01:00",
     "selected_strategy":  "railway_internal_route",
     "previous_pack":  {
                           "pack_id":  "011",
                           "status":  "VERIFIED"
                       },
-    "commit":  "02f5d3624441666daa021a539e6ed8f44b865a8e",
     "tests":  {
                   "maintenance":  "PASS",
                   "runtime_safety":  "PASS",
@@ -85,14 +83,7 @@
                            "M06":  "VERIFIED",
                            "M07":  "VERIFIED_NO_MIGRATION_REQUIRED"
                        },
-    "pack_id":  "012",
-    "pack_title":  "Financial RPC Invariants",
-    "status":  "VERIFIED",
     "pack_fix":  "FIX1",
-    "source_commit":  "02f5d3624441666daa021a539e6ed8f44b865a8e",
-    "finalized_at":  "2026-09-12T08:07:26.3221213+01:00",
-    "next_pack_allowed":  true,
-    "next_pack":  "013 - Unified Usage Ledger",
     "checkpoint_a":  {
                          "status":  "VERIFIED",
                          "p0_infrastructure_blockers":  0,
@@ -116,5 +107,109 @@
                     "duplicate_refund_path":  false,
                     "receipt_sha256":  "8BE98A8D1A3FE742D81FFFB0AA8F258EDFAAFDBE5B095B909E37C7600BFA57E9",
                     "postconditions_sha256":  "8973BD190F527C13EA7219622D4706487A1254208E6221D25DF4D3A6890042CC"
-                }
+                },
+    "pack013":  {
+                    "status":  "LOCKED_VERIFIED",
+                    "rev11":  "LOCKED_VERIFIED",
+                    "source_commit":  "e057cede34cdc7c3d39d355ff44cec9e249edeb9",
+                    "receipt_sha256":  "4DD1123256BAA76E258A1F0629A0BE7F9BEE58F5146C2CFE0130DEE201176A0B",
+                    "unified_usage_ledger":  "VERIFIED",
+                    "code_studio_usage_bridge":  "VERIFIED",
+                    "database_migration_required":  false
+                },
+    "pack014":  {
+                    "status":  "LOCKED_VERIFIED",
+                    "source_commit":  "826867e9fcb7327082a40295a11360e91af70ead",
+                    "verified_on_source_commit":  "e057cede34cdc7c3d39d355ff44cec9e249edeb9",
+                    "receipt_sha256":  "7A26719E3C0A745C12F6A323053983D707D62CD20F90F19F3BFD0AC8D0754C6E",
+                    "single_authoritative_cost_registry":  "VERIFIED",
+                    "fail_closed_pricing":  "VERIFIED"
+                },
+    "pack015":  {
+                    "status":  "LOCKED_VERIFIED",
+                    "source_commit":  "56e1901c1ad16240cf2c9905ce11c88903bf42bf",
+                    "receipt_sha256":  "29DA33C71CCAF3BF37E94E8DB9AA6D332DC3B23AB561F83AD8EBE213A4F3AA93",
+                    "exact_integer_micro_usd":  "VERIFIED",
+                    "all_in_technical_cost_model":  "VERIFIED",
+                    "unknown_cost_mode":  "FAIL_CLOSED",
+                    "live_preview_measurement_contract":  "VERIFIED",
+                    "database_migration_required":  false
+                },
+    "pack016":  {
+                    "status":  "LOCKED_VERIFIED",
+                    "source_commit":  "3f019b04a31c11864d388160573fe1579a0a96ac",
+                    "receipt_sha256":  "F5BE6CD9F03F021024A7E8623F188978D042EECE5BE41DA25B4CD901DA997F34",
+                    "github_quality_gate_observation":  "PASS",
+                    "shared_runtime_catalog":  "VERIFIED",
+                    "direct_live_deployment_proof":  "PASS",
+                    "repair":  "FIX2",
+                    "starter":  "PENDING_ECONOMICS_FAIL_CLOSED"
+                },
+    "pack017":  {
+                    "status":  "LOCKED_VERIFIED",
+                    "source_commit":  "[main de5f1e6] fix: complete five-hour weekly capacity protection  6 files changed, 460 insertions(+), 2 deletions(-)  create mode 100644 backend/lib/capacityProtection.js  create mode 100644 backend/test-pack017-capacity-weekly-protection.js de5f1e6ea5d814aaea13af39b6de197b97dbf573",
+                    "receipt_sha256":  "9A83F5C4D3EC0D3D3DB6C53DF4727E811E194798EB0A1580C62684E2B916A022",
+                    "repair":  "FIX2",
+                    "production_plan_limits":  "UNCONFIGURED_BY_DESIGN",
+                    "warnings_20_10_5":  "VERIFIED",
+                    "github_quality_gate_observation":  "UNAVAILABLE",
+                    "five_hour_window":  "VERIFIED",
+                    "purchased_topup_precedence":  "VERIFIED",
+                    "production_enforcement":  "OFF",
+                    "public_live_capacity_contract":  "VERIFIED",
+                    "weekly_protection":  "VERIFIED"
+                },
+    "pack018":  {
+                    "status":  "LOCKED_VERIFIED",
+                    "source_commit":  "648e9b78c727f0b0680ea5860a1fee7f8f37beb5",
+                    "receipt_sha256":  "A860A3D3AF8A3700E7C06ED6DC7229B2446C0CA9BC8431BAFEA6A4647AAE5BF8",
+                    "shared_usage_source":  "/api/zuvyr-usage-summary",
+                    "request_history_source":  "zuvyr_usage_records",
+                    "responsive_value_parity":  "VERIFIED",
+                    "warnings":  "VERIFIED",
+                    "actions":  "VERIFIED",
+                    "production_database_mutation":  false
+                },
+    "pack_title":  "Stripe Canonical Catalog \u0026 Lifecycle",
+    "finalized_at":  "2026-09-13T02:37:28.2010211+01:00",
+    "pack019":  {
+                    "status":  "SOURCE_VERIFIED_AWAITING_M08",
+                    "source_commit":  "f7d525fc2ffce5994d7f808e92f422d08989a8b3",
+                    "receipt_sha256":  "283E446C91D40DC5BA34C3EAB4925B10F6C877B87E98127E98F5CECB66B4ADDA",
+                    "catalog_version":  "pack-019.stripe-canonical-catalog.v1",
+                    "fix_iteration":  "FIX4",
+                    "stripe_checkout_billing_unit_cents":  1,
+                    "fractional_cent_checkout_bug_fixed":  true,
+                    "secrets_embedded":  false,
+                    "canonical_activation_default":  "OFF",
+                    "legacy_topup_checkout_compatible":  true,
+                    "external_gate":  "M08",
+                    "stripe_mutation":  false,
+                    "railway_variable_mutation":  false,
+                    "production_database_mutation":  false
+                },
+    "commit":  "f7d525fc2ffce5994d7f808e92f422d08989a8b3",
+    "source_commit":  "f7d525fc2ffce5994d7f808e92f422d08989a8b3",
+    "pack_id":  "019",
+    "status":  "SOURCE_VERIFIED_AWAITING_M08",
+    "m08":  {
+                "test_mode_status":  "VERIFIED",
+                "test_mode_receipt_sha256":  "65072F5168089F42A5ABF45DEF974B63FE6C90FF0574059B5096C7A0ADC617A9",
+                "live_status":  "BLOCKED_EXTERNAL_BUSINESS_VERIFICATION",
+                "live_reason":  "Stripe live account unavailable until legitimate business verification is completed",
+                "canonical_gate_complete":  false,
+                "cost_usd":  0,
+                "production_database_mutation":  false,
+                "railway_variable_mutation":  false,
+                "live_stripe_mutation":  false,
+                "updated_at":  "2026-09-13T02:43:49.2073508+01:00",
+                "development_gate_complete":  true,
+                "live_billing_allowed":  false,
+                "deferral_revision":  "REV1.2",
+                "deferral_policy":  "TEST_MODE_ALLOWS_PACK020_DEVELOPMENT_LIVE_REMAINS_LAUNCH_GATE"
+            },
+    "generated_at":  "2026-09-13T02:57:22.8777962+01:00",
+    "next_pack_allowed":  true,
+    "next_external_gate":  "M08_LIVE_BEFORE_REAL_MONEY_LAUNCH",
+    "next_pack":  "020"
 }
