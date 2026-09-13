@@ -16,6 +16,7 @@
     "billingMode": "payment",
     "minCredits": 1000,
     "maxCredits": 10000,
+    "stripeCheckoutBillingUnitCents": 1,
     "tiers": [
       {
         "id": "standard",

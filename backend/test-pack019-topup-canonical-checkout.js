@@ -195,6 +195,14 @@ async function invoke(
     1000
   );
   assert.equal(
+    result.payload.metadata.stripeBillingUnitCents,
+    '1'
+  );
+  assert.equal(
+    result.payload.metadata.stripeCheckoutQuantity,
+    '1000'
+  );
+  assert.equal(
     result.payload.metadata.type,
     'topup'
   );
@@ -234,7 +242,15 @@ async function invoke(
   );
   assert.equal(
     result.payload.line_items[0].quantity,
-    5000
+    4000
+  );
+  assert.equal(
+    result.payload.metadata.stripeBillingUnitCents,
+    '1'
+  );
+  assert.equal(
+    result.payload.metadata.stripeCheckoutQuantity,
+    '4000'
   );
   assert.equal(
     result.payload.metadata.topupTier,
@@ -314,7 +330,7 @@ async function invoke(
   );
 
   console.log(
-    'PASS: canonical top-up checkout selects standard/bulk Stripe Price bindings without embedding IDs'
+    'PASS: canonical top-up checkout uses one-cent Stripe billing units while preserving standard/bulk economics'
   );
   console.log(
     'PASS: canonical mode fails closed when required Price bindings are absent'

@@ -106,6 +106,14 @@ assert.equal(
   1000
 );
 assert.equal(
+  quote.stripeBillingUnitCents,
+  1
+);
+assert.equal(
+  quote.stripeCheckoutQuantity,
+  1000
+);
+assert.equal(
   quote.priceUsd,
   10
 );
@@ -125,6 +133,14 @@ assert.equal(
   4000
 );
 assert.equal(
+  quote.stripeBillingUnitCents,
+  1
+);
+assert.equal(
+  quote.stripeCheckoutQuantity,
+  4000
+);
+assert.equal(
   quote.priceUsd,
   40
 );
@@ -140,8 +156,27 @@ assert.equal(
   8000
 );
 assert.equal(
+  quote.stripeCheckoutQuantity,
+  8000
+);
+assert.equal(
   quote.priceUsd,
   80
+);
+
+quote =
+  quoteTopupCredits(
+    5001,
+    {}
+  );
+
+assert.equal(
+  quote.amountCents,
+  4001
+);
+assert.equal(
+  quote.stripeCheckoutQuantity,
+  4001
 );
 
 const env = {
@@ -308,7 +343,7 @@ console.log(
   'PASS: Pack019 canonical Stripe catalog derives subscription price bindings from plans.json'
 );
 console.log(
-  'PASS: canonical top-up tiers preserve 1000=$10, 5000+ bulk economics and 10,000-credit cap using exact micro-USD'
+  'PASS: canonical top-up tiers preserve exact micro-USD economics while Stripe checkout uses cent-safe billing units'
 );
 console.log(
   'PASS: catalog stores only environment binding names and leaks no Stripe IDs or secrets'

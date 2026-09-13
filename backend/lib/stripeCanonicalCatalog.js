@@ -119,6 +119,33 @@ function quoteTopupCredits(
     roundMicrousdToCents(
       amountMicrousd
     );
+  const stripeBillingUnitCents =
+    Number(
+      stripeCatalog.topups
+        .stripeCheckoutBillingUnitCents
+    );
+
+  if (
+    !Number.isSafeInteger(
+      stripeBillingUnitCents
+    ) ||
+    stripeBillingUnitCents <= 0 ||
+    amountCents %
+      stripeBillingUnitCents !== 0
+  ) {
+    const error =
+      new Error(
+        'invalid_stripe_topup_billing_unit'
+      );
+    error.code =
+      'invalid_stripe_topup_billing_unit';
+    throw error;
+  }
+
+  const stripeCheckoutQuantity =
+    amountCents /
+    stripeBillingUnitCents;
+
   const configuredId =
     nonEmpty(env[tier.priceEnvKey])
       ? env[tier.priceEnvKey].trim()
@@ -147,6 +174,8 @@ function quoteTopupCredits(
     amountMicrousd:
       amountMicrousd.toString(),
     amountCents,
+    stripeBillingUnitCents,
+    stripeCheckoutQuantity,
     priceUsd:
       amountCents / 100,
     priceEnvKey:
@@ -198,6 +227,9 @@ function catalogBindingState(
             tier.maxCredits,
           unitPriceMicrousd:
             tier.unitPriceMicrousd,
+          stripeBillingUnitCents:
+            stripeCatalog.topups
+              .stripeCheckoutBillingUnitCents,
           priceEnvKey:
             tier.priceEnvKey,
           configured:

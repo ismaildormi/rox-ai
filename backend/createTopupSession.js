@@ -152,7 +152,8 @@ router.post('/', async (req, res) => {
     lineItem = {
       price:
         quote.stripePriceId,
-      quantity: credits
+      quantity:
+        quote.stripeCheckoutQuantity
     };
 
     metadata = {
@@ -171,6 +172,14 @@ router.post('/', async (req, res) => {
       unitPriceMicrousd:
         String(
           quote.unitPriceMicrousd
+        ),
+      stripeBillingUnitCents:
+        String(
+          quote.stripeBillingUnitCents
+        ),
+      stripeCheckoutQuantity:
+        String(
+          quote.stripeCheckoutQuantity
         )
     };
 
